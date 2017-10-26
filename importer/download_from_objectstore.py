@@ -24,8 +24,9 @@ FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 
 config = configparser.RawConfigParser()
-# config.read('importer/auth.conf')
-config.read('/app/auth.conf')
+config.read('importer/auth.conf') # LOCAL
+#config.read('/app/auth.conf') # CONTAINER
+
 
 OBJECTSTORE_PASSWORD = os.environ['EXTERN_DATASERVICES_PASSWORD']
 
@@ -44,12 +45,14 @@ OS_CONNECT = {
 
 
 DATASETS = set([
-    'MORA',
+    'testje',
+    # 'dummy',
+    # 'GVB',
+    # 'MORA',
     # 'Google',
     # 'GVB',
 ])
 
-prefix = 'aanvalsplan_schoon/crow'
 
 def get_full_container_list(conn, container, **kwargs):
     
@@ -71,26 +74,25 @@ def get_full_container_list(conn, container, **kwargs):
     return seed
 
 
-def download_container(conn, container, prefix, datadir):
-    # target_dir = os.path.join(datadir, prefix)
-    # os.makedirs(target_dir)  # will error out if directory exists
+def download_container(conn, container, datadir):
+    # list of container's content
     content = get_full_container_list(conn, container['name'])
-    #content = get_full_container_list(conn, container['name'],prefix=prefix)
-    # print(conn.get_container('druktemeter'))
     
+    # loop over files
     for obj in content:
-        if obj['content_type']!='application/directory':
+        # check if object type is not application or dir
+        if obj['content_type'] != 'application/directory':
+            # target filename of object
             target_filename = os.path.join(datadir, obj['name'])
-            #target_filename = obj['name']
+            # write object in target file
             with open(target_filename, 'wb') as new_file:
                 _, obj_content = conn.get_object(container['name'], obj['name'])
                 new_file.write(obj_content)
-        # logger.debug('Written file obj['name']')
 
 
 def download_containers(conn, datasets, datadir):
     """
-    Download the schoonmonitor datasets from object store.
+    Download the citydynamics datasets from object store.
     
     Simplifying assumptions:
     * layout on data store matches intended layout of local data directory
@@ -118,7 +120,7 @@ def download_containers(conn, datasets, datadir):
     for c in containers:
         if c['name'] in datasets:
             print(c['name'])
-            download_container(conn, c, prefix, datadir)
+            download_container(conn, c, datadir)
 
 
 def main(datadir):

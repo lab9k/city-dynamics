@@ -6,8 +6,8 @@ services:
       - "5403:5432"
     environment:
       POSTGRES_PASSWORD: insecure
-      POSTGRES_DB: schoonmonitor
-      POSTGRES_USER: schoonmonitor
+      POSTGRES_DB: city-dynamics
+      POSTGRES_USER: city-dynamics
   web:
     build: ./web
     ports:
@@ -15,13 +15,13 @@ services:
     links:
       - database:database
     environment:
-      DB_NAME: schoonmonitor
+      DB_NAME: city-dynamics
       DB_PASSWORD: insecure
       UWSGI_HTTP: ":8001"
-      UWSGI_MODULE: "schoonmonitor.wsgi:application"
+      UWSGI_MODULE: "city-dynamics.wsgi:application"
       UWSGI_PROCESSES: 4
       UWSGI_MASTER: 1
-      UWSGI_STATIC_MAP: "/schoonmonitor/static=/static"
+      UWSGI_STATIC_MAP: "/city-dynamics/static=/static"
   importer:
       build: ./importer
       links:

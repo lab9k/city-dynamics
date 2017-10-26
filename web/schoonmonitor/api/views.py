@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 #from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
-from schoonmonitor.api.models import Melding
+from schoonmonitor.api.models import LengteGewicht
 from schoonmonitor.api.serializers import MeldingSerializer
 
 # Create your views here.
@@ -13,5 +13,5 @@ class HomePageView(TemplateView):
 
 class MeldingViewSet(viewsets.ModelViewSet):
     """ ViewSet for viewing and editing Employee objects """
-    queryset = Melding.objects.all()
+    queryset = LengteGewicht.objects.all()
     serializer_class = MeldingSerializer

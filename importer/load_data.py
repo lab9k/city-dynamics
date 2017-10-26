@@ -17,7 +17,7 @@ from datetime import datetime, date, time
 
 # add project dir to path
 # may only be necessary for local dev?
-project_dir = '/Users/rluijk/Documents/GemeenteAmsterdam/city-dynamics/web/'
+project_dir = '/Users/rluijk/Documents/GitHub/city-dynamics/web/'
 sys.path.append(project_dir)
 
 # add settings.py to environmental variable
@@ -28,9 +28,11 @@ django.setup()
 
 # import different models
 # Note this somehow also invokes schoonmonitor/admin.py
-from schoonmonitor.api.models import Melding
+from schoonmonitor.api.models import LengteGewicht
 
-melding = Melding()
+melding = LengteGewicht()
+
+# data import
 melding.__dict__
 melding.save()
 

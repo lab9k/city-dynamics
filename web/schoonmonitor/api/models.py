@@ -6,13 +6,9 @@ from rest_framework import serializers
 from datetime import datetime
 
 
-class Melding(models.Model):
-    # hoofdrubriek = models.CharField(max_length=255, default='empty')
-    subrubriek = models.CharField(max_length=255, default='empty')
-    beschrijving = models.CharField(max_length=255, default='empty')
-    lat = models.CharField(max_length=255, default='empty')
-    lng = models.CharField(max_length=255, default='empty')
-    # timestamp = models.DateTimeField()
+class LengteGewicht(models.Model):
+	Lengte = models.CharField(max_length=255)
+	Gewicht = models.CharField(max_length=255)
 
 # objects = models.GeoManager()
 

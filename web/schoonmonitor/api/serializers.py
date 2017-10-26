@@ -5,13 +5,13 @@ from django.http import HttpResponse, JsonResponse
 
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from schoonmonitor.api.models import Melding
+from schoonmonitor.api.models import LengteGewicht
 
 
 class MeldingSerializer(GeoFeatureModelSerializer):
     """ A class to serialize locations as GeoJSON compatible data """
 
     class Meta:
-        model = Melding
+        model = LengteGewicht
         geo_field = 'Geom'
         fields = 'Hoofdrubriek', 'Subrubriek', 'Datummelding'

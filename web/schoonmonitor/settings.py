@@ -110,24 +110,24 @@ WSGI_APPLICATION = 'schoonmonitor.wsgi.application'
 DATABASE_OPTIONS = {
     LocationKey.docker: {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': os.getenv('DATABASE_NAME', 'schoonmonitor'),
-        'USER': os.getenv('DATABASE_USER', 'schoonmonitor'),
+        'NAME': os.getenv('DATABASE_NAME', 'city-dynamics'),
+        'USER': os.getenv('DATABASE_USER', 'city-dynamics'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'insecure'),
         'HOST': 'database',
         'PORT': '5432'
     },
     LocationKey.local: {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': os.getenv('DATABASE_NAME', 'schoonmonitor'),
-        'USER': os.getenv('DATABASE_USER', 'schoonmonitor'),
+        'NAME': os.getenv('DATABASE_NAME', 'city-dynamics'),
+        'USER': os.getenv('DATABASE_USER', 'city-dynamics'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'insecure'),
         'HOST': get_docker_host(),
         'PORT': '5403'
     },
     LocationKey.override: {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': os.getenv('DATABASE_NAME', 'schoonmonitor'),
-        'USER': os.getenv('DATABASE_USER', 'schoonmonitor'),
+        'NAME': os.getenv('DATABASE_NAME', 'city-dynamics'),
+        'USER': os.getenv('DATABASE_USER', 'city-dynamics'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'insecure'),
         'HOST': os.getenv(OVERRIDE_HOST_ENV_VAR),
         'PORT': os.getenv(OVERRIDE_PORT_ENV_VAR, '5432')

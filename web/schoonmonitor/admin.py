@@ -1,5 +1,5 @@
 from django.contrib import admin
-from schoonmonitor.api.models import Melding
+from schoonmonitor.api.models import LengteGewicht
 from leaflet.admin import LeafletGeoAdmin
 
 # Change header name
@@ -19,6 +19,6 @@ admin.site.site_header = 'Schoonmonitor'
 #     #inlines = [WerkorderInline, ProjectPlanInline]
 
 
-admin.site.register(Melding)
+admin.site.register(LengteGewicht)
 
 
