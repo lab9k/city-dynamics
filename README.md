@@ -1,5 +1,11 @@
 ## City dynamics ##
 
+City-dynamics
+
+Collaborators: Jerome Cremers, Rene Luijk
+
+---
+
 Create database
 
 ```
@@ -49,4 +55,3 @@ Download the data from the object store to local folder `/data` within the conta
 ```
 docker-compose up importer
 ```
-
