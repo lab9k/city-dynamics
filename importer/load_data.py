@@ -10,25 +10,25 @@ import numpy as np
 from datetime import datetime, date, time
 
 
-# # parse arguments (now only datadir)
-# parser = argparse.ArgumentParser()
-# parser.add_argument('datadir', type=str, help='Local data directory.', nargs=1)
-# args = parser.parse_args()
+# parse arguments (now only datadir)
+parser = argparse.ArgumentParser()
+parser.add_argument('datadir', type=str, help='Local data directory.', nargs=1)
+args = parser.parse_args()
 
 # add project dir to path
 # may only be necessary for local dev?
-project_dir = '/Users/rluijk/Documents/GitHub/city-dynamics/web/'
-sys.path.append(project_dir)
+#project_dir = '/Users/rluijk/Documents/GitHub/city-dynamics/web/'
+#sys.path.append(project_dir)
 
 # add settings.py to environmental variable
-os.environ['DJANGO_SETTINGS_MODULE'] = 'schoonmonitor.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'cityDynamics.settings'
 
 # setup Django using settings
 django.setup()
 
 # import different models
 # Note this somehow also invokes schoonmonitor/admin.py
-from schoonmonitor.api.models import LengteGewicht
+from cityDynamics.api.models import LengteGewicht
 
 melding = LengteGewicht()
 
