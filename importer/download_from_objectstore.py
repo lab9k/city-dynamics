@@ -24,7 +24,7 @@ FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 
 config = configparser.RawConfigParser()
-config.read('auth.conf') # LOCAL
+config.read('/home/rluijk/Documents/gitrepos/city-dynamics/importer/auth.conf') # LOCAL
 #config.read('/app/auth.conf') # CONTAINER
 
 
@@ -45,11 +45,12 @@ OS_CONNECT = {
 
 
 DATASETS = set([
+    'testje',
     # 'GVB',
     # 'MORA',
     # 'Google',
     # 'GVB',
-    'google_live_octnov17'
+    # 'google_live_octnov17',
 ])
 
 
