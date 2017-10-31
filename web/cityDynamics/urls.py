@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
-from cityDynamics.api.views import (HomePageView, MeldingViewSet)
+from citydynamics.api.views import (HomePageView, MeldingViewSet)
 
 
 router = DefaultRouter()
@@ -31,10 +31,10 @@ urlpatterns = router.urls
 
 urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls')),
-    url(r'^cityDynamics/admin/', admin.site.urls),
-    url(r'^cityDynamics/api/', include(router.urls)),
-    #url(r'^cityDynamics/api/beeldmaatlattengeojson/$', BeeldmaatlatGeoJsonViewSet, name='beeldmaatlattengeojson'),
-    url(r'^cityDynamics/$', HomePageView.as_view(), name='home'),
+    url(r'^citydynamics/admin/', admin.site.urls),
+    url(r'^citydynamics/api/', include(router.urls)),
+    #url(r'^citydynamics/api/beeldmaatlattengeojson/$', BeeldmaatlatGeoJsonViewSet, name='beeldmaatlattengeojson'),
+    url(r'^citydynamics/$', HomePageView.as_view(), name='home'),
 ]
 
 

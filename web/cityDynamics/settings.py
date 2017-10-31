@@ -13,7 +13,7 @@
 
 import os
 
-from cityDynamics.settings_databases import LocationKey,\
+from citydynamics.settings_databases import LocationKey,\
     get_docker_host,\
     get_database_key,\
     OVERRIDE_HOST_ENV_VAR,\
@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     # 'rest_framework_gis',
 
     # 'leaflet',
-    'cityDynamics',
+    'city_dynamics',
 ]
 
 MIDDLEWARE = [
@@ -72,12 +72,12 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-ROOT_URLCONF = 'cityDynamics.urls'
+ROOT_URLCONF = 'citydynamics.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'cityDynamics/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'citydynamics/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -104,7 +104,7 @@ TEMPLATES = [
 # }
 
 
-WSGI_APPLICATION = 'cityDynamics.wsgi.application'
+WSGI_APPLICATION = 'citydynamics.wsgi.application'
 
 
 DATABASE_OPTIONS = {
@@ -197,13 +197,13 @@ REST_FRAMEWORK = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/cityDynamics/static/'
+STATIC_URL = '/citydynamics/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 
 #STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'),)
 
 # Upload location
-MEDIA_URL = '/cityDynamics/media/'
+MEDIA_URL = '/citydynamics/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGGING = {

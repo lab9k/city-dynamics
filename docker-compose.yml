@@ -18,10 +18,10 @@ services:
       DB_NAME: city-dynamics
       DB_PASSWORD: insecure
       UWSGI_HTTP: ":8001"
-      UWSGI_MODULE: "city-dynamics.wsgi:application"
+      UWSGI_MODULE: "citydynamics.wsgi:application"
       UWSGI_PROCESSES: 4
       UWSGI_MASTER: 1
-      UWSGI_STATIC_MAP: "/city-dynamics/static=/static"
+      UWSGI_STATIC_MAP: "/citydynamics/static=/static"
   importer:
       build: ./importer
       links:

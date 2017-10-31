@@ -18,7 +18,7 @@ WORKDIR /app
 
 USER datapunt
 
-RUN export DJANGO_SETTINGS_MODULE=schoonmonitor.settings
+RUN export DJANGO_SETTINGS_MODULE=citydynamics.settings
 RUN python manage.py collectstatic
 CMD uwsgi
 

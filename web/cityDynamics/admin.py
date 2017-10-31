@@ -1,9 +1,9 @@
 from django.contrib import admin
-from cityDynamics.api.models import LengteGewicht
+from citydynamics.api.models import LengteGewicht
 from leaflet.admin import LeafletGeoAdmin
 
 # Change header name
-admin.site.site_header = 'cityDynamics'
+admin.site.site_header = 'citydynamics'
 
 # Register your models here.
 

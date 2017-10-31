@@ -21,14 +21,14 @@ args = parser.parse_args()
 #sys.path.append(project_dir)
 
 # add settings.py to environmental variable
-os.environ['DJANGO_SETTINGS_MODULE'] = 'cityDynamics.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'city_dynamics.settings'
 
 # setup Django using settings
 django.setup()
 
 # import different models
 # Note this somehow also invokes schoonmonitor/admin.py
-from cityDynamics.api.models import LengteGewicht
+from city_dynamics.api.models import LengteGewicht
 
 melding = LengteGewicht()
 

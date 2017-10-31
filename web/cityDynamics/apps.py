@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class SchoonMonitorConfig(AppConfig):
-    name = 'cityDynamics'
+class citydynamicsConfig(AppConfig):
+    name = 'citydynamics'

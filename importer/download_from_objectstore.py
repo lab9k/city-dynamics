@@ -24,8 +24,8 @@ FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 
 config = configparser.RawConfigParser()
-# config.read('importer/auth.conf') # LOCAL
-config.read('/app/auth.conf') # CONTAINER
+config.read('auth.conf') # LOCAL
+#config.read('/app/auth.conf') # CONTAINER
 
 
 OBJECTSTORE_PASSWORD = os.environ['EXTERN_DATASERVICES_PASSWORD']
@@ -45,12 +45,11 @@ OS_CONNECT = {
 
 
 DATASETS = set([
-    'testje',
-    # 'dummy',
     # 'GVB',
     # 'MORA',
     # 'Google',
     # 'GVB',
+    'google_live_octnov17'
 ])
 
 
@@ -129,7 +128,7 @@ def main(datadir):
 
 
 if __name__ == '__main__':
-    desc = "Download data from objectore."
+    desc = "Download data from object store."
     parser = argparse.ArgumentParser(desc)
     parser.add_argument('datadir', type=str, help='Local data directory.', nargs=1)
     args = parser.parse_args()
