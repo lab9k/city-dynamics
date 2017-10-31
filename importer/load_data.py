@@ -28,6 +28,7 @@ django.setup()
 
 # read data
 df = pd.read_csv('/home/rluijk/Documents/gitrepos/city-dynamics/data/dummy_data.csv')
+# df = pd.read_csv('/data/dummy_data.csv')
 
 
 
@@ -55,4 +56,4 @@ df.to_sql(name=name, con=conn, index=False, if_exists='append')
 # conn = psycopg2.connect("dbname=city-dynamics user=city-dynamics password=insecure host=localhost port=5403")
 
 # check that it worked
-pd.read_sql('SELECT * FROM mytable', conn)
+print(pd.read_sql('SELECT * FROM mytable', conn))
