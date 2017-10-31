@@ -2,7 +2,7 @@
 
 City-dynamics
 
-Collaborators: Jerome Cremers, Rene Luijk
+Collaborators: Jerome Cremers, Rene Luijk, Swaan Dekkers
 
 ---
 
