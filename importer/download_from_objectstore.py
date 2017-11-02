@@ -24,8 +24,8 @@ FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 
 config = configparser.RawConfigParser()
-config.read('/home/rluijk/Documents/gitrepos/city-dynamics/importer/auth.conf') # LOCAL
-# config.read('/app/auth.conf') # CONTAINER
+# config.read('/home/rluijk/Documents/gitrepos/city-dynamics/importer/auth.conf') # LOCAL
+config.read('/app/auth.conf') # CONTAINER
 
 
 OBJECTSTORE_PASSWORD = os.environ['EXTERN_DATASERVICES_PASSWORD']

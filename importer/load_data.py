@@ -1,42 +1,43 @@
-import csv
-import sys
+def read_write_testje(files, *args):
+    file = [file for file in files if args[0] in file]
+    if len(file) > 1:
+        print('Multiple files match!')
+        return None
+    elif len(file) == 0:
+        print('No files match!')
+        return None
+    df = pd.read_csv(file[0])
+    df.to_sql(name=args[1], con=conn, index=False, if_exists='append')
+
+
 import os
 import argparse
-import django
 import configparser
 
 import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
+# parse arguments
+parser = argparse.ArgumentParser()
+parser.add_argument('datadir', type=str, help='Local data directory.', nargs=1)
+parser.add_argument('dbConfig', type=str, help='database config settings: dev or docker', nargs=1)
+args = parser.parse_args()
 
-# parse arguments (now only datadir)
-# parser = argparse.ArgumentParser()
-# parser.add_argument('datadir', type=str, help='Local data directory.', nargs=1)
-# args = parser.parse_args()
+# get datadir argument
+datadir = args.datadir[0]
 
-# add project dir to path
-# may only be necessary for local dev?
-project_dir = '/home/rluijk/Documents/gitrepos/city-dynamics/web/'
-sys.path.append(project_dir)
+# get dbConfig argument
+dbConfig = args.dbConfig[0]
 
-# add settings.py to environmental variable
-os.environ['DJANGO_SETTINGS_MODULE'] = 'citydynamics.settings'
+# list all files in data folder
+filelist = [os.path.join(datadir, file) for file in os.listdir(datadir)]
 
-# setup Django using settings
-django.setup()
-
-# read data
-df = pd.read_csv('/home/rluijk/Documents/gitrepos/city-dynamics/data/dummy_data.csv')
-# df = pd.read_csv('/data/dummy_data.csv')
-
-
-
+# parse authentication configuration
 config = configparser.RawConfigParser()
-# config.read('auth.conf')
-config.read('/home/rluijk/Documents/gitrepos/city-dynamics/importer/auth.conf')
+config.read('auth.conf')
 
-dbConfig = 'dev'
+# create postgres URL
 LOCAL_POSTGRES_URL = URL(
     drivername='postgresql',
     username=config.get(dbConfig,'user'),
@@ -46,14 +47,12 @@ LOCAL_POSTGRES_URL = URL(
     database=config.get(dbConfig,'dbname')
 )
 
-
-# to database
+# connect to database
 name = 'mytable'
 conn = create_engine(LOCAL_POSTGRES_URL)
-df.to_sql(name=name, con=conn, index=False, if_exists='append')
 
-# alternative method
-# conn = psycopg2.connect("dbname=city-dynamics user=city-dynamics password=insecure host=localhost port=5403")
+# read testje and write to db
+read_write_testje(filelist, 'dummy', 'mytable')
 
-# check that it worked
+# check if it worked
 print(pd.read_sql('SELECT * FROM mytable', conn))

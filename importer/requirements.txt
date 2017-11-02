@@ -4,3 +4,6 @@ python-swiftclient==3.4.0
 configparser
 pandas
 sqlalchemy
+
+pbr==3.1.1
+psycopg2
