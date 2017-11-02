@@ -45,8 +45,8 @@ OS_CONNECT = {
 
 
 DATASETS = set([
-    'testje',
-    # 'GVB',
+    # 'testje',
+    'GVB',
     # 'MORA',
     # 'Google',
     # 'GVB',
