@@ -31,7 +31,7 @@ In a new window, run the database, and keep it running.
 docker-compose up database
 ```
 
-In order to connect to the object store, you need to store the password in an environment variable. In UNIX:
+In order to connect to the object store, you need to store the password in an environment variable.
 
 ```
 export EXTERN_DATASERVICES_PASSWORD="password"
@@ -43,7 +43,7 @@ Build importer. Does not yet download data from object store.
 docker-compose build importer
 ```
 
-Download the data from the object store to local folder `/data` within the container.
+Download the data from the object, store to local folder `/data` within the container, and import into locally running database.
 
 ```
 docker-compose up importer
