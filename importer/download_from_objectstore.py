@@ -24,7 +24,7 @@ FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 
 config = configparser.RawConfigParser()
-# config.read('/home/rluijk/Documents/gitrepos/city-dynamics/importer/auth.conf') # LOCAL
+# config.read('importer/auth.conf') # LOCAL
 config.read('/app/auth.conf') # CONTAINER
 
 
@@ -47,9 +47,8 @@ OS_CONNECT = {
 DATASETS = set([
     # 'testje',
     'GVB',
-    # 'MORA',
+    'MORA',
     # 'Google',
-    # 'GVB',
     # 'google_live_octnov17',
 ])
 
@@ -80,8 +79,8 @@ def download_container(conn, container, datadir):
     
     # loop over files
     for obj in content:
-        # check if object type is not application or dir
-        if obj['content_type'] != 'application/directory':
+        # check if object type is not application or dir, or a "part" file
+        if obj['content_type'] != 'application/directory' and 'part' not in obj['name']:
             # target filename of object
             target_filename = os.path.join(datadir, obj['name'])
             # write object in target file

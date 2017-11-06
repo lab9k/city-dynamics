@@ -31,13 +31,6 @@ In a new window, run the database, and keep it running.
 docker-compose up database
 ```
 
-Before you can login to the site, you must create the tables and an admin useraccount in the database:
-
-```
-python web/manage.py migrate
-python web/manage.py createsuperuser
-```
-
 In order to connect to the object store, you need to store the password in an environment variable. In UNIX:
 
 ```
@@ -55,3 +48,5 @@ Download the data from the object store to local folder `/data` within the conta
 ```
 docker-compose up importer
 ```
+
+The database is now filled with data and can be queried.
