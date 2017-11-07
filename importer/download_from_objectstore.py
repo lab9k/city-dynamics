@@ -24,12 +24,11 @@ FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 
 config = configparser.RawConfigParser()
-# config.read('importer/auth.conf') # LOCAL
-config.read('/app/auth.conf') # CONTAINER
+# config.read('importer/auth.conf') # local dev
+config.read('auth.conf') # in container
 
-
+# find object store password in environmental variables
 OBJECTSTORE_PASSWORD = os.environ['EXTERN_DATASERVICES_PASSWORD']
-
 
 OS_CONNECT = {
     'auth_version': config.get('extern_dataservices','ST_AUTH_VERSION'),
@@ -45,11 +44,8 @@ OS_CONNECT = {
 
 
 DATASETS = set([
-    # 'testje',
     'GVB',
     'MORA',
-    # 'Google',
-    # 'google_live_octnov17',
 ])
 
 

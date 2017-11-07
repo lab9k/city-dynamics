@@ -2,7 +2,6 @@ import os
 import argparse
 import configparser
 import datetime
-
 import pandas as pd
 
 def fix_times(t, d):
@@ -16,7 +15,7 @@ def fix_times(t, d):
 
 def get_datetime(row):
     t = datetime.time(row.tijd_numeric, 0)
-    d = [int(e) for e in row.date.split('-')]    
+    d = [int(e) for e in row.date.split('-')]
     d = datetime.date(d[0], d[1], d[2])
     dt = datetime.datetime.combine(d, t)
     return dt
@@ -85,13 +84,13 @@ def to_database(tablename, conn, datadir, rittenpath='Ritten GVB 24jun2017-7okt2
     inout['timestamp'] = [get_datetime(row) for _, row in inout.iterrows()]    
     
     # mean locaties
-    locations.rename(columns={'ortnr_eind':'ortnr', 'haltenaam_eind':'halte', 'lat_eind':'lat', 'lng_eind':'lng'}, inplace=True)
-    mean_locations = locations.groupby('halte')['lat', 'lng'].mean().reset_index()
+    locations.rename(columns={'ortnr_eind':'ortnr', 'haltenaam_eind':'halte', 'lat_eind':'lat', 'lng_eind':'lon'}, inplace=True)
+    mean_locations = locations.groupby('halte')['lat', 'lon'].mean().reset_index()
     mean_locations = mean_locations[mean_locations.halte != '-- Leeg beeld --']
     
     # add lat/long coordinates
     inout = pd.merge(inout, mean_locations, on='halte')
-    
+
     # drop obsolete columns
     inout.drop(['tijd_numeric', 'tijd', 'date'], axis=1, inplace=True)
     
