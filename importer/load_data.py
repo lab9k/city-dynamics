@@ -2,6 +2,7 @@ import os
 import argparse
 import configparser
 import datetime
+import logging
 
 import pandas as pd
 from sqlalchemy import create_engine
@@ -12,6 +13,10 @@ from sqlalchemy.engine.url import URL
 # from importer import mora # local dev
 import gvb # in docker
 import mora # in docker
+import google
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # parse arguments
 parser = argparse.ArgumentParser()
@@ -44,6 +49,7 @@ LOCAL_POSTGRES_URL = URL(
 
 # connect to database
 conn = create_engine(LOCAL_POSTGRES_URL)
+logger.info('Created database connection')
 
 # configuration for database
 db_config = configparser.RawConfigParser()
@@ -52,10 +58,22 @@ db_config.read('db.conf') # in docker
 
 # GVB to database
 tablename = db_config.get('gvb', 'TABLE_NAME')
+logger.info('Parsing and writing GVB data...')
 gvb.to_database(tablename=tablename, conn=conn, datadir=datadir)
+logger.info('... done')
 # print(pd.read_sql_table(table_name=tablename, con=conn).head()) # check if it worked
 
 # MORA to database
 tablename = db_config.get('mora', 'TABLE_NAME')
+logger.info('Parsing and writing MORA data...')
 mora.to_database(tablename=tablename, conn=conn, datadir=datadir)
+logger.info('... done')
+
+# print(pd.read_sql_table(table_name=tablename, con=conn).head(2)) # check if it worked
+
+# Google to database
+tablename = db_config.get('google', 'TABLE_NAME')
+logger.info('Parsing and writing Google data...')
+google.to_database(tablename=tablename, conn=conn, datadir=datadir)
+logger.info('... done')
 # print(pd.read_sql_table(table_name=tablename, con=conn).head(2)) # check if it worked

@@ -23,4 +23,4 @@ ADD /run_import.sh /app/run_import.sh
 
 # Run the import, which downloads data from object store
 # and loads them into the database
-CMD /app/run_import.sh
+CMD cat -v /app/run_import.sh

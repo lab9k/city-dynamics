@@ -46,6 +46,7 @@ OS_CONNECT = {
 DATASETS = set([
     'GVB',
     'MORA',
+    'google_live_octnov17',
 ])
 
 
