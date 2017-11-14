@@ -4,41 +4,32 @@ This is where SQL queries that must be run after import go.
 import psycopg2
 import configparser
 import argparse
+import sys
 
 # parse authentication configuration
-config = configparser.RawConfigParser()
-config.read('auth.conf') # in docker
-# config.read('importer/auth.conf') # local
+config_auth = configparser.RawConfigParser()
+config_auth.read('auth.conf') 
 
-createGeomGVB = """
-ALTER TABLE "GVB"
-  DROP COLUMN IF EXISTS id;
-ALTER TABLE "GVB" 
-  ADD COLUMN id SERIAL PRIMARY KEY;
-ALTER TABLE "GVB"
-  DROP COLUMN IF EXISTS geom;
-ALTER TABLE "GVB"
-  ADD COLUMN geom geometry;
-UPDATE "GVB"
-    SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
+config_src = configparser.RawConfigParser()
+config_src.read('sources.conf') 
 
-CREATE INDEX geom_GVB ON "GVB" USING GIST(geom);
-"""
+tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections() if config_src.get(x, 'CONTAINS_GEOM') == 'YES']
 
-createGeomMORA = """
-ALTER TABLE "MORA"
-  DROP COLUMN IF EXISTS id;
-ALTER TABLE "MORA" 
-  ADD COLUMN id SERIAL PRIMARY KEY;
-ALTER TABLE "MORA"
-  DROP COLUMN IF EXISTS geom;
-ALTER TABLE "MORA"
-  ADD COLUMN geom geometry;
-UPDATE "MORA"
-    SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
+def create_geometry_query(tablename):
+  return """
+  ALTER TABLE "{}"
+    DROP COLUMN IF EXISTS id;
+  ALTER TABLE "{}" 
+    ADD COLUMN id SERIAL PRIMARY KEY;
+  ALTER TABLE "{}"
+    DROP COLUMN IF EXISTS geom;
+  ALTER TABLE "{}"
+    ADD COLUMN geom geometry;
+  UPDATE "{}"
+      SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
 
-CREATE INDEX geom_MORA ON "MORA" USING GIST(geom);
-"""
+  CREATE INDEX {} ON "GVB" USING GIST(geom);
+  """.format(tablename, tablename, tablename, tablename, tablename, 'geom_' + tablename)
 
 
 def execute_sql(pg_str, sql):
@@ -54,12 +45,9 @@ def get_pg_str(host, port, user, dbname, password):
 
 
 def main(dbConfig):
-    print('Additional SQL run after import concludes.')
-    pg_str = get_pg_str(config.get(dbConfig,'host'),config.get(dbConfig,'port'),config.get(dbConfig,'dbname'), config.get(dbConfig,'user'), config.get(dbConfig,'password'))
-    execute_sql(pg_str, createGeomGVB)
-    print('geometry field created in GVB')
-    execute_sql(pg_str, createGeomMORA)
-    print('geometry field created in MORA')
+    pg_str = get_pg_str(config_auth.get(dbConfig,'host'),config_auth.get(dbConfig,'port'),config_auth.get(dbConfig,'dbname'), config_auth.get(dbConfig,'user'), config_auth.get(dbConfig,'password'))
+    for table in tables_to_modify:
+        execute_sql(pg_str, create_geometry_query(table))
 
 
 if __name__ == '__main__':
