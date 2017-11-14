@@ -7,23 +7,26 @@ import re
 import csv
 import numpy as np
 
-def fix_times(t, d):
-    if t >= 24:
-        t -= 24
-        if d == 1:
-            d = 7
-        else:
-            d -= 1	
-    return t, d
 
-def get_datetime(row):
-    t = datetime.time(row.tijd_numeric, 0)
-    d = [int(e) for e in row.date.split('-')]
-    d = datetime.date(d[0], d[1], d[2])
-    dt = datetime.datetime.combine(d, t)
-    return dt
+def parse_gvb(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locationspath='Ortnr - coordinaten (ingangsdatum dec 2015) met LAT LONG.xlsx'):
+    
+    def fix_times(t, d):
+        if t >= 24:
+            t -= 24
+            if d == 1:
+                d = 7
+            else:
+                d -= 1  
+        return t, d
 
-def parse_gvb(tablename, conn, datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locationspath='Ortnr - coordinaten (ingangsdatum dec 2015) met LAT LONG.xlsx'):
+    def get_datetime(row):
+        t = datetime.time(row.tijd_numeric, 0)
+        d = [int(e) for e in row.date.split('-')]
+        d = datetime.date(d[0], d[1], d[2])
+        dt = datetime.datetime.combine(d, t)
+        return dt
+
+
     # read raw ritten
     rittenpath = os.path.join(datadir, rittenpath)
     ritten = pd.read_csv(rittenpath, skiprows=2, header=None)
@@ -97,11 +100,10 @@ def parse_gvb(tablename, conn, datadir, rittenpath='Ritten GVB 24jun2017-7okt201
     # drop obsolete columns
     inout.drop(['tijd_numeric', 'tijd', 'date'], axis=1, inplace=True)
     
-    # write to database
-    inout.to_sql(name=tablename, con=conn, index=False, if_exists='replace')
+    return inout
 
 
-def parse_google(conn, tablename, datadir):
+def parse_google(datadir):
     location_files = [x for x in os.listdir(datadir) if x.startswith('locations')]
 
     locations = pd.DataFrame()
@@ -130,10 +132,10 @@ def parse_google(conn, tablename, datadir):
 
     google_pop_times.scrape_time = pd.to_datetime(google_pop_times.scrape_time)
 
-    google_pop_times.to_sql(name=tablename, con=conn, index=False, if_exists='replace')
+    return google_pop_times
 
 
-def parse_mora(tablename, conn, datadir, filename='MORA_data_data.csv'):
+def parse_mora(datadir, filename='MORA_data_data.csv'):
     # read mora csv
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, delimiter=';')
@@ -152,4 +154,35 @@ def parse_mora(tablename, conn, datadir, filename='MORA_data_data.csv'):
     indx = np.logical_not(indx)
     df_select = df_select.loc[indx, :]
 
-    df_select.to_sql(name=tablename, con=conn, index=False, if_exists='replace')
+    return df_select
+
+
+def parse_tellus(datadir, filename='tellus_1M.csv'):
+    # read mora csv
+    path = os.path.join(datadir, filename)
+    df = pd.read_csv(path, delimiter='\t', encoding='utf-16')
+
+    # select Latitude, Longitude, Meetwaarde, Representatief, Richting, Richting 1, Richting 2
+    # representatief is of het een feestdag (1) is of een representatieve dag (3)
+    df_select = df.loc[:,['Latitude', 'Longitude', 'Meetwaarde', 'Representatief', 'Richting', 'Richting 1', 'Richting 2']]
+
+    # Vaak wordt als tijd 00:00:00 gegeven, de date time parser laat dit weg. Dus als er geen tijd is, was het in het oorspronkelijk bestand 00:00:00. 
+    df_select['timestamp from'] = pd.to_datetime(df['Tijd Van'], format="%d/%m/%Y %H:%M:%S")
+    df_select['timestamp to'] = pd.to_datetime(df['Tijd Tot'], format="%d/%m/%Y %H:%M:%S")
+
+    # rename columns
+    df_select.rename(columns={'Latitude':'lat', 'Longitude':'lon', 'Meetwaarde':'meetwaarde', 'Representatief':'representatief', 'Richting':'richting', 'Richting 1':'richting 1', 'Richting 2':'richting 2'}, inplace=True)
+
+    # change comma to dot and type object to type float64
+    df_select['lon'] = df_select['lon'].str.replace(',','.')
+    df_select['lat'] = df_select['lat'].str.replace(',','.')
+
+    df_select['lon'] = pd.to_numeric(df_select['lon'], errors='coerce')
+    df_select['lat'] = pd.to_numeric(df_select['lat'], errors='coerce')
+
+    # filter NaN
+    indx = np.logical_or(np.isnan(df_select.lat), np.isnan(df_select.lon))
+    indx = np.logical_not(indx)
+    df_select = df_select.loc[indx, :]
+
+    return df_select

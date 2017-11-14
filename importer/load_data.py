@@ -37,7 +37,8 @@ def main(datadir, dbConfig):
 
 	for dataset in datasets:
 		logger.info('Parsing and writing {} data...'.format(dataset))
-		getattr(parsers, 'parse_' + dataset)(tablename=config_src.get(dataset, 'TABLE_NAME'), conn=conn, datadir=datadir)
+		df = getattr(parsers, 'parse_' + dataset)(datadir=datadir)
+		df.to_sql(name=config_src.get(dataset, 'TABLE_NAME'), con=conn, index=False, if_exists='replace')
 		logger.info('... done')
 
 

@@ -45,7 +45,7 @@ OS_CONNECT = {
 }
 
 
-DATASETS = [config_src.get(x, 'FOLDER_FTP') for x in config_src.sections()]
+datasets = [config_src.get(x, 'FOLDER_FTP') for x in config_src.sections()]
 
 
 def get_full_container_list(conn, container, **kwargs):
@@ -119,7 +119,7 @@ def download_containers(conn, datasets, datadir):
 
 def main(datadir):
     conn = Connection(**OS_CONNECT)
-    download_containers(conn, DATASETS, datadir)
+    download_containers(conn, datasets, datadir)
 
 
 if __name__ == '__main__':
