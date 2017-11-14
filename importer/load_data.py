@@ -8,72 +8,43 @@ import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
-# import functions for different datasets
-# from importer import gvb # local dev
-# from importer import mora # local dev
-import gvb # in docker
-import mora # in docker
-import google
+import parsers
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# parse arguments
-parser = argparse.ArgumentParser()
-parser.add_argument('datadir', type=str, help='Local data directory.', nargs=1)
-parser.add_argument('dbConfig', type=str, help='database config settings: dev or docker', nargs=1)
-args = parser.parse_args()
+config_src = configparser.RawConfigParser()
+config_src.read('sources.conf') 
 
-# get datadir argument
-datadir = args.datadir[0] # in docker
-# datadir = 'data' # local dev
+datasets = config_src.sections()
 
-# get dbConfig argument
-dbConfig = args.dbConfig[0] # in docker
-# dbConfig = 'dev' # local dev
 
-# parse authentication configuration
-config = configparser.RawConfigParser()
-config.read('auth.conf') # in docker
-# config.read('importer/auth.conf') # local dev
+def main(datadir, dbConfig):
+	config_auth = configparser.RawConfigParser()
+	config_auth.read('auth.conf') 
 
-# create postgres URL
-LOCAL_POSTGRES_URL = URL(
-    drivername='postgresql',
-    username=config.get(dbConfig,'user'),
-    password=config.get(dbConfig,'password'),
-    host=config.get(dbConfig,'host'),
-    port=config.get(dbConfig,'port'),
-    database=config.get(dbConfig,'dbname')
-)
+	LOCAL_POSTGRES_URL = URL(
+		drivername='postgresql',
+		username=config_auth.get(dbConfig,'user'),
+		password=config_auth.get(dbConfig,'password'),
+		host=config_auth.get(dbConfig,'host'),
+		port=config_auth.get(dbConfig,'port'),
+		database=config_auth.get(dbConfig,'dbname')
+	)
 
-# connect to database
-conn = create_engine(LOCAL_POSTGRES_URL)
-logger.info('Created database connection')
+	conn = create_engine(LOCAL_POSTGRES_URL)
+	logger.info('Created database connection')
 
-# configuration for database
-db_config = configparser.RawConfigParser()
-db_config.read('db.conf') # in docker
-# db_config.read('importer/db.conf') # local dev
+	for dataset in datasets:
+		logger.info('Parsing and writing {} data...'.format(dataset))
+		getattr(parsers, 'parse_' + dataset)(tablename=config_src.get(dataset, 'TABLE_NAME'), conn=conn, datadir=datadir)
+		logger.info('... done')
 
-# GVB to database
-tablename = db_config.get('gvb', 'TABLE_NAME')
-logger.info('Parsing and writing GVB data...')
-gvb.to_database(tablename=tablename, conn=conn, datadir=datadir)
-logger.info('... done')
-# print(pd.read_sql_table(table_name=tablename, con=conn).head()) # check if it worked
 
-# MORA to database
-tablename = db_config.get('mora', 'TABLE_NAME')
-logger.info('Parsing and writing MORA data...')
-mora.to_database(tablename=tablename, conn=conn, datadir=datadir)
-logger.info('... done')
-
-# print(pd.read_sql_table(table_name=tablename, con=conn).head(2)) # check if it worked
-
-# Google to database
-tablename = db_config.get('google', 'TABLE_NAME')
-logger.info('Parsing and writing Google data...')
-google.to_database(tablename=tablename, conn=conn, datadir=datadir)
-logger.info('... done')
-# print(pd.read_sql_table(table_name=tablename, con=conn).head(2)) # check if it worked
+if __name__ == '__main__':
+	desc = 'Upload city-dynamics datasets into PostgreSQL.'
+	parser = argparse.ArgumentParser(desc)
+	parser.add_argument('datadir', type=str, help='Local data directory', nargs=1)
+	parser.add_argument('dbConfig', type=str, help='database config settings: dev or docker', nargs=1)
+	args = parser.parse_args()
+	main(args.datadir[0], args.dbConfig[0])

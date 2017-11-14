@@ -23,31 +23,29 @@ logger = logging.getLogger(__name__)
 FORMAT = '%(asctime)-15s %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.DEBUG)
 
-config = configparser.RawConfigParser()
-# config.read('importer/auth.conf') # local dev
-config.read('auth.conf') # in container
+config_auth = configparser.RawConfigParser()
+config_auth.read('auth.conf') 
+
+config_src = configparser.RawConfigParser()
+config_src.read('sources.conf') 
 
 # find object store password in environmental variables
 OBJECTSTORE_PASSWORD = os.environ['EXTERN_DATASERVICES_PASSWORD']
 
 OS_CONNECT = {
-    'auth_version': config.get('extern_dataservices','ST_AUTH_VERSION'),
-    'authurl': config.get('extern_dataservices','OS_AUTH_URL'),
-    'tenant_name': config.get('extern_dataservices','OS_TENANT_NAME'),
-    'user': config.get('extern_dataservices','OS_USERNAME'),
+    'auth_version': config_auth.get('extern_dataservices','ST_AUTH_VERSION'),
+    'authurl': config_auth.get('extern_dataservices','OS_AUTH_URL'),
+    'tenant_name': config_auth.get('extern_dataservices','OS_TENANT_NAME'),
+    'user': config_auth.get('extern_dataservices','OS_USERNAME'),
     'os_options': {
-        'tenant_id': config.get('extern_dataservices','OS_PROJECT_ID'),  # Project ID
-        'region_name': config.get('extern_dataservices','OS_REGION_NAME')
+        'tenant_id': config_auth.get('extern_dataservices','OS_PROJECT_ID'),  # Project ID
+        'region_name': config_auth.get('extern_dataservices','OS_REGION_NAME')
     },
     'key': OBJECTSTORE_PASSWORD
 }
 
 
-DATASETS = set([
-    'GVB',
-    'MORA',
-    'google_live_octnov17',
-])
+DATASETS = [config_src.get(x, 'FOLDER_FTP') for x in config_src.sections()]
 
 
 def get_full_container_list(conn, container, **kwargs):
