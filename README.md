@@ -55,7 +55,7 @@ The database is now filled with data and can be queried.
 
 ---
 
-#Additional info for developers#
+# Additional info for developers #
 
 To add a new data source, make sure it is present in the root directory of the objectstore and configure `sources.conf`.
 Create a parser function in parsers.py and make sure this function is called 'parser_x', where 'x' needs to be replaced with the name of the data source, stated between square brackets in `sources.conf`.
