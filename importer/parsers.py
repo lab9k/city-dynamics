@@ -2,10 +2,10 @@ import os
 import argparse
 import configparser
 import datetime
+import numpy as np
 import pandas as pd
 import re
 import csv
-import numpy as np
 
 
 def parse_gvb(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locationspath='Ortnr - coordinaten (ingangsdatum dec 2015) met LAT LONG.xlsx'):
@@ -157,10 +157,10 @@ def parse_mora(datadir, filename='MORA_data_data.csv'):
     return df_select
 
 
-def parse_tellus(datadir, filename='tellus_1M.csv'):
-    # read mora csv
+def parse_tellus(datadir, filename='tellus2017.csv'):
+    # read tellus csv
     path = os.path.join(datadir, filename)
-    df = pd.read_csv(path, delimiter='\t', encoding='utf-16')
+    df = pd.read_csv(path, delimiter=';', encoding='utf-8', nrows=1e5)
 
     # select Latitude, Longitude, Meetwaarde, Representatief, Richting, Richting 1, Richting 2
     # representatief is of het een feestdag (1) is of een representatieve dag (3)
