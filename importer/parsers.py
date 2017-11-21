@@ -103,36 +103,23 @@ def parse_gvb(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locations
     return inout
 
 
-def parse_google(datadir):
-    location_files = [x for x in os.listdir(datadir) if x.startswith('locations')]
+def parse_google(datadir, filename='google_oct_nov2017.csv', locationsfile='locations2k_details.csv'):
+    # read mora csv
+    path = os.path.join(datadir, filename)
+    df = pd.read_csv(path, delimiter=';')
 
-    locations = pd.DataFrame()
-    for file in location_files:
-        file_path = os.path.join(datadir, file)
-        locations = pd.concat([locations, pd.read_csv(file_path, sep=';')])
+    # read location file
+    path = os.path.join(datadir, locationsfile)
+    locations = pd.read_csv(path, sep=';')
 
-    locations.drop('Unnamed: 0',axis=1, inplace=True)
-    locations.address = locations.address.str.replace(',',' ')
+    # create Location column
+    locations['Location'] = [row['name'] + ', ' + row['address'] for _, row in locations.iterrows()]
+    locations.drop('id', axis=1, inplace=True)
 
-    measures = pd.read_csv(datadir + r'\ams_google_data.csv',
-                      encoding='cp1252')
+    # add geometry, types
+    df = pd.merge(df, locations, on='Location')
 
-    _, measures['Location_address'] = measures.search_term.str.split('  ',1).str
-    measures.drop('name', axis=1, inplace=True)
-
-    google_pop_times = measures.merge(locations, left_on='Location_address', right_on='address')
-
-    to_drop = ['batch','batch_time',
-               'search_term','Location_address',
-               'place_id','rating','popular_times']
-
-    google_pop_times.drop(to_drop, axis=1, inplace=True)
-
-    google_pop_times.rename(columns={'lng':'lon'}, inplace=True)
-
-    google_pop_times.scrape_time = pd.to_datetime(google_pop_times.scrape_time)
-
-    return google_pop_times
+    return df
 
 
 def parse_mora(datadir, filename='MORA_data_data.csv'):
