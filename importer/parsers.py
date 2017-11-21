@@ -104,10 +104,6 @@ def parse_gvb(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locations
 
 
 def parse_google(datadir, filename='google_oct_nov2017.csv', locationsfile='locations2k_details.csv'):
-    datadir='/home/rluijk/Documents/GemeenteAmsterdam/google_livescraper'
-    filename='google_oct_nov2017.csv'
-    locationsfile='locations2k_details.csv'
-
     # read google csv
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, delimiter=';')
@@ -119,6 +115,8 @@ def parse_google(datadir, filename='google_oct_nov2017.csv', locationsfile='loca
     df['historical'] = df.Expected.astype(float)
     df['live'] = df.Observed.astype(float)
 
+    df.drop(['Expected', 'Observed'], axis=1, inplace=True)
+
     # read location file
     path = os.path.join(datadir, locationsfile)
     locations = pd.read_csv(path, sep=';')
@@ -126,6 +124,9 @@ def parse_google(datadir, filename='google_oct_nov2017.csv', locationsfile='loca
     # create Location column
     locations['Location'] = [row['name'] + ', ' + row['address'] for _, row in locations.iterrows()]
     locations.drop('id', axis=1, inplace=True)
+
+    # change longitude column name
+    locations.rename(columns={'lng': 'lon'}, inplace=True)
 
     # drop duplicated locations
     indx = np.logical_not(locations.Location.duplicated())
