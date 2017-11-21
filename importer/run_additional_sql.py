@@ -17,19 +17,19 @@ tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections
 
 def create_geometry_query(tablename):
   return """
-  ALTER TABLE "{}"
+  ALTER TABLE "{0}"
     DROP COLUMN IF EXISTS id;
-  ALTER TABLE "{}" 
+  ALTER TABLE "{0}" 
     ADD COLUMN id SERIAL PRIMARY KEY;
-  ALTER TABLE "{}"
+  ALTER TABLE "{0}"
     DROP COLUMN IF EXISTS geom;
-  ALTER TABLE "{}"
+  ALTER TABLE "{0}"
     ADD COLUMN geom geometry;
-  UPDATE "{}"
+  UPDATE "{0}"
       SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
 
-  CREATE INDEX {} ON "GVB" USING GIST(geom);
-  """.format(tablename, tablename, tablename, tablename, tablename, 'geom_' + tablename)
+  CREATE INDEX {1} ON "GVB" USING GIST(geom);
+  """.format(tablename, 'geom_' + tablename)
 
 
 def execute_sql(pg_str, sql):
