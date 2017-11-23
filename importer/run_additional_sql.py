@@ -28,15 +28,75 @@ def create_geometry_query(tablename):
   UPDATE "{0}"
       SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
 
-  CREATE INDEX {1} ON "GVB" USING GIST(geom);
+  CREATE INDEX {1} ON "{0}" USING GIST(geom);
   """.format(tablename, 'geom_' + tablename)
 
 
 def add_buurtcombinatie_query(table):
   return """
-  SELECT {}.id, b.id 
-  FROM pointTableName "GVB",  
-  WHERE ST_Intersects({}.myPointGeo, b.myPolygonGeo);
+  SELECT "{0}".id, BUURTCOMBINATIE.Stadsdeel_code
+  FROM "{0}", BUURTCOMBINATIE
+  WHERE ST_Intersects("{0}".geom, BUURTCOMBINATIE.COORDS);
+  """.format(table)
+
+def test(table):
+  return """
+  SELECT 
+  g.id as id,
+  b."Buurtcombinatie" as bc
+  FROM 
+  gvb as g, 
+  buurtcombinatie as b
+  WHERE ST_Intersects(g.geom, b."COORDS")
+  """
+
+
+def dummy(table):
+  return"""SELECT 
+  e.*, 
+  g.naam as gebiedsnaam, 
+  g.code as gebiedscode
+  INTO 
+    crowscores_totaal
+  FROM
+     (SELECT 
+       c.*, 
+       d.stadsdeelcode,
+       d.buurtcode,
+       d.wijkcode,
+       d.stadsdeelnaam,
+       d.buurtnaam,
+       d.wijknaam
+    FROM 
+      (select * from crowscores) as c, 
+      (SELECT 
+         a.stadsdeelcode,
+         a.buurtcode,
+         w.vollcode as wijkcode,
+         a.stadsdeelnaam,
+         a.buurtnaam,
+         w.naam as wijknaam,
+         a.wkb_geometry
+       FROM
+       (  SELECT 
+          s.naam as stadsdeelnaam,
+          s.code as stadsdeelcode,
+          b.naam as buurtnaam,
+          s.code || b.code as buurtcode,
+          b.wkb_geometry
+          FROM 
+            buurt as b, 
+            stadsdeel as s
+          WHERE ST_WITHIN(ST_CENTROID(b.wkb_geometry),s.wkb_geometry)
+        ) as a, 
+        buurtcombinatie as w
+      WHERE ST_WITHIN(ST_CENTROID(a.wkb_geometry),w.wkb_geometry)) as d
+    WHERE ST_WITHIN(ST_CENTROID(c.geom), d.wkb_geometry)
+    ) as e,
+    gebiedsgerichtwerken as g
+  WHERE ST_WITHIN(ST_CENTROID(e.geom), g.wkb_geometry);
+  ALTER TABLE crowscores_totaal 
+  ADD PRIMARY KEY (id);
   """
 
 def execute_sql(pg_str, sql):
@@ -54,8 +114,11 @@ def get_pg_str(host, port, user, dbname, password):
 def main(dbConfig):
     pg_str = get_pg_str(config_auth.get(dbConfig,'host'),config_auth.get(dbConfig,'port'),config_auth.get(dbConfig,'dbname'), config_auth.get(dbConfig,'user'), config_auth.get(dbConfig,'password'))
     for table in tables_to_modify:
+        print(table)
         #execute_sql(pg_str, create_geometry_query(table))
-        execute_sql(pg_str, add_buurtcombinatie_query(table))
+        #print(add_buurtcombinatie_query(table))
+        #execute_sql(pg_str, add_buurtcombinatie_query(table))
+        execute_sql(pg_str, test(table))
 
 
 if __name__ == '__main__':

@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', insecure_secret)
 DEBUG = SECRET_KEY == insecure_secret
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -41,33 +41,24 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
 
-    'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'corsheaders',
-    # 'django.contrib.gis',
+    'django.contrib.gis',
+    'django_filters',
+    'rest_framework',
+    'rest_framework_gis',
 
-    # 'rest_framework',
-    # 'rest_framework_gis',
-
-    # 'leaflet',
+    'django_extensions',
+    'datapunt_api',
     'citydynamics',
+    'citydynamics.api',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-
-    'corsheaders.middleware.CorsMiddleware',
-
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -184,16 +175,18 @@ DATE_FORMAT = '%d %b %Y'
 
 USE_TZ = True
 
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 10
-}
+REST_FRAMEWORK = dict(
+    PAGE_SIZE=25,
+    MAX_PAGINATE_BY=100,
 
+    DEFAULT_AUTHENTICATION_CLASSES=[],
+    DEFAULT_PERMISSION_CLASSES=[],
+
+    UNAUTHENTICATED_USER={},
+    UNAUTHENTICATED_TOKEN={},
+    # or allow read-only access for unauthenticated users.
+    DEFAULT_PAGINATION_CLASS='rest_framework.pagination.LimitOffsetPagination',
+)
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 

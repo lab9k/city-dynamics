@@ -38,7 +38,8 @@ def main(datadir, dbConfig):
 	for dataset in datasets:
 		logger.info('Parsing and writing {} data...'.format(dataset))
 		df = getattr(parsers, 'parse_' + dataset)(datadir=datadir)
-		df.to_sql(name=config_src.get(dataset, 'TABLE_NAME'), con=conn, index=False, if_exists='replace')
+		df.to_sql(name=config_src.get(dataset, 'TABLE_NAME'), con=conn, index=True, if_exists='replace')
+		conn.execute('ALTER TABLE "{}" ADD PRIMARY KEY ("index");'.format(config_src.get(dataset, 'TABLE_NAME')))
 		logger.info('... done')
 
 

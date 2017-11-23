@@ -1,5 +1,6 @@
 from django.contrib import admin
-from citydynamics.api.models import LengteGewicht
+from citydynamics.api.models import Buurtcombinatie
+from citydynamics.api.models import Gvb
 # from leaflet.admin import LeafletGeoAdmin
 
 # Change header name
@@ -19,6 +20,8 @@ admin.site.site_header = 'citydynamics'
 #     #inlines = [WerkorderInline, ProjectPlanInline]
 
 
-admin.site.register(LengteGewicht)
+admin.site.register(Buurtcombinatie)
+admin.site.register(Gvb)
+
 
 

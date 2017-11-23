@@ -21,20 +21,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
-from citydynamics.api.views import (HomePageView, MeldingViewSet)
+from citydynamics.api.views import GvbViewSet
 
 
 router = DefaultRouter()
-router.register(prefix='meldingen', viewset=MeldingViewSet)
+router.register(prefix='gvb', viewset=GvbViewSet)
 
 urlpatterns = router.urls
 
 urlpatterns = [
-    url(r'^api-auth/', include('rest_framework.urls')),
-    url(r'^citydynamics/admin/', admin.site.urls),
     url(r'^citydynamics/api/', include(router.urls)),
     #url(r'^citydynamics/api/beeldmaatlattengeojson/$', BeeldmaatlatGeoJsonViewSet, name='beeldmaatlattengeojson'),
-    url(r'^citydynamics/$', HomePageView.as_view(), name='home'),
 ]
 
 
