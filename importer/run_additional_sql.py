@@ -13,7 +13,7 @@ config_auth.read('auth.conf')
 config_src = configparser.RawConfigParser()
 config_src.read('sources.conf') 
 
-tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections() if config_src.get(x, 'CONTAINS_GEOM') == 'YES']
+tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections() if config_src.get(x, 'CREATE_POINT') == 'YES']
 
 def create_geometry_query(tablename):
   return """
@@ -32,6 +32,13 @@ def create_geometry_query(tablename):
   """.format(tablename, 'geom_' + tablename)
 
 
+def add_buurtcombinatie_query(table):
+  return """
+  SELECT {}.id, b.id 
+  FROM pointTableName "GVB",  
+  WHERE ST_Intersects({}.myPointGeo, b.myPolygonGeo);
+  """
+
 def execute_sql(pg_str, sql):
     with psycopg2.connect(pg_str) as conn:
         with conn.cursor() as cursor:
@@ -47,7 +54,8 @@ def get_pg_str(host, port, user, dbname, password):
 def main(dbConfig):
     pg_str = get_pg_str(config_auth.get(dbConfig,'host'),config_auth.get(dbConfig,'port'),config_auth.get(dbConfig,'dbname'), config_auth.get(dbConfig,'user'), config_auth.get(dbConfig,'password'))
     for table in tables_to_modify:
-        execute_sql(pg_str, create_geometry_query(table))
+        #execute_sql(pg_str, create_geometry_query(table))
+        execute_sql(pg_str, add_buurtcombinatie_query(table))
 
 
 if __name__ == '__main__':
