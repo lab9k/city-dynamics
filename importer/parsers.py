@@ -196,7 +196,8 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
     return df_select
 
 def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
+    path = os.path.join(datadir, filename)
     df = pd.read_csv(path, sep=';')
     df.drop('Unnamed: 8', axis=1, inplace=True)
-    
+
     return df
