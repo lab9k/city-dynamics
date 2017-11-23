@@ -202,3 +202,9 @@ def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
     df.drop('Unnamed: 8', axis=1, inplace=True)
 
     return df
+
+def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
+    path = os.path.join(datadir, filename)
+    df = pd.read_csv(path, sep=';')
+
+    return df
