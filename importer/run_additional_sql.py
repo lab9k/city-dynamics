@@ -18,10 +18,6 @@ tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections
 def create_geometry_query(tablename):
   return """
   ALTER TABLE "{0}"
-    DROP COLUMN IF EXISTS id;
-  ALTER TABLE "{0}" 
-    ADD COLUMN id SERIAL PRIMARY KEY;
-  ALTER TABLE "{0}"
     DROP COLUMN IF EXISTS geom;
   ALTER TABLE "{0}"
     ADD COLUMN geom geometry;
@@ -30,6 +26,34 @@ def create_geometry_query(tablename):
 
   CREATE INDEX {1} ON "{0}" USING GIST(geom);
   """.format(tablename, 'geom_' + tablename)
+
+def add_bc_codes(table):
+  return """
+  DROP TABLE IF EXISTS gvb_incl_buurtcombi;
+  create
+  table
+    public.gvb_incl_buurtcombi as with bc as(
+      select
+        *,
+        st_setsrid(
+          st_geometryfromtext("COORDS"),
+          4326
+        ) as coords
+      from
+        buurtcombinatie
+    ) select
+      gvb.halte,
+      gvb.geom,
+      bc."Buurtcombinatie_code",
+      bc."Buurtcombinatie",
+      bc."Stadsdeel_code"
+    from
+      public.gvb join bc on
+      st_intersects(
+        gvb.geom,
+        bc.coords
+      )
+  """
 
 def execute_sql(pg_str, sql):
     with psycopg2.connect(pg_str) as conn:
@@ -48,6 +72,7 @@ def main(dbConfig):
     for table in tables_to_modify:
         print(table)
         execute_sql(pg_str, create_geometry_query(table))
+        execute_sql(pg_str, add_bc_codes(table))
 
 
 if __name__ == '__main__':
