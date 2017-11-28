@@ -75,7 +75,6 @@ def main(datadir, dbConfig):
 
 	conn = create_engine(LOCAL_POSTGRES_URL)
 	pg_str = get_pg_str(config_auth.get(dbConfig,'host'),config_auth.get(dbConfig,'port'),config_auth.get(dbConfig,'dbname'), config_auth.get(dbConfig,'user'), config_auth.get(dbConfig,'password'))
-	print(pg_str)
 
 	logger.info('Created database connection')
 

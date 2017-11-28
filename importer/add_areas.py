@@ -5,6 +5,10 @@ import psycopg2
 import configparser
 import argparse
 import sys
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # parse authentication configuration
 config_auth = configparser.RawConfigParser()
@@ -61,6 +65,11 @@ def add_bc_codes(table):
       )
   """.format(table + '_with_bc', table)
 
+def set_primary_key(table):
+  return """
+  ALTER TABLE "{}" ADD PRIMARY KEY (index)
+  """.format(table)
+
 def execute_sql(pg_str, sql):
     with psycopg2.connect(pg_str) as conn:
         with conn.cursor() as cursor:
@@ -78,9 +87,10 @@ def main(dbConfig):
     execute_sql(pg_str, simplify_polygon('buurtcombinatie'))
 
     for table in tables_to_modify:
-        print(table)
+        logger.info('Handling {} table'.format(table))
         execute_sql(pg_str, create_geometry_query(table))
         execute_sql(pg_str, add_bc_codes(table))
+        execute_sql(pg_str, set_primary_key(table + '_with_bc'))
 
 
 if __name__ == '__main__':
