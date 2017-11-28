@@ -9,4 +9,4 @@ python /app/download_from_objectstore.py /data
 python /app/load_data.py /data docker
 
 # add geometry
-python /app/run_additional_sql.py docker
+python /app/add_areas.py docker
