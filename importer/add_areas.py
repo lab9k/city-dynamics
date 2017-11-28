@@ -27,6 +27,17 @@ def create_geometry_query(tablename):
   CREATE INDEX {1} ON "{0}" USING GIST(geom);
   """.format(tablename, 'geom_' + tablename)
 
+
+def simplify_polygon(table):
+  return """
+  ALTER TABLE "{0}"
+    DROP COLUMN IF EXISTS wkb_geometry_simplified;
+  ALTER TABLE "{0}"
+    ADD COLUMN wkb_geometry_simplified geometry;
+  UPDATE "{0}"
+    SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.01);
+  """.format(table)
+
 def add_bc_codes(table):
   return """
   DROP TABLE IF EXISTS "{0}";
@@ -34,23 +45,19 @@ def add_bc_codes(table):
   table
     public."{0}" as with bc as(
       select
-        *,
-        st_setsrid(
-          st_geometryfromtext("COORDS"),
-          4326
-        ) as coords
+        *
       from
         buurtcombinatie
     ) select
       "{1}".*,
-      bc."Buurtcombinatie_code",
-      bc."Buurtcombinatie",
-      bc."Stadsdeel_code"
+      bc."vollcode",
+      bc."naam",
+      LEFT(bc."vollcode", 1) as "stadsdeel_code"
     from
       public."{1}" join bc on
       st_intersects(
         "{1}".geom,
-        bc.coords
+        bc.wkb_geometry
       )
   """.format(table + '_with_bc', table)
 
@@ -68,6 +75,8 @@ def get_pg_str(host, port, user, dbname, password):
 
 def main(dbConfig):
     pg_str = get_pg_str(config_auth.get(dbConfig,'host'),config_auth.get(dbConfig,'port'),config_auth.get(dbConfig,'dbname'), config_auth.get(dbConfig,'user'), config_auth.get(dbConfig,'password'))
+    execute_sql(pg_str, simplify_polygon('buurtcombinatie'))
+
     for table in tables_to_modify:
         print(table)
         execute_sql(pg_str, create_geometry_query(table))
