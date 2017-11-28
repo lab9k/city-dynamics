@@ -29,10 +29,10 @@ def create_geometry_query(tablename):
 
 def add_bc_codes(table):
   return """
-  DROP TABLE IF EXISTS gvb_incl_buurtcombi;
+  DROP TABLE IF EXISTS "{0}";
   create
   table
-    public.gvb_incl_buurtcombi as with bc as(
+    public."{0}" as with bc as(
       select
         *,
         st_setsrid(
@@ -42,18 +42,17 @@ def add_bc_codes(table):
       from
         buurtcombinatie
     ) select
-      gvb.halte,
-      gvb.geom,
+      "{1}".*,
       bc."Buurtcombinatie_code",
       bc."Buurtcombinatie",
       bc."Stadsdeel_code"
     from
-      public.gvb join bc on
+      public."{1}" join bc on
       st_intersects(
-        gvb.geom,
+        "{1}".geom,
         bc.coords
       )
-  """
+  """.format(table + '_with_bc', table)
 
 def execute_sql(pg_str, sql):
     with psycopg2.connect(pg_str) as conn:
