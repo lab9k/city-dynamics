@@ -206,5 +206,14 @@ def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
 def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, sep=';')
+    return df
 
+def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
+    path = os.path.join(datadir, filename)
+    df = pd.read_excel(path, sheet_name=3)
+    indx = np.logical_and(df.wijk != 'gemiddelde', np.logical_not(df.wijk.isnull()))
+    cols = ['wijk', 'verbl. Per HA (land) 2016']
+    df = df.loc[indx, cols]
+    df[cols[1]] = np.round(df[cols[1]]).astype(int)
+    df.columns = ['wijk', 'verblijversindex']
     return df
