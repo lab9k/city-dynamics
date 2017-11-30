@@ -13,7 +13,10 @@ config_auth.read('auth.conf')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-dbConfig = 'dev'
+desc = "Calculate index."
+parser = argparse.ArgumentParser(desc)
+parser.add_argument('dbConfig', type=str, help='database config settings: dev or docker', nargs=1)
+args = parser.parse_args()
 
 def get_conn(dbConfig):
 	POSTGRES_URL = URL(
@@ -42,36 +45,42 @@ def min_max(x):
 	return (x - min(x)) / (max(x) - min(x))
 
 def calc_average_scale(df):
-	df = df.groupby(['day', 'hour', 'Buurtcombinatie_code'])['drukte_index'].mean().reset_index()
-	df['normalized'] = df.groupby(['day', 'Buurtcombinatie_code'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+	df = df.groupby(['day', 'hour', 'vollcode'])['drukte_index'].mean().reset_index()
+	df['normalized'] = df.groupby(['day', 'vollcode'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 	return df
 
 def merge_datasets(data):
-	df = reduce(lambda x, y: pd.merge(x, y, on = ['day', 'hour', 'Buurtcombinatie_code'], how='outer'), data)
+	df = reduce(lambda x, y: pd.merge(x, y, on = ['day', 'hour', 'vollcode'], how='outer'), data)
 	cols = [col for col in df.columns if 'normalized' in col]
 	df['normalized_index'] = df.loc[:,cols].mean(axis=1)
 	return df
 
-# create connection
-conn = get_conn(dbConfig='dev')
+def main():
+	global conn
+	global sql
 
-# base call
-sql = """ SELECT * FROM "{}" """
+	# create connection
+	conn = get_conn(dbConfig=args.dbConfig[0])
 
-# read buurtcodes
-buurtcodes = pd.read_sql(sql=sql.format('buurtcombinatie'), con=conn)
+	# base call
+	sql = """ SELECT * FROM "{}" """
 
-# read data sources, and round timestamp
-google = import_data('google_with_bc', 'live')
-gvb = import_data('gvb_with_bc', 'incoming')
+	# read buurtcodes
+	buurtcodes = pd.read_sql(sql=sql.format('buurtcombinatie'), con=conn)
 
-# google average
-google_mean = calc_average_scale(google)
-gvb_mean = calc_average_scale(gvb)
+	# read data sources, and round timestamp
+	google = import_data('google_with_bc', 'live')
+	gvb = import_data('gvb_with_bc', 'incoming')
 
-# merge datasets
-cols = ['day', 'hour', 'Buurtcombinatie_code', 'normalized']
-df_index = merge_datasets(data=[google_mean[cols], gvb_mean[cols]])
+	# google average
+	google_mean = calc_average_scale(google)
+	gvb_mean = calc_average_scale(gvb)
 
-# write to db
-df_index.to_sql(name='drukteindex', con=conn, index=False, if_exists='replace')
+	# merge datasets
+	cols = ['day', 'hour', 'vollcode', 'normalized']
+	df_index = merge_datasets(data=[google_mean[cols], gvb_mean[cols]])
+
+	# write to db
+	df_index.to_sql(name='drukteindex', con=conn, index=False, if_exists='replace')
+
+main()

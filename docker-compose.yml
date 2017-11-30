@@ -31,4 +31,7 @@ services:
         # E.g. by running in terminal
         # export EXTERN_DATASERVICES_PASSWORD="mypassword"
         EXTERN_DATASERVICES_PASSWORD:
-        
+  analyzer:
+      build: ./analyzer
+      links:
+        - database:database
