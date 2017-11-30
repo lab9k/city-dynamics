@@ -13,11 +13,6 @@ config_auth.read('auth.conf')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-desc = "Calculate index."
-parser = argparse.ArgumentParser(desc)
-parser.add_argument('dbConfig', type=str, help='database config settings: dev or docker', nargs=1)
-args = parser.parse_args()
-
 def get_conn(dbConfig):
 	POSTGRES_URL = URL(
 		drivername='postgresql',
@@ -30,8 +25,8 @@ def get_conn(dbConfig):
 	conn = create_engine(POSTGRES_URL)
 	return conn
 
-def import_data(table, colname):
-	df = pd.read_sql(sql=sql.format(table), con=conn)
+def import_data(table, colname, sql_query, conn):
+	df = pd.read_sql(sql=sql_query.format(table), con=conn)
 	if 'timestamp from' in df.columns:
 		df.rename(columns={'timestamp from': 'timesetamp'}, inplace=True)
 	df['timestamp'] = df['timestamp'].dt.floor('60min')
@@ -56,21 +51,18 @@ def merge_datasets(data):
 	return df
 
 def main():
-	global conn
-	global sql
-
 	# create connection
 	conn = get_conn(dbConfig=args.dbConfig[0])
 
 	# base call
-	sql = """ SELECT * FROM "{}" """
+	sql_query = """ SELECT * FROM "{}" """
 
 	# read buurtcodes
-	buurtcodes = pd.read_sql(sql=sql.format('buurtcombinatie'), con=conn)
+	buurtcodes = pd.read_sql(sql=sql_query.format('buurtcombinatie'), con=conn)
 
 	# read data sources, and round timestamp
-	google = import_data('google_with_bc', 'live')
-	gvb = import_data('gvb_with_bc', 'incoming')
+	google = import_data('google_with_bc', 'live', sql_query, conn)
+	gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
 
 	# google average
 	google_mean = calc_average_scale(google)
@@ -83,4 +75,9 @@ def main():
 	# write to db
 	df_index.to_sql(name='drukteindex', con=conn, index=False, if_exists='replace')
 
-main()
+if __name__ == '__main__':
+	desc = "Calculate index."
+	parser = argparse.ArgumentParser(desc)
+	parser.add_argument('dbConfig', type=str, help='database config settings: dev or docker', nargs=1)
+	args = parser.parse_args()
+	main()
