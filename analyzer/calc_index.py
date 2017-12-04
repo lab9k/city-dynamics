@@ -29,12 +29,22 @@ def min_max(x):
 	x = np.array(x)
 	return (x - min(x)) / (max(x) - min(x))
 
-def normalize(df):
+def normalize(x):
+	return (x - x.min()) / (x.max() - x.min())
+
+def normalize_df(df):
 	# average per area code, timestamp (rounded to the hour)
 	df = df.groupby(['vollcode', 'timestamp'])['drukte_index'].mean().reset_index()
 	# scale per timestamp (rounded to the hour)
 	df['normalized'] = df.groupby(['timestamp'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 	return df
+
+def import_verblijversindex(sql_query, conn):
+	verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
+	verblijversindex = verblijversindex[['wijk', 'oppervlakte_m2']]
+	verblijversindex.rename(columns={'wijk': 'vollcode'}, inplace=True)
+	verblijversindex['normalized_m2'] = normalize(verblijversindex.oppervlakte_m2)
+	return verblijversindex
 
 def import_data(table, colname, sql_query, conn):
 	df = pd.read_sql(sql=sql_query.format(table), con=conn)
@@ -44,11 +54,12 @@ def import_data(table, colname, sql_query, conn):
 	df['day'] = [ts.weekday() for ts in df.timestamp]
 	df['hour'] = [ts.hour for ts in df.timestamp]
 	df.rename(columns={colname: 'drukte_index'}, inplace=True)
-	df = normalize(df)
+	df = normalize_df(df)
 	return df
 
-def merge_datasets(data):
+def merge_datasets(data, verblijversindex):
 	df = reduce(lambda x, y: pd.merge(x, y, on = ['timestamp', 'vollcode'], how='outer'), data)
+	df = pd.merge(df, verblijversindex, on='vollcode', how='outer')
 	cols = [col for col in df.columns if 'normalized' in col]
 	df['normalized_index'] = df.loc[:,cols].mean(axis=1)
 	return df
@@ -64,7 +75,7 @@ def main():
 	buurtcodes = pd.read_sql(sql=sql_query.format('buurtcombinatie'), con=conn)
 
 	# verblijversindex
-	verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
+	verblijversindex = import_verblijversindex(sql_query=sql_query, conn=conn)
 
 	# read data sources, and round timestamp
 	google = import_data('google_with_bc', 'live', sql_query, conn)
@@ -72,7 +83,7 @@ def main():
 
 	# merge datasets
 	cols = ['vollcode', 'timestamp', 'normalized']
-	df_index = merge_datasets(data=[google[cols], gvb[cols]])
+	df_index = merge_datasets(data=[google[cols], gvb[cols]], verblijversindex=verblijversindex)
 
 	# add buurtcode information
 	df_index = pd.merge(df_index, buurtcodes, on='vollcode')
