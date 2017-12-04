@@ -40,8 +40,9 @@ def min_max(x):
 	return (x - min(x)) / (max(x) - min(x))
 
 def calc_average_scale(df):
-	df = df.groupby(['day', 'hour', 'vollcode'])['drukte_index'].mean().reset_index()
-	df['normalized'] = df.groupby(['day', 'vollcode'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+	df = gvb.copy()
+	df = df.groupby(['timestamp', 'vollcode'])['drukte_index'].mean().reset_index()
+	df['normalized'] = df.groupby('vollcode')['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
 	return df
 
 def merge_datasets(data):
@@ -60,11 +61,16 @@ def main():
 	# read buurtcodes
 	buurtcodes = pd.read_sql(sql=sql_query.format('buurtcombinatie'), con=conn)
 
+	# verblijversindex
+	verblijversindex = pd.read_sql(sql=sql.format('VERBLIJVERSINDEX'), con=conn)
+
 	# read data sources, and round timestamp
 	google = import_data('google_with_bc', 'live', sql_query, conn)
 	gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
 
-	# google average
+	google.set_index('timestamp', inplace=True)
+	gvb.set_index('timestamp', inplace=True)
+
 	google_mean = calc_average_scale(google)
 	gvb_mean = calc_average_scale(gvb)
 

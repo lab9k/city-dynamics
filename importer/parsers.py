@@ -84,10 +84,10 @@ def parse_gvb(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locations
     inout['tijd_numeric'] = [x[0] for x in fixed_time_day]
     inout['day_numeric'] = [x[1] for x in fixed_time_day]
 
-    # add timestamp, fake date, mon 2 oct - sun 8 oct
-    dates = ['2017-10-0' + str(i) for i in range(2, 9)]
+    # add timestamp, fake date, mon 16 oct - sun 22 oct
+    dates = ['2017-10-' + str(i) for i in range(16, 23)]
     inout['date'] = [dates[d-1] for d in inout.day_numeric]
-    inout['timestamp'] = [get_datetime(row) for _, row in inout.iterrows()]    
+    inout['timestamp'] = [get_datetime(row) for _, row in inout.iterrows()]
     
     # mean locaties
     locations.rename(columns={'ortnr_eind':'ortnr', 'haltenaam_eind':'halte', 'lat_eind':'lat', 'lng_eind':'lon'}, inplace=True)
@@ -212,8 +212,8 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
     path = os.path.join(datadir, filename)
     df = pd.read_excel(path, sheet_name=3)
     indx = np.logical_and(df.wijk != 'gemiddelde', np.logical_not(df.wijk.isnull()))
-    cols = ['wijk', 'verbl. Per HA (land) 2016']
+    cols = ['wijk', 'oppervlakte land in vierkante meters', 'verbl. Per HA (land) 2016']
     df = df.loc[indx, cols]
-    df[cols[1]] = np.round(df[cols[1]]).astype(int)
-    df.columns = ['wijk', 'verblijversindex']
+    df[cols[2]] = np.round(df[cols[2]]).astype(int)
+    df.columns = ['wijk', 'oppervlakte_m2', 'verblijversindex']
     return df
