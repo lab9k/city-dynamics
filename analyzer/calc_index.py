@@ -25,6 +25,16 @@ def get_conn(dbConfig):
 	conn = create_engine(POSTGRES_URL)
 	return conn
 
+def min_max(x):
+	x = np.array(x)
+	return (x - min(x)) / (max(x) - min(x))
+
+def normalize(df):
+	df = df.groupby(['vollcode', 'timestamp'])['drukte_index'].mean().reset_index()
+	df['normalized'] = df.groupby(['timestamp'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+	df.groupby('vollcode')['normalized'].max()
+	return df
+
 def import_data(table, colname, sql_query, conn):
 	df = pd.read_sql(sql=sql_query.format(table), con=conn)
 	if 'timestamp from' in df.columns:
@@ -33,53 +43,38 @@ def import_data(table, colname, sql_query, conn):
 	df['day'] = [ts.weekday() for ts in df.timestamp]
 	df['hour'] = [ts.hour for ts in df.timestamp]
 	df.rename(columns={colname: 'drukte_index'}, inplace=True)
-	return df
-
-def min_max(x):
-	x = np.array(x)
-	return (x - min(x)) / (max(x) - min(x))
-
-def calc_average_scale(df):
-	df = gvb.copy()
-	df = df.groupby(['timestamp', 'vollcode'])['drukte_index'].mean().reset_index()
-	df['normalized'] = df.groupby('vollcode')['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+	df = normalize(df)
 	return df
 
 def merge_datasets(data):
-	df = reduce(lambda x, y: pd.merge(x, y, on = ['day', 'hour', 'vollcode'], how='outer'), data)
+	df = reduce(lambda x, y: pd.merge(x, y, on = ['timestamp', 'vollcode'], how='outer'), data)
 	cols = [col for col in df.columns if 'normalized' in col]
 	df['normalized_index'] = df.loc[:,cols].mean(axis=1)
 	return df
 
 def main():
-	# create connection
-	conn = get_conn(dbConfig=args.dbConfig[0])
+# create connection
+conn = get_conn(dbConfig=args.dbConfig[0])
 
-	# base call
-	sql_query = """ SELECT * FROM "{}" """
+# base call
+sql_query = """ SELECT * FROM "{}" """
 
-	# read buurtcodes
-	buurtcodes = pd.read_sql(sql=sql_query.format('buurtcombinatie'), con=conn)
+# read buurtcodes
+buurtcodes = pd.read_sql(sql=sql_query.format('buurtcombinatie'), con=conn)
 
-	# verblijversindex
-	verblijversindex = pd.read_sql(sql=sql.format('VERBLIJVERSINDEX'), con=conn)
+# verblijversindex
+verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
 
-	# read data sources, and round timestamp
-	google = import_data('google_with_bc', 'live', sql_query, conn)
-	gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
+# read data sources, and round timestamp
+google = import_data('google_with_bc', 'live', sql_query, conn)
+gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
 
-	google.set_index('timestamp', inplace=True)
-	gvb.set_index('timestamp', inplace=True)
+# merge datasets
+cols = ['vollcode', 'normalized']
+df_index = merge_datasets(data=[google[cols], gvb[cols]])
 
-	google_mean = calc_average_scale(google)
-	gvb_mean = calc_average_scale(gvb)
-
-	# merge datasets
-	cols = ['day', 'hour', 'vollcode', 'normalized']
-	df_index = merge_datasets(data=[google_mean[cols], gvb_mean[cols]])
-
-	# write to db
-	df_index.to_sql(name='drukteindex', con=conn, index=False, if_exists='replace')
+# write to db
+df_index.to_sql(name='drukteindex', con=conn, index=False, if_exists='replace')
 
 if __name__ == '__main__':
 	desc = "Calculate index."
