@@ -169,7 +169,7 @@ def parse_mora(datadir, filename='MORA_data_data.csv'):
 def parse_tellus(datadir, filename='tellus2017.csv'):
     # read tellus csv
     path = os.path.join(datadir, filename)
-    df = pd.read_csv(path, delimiter=';', encoding='utf-8', nrows=1e5)
+    df = pd.read_csv(path, delimiter=';', encoding='utf-8')
 
     # select Latitude, Longitude, Meetwaarde, Representatief, Richting, Richting 1, Richting 2
     # representatief is of het een feestdag (1) is of een representatieve dag (3)
