@@ -167,9 +167,25 @@ def parse_mora(datadir, filename='MORA_data_data.csv'):
 
 
 def parse_tellus(datadir, filename='tellus2017.csv'):
-    # read tellus csv
+    # open tellus csv
     path = os.path.join(datadir, filename)
-    df = pd.read_csv(path, delimiter=';', encoding='utf-8')
+    file = open(path, 'r', encoding='utf-8')
+
+    # read header
+    header = np.array(next(file).strip('\n').split(';'))
+
+    # read data going to centrum
+    def read_line(line):
+        line = line.strip('\n').split(';')
+        if line[5] == 'Centrum' or line[6] == 'Centrum':
+            return line
+
+    # read lines
+    df = [read_line(line) for line in file]
+    df = [line for line in df if line is not None]
+
+    # convert to dataframe
+    df = pd.DataFrame(df, columns=header)
 
     # select Latitude, Longitude, Meetwaarde, Representatief, Richting, Richting 1, Richting 2
     # representatief is of het een feestdag (1) is of een representatieve dag (3)
