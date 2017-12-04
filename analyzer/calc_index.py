@@ -72,8 +72,11 @@ def main():
 	cols = ['day', 'hour', 'vollcode', 'normalized']
 	df_index = merge_datasets(data=[google_mean[cols], gvb_mean[cols]])
 
+	df_index = pd.merge(df_index, buurtcodes, on='vollcode')
+
 	# write to db
-	df_index.to_sql(name='drukteindex', con=conn, index=False, if_exists='replace')
+	df_index.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
+	conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
 
 if __name__ == '__main__':
 	desc = "Calculate index."

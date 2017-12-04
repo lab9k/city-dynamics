@@ -21,11 +21,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
-from citydynamics.api.views import GvbViewSet
+from citydynamics.api.views import DrukteindexViewSet
 
 
 router = DefaultRouter()
-router.register(prefix='gvb', viewset=GvbViewSet)
+router.register(prefix='drukteindex', viewset=DrukteindexViewSet)
 
 urlpatterns = router.urls
 
