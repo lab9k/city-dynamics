@@ -18,14 +18,14 @@ from . import serializers
 #     queryset = LengteGewicht.objects.all()
 #     serializer_class = MeldingSerializer
 
-class GvbViewSet(rest.DatapuntViewSet):
+class DrukteindexViewSet(rest.DatapuntViewSet):
     """
-    Amazing api
+    Drukteindex API
     """
 
-    queryset = models.Gvb.objects.all()
-    serializer_class = serializers.GvbSerializer
-    serializer_detail_class = serializers.GvbSerializer
+    queryset = models.Drukteindex.objects.all()
+    serializer_class = serializers.DrukteindexSerializer
+    serializer_detail_class = serializers.DrukteindexSerializer
 
     #filter_class = CijfersFilter
 

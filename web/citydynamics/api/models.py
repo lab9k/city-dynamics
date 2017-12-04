@@ -7,13 +7,13 @@ from datetime import datetime
 
 class Buurt(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
-    gml_id = models.CharField(max_length=-1)
-    id = models.CharField(max_length=-1, blank=True, null=True)
-    code = models.CharField(max_length=-1, blank=True, null=True)
-    naam = models.CharField(max_length=-1, blank=True, null=True)
-    display = models.CharField(max_length=-1, blank=True, null=True)
-    type = models.CharField(max_length=-1, blank=True, null=True)
-    uri = models.CharField(max_length=-1, blank=True, null=True)
+    gml_id = models.CharField(max_length=255)
+    id = models.CharField(max_length=255, blank=True, null=True)
+    code = models.CharField(max_length=255, blank=True, null=True)
+    naam = models.CharField(max_length=255, blank=True, null=True)
+    display = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+    uri = models.CharField(max_length=255, blank=True, null=True)
     wkb_geometry = models.GeometryField(blank=True, null=True)
 
     class Meta:
@@ -23,13 +23,13 @@ class Buurt(models.Model):
 
 class Buurtcombinatie(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
-    gml_id = models.CharField(max_length=-1)
-    id = models.CharField(max_length=-1, blank=True, null=True)
-    vollcode = models.CharField(max_length=-1, blank=True, null=True)
-    naam = models.CharField(max_length=-1, blank=True, null=True)
-    display = models.CharField(max_length=-1, blank=True, null=True)
-    type = models.CharField(max_length=-1, blank=True, null=True)
-    uri = models.CharField(max_length=-1, blank=True, null=True)
+    gml_id = models.CharField(max_length=255)
+    id = models.CharField(max_length=255, blank=True, null=True)
+    vollcode = models.CharField(max_length=255, blank=True, null=True)
+    naam = models.CharField(max_length=255, blank=True, null=True)
+    display = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+    uri = models.CharField(max_length=255, blank=True, null=True)
     wkb_geometry = models.GeometryField(blank=True, null=True)
     wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
 
@@ -56,6 +56,15 @@ class Drukteindex(models.Model):
     normalized_x = models.FloatField(blank=True, null=True)
     normalized_y = models.FloatField(blank=True, null=True)
     normalized_index = models.FloatField(blank=True, null=True)
+    ogc_fid = models.BigIntegerField(blank=True, null=True)
+    gml_id = models.TextField(blank=True, null=True)
+    id = models.TextField(blank=True, null=True)
+    naam = models.TextField(blank=True, null=True)
+    display = models.TextField(blank=True, null=True)
+    type = models.TextField(blank=True, null=True)
+    uri = models.TextField(blank=True, null=True)
+    wkb_geometry = models.TextField(blank=True, null=True)
+    wkb_geometry_simplified = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
@@ -92,13 +101,13 @@ class Functiekaart(models.Model):
 
 class Gebiedsgerichtwerken(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
-    gml_id = models.CharField(max_length=-1)
-    id = models.CharField(max_length=-1, blank=True, null=True)
-    code = models.CharField(max_length=-1, blank=True, null=True)
-    naam = models.CharField(max_length=-1, blank=True, null=True)
-    display = models.CharField(max_length=-1, blank=True, null=True)
-    type = models.CharField(max_length=-1, blank=True, null=True)
-    uri = models.CharField(max_length=-1, blank=True, null=True)
+    gml_id = models.CharField(max_length=255)
+    id = models.CharField(max_length=255, blank=True, null=True)
+    code = models.CharField(max_length=255, blank=True, null=True)
+    naam = models.CharField(max_length=255, blank=True, null=True)
+    display = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+    uri = models.CharField(max_length=255, blank=True, null=True)
     wkb_geometry = models.GeometryField(blank=True, null=True)
 
     class Meta:
@@ -140,8 +149,8 @@ class GoogleWithBc(models.Model):
     types = models.TextField(blank=True, null=True)
     differences = models.FloatField(blank=True, null=True)
     geom = models.GeometryField(srid=0, blank=True, null=True)
-    vollcode = models.CharField(max_length=-1, blank=True, null=True)
-    naam = models.CharField(max_length=-1, blank=True, null=True)
+    vollcode = models.CharField(max_length=255, blank=True, null=True)
+    naam = models.CharField(max_length=255, blank=True, null=True)
     stadsdeel_code = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -175,8 +184,8 @@ class GvbWithBc(models.Model):
     lat = models.FloatField(blank=True, null=True)
     lon = models.FloatField(blank=True, null=True)
     geom = models.GeometryField(srid=0, blank=True, null=True)
-    vollcode = models.CharField(max_length=-1, blank=True, null=True)
-    naam = models.CharField(max_length=-1, blank=True, null=True)
+    vollcode = models.CharField(max_length=255, blank=True, null=True)
+    naam = models.CharField(max_length=255, blank=True, null=True)
     stadsdeel_code = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -206,8 +215,8 @@ class MoraWithBc(models.Model):
     lon = models.FloatField(blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
     geom = models.GeometryField(srid=0, blank=True, null=True)
-    vollcode = models.CharField(max_length=-1, blank=True, null=True)
-    naam = models.CharField(max_length=-1, blank=True, null=True)
+    vollcode = models.CharField(max_length=255, blank=True, null=True)
+    naam = models.CharField(max_length=255, blank=True, null=True)
     stadsdeel_code = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -217,13 +226,13 @@ class MoraWithBc(models.Model):
 
 class Stadsdeel(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
-    gml_id = models.CharField(max_length=-1)
-    id = models.CharField(max_length=-1, blank=True, null=True)
-    code = models.CharField(max_length=-1, blank=True, null=True)
-    naam = models.CharField(max_length=-1, blank=True, null=True)
-    display = models.CharField(max_length=-1, blank=True, null=True)
-    type = models.CharField(max_length=-1, blank=True, null=True)
-    uri = models.CharField(max_length=-1, blank=True, null=True)
+    gml_id = models.CharField(max_length=255)
+    id = models.CharField(max_length=255, blank=True, null=True)
+    code = models.CharField(max_length=255, blank=True, null=True)
+    naam = models.CharField(max_length=255, blank=True, null=True)
+    display = models.CharField(max_length=255, blank=True, null=True)
+    type = models.CharField(max_length=255, blank=True, null=True)
+    uri = models.CharField(max_length=255, blank=True, null=True)
     wkb_geometry = models.GeometryField(blank=True, null=True)
 
     class Meta:
@@ -261,10 +270,11 @@ class TellusWithBc(models.Model):
     timestamp_from = models.DateTimeField(db_column='timestamp from', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     timestamp_to = models.DateTimeField(db_column='timestamp to', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     geom = models.GeometryField(srid=0, blank=True, null=True)
-    vollcode = models.CharField(max_length=-1, blank=True, null=True)
-    naam = models.CharField(max_length=-1, blank=True, null=True)
+    vollcode = models.CharField(max_length=255, blank=True, null=True)
+    naam = models.CharField(max_length=255, blank=True, null=True)
     stadsdeel_code = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'tellus_with_bc'
+

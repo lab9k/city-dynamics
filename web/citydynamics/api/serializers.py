@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from citydynamics.api.models import Gvb
+from citydynamics.api.models import Drukteindex
 
 # class MeldingSerializer(GeoFeatureModelSerializer):
 #     """ A class to serialize locations as GeoJSON compatible data """
@@ -14,18 +14,18 @@ from citydynamics.api.models import Gvb
 #         fields = 'Hoofdrubriek', 'Subrubriek', 'Datummelding'
 
 
-# class GvbSerializer(GeoFeatureModelSerializer):
+class DrukteindexSerializer(GeoFeatureModelSerializer):
+    """ A class to serialize locations as GeoJSON compatible data """
+
+    class Meta:
+        model = Drukteindex
+        geo_field = 'wkb_geometry_simplified'
+        fields = ('day', 'hour', 'vollcode', 'normalized_index')
+
+# class GvbSerializer(serializers.ModelSerializer):
 #     """ A class to serialize locations as GeoJSON compatible data """
 
 #     class Meta:
 #         model = Gvb
 #         #geo_field = 'geom'
 #         fields = ('halte', 'timestamp', 'incoming', 'outgoing')
-
-class GvbSerializer(serializers.ModelSerializer):
-    """ A class to serialize locations as GeoJSON compatible data """
-
-    class Meta:
-        model = Gvb
-        #geo_field = 'geom'
-        fields = ('halte', 'timestamp', 'incoming', 'outgoing')
