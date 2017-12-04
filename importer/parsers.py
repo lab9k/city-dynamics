@@ -26,7 +26,6 @@ def parse_gvb(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locations
         dt = datetime.datetime.combine(d, t)
         return dt
 
-
     # read raw ritten
     rittenpath = os.path.join(datadir, rittenpath)
     ritten = pd.read_csv(rittenpath, skiprows=2, header=None)
@@ -209,6 +208,11 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
     indx = np.logical_or(np.isnan(df_select.lat), np.isnan(df_select.lon))
     indx = np.logical_not(indx)
     df_select = df_select.loc[indx, :]
+
+    # only direction centrum
+    indx1 = np.logical_and(df_select['richting 1'] == 'Centrum', df_select.richting == 1)
+    indx2 = np.logical_and(df_select['richting 2'] == 'Centrum', df_select.richting == 2)
+    df_select = df_select.loc[np.logical_or(indx1, indx2), :]
 
     return df_select
 
