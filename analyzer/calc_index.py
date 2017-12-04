@@ -30,9 +30,10 @@ def min_max(x):
 	return (x - min(x)) / (max(x) - min(x))
 
 def normalize(df):
+	# average per area code, timestamp (rounded to the hour)
 	df = df.groupby(['vollcode', 'timestamp'])['drukte_index'].mean().reset_index()
+	# scale per timestamp (rounded to the hour)
 	df['normalized'] = df.groupby(['timestamp'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
-	df.groupby('vollcode')['normalized'].max()
 	return df
 
 def import_data(table, colname, sql_query, conn):
@@ -53,32 +54,32 @@ def merge_datasets(data):
 	return df
 
 def main():
-# create connection
-conn = get_conn(dbConfig=args.dbConfig[0])
+	# create connection
+	conn = get_conn(dbConfig=args.dbConfig[0])
 
-# base call
-sql_query = """ SELECT * FROM "{}" """
+	# base call
+	sql_query = """ SELECT * FROM "{}" """
 
-# read buurtcodes
-buurtcodes = pd.read_sql(sql=sql_query.format('buurtcombinatie'), con=conn)
+	# read buurtcodes
+	buurtcodes = pd.read_sql(sql=sql_query.format('buurtcombinatie'), con=conn)
 
-# verblijversindex
-verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
+	# verblijversindex
+	verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
 
-# read data sources, and round timestamp
-google = import_data('google_with_bc', 'live', sql_query, conn)
-gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
+	# read data sources, and round timestamp
+	google = import_data('google_with_bc', 'live', sql_query, conn)
+	gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
 
-# merge datasets
-cols = ['vollcode', 'normalized']
-df_index = merge_datasets(data=[google[cols], gvb[cols]])
+	# merge datasets
+	cols = ['vollcode', 'timestamp', 'normalized']
+	df_index = merge_datasets(data=[google[cols], gvb[cols]])
 
+	# add buurtcode information
+	df_index = pd.merge(df_index, buurtcodes, on='vollcode')
 
-df_index = pd.merge(df_index, buurtcodes, on='vollcode')
-
-# write to db
-df_index.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
-conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
+	# write to db
+	df_index.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
+	conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
 
 
 if __name__ == '__main__':
