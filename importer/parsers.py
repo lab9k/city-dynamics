@@ -183,38 +183,44 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
     df = [read_line(line) for line in file]
     df = [line for line in df if line is not None]
 
+    # close file
+    file.close()
+
     # convert to dataframe
     df = pd.DataFrame(df, columns=header)
 
     # select Latitude, Longitude, Meetwaarde, Representatief, Richting, Richting 1, Richting 2
     # representatief is of het een feestdag (1) is of een representatieve dag (3)
-    df_select = df.loc[:,['Latitude', 'Longitude', 'Meetwaarde', 'Representatief', 'Richting', 'Richting 1', 'Richting 2']]
+    df = df.loc[:,['Latitude', 'Longitude', 'Meetwaarde', 'Representatief', 'Richting', 'Richting 1', 'Richting 2', 'Tijd Van']]
 
     # Vaak wordt als tijd 00:00:00 gegeven, de date time parser laat dit weg. Dus als er geen tijd is, was het in het oorspronkelijk bestand 00:00:00. 
-    df_select['timestamp from'] = pd.to_datetime(df['Tijd Van'], format="%d/%m/%Y %H:%M:%S")
-    df_select['timestamp to'] = pd.to_datetime(df['Tijd Tot'], format="%d/%m/%Y %H:%M:%S")
+    df['Tijd Van'] = pd.to_datetime(df['Tijd Van'], format="%d/%m/%Y %H:%M:%S")
 
     # rename columns
-    df_select.rename(columns={'Latitude':'lat', 'Longitude':'lon', 'Meetwaarde':'meetwaarde', 'Representatief':'representatief', 'Richting':'richting', 'Richting 1':'richting 1', 'Richting 2':'richting 2'}, inplace=True)
+    df.rename(columns={'Tijd Van':'timestamp', 'Latitude':'lat', 'Longitude':'lon', 'Meetwaarde':'meetwaarde', 'Representatief':'representatief', 'Richting':'richting', 'Richting 1':'richting 1', 'Richting 2':'richting 2'}, inplace=True)
 
     # change comma to dot and type object to type float64
-    df_select['lon'] = df_select['lon'].str.replace(',','.')
-    df_select['lat'] = df_select['lat'].str.replace(',','.')
+    df['lon'] = df['lon'].str.replace(',','.')
+    df['lat'] = df['lat'].str.replace(',','.')
 
-    df_select['lon'] = pd.to_numeric(df_select['lon'], errors='coerce')
-    df_select['lat'] = pd.to_numeric(df_select['lat'], errors='coerce')
+    df['lon'] = pd.to_numeric(df['lon'], errors='coerce')
+    df['lat'] = pd.to_numeric(df['lat'], errors='coerce')
 
     # filter NaN
-    indx = np.logical_or(np.isnan(df_select.lat), np.isnan(df_select.lon))
+    indx = np.logical_or(np.isnan(df.lat), np.isnan(df.lon))
     indx = np.logical_not(indx)
-    df_select = df_select.loc[indx, :]
+    df = df.loc[indx, :]
 
     # only direction centrum
-    indx1 = np.logical_and(df_select['richting 1'] == 'Centrum', df_select.richting == 1)
-    indx2 = np.logical_and(df_select['richting 2'] == 'Centrum', df_select.richting == 2)
-    df_select = df_select.loc[np.logical_or(indx1, indx2), :]
+    indx1 = np.logical_and(df['richting 1'] == 'Centrum', df.richting == '1')
+    indx2 = np.logical_and(df['richting 2'] == 'Centrum', df.richting == '2')
+    df = df.loc[np.logical_or(indx1, indx2), :]
 
-    return df_select
+    # drop columns
+    df.drop(columns=['richting', 'richting 1', 'richting 2', 'representatief'], inplace=True)
+
+    return df
+
 
 def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
     path = os.path.join(datadir, filename)
@@ -223,10 +229,12 @@ def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
 
     return df
 
+
 def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, sep=';')
     return df
+
 
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
     path = os.path.join(datadir, filename)
