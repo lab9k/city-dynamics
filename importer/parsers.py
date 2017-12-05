@@ -166,18 +166,18 @@ def parse_mora(datadir, filename='MORA_data_data.csv'):
 
 
 def parse_tellus(datadir, filename='tellus2017.csv'):
-    # open tellus csv
-    path = os.path.join(datadir, filename)
-    file = open(path, 'r', encoding='utf-8')
+# open tellus csv
+path = os.path.join(datadir, filename)
+file = open(path, 'r', encoding='utf-8')
 
-    # read header
-    header = np.array(next(file).strip('\n').split(';'))
+# read header
+header = np.array(next(file).strip('\n').split(';'))
 
-    # read data going to centrum
-    def read_line(line):
-        line = line.strip('\n').split(';')
-        if line[5] == 'Centrum' or line[6] == 'Centrum':
-            return line
+# read data going to centrum
+def read_line(line):
+    line = line.strip('\n').split(';')
+    if line[5] == 'Centrum' or line[6] == 'Centrum':
+        return line
 
     # read lines
     df = [read_line(line) for line in file]
@@ -191,13 +191,13 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
 
     # select Latitude, Longitude, Meetwaarde, Representatief, Richting, Richting 1, Richting 2
     # representatief is of het een feestdag (1) is of een representatieve dag (3)
-    df = df.loc[:,['Latitude', 'Longitude', 'Meetwaarde', 'Representatief', 'Richting', 'Richting 1', 'Richting 2', 'Tijd Van']]
+    df = df.loc[:,['Tellus Id', 'Latitude', 'Longitude', 'Meetwaarde', 'Representatief', 'Richting', 'Richting 1', 'Richting 2', 'Tijd Van']]
 
     # Vaak wordt als tijd 00:00:00 gegeven, de date time parser laat dit weg. Dus als er geen tijd is, was het in het oorspronkelijk bestand 00:00:00. 
     df['Tijd Van'] = pd.to_datetime(df['Tijd Van'], format="%d/%m/%Y %H:%M:%S")
 
     # rename columns
-    df.rename(columns={'Tijd Van':'timestamp', 'Latitude':'lat', 'Longitude':'lon', 'Meetwaarde':'meetwaarde', 'Representatief':'representatief', 'Richting':'richting', 'Richting 1':'richting 1', 'Richting 2':'richting 2'}, inplace=True)
+    df.rename(columns={'Tellus Id':'tellus_id', 'Tijd Van':'timestamp', 'Latitude':'lat', 'Longitude':'lon', 'Meetwaarde':'meetwaarde', 'Representatief':'representatief', 'Richting':'richting', 'Richting 1':'richting 1', 'Richting 2':'richting 2'}, inplace=True)
 
     # change comma to dot and type object to type float64
     df['lon'] = df['lon'].str.replace(',','.')
