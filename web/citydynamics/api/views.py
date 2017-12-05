@@ -13,56 +13,60 @@ import datetime
 import django_filters
 
 
-def convert_to_date(input_date):
-    """
-    Converts input time to a date object.
-    Allowed input is timestamp, or string denoting a date in ISO or EU format
-    Parameters:
-    input_date: The input from the query params
-    Returns:
-    A python date object
-    """
-    if not input_date:
-        return
+# def convert_to_date(input_date):
+#     """
+#     Converts input time to a date object.
+#     Allowed input is timestamp, or string denoting a date in ISO or EU format
+#     Parameters:
+#     input_date: The input from the query params
+#     Returns:
+#     A python date object
+#     """
+#     if not input_date:
+#         return
    
-    date_format = '%Y-%m-%d'  # Assume iso
-    if input_date.isdigit():
-        # The next test will make it that timestamp from around 3 am on 1-1-1970
-        # will be handled as dates. :
-        # however this should not be an issue
-        if len(input_date) == 4:
-            # Only a year is given
-            date_format = '%Y'
-        else:
-            # Treat itas a timestamp
-            try:
-                date_obj = datetime.date.fromtimestamp(int(input_date))
-            except OverflowError:  # Just to be on the safe side, you never know
-                date_obj = None
-            return date_obj
-    elif '-' in input_date:
-        # A date string. Determinig format
-        if input_date.find('-') == 2:
-            # EU format
-            date_format = '%d-%m-%Y'
-    else:
-        # Un-workable input
-        return None
-    # Attempting to convert the string to a date object
-    try:
-        date_obj = datetime.datetime.strptime(input_date, date_format).date()
-    except ValueError:
-        # Cannot convert the input to a date object
-        date_obj = None
+#     date_format = '%Y-%m-%d'  # Assume iso
+#     if input_date.isdigit():
+#         # The next test will make it that timestamp from around 3 am on 1-1-1970
+#         # will be handled as dates. :
+#         # however this should not be an issue
+#         if len(input_date) == 4:
+#             # Only a year is given
+#             date_format = '%Y'
+#         else:
+#             # Treat itas a timestamp
+#             try:
+#                 date_obj = datetime.date.fromtimestamp(int(input_date))
+#             except OverflowError:  # Just to be on the safe side, you never know
+#                 date_obj = None
+#             return date_obj
+#     elif '-' in input_date:
+#         # A date string. Determinig format
+#         if input_date.find('-') == 2:
+#             # EU format
+#             date_format = '%d-%m-%Y'
+#     else:
+#         # Un-workable input
+#         return None
+#     # Attempting to convert the string to a date object
+#     try:
+#         date_obj = datetime.datetime.strptime(input_date, date_format).date()
+#     except ValueError:
+#         # Cannot convert the input to a date object
+#         date_obj = None
 
+#     return date_obj
+
+def convert_to_date(input_date):
+    date_obj = datetime.datetime.strptime(input_date, '%Y-%m-%d-%H-%M-%S')
     return date_obj
-
 
 class DateFilter(FilterSet):
     #datetime = django_filters.DateTimeFilter(action=filter_on_date)
 
     vanaf = filters.CharFilter(label='vanaf', method='vanaf_filter')
     tot = filters.CharFilter(label='tot', method='tot_filter')
+    op = filters.CharFilter(label='tot', method='op_filter')
 
     class Meta:
         model = models.Drukteindex
@@ -70,25 +74,34 @@ class DateFilter(FilterSet):
             'timestamp',
             'vanaf',
             'tot',
-            #'op',
+            'op',
             #'hour',
             'vollcode'
         ]
 
     def vanaf_filter(self, queryset, _name, value):
-        start_date = convert_to_date(value)
-        if not start_date:
-            raise ValidationError('geef een tijd pannekoek')
+        date = convert_to_date(value)
+        if not date:
+            raise ValidationError('Please insert a datetime')
+        queryset = queryset.filter(timestamp__gte=date)
 
-        queryset = queryset.filter(timestamp__gte=start_date)
         return queryset
 
     def tot_filter(self, queryset, _name, value):
-        assert False
         date = convert_to_date(value)
+        if not date:
+            raise ValidationError('Please insert a datetime')
         queryset = queryset.filter(timestamp__lte=date)
+
         return queryset
 
+    def op_filter(self, queryset, _name, value):
+        date = convert_to_date(value)
+        if not date:
+            raise ValidationError('Please insert a datetime')
+        queryset = queryset.filter(timestamp=date)
+
+        return queryset
 
 
 class DrukteindexViewSet(rest.DatapuntViewSet):
