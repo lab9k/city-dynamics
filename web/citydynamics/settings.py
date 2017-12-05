@@ -186,7 +186,11 @@ REST_FRAMEWORK = dict(
     UNAUTHENTICATED_TOKEN={},
     # or allow read-only access for unauthenticated users.
     DEFAULT_PAGINATION_CLASS='rest_framework.pagination.LimitOffsetPagination',
+    DEFAULT_FILTER_BACKENDS=(
+        'rest_framework.filters.DjangoFilterBackend',
+    ),
 )
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 

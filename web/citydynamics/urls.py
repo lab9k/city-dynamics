@@ -31,6 +31,7 @@ urlpatterns = router.urls
 
 urlpatterns = [
     url(r'^citydynamics/api/', include(router.urls)),
+
     #url(r'^citydynamics/api/beeldmaatlattengeojson/$', BeeldmaatlatGeoJsonViewSet, name='beeldmaatlattengeojson'),
 ]
 

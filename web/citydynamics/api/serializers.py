@@ -20,7 +20,7 @@ class DrukteindexSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Drukteindex
         geo_field = 'wkb_geometry_simplified'
-        fields = ('day', 'hour', 'vollcode', 'normalized_index')
+        fields = ('vollcode', 'normalized_index')
 
 # class GvbSerializer(serializers.ModelSerializer):
 #     """ A class to serialize locations as GeoJSON compatible data """

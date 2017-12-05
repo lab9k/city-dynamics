@@ -5,6 +5,17 @@ from datetime import datetime
 
 # objects = models.GeoManager()
 
+class Verblijversindex(models.Model):
+    index = models.BigIntegerField(primary_key=True)
+    wijk = models.TextField(blank=True, null=True)
+    oppervlakte_m2 = models.FloatField(blank=True, null=True)
+    verblijversindex = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'VERBLIJVERSINDEX'
+
+
 class Buurt(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
     gml_id = models.CharField(max_length=255)
@@ -50,11 +61,12 @@ class DjangoMigrations(models.Model):
 
 class Drukteindex(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    day = models.BigIntegerField(blank=True, null=True)
-    hour = models.BigIntegerField(blank=True, null=True)
     vollcode = models.TextField(blank=True, null=True)
+    timestamp = models.DateTimeField(blank=True, null=True)
     normalized_x = models.FloatField(blank=True, null=True)
     normalized_y = models.FloatField(blank=True, null=True)
+    oppervlakte_m2 = models.FloatField(blank=True, null=True)
+    normalized_m2 = models.FloatField(blank=True, null=True)
     normalized_index = models.FloatField(blank=True, null=True)
     ogc_fid = models.BigIntegerField(blank=True, null=True)
     gml_id = models.TextField(blank=True, null=True)
