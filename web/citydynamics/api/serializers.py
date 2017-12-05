@@ -12,4 +12,4 @@ class DrukteindexSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Drukteindex
         geo_field = 'wkb_geometry_simplified'
-        fields = ('naam', 'vollcode', 'normalized_index')
+        fields = ('naam', 'vollcode', 'drukte_index')

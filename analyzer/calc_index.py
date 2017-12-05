@@ -1,6 +1,9 @@
 import configparser
 import argparse
 import logging
+import json
+import requests
+import time
 import pandas as pd
 import numpy as np
 
@@ -95,7 +98,8 @@ def complete_ts_vollcode(data, vollcodes):
 	# get list of timestamps
 	start = np.min(data.timestamp)
 	end = np.max(data.timestamp)
-	timestamps = [dt for dt in datetime_range(start, end, {'days': 0, 'hours': 1})]
+	timestamps = pd.date_range(start=start, end=end, freq='H')
+	# timestamps = [dt for dt in datetime_range(start, end, {'days': 0, 'hours': 1})]
 
 	# add multi-index
 	mind = pd.MultiIndex.from_product([timestamps, vollcodes])
@@ -105,9 +109,10 @@ def complete_ts_vollcode(data, vollcodes):
 	data.drop(['vollcode', 'timestamp'], axis=1, inplace=True)
 
 	# rename columns
-	data.rename(columns={'level_0':'timesetamp', 'level_1':'vollcode'}, inplace=True)
+	data.rename(columns={'level_0':'timestamp', 'level_1':'vollcode'}, inplace=True)
 
 	return data
+
 
 def main():
 	# create connection
@@ -125,8 +130,8 @@ def main():
 	# read data sources, and round timestamp
 	google = import_data('google_with_bc', 'live', sql_query, conn)
 	gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
-	vollcodes = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
-	tellus = import_tellus('tellus_with_bc', 'meetwaarde', sql_query, conn, vollcodes=vollcodes)
+	vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
+	tellus = import_tellus('tellus_with_bc', 'meetwaarde', sql_query, conn, vollcodes=vollcodes_centrum)
 
 	# merge datasets
 	cols = ['vollcode', 'timestamp', 'normalized']
@@ -134,8 +139,8 @@ def main():
 	df = merge_datasets(data=data)
 
 	# fill in missing timestamp-vollcode combinations
-	vollcodes = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
-	df = complete_ts_vollcode(data=df, vollcodes=vollcodes)
+	all_vollcodes = [bc for bc in buurtcodes.vollcode.unique()]
+	df = complete_ts_vollcode(data=df, vollcodes=all_vollcodes)
 
 	# add buurtcode information
 	df = pd.merge(df, buurtcodes, on='vollcode', how='left')
@@ -151,7 +156,7 @@ def main():
 	df.drop(cols, axis=1, inplace=True)
 
 	# write to db
-	df_index.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
+	df.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
 	conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
 
 
