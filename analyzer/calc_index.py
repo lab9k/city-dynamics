@@ -2,6 +2,7 @@ import configparser
 import argparse
 import logging
 import pandas as pd
+import numpy as np
 
 from functools import reduce
 from sqlalchemy import create_engine
@@ -49,17 +50,38 @@ def import_verblijversindex(sql_query, conn):
 def import_data(table, colname, sql_query, conn):
 	df = pd.read_sql(sql=sql_query.format(table), con=conn)
 	if 'timestamp from' in df.columns:
-		df.rename(columns={'timestamp from': 'timesetamp'}, inplace=True)
+		df.rename(columns={'timestamp from': 'timestamp'}, inplace=True)
 	df['timestamp'] = df['timestamp'].dt.floor('60min')
 	df['day'] = [ts.weekday() for ts in df.timestamp]
 	df['hour'] = [ts.hour for ts in df.timestamp]
 	df.rename(columns={colname: 'drukte_index'}, inplace=True)
+	df['drukte_index'] = df['drukte_index'].astype(float)
 	df = normalize_df(df)
+	return df
+
+def import_tellus(table, colname, sql_query, conn, vollcodes):
+	df = pd.read_sql(sql=sql_query.format(table), con=conn)
+	df = df[['meetwaarde', 'timestamp', 'vollcode']]
+	df.rename(columns={'meetwaarde':'drukte_index'}, inplace=True)
+	df['drukte_index'] = df['drukte_index'].astype(int)
+	df = df.groupby('timestamp')['drukte_index'].sum().reset_index()
+	df['date'] = [ts.date() for ts in df.timestamp]
+
+	data = []
+	for vc in vollcodes:
+		new_df = df.copy()
+		new_df['vollcode'] = vc
+		data.append(new_df)
+
+	df = pd.concat(data, ignore_index=True)
+
+	df['normalized'] = df.groupby(['date'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+	df = df[['timestamp', 'drukte_index', 'normalized', 'vollcode']]
 	return df
 
 def merge_datasets(data, verblijversindex):
 	df = reduce(lambda x, y: pd.merge(x, y, on = ['timestamp', 'vollcode'], how='outer'), data)
-	df = pd.merge(df, verblijversindex, on='vollcode', how='outer')
+	df = pd.merge(df, verblijversindex, on='vollcode', how='left')
 	cols = [col for col in df.columns if 'normalized' in col]
 	df['normalized_index'] = df.loc[:,cols].mean(axis=1)
 	return df
@@ -80,10 +102,12 @@ def main():
 	# read data sources, and round timestamp
 	google = import_data('google_with_bc', 'live', sql_query, conn)
 	gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
+	vollcodes = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
+	tellus = import_tellus('tellus_with_bc', 'meetwaarde', sql_query, conn, vollcodes=vollcodes)
 
 	# merge datasets
 	cols = ['vollcode', 'timestamp', 'normalized']
-	df_index = merge_datasets(data=[google[cols], gvb[cols]], verblijversindex=verblijversindex)
+	df_index = merge_datasets(data=[google[cols], gvb[cols], tellus[cols]], verblijversindex=verblijversindex)
 
 	# add buurtcode information
 	df_index = pd.merge(df_index, buurtcodes, on='vollcode')

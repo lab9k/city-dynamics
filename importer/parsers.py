@@ -166,18 +166,18 @@ def parse_mora(datadir, filename='MORA_data_data.csv'):
 
 
 def parse_tellus(datadir, filename='tellus2017.csv'):
-# open tellus csv
-path = os.path.join(datadir, filename)
-file = open(path, 'r', encoding='utf-8')
+    # open tellus csv
+    path = os.path.join(datadir, filename)
+    file = open(path, 'r', encoding='utf-8')
 
-# read header
-header = np.array(next(file).strip('\n').split(';'))
+    # read header
+    header = np.array(next(file).strip('\n').split(';'))
 
-# read data going to centrum
-def read_line(line):
-    line = line.strip('\n').split(';')
-    if line[5] == 'Centrum' or line[6] == 'Centrum':
-        return line
+    # read data going to centrum
+    def read_line(line):
+        line = line.strip('\n').split(';')
+        if line[5] == 'Centrum' or line[6] == 'Centrum':
+            return line
 
     # read lines
     df = [read_line(line) for line in file]
