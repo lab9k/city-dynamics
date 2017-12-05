@@ -1,3 +1,13 @@
+from datetime import date, datetime, timedelta
+
+def datetime_range(start, end, delta):
+    current = start
+    if not isinstance(delta, timedelta):
+        delta = timedelta(**delta)
+    while current < end:
+        yield current
+        current += delta
+
 import configparser
 import argparse
 import logging
@@ -111,6 +121,15 @@ def main():
 
 	# add buurtcode information
 	df_index = pd.merge(df_index, buurtcodes, on='vollcode')
+
+	# fill in missing timestamp-vollcode combinations
+	start = np.min(df_index.timestamp)
+	end = np.max(df_index.timestamp)
+	all_timestamps = [dt for dt in datetime_range(start, end, {'days': 0, 'hours': 1})]
+	all_vollcodes = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
+
+	mind = pd.MultiIndex.from_product([all_timestamps, all_vollcodes])
+	df_index = df_index.reindex(mind, fill_value=np.nan).reset_index()
 
 	# write to db
 	df_index.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
