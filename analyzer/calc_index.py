@@ -1,13 +1,3 @@
-from datetime import date, datetime, timedelta
-
-def datetime_range(start, end, delta):
-    current = start
-    if not isinstance(delta, timedelta):
-        delta = timedelta(**delta)
-    while current < end:
-        yield current
-        current += delta
-
 import configparser
 import argparse
 import logging
@@ -17,6 +7,7 @@ import numpy as np
 from functools import reduce
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
+from datetime import date, datetime, timedelta
 
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
@@ -35,6 +26,14 @@ def get_conn(dbConfig):
 	)
 	conn = create_engine(POSTGRES_URL)
 	return conn
+
+def datetime_range(start, end, delta):
+	current = start
+	if not isinstance(delta, timedelta):
+		delta = timedelta(**delta)
+	while current < end:
+		yield current
+		current += delta
 
 def min_max(x):
 	x = np.array(x)
@@ -89,12 +88,26 @@ def import_tellus(table, colname, sql_query, conn, vollcodes):
 	df = df[['timestamp', 'drukte_index', 'normalized', 'vollcode']]
 	return df
 
-def merge_datasets(data, verblijversindex):
-	df = reduce(lambda x, y: pd.merge(x, y, on = ['timestamp', 'vollcode'], how='outer'), data)
-	df = pd.merge(df, verblijversindex, on='vollcode', how='left')
-	cols = [col for col in df.columns if 'normalized' in col]
-	df['normalized_index'] = df.loc[:,cols].mean(axis=1)
-	return df
+def merge_datasets(data):
+	return reduce(lambda x, y: pd.merge(x, y, on = ['timestamp', 'vollcode'], how='outer'), data)
+
+def complete_ts_vollcode(data, vollcodes):
+	# get list of timestamps
+	start = np.min(data.timestamp)
+	end = np.max(data.timestamp)
+	timestamps = [dt for dt in datetime_range(start, end, {'days': 0, 'hours': 1})]
+
+	# add multi-index
+	mind = pd.MultiIndex.from_product([timestamps, vollcodes])
+	data = data.reindex(mind, fill_value=np.nan).reset_index()
+
+	# drop columns
+	data.drop(['vollcode', 'timestamp'], axis=1, inplace=True)
+
+	# rename columns
+	data.rename(columns={'level_0':'timesetamp', 'level_1':'vollcode'}, inplace=True)
+
+	return data
 
 def main():
 	# create connection
@@ -117,19 +130,25 @@ def main():
 
 	# merge datasets
 	cols = ['vollcode', 'timestamp', 'normalized']
-	df_index = merge_datasets(data=[google[cols], gvb[cols], tellus[cols]], verblijversindex=verblijversindex)
-
-	# add buurtcode information
-	df_index = pd.merge(df_index, buurtcodes, on='vollcode')
+	data = [google[cols], gvb[cols], tellus[cols]]
+	df = merge_datasets(data=data)
 
 	# fill in missing timestamp-vollcode combinations
-	start = np.min(df_index.timestamp)
-	end = np.max(df_index.timestamp)
-	all_timestamps = [dt for dt in datetime_range(start, end, {'days': 0, 'hours': 1})]
-	all_vollcodes = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
+	vollcodes = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
+	df = complete_ts_vollcode(data=df, vollcodes=vollcodes)
 
-	mind = pd.MultiIndex.from_product([all_timestamps, all_vollcodes])
-	df_index = df_index.reindex(mind, fill_value=np.nan).reset_index()
+	# add buurtcode information
+	df = pd.merge(df, buurtcodes, on='vollcode', how='left')
+
+	# add verblijversindex
+	df = pd.merge(df, verblijversindex, on='vollcode', how='left')
+
+	# calculate overall index
+	cols = [col for col in df.columns if 'normalized' in col]
+	df['drukte_index'] = df[cols].mean(axis=1)
+
+	# drop obsolete columns
+	df.drop(cols, axis=1, inplace=True)
 
 	# write to db
 	df_index.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
