@@ -27,7 +27,6 @@ def create_geometry_query(tablename):
     ADD COLUMN geom geometry;
   UPDATE "{0}"
       SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
-
   CREATE INDEX {1} ON "{0}" USING GIST(geom);
   """.format(tablename, 'geom_' + tablename)
 
@@ -39,7 +38,7 @@ def simplify_polygon(table):
   ALTER TABLE "{0}"
     ADD COLUMN wkb_geometry_simplified geometry;
   UPDATE "{0}"
-    SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.01);
+    SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.1);
   """.format(table)
 
 def add_bc_codes(table):

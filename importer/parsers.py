@@ -245,3 +245,20 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
     df[cols[2]] = np.round(df[cols[2]]).astype(int)
     df.columns = ['wijk', 'oppervlakte_m2', 'verblijversindex']
     return df
+
+def parse_cmsa(datadir):
+    def read_file(file, datadir):
+        cam_number = re.sub('_.*', '', file.replace('Cam_loc', ''))
+        df = pd.read_csv(os.path.join(datadir, file), sep=',')
+        df.drop('Unnamed: 3', axis=1, inplace=True)
+        df['cam_number'] = cam_number
+        return df
+
+    paths = os.listdir(datadir)
+    cam_paths = [p for p in paths if 'Cam_loc' in p]
+    data = [read_file(file=file, datadir=datadir) for file in cam_paths]
+    data = pd.concat(data, ignore_index=True)
+    data.rename(columns={'Time':'timestamp', 'In':'in', 'Out':'out'}, inplace=True)
+    data['timestamp'] = [ts + ':00' for ts in data.timestamp]
+    data['timestamp'] = [datetime.datetime.strptime(ts, '%Y-%m-%d %H:%M:%S') for ts in data.timestamp]
+    return data
