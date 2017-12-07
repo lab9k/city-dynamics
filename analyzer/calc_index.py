@@ -46,11 +46,9 @@ def min_max(x):
     x = np.array(x)
     return (x - min(x)) / (max(x) - min(x))
 
-
 def normalize(x):
-<<<<<<< HEAD
 	x = rankdata(x)
-	return (x - x.min()) / (x.max() - x.min())
+	return min_max(x)
 
 def normalize_df(df):
 	# average per area code, timestamp (rounded to the hour)
@@ -58,18 +56,6 @@ def normalize_df(df):
 	# scale per timestamp (rounded to the hour)
 	df['normalized'] = df.groupby(['timestamp'])['drukte_index'].transform(normalize)
 	return df
-=======
-    return (x - x.min()) / (x.max() - x.min())
-
-
-def normalize_df(df):
-    # average per area code, timestamp (rounded to the hour)
-    df = df.groupby(['vollcode', 'timestamp'])['drukte_index'].mean().reset_index()
-    # scale per timestamp (rounded to the hour)
-    df['normalized'] = df.groupby(['timestamp'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
-    return df
-
->>>>>>> 47501a7ea6c9b1fead739cd75557a9db6318fa15
 
 def import_verblijversindex(sql_query, conn):
     verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
@@ -77,7 +63,6 @@ def import_verblijversindex(sql_query, conn):
     verblijversindex.rename(columns={'wijk': 'vollcode'}, inplace=True)
     verblijversindex['normalized_m2'] = normalize(verblijversindex.oppervlakte_m2)
     return verblijversindex
-
 
 def import_data(table, colname, sql_query, conn):
 	df = pd.read_sql(sql=sql_query.format(table), con=conn)
