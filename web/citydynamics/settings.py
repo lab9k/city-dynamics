@@ -40,7 +40,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     # 'corsheaders',
@@ -53,6 +52,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_gis',
+
+
 ]
 
 MIDDLEWARE = [
@@ -178,13 +179,13 @@ REST_FRAMEWORK = dict(
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/citydynamics/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 
 #STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'),)
 
 # Upload location
-MEDIA_URL = '/citydynamics/media/'
+MEDIA_URL = '/blabla/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGGING = {
