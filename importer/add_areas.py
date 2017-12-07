@@ -27,7 +27,6 @@ def create_geometry_query(tablename):
     ADD COLUMN geom geometry;
   UPDATE "{0}"
       SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
-
   CREATE INDEX {1} ON "{0}" USING GIST(geom);
   """.format(tablename, 'geom_' + tablename)
 
@@ -39,7 +38,17 @@ def simplify_polygon(table):
   ALTER TABLE "{0}"
     ADD COLUMN wkb_geometry_simplified geometry;
   UPDATE "{0}"
-    SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.01);
+    SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.1);
+  """.format(table)
+
+def geom_to_polygon(table):
+  return """
+  ALTER TABLE "{0}"
+    DROP COLUMN IF EXISTS wkb_polygon_simplified;
+  ALTER TABLE "{0}"
+    ADD COLUMN wkb_polygon_simplified varchar;
+  UPDATE "{0}"
+    SET wkb_polygon_simplified = ST_AsText(wkb_geometry_simplified);
   """.format(table)
 
 def add_bc_codes(table):
@@ -85,12 +94,13 @@ def get_pg_str(host, port, user, dbname, password):
 def main(dbConfig):
     pg_str = get_pg_str(config_auth.get(dbConfig,'host'),config_auth.get(dbConfig,'port'),config_auth.get(dbConfig,'dbname'), config_auth.get(dbConfig,'user'), config_auth.get(dbConfig,'password'))
     execute_sql(pg_str, simplify_polygon('buurtcombinatie'))
+    execute_sql(pg_str, geom_to_polygon('buurtcombinatie')) 
 
-    for table in tables_to_modify:
-        logger.info('Handling {} table'.format(table))
-        execute_sql(pg_str, create_geometry_query(table))
-        execute_sql(pg_str, add_bc_codes(table))
-        execute_sql(pg_str, set_primary_key(table + '_with_bc'))
+    # for table in tables_to_modify:
+    #     logger.info('Handling {} table'.format(table))
+    #     execute_sql(pg_str, create_geometry_query(table))
+    #     execute_sql(pg_str, add_bc_codes(table))
+    #     execute_sql(pg_str, set_primary_key(table + '_with_bc'))
 
 
 if __name__ == '__main__':
