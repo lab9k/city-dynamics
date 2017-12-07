@@ -262,3 +262,24 @@ def parse_cmsa(datadir):
     data['timestamp'] = [ts + ':00' for ts in data.timestamp]
     data['timestamp'] = [datetime.datetime.strptime(ts, '%Y-%m-%d %H:%M:%S') for ts in data.timestamp]
     return data
+
+def parse_afval(datadir, filename='WEEGGEGEVENS(1-10_30-11_2017).csv'):
+    df = df_afval.loc[:,['datum', 'tijd', 'fractie', 'nettogewicht', 'breedtegraad', 'lengtegraad']]
+    df['DateTime'] = df[['datum', 'tijd']].apply(lambda x: ''.join(x), axis=1)
+    df['timestamp'] = pd.to_datetime(df['DateTime'], format="%d/%m/%Y%H:%M:%S")
+    df = df.drop(['datum', 'tijd', 'DateTime'], axis=1)
+    df.rename(columns={'breedtegraad':'lat', 'lengtegraad':'lon'}, inplace=True)
+
+    # change comma to dot and type object to type float64
+    df['lon'] = df['lon'].str.replace(',','.')
+    df['lat'] = df['lat'].str.replace(',','.')
+
+    df['lon'] = pd.to_numeric(df['lon'], errors='coerce')
+    df['lat'] = pd.to_numeric(df['lat'], errors='coerce')
+
+    # filter NaN
+    indx = np.logical_or(np.isnan(df.lat), np.isnan(df.lon))
+    indx = np.logical_not(indx)
+    df = df.loc[indx, :]
+    
+    return df
