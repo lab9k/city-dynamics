@@ -71,6 +71,7 @@ class Buurtcombinatie(models.Model):
     uri = models.CharField(max_length=255, blank=True, null=True)
     wkb_geometry = models.GeometryField(blank=True, null=True)
     wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
+    wkb_polygon_simplified = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -110,6 +111,7 @@ class Drukteindex(models.Model):
     uri = models.TextField(blank=True, null=True)
     wkb_geometry = models.TextField(blank=True, null=True)
     wkb_geometry_simplified = models.TextField(blank=True, null=True)
+    wkb_polygon_simplified = models.TextField(blank=True, null=True)
     oppervlakte_m2 = models.FloatField(blank=True, null=True)
     drukte_index = models.FloatField(blank=True, null=True)
 

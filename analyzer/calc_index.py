@@ -154,7 +154,9 @@ def main():
 
 	# drop obsolete columns
 	df.drop(cols, axis=1, inplace=True)
-
+	print(df.shape)
+	df = df[df['timestamp'] > '2017-10-01 00:00:00']
+	print(df.shape)
 	# write to db
 	df.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
 	conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
