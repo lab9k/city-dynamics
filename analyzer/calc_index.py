@@ -7,6 +7,7 @@ import time
 import pandas as pd
 import numpy as np
 
+from scipy.stats import rankdata
 from functools import reduce
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
@@ -43,13 +44,14 @@ def min_max(x):
 	return (x - min(x)) / (max(x) - min(x))
 
 def normalize(x):
+	x = rankdata(x)
 	return (x - x.min()) / (x.max() - x.min())
 
 def normalize_df(df):
 	# average per area code, timestamp (rounded to the hour)
 	df = df.groupby(['vollcode', 'timestamp'])['drukte_index'].mean().reset_index()
 	# scale per timestamp (rounded to the hour)
-	df['normalized'] = df.groupby(['timestamp'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+	df['normalized'] = df.groupby(['timestamp'])['drukte_index'].transform(normalize)
 	return df
 
 def import_verblijversindex(sql_query, conn):
@@ -61,6 +63,7 @@ def import_verblijversindex(sql_query, conn):
 
 def import_data(table, colname, sql_query, conn):
 	df = pd.read_sql(sql=sql_query.format(table), con=conn)
+	df['timestamp'] = df.timestamp.dt.round('60min')
 	if 'timestamp from' in df.columns:
 		df.rename(columns={'timestamp from': 'timestamp'}, inplace=True)
 	df['timestamp'] = df['timestamp'].dt.floor('60min')
@@ -73,6 +76,7 @@ def import_data(table, colname, sql_query, conn):
 
 def import_tellus(table, colname, sql_query, conn, vollcodes):
 	df = pd.read_sql(sql=sql_query.format(table), con=conn)
+	df['timestamp'] = df.timestamp.dt.round('60min')
 	df = df[['meetwaarde', 'timestamp', 'vollcode']]
 	df.rename(columns={'meetwaarde':'drukte_index'}, inplace=True)
 	df['drukte_index'] = df['drukte_index'].astype(int)
