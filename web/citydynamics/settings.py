@@ -40,19 +40,20 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     # 'corsheaders',
     'django.contrib.gis',
     'django_filters',
-    'rest_framework',
-    'rest_framework_gis',
-
     'django_extensions',
     'datapunt_api',
     'citydynamics',
     'citydynamics.api',
+
+    'rest_framework',
+    'rest_framework_gis',
+
+
 ]
 
 MIDDLEWARE = [
@@ -144,22 +145,6 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -194,13 +179,13 @@ REST_FRAMEWORK = dict(
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/citydynamics/static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 
 #STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'),)
 
 # Upload location
-MEDIA_URL = '/citydynamics/media/'
+MEDIA_URL = '/blabla/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGGING = {
