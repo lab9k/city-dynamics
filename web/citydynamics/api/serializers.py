@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from rest_framework_gis.fields import GeometryField
 from citydynamics.api.models import Drukteindex
 
 
@@ -11,5 +12,6 @@ class DrukteindexSerializer(GeoFeatureModelSerializer):
 
     class Meta:
         model = Drukteindex
-        geo_field = 'wkb_polygon_simplified'
-        fields = ('naam', 'vollcode', 'drukte_index')
+        geo_field = 'wkb_geometry'
+        fields = ('naam', 'vollcode', 'normalized_index')
+
