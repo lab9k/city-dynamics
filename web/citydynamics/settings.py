@@ -46,13 +46,13 @@ INSTALLED_APPS = [
     # 'corsheaders',
     'django.contrib.gis',
     'django_filters',
-    'rest_framework',
-    'rest_framework_gis',
-
     'django_extensions',
     'datapunt_api',
     'citydynamics',
     'citydynamics.api',
+
+    'rest_framework',
+    'rest_framework_gis',
 ]
 
 MIDDLEWARE = [
@@ -144,22 +144,6 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -176,8 +160,8 @@ DATE_FORMAT = '%d %b %Y'
 USE_TZ = True
 
 REST_FRAMEWORK = dict(
-    #PAGE_SIZE=25,
-    #MAX_PAGINATE_BY=100,
+    PAGE_SIZE=25,
+    MAX_PAGINATE_BY=100,
 
     DEFAULT_AUTHENTICATION_CLASSES=[],
     DEFAULT_PERMISSION_CLASSES=[],
