@@ -15,8 +15,8 @@ from datetime import date, datetime, timedelta
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger(__name__)
 
 
 def get_conn(dbConfig):
@@ -136,6 +136,7 @@ def main():
 
     # verblijversindex
     verblijversindex = import_verblijversindex(sql_query=sql_query, conn=conn)
+    log.debug('verblijversindex')
 
     # read data sources, and round timestamp
     google = import_data('google_with_bc', 'live', sql_query, conn)
@@ -144,6 +145,7 @@ def main():
     tellus = import_tellus('tellus_with_bc', 'meetwaarde', sql_query, conn, vollcodes=vollcodes_centrum)
 
     # merge datasets
+    log.debug('merge datasets')
     cols = ['vollcode', 'timestamp', 'normalized']
     data = [google[cols], gvb[cols], tellus[cols]]
     df = merge_datasets(data=data)
@@ -159,6 +161,7 @@ def main():
     df = pd.merge(df, verblijversindex, on='vollcode', how='left')
 
     # calculate overall index
+    log.debug('calculating overall index')
     cols = [col for col in df.columns if 'normalized' in col]
     df['drukte_index'] = df[cols].mean(axis=1)
 
@@ -169,12 +172,15 @@ def main():
     df = df[df['timestamp'] > '2017-10-01 00:00:00']
 
     # write to db
+    log.debug('writing data to db')
     df.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
     conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
+    log.debug('Done you are awesome <3')
 
 
 if __name__ == '__main__':
     desc = "Calculate index."
+    log.debug(desc)
     parser = argparse.ArgumentParser(desc)
     parser.add_argument('dbConfig', type=str, help='database config settings: dev or docker', nargs=1)
     args = parser.parse_args()
