@@ -44,68 +44,55 @@ def datetime_range(start, end, delta):
 
 def min_max(x):
     x = np.array(x)
-    return (x - min(x)) / (max(x) - min(x))
+    x = (x - min(x)) / (max(x) - min(x))
+    return x
+
 
 def normalize(x):
-	x = rankdata(x)
-	return min_max(x)
+    x = rankdata(x)
+    return min_max(x)
+
 
 def normalize_df(df):
-	# average per area code, timestamp (rounded to the hour)
-	df = df.groupby(['vollcode', 'timestamp'])['drukte_index'].mean().reset_index()
-	# scale per timestamp (rounded to the hour)
-	df['normalized'] = df.groupby(['timestamp'])['drukte_index'].transform(normalize)
-	return df
+    # average per area code, timestamp (rounded to the hour)
+    df = df.groupby(['vollcode', 'timestamp'])['drukte_index'].mean().reset_index()
+    # scale per timestamp (rounded to the hour)
+    df['normalized'] = df.groupby(['timestamp'])['drukte_index'].transform(normalize)
+    return df
+
 
 def import_verblijversindex(sql_query, conn):
     verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
     verblijversindex = verblijversindex[['wijk', 'oppervlakte_m2']]
     verblijversindex.rename(columns={'wijk': 'vollcode'}, inplace=True)
-    verblijversindex['normalized_m2'] = normalize(verblijversindex.oppervlakte_m2)
+    verblijversindex['normalized_verblijversindex'] = normalize(verblijversindex.oppervlakte_m2)
     return verblijversindex
 
+
 def import_data(table, colname, sql_query, conn):
-	df = pd.read_sql(sql=sql_query.format(table), con=conn)
-	df['timestamp'] = df.timestamp.dt.round('60min')
-	if 'timestamp from' in df.columns:
-		df.rename(columns={'timestamp from': 'timestamp'}, inplace=True)
-	df['timestamp'] = df['timestamp'].dt.floor('60min')
-	df['day'] = [ts.weekday() for ts in df.timestamp]
-	df['hour'] = [ts.hour for ts in df.timestamp]
-	df.rename(columns={colname: 'drukte_index'}, inplace=True)
-	df['drukte_index'] = df['drukte_index'].astype(float)
-	df = normalize_df(df)
-	return df
+    df = pd.read_sql(sql=sql_query.format(table), con=conn)
+    df['timestamp'] = df.timestamp.dt.round('60min')
+    if 'timestamp from' in df.columns:
+        df.rename(columns={'timestamp from': 'timestamp'}, inplace=True)
+    df['timestamp'] = df['timestamp'].dt.floor('60min')
+    df['day'] = [ts.weekday() for ts in df.timestamp]
+    df['hour'] = [ts.hour for ts in df.timestamp]
+    df.rename(columns={colname: 'drukte_index'}, inplace=True)
+    df['drukte_index'] = df['drukte_index'].astype(float)
+    df = normalize_df(df)
+    new_name = 'normalized_' + table
+    df.rename(columns={'normalized': new_name}, inplace=True)
+    return df
+
 
 def import_tellus(table, colname, sql_query, conn, vollcodes):
-	df = pd.read_sql(sql=sql_query.format(table), con=conn)
-	df['timestamp'] = df.timestamp.dt.round('60min')
-	df = df[['meetwaarde', 'timestamp', 'vollcode']]
-	df.rename(columns={'meetwaarde':'drukte_index'}, inplace=True)
-	df['drukte_index'] = df['drukte_index'].astype(int)
-	df = df.groupby('timestamp')['drukte_index'].sum().reset_index()
-	df['date'] = [ts.date() for ts in df.timestamp]
-# =======
-#     df = pd.read_sql(sql=sql_query.format(table), con=conn)
-#     if 'timestamp from' in df.columns:
-#             df.rename(columns={'timestamp from': 'timestamp'}, inplace=True)
-#     df['timestamp'] = df['timestamp'].dt.floor('60min')
-#     df['day'] = [ts.weekday() for ts in df.timestamp]
-#     df['hour'] = [ts.hour for ts in df.timestamp]
-#     df.rename(columns={colname: 'drukte_index'}, inplace=True)
-#     df['drukte_index'] = df['drukte_index'].astype(float)
-#     df = normalize_df(df)
-#     return df
-
-
-# def import_tellus(table, colname, sql_query, conn, vollcodes):
-#     df = pd.read_sql(sql=sql_query.format(table), con=conn)
-#     df = df[['meetwaarde', 'timestamp', 'vollcode']]
-#     df.rename(columns={'meetwaarde':'drukte_index'}, inplace=True)
-#     df['drukte_index'] = df['drukte_index'].astype(int)
-#     df = df.groupby('timestamp')['drukte_index'].sum().reset_index()
-#     df['date'] = [ts.date() for ts in df.timestamp]
-# >>>>>>> 47501a7ea6c9b1fead739cd75557a9db6318fa15
+    df = pd.read_sql(sql=sql_query.format(table), con=conn)
+    df['timestamp'] = df.timestamp.dt.round('60min')
+    df = df[['meetwaarde', 'timestamp', 'vollcode']]
+    df.rename(columns={'meetwaarde':'drukte_index'}, inplace=True)
+    df['drukte_index'] = df['drukte_index'].astype(int)
+    df = df.groupby('timestamp')['drukte_index'].sum().reset_index()
+    df['date'] = [ts.date() for ts in df.timestamp]
 
     data = []
     for vc in vollcodes:
@@ -114,9 +101,8 @@ def import_tellus(table, colname, sql_query, conn, vollcodes):
             data.append(new_df)
 
     df = pd.concat(data, ignore_index=True)
-
-    df['normalized'] = df.groupby(['date'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
-    df = df[['timestamp', 'drukte_index', 'normalized', 'vollcode']]
+    df['normalized_tellus'] = df.groupby(['date'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
+    df = df[['timestamp', 'drukte_index', 'normalized_tellus', 'vollcode']]
     return df
 
 
@@ -144,6 +130,22 @@ def complete_ts_vollcode(data, vollcodes):
     return data
 
 
+def weighted_mean(data, cols, weights):
+    # create numpy array with right columns
+    X = np.array(data.loc[:, cols])
+
+    # calculate weight matrix
+    n_weights = len(weights)
+    weights = np.array(weights * len(X)).reshape(len(X), n_weights)
+    weights[np.isnan(X)] = 0
+
+    # calculate overall index
+    wmean = np.array(X * weights)
+    wmean = np.nanmean(wmean, axis=1) / weights.sum(axis=1)
+
+    return wmean
+
+
 def main():
     # create connection
     conn = get_conn(dbConfig=args.dbConfig[0])
@@ -166,9 +168,16 @@ def main():
 
     # merge datasets
     log.debug('merge datasets')
-    cols = ['vollcode', 'timestamp', 'normalized']
-    data = [google[cols], gvb[cols], tellus[cols]]
+    select_cols = 'vollcode|timestamp|normalized_'
+    data = [
+        google.filter(regex=select_cols),
+        gvb.filter(regex=select_cols),
+        tellus.filter(regex=select_cols)
+    ]
     df = merge_datasets(data=data)
+
+    # filter on october onwards
+    df = df[df['timestamp'] >= '2017-10-01 00:00:00']
 
     # fill in missing timestamp-vollcode combinations
     all_vollcodes = [bc for bc in buurtcodes.vollcode.unique()]
@@ -180,16 +189,17 @@ def main():
     # add verblijversindex
     df = pd.merge(df, verblijversindex, on='vollcode', how='left')
 
-    # calculate overall index
     log.debug('calculating overall index')
+
+    # normalized columns for index
     cols = [col for col in df.columns if 'normalized' in col]
-    df['drukte_index'] = df[cols].mean(axis=1)
+
+    # define weights, have to be in same order als columns!
+    weights = [0.6, 0.1, 0.1, 0.2]
+    df['drukte_index'] = weighted_mean(data=df, cols=cols, weights=weights)
 
     # drop obsolete columns
     df.drop(cols, axis=1, inplace=True)
-
-    # filter on october onwards
-    df = df[df['timestamp'] > '2017-10-01 00:00:00']
 
     # write to db
     log.debug('writing data to db')
