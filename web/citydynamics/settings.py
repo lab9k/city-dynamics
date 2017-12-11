@@ -131,17 +131,6 @@ DATABASES = {
 }
 
 
-#DATABASES = {
-#   'default': {
-#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#         'HOST': 'database',
-#         'PORT': '5402',
-#         'NAME': 'schoonmonitor',
-#         'USER': 'schoonmonitor',
-#         'PASSWORD': 'insecure',
-#    }
-#}
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -154,15 +143,15 @@ TIME_ZONE = 'Europe/Amsterdam'
 
 USE_I18N = True
 
-USE_L10N = True # TO override date notation
+USE_L10N = True  # TO override date notation
 
 DATE_FORMAT = '%d %b %Y'
 
 USE_TZ = True
 
 REST_FRAMEWORK = dict(
-    #PAGE_SIZE=25,
-    #MAX_PAGINATE_BY=100,
+    PAGE_SIZE=500,
+    MAX_PAGINATE_BY=100,
 
     DEFAULT_AUTHENTICATION_CLASSES=[],
     DEFAULT_PERMISSION_CLASSES=[],
@@ -182,7 +171,7 @@ REST_FRAMEWORK = dict(
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 
-#STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'),)
+# STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'),)
 
 # Upload location
 MEDIA_URL = '/blabla/static/'
@@ -212,4 +201,3 @@ LOGGING = {
         },
     },
 }
-

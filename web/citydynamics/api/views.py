@@ -1,7 +1,3 @@
-from django.views.generic import TemplateView
-from django.core.serializers import serialize
-from django.http import HttpResponse, JsonResponse
-from rest_framework import viewsets
 from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 from rest_framework.serializers import ValidationError
@@ -10,13 +6,17 @@ from datapunt_api import rest
 from . import models
 from . import serializers
 import datetime
-import django_filters
+
+import logging
+
+log = logging.getLogger(__name__)
 
 
 def convert_to_date(input_date):
     try:
         date_obj = datetime.datetime.strptime(input_date, '%Y-%m-%d-%H-%M-%S')
-    except:
+    except ValueError:
+        log.exception("Got an invalid date value")
         date_obj = None
     return date_obj
 

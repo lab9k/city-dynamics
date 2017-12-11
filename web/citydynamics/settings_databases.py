@@ -1,5 +1,8 @@
 import os
 import re
+import logging
+
+log = logging.getLogger(__name__)
 
 
 def get_docker_host():
@@ -27,7 +30,8 @@ def in_docker():
     """
     try:
         return ':/docker/' in open('/proc/1/cgroup', 'r').read()
-    except:
+    except OSError:
+        log.exception('docker test')
         return False
 
 

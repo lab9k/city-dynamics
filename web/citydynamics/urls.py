@@ -14,7 +14,6 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-from django.contrib import admin
 
 # Added to open Files on dev server
 from django.conf import settings
@@ -32,7 +31,7 @@ urlpatterns = router.urls
 urlpatterns = [
     url(r'^citydynamics/api/', include(router.urls)),
 
-    #url(r'^citydynamics/api/beeldmaatlattengeojson/$', BeeldmaatlatGeoJsonViewSet, name='beeldmaatlattengeojson'),
+    # url(r'^citydynamics/api/beeldmaatlattengeojson/$', BeeldmaatlatGeoJsonViewSet, name='beeldmaatlattengeojson'),
 ]
 
 
