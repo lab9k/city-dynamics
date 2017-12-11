@@ -84,7 +84,7 @@ def parse_gvb(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locations
     inout['day_numeric'] = [x[1] for x in fixed_time_day]
 
     # add timestamp, fake date, mon 16 oct - sun 22 oct
-    dates = ['2017-10-' + str(i) for i in range(16, 23)]
+    dates = ['2017-12-' + str(i) for i in range(4, 11)]
     inout['date'] = [dates[d-1] for d in inout.day_numeric]
     inout['timestamp'] = [get_datetime(row) for _, row in inout.iterrows()]
     
