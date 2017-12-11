@@ -1,0 +1,48 @@
+version: '3.0'
+services:
+  database:
+    image: build.datapunt.amsterdam.nl:5000/atlas/postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: onderwijs
+      POSTGRES_USER: onderwijs
+      POSTGRES_PASSWORD: insecure
+
+  importer:
+    image: build.datapunt.amsterdam.nl:5000/datapunt/onderwijs:${ENVIRONMENT}
+    ports:
+      - "8000:8000"
+    links:
+      - database
+    environment:
+      SECRET_KEY: insecure
+      DATABASE_NAME: onderwijs
+      DATABASE_USER: onderwijs
+      DATABASE_PASSWORD: insecure
+    command: >
+        bash -c "/deploy/docker-wait.sh \
+                && /deploy/docker-migrate.sh \
+                && python manage.py run_import"
+
+  db-backup:
+    image: build.datapunt.amsterdam.nl:5000/atlas/postgres
+    links:
+      - database:db
+    volumes:
+      - ./backups:/tmp/backups
+    command: >
+      bash -c "echo db:5432:onderwijs:onderwijs:insecure > ~/.pgpass \
+              && chmod 600 ~/.pgpass \
+              && pg_dump --clean \
+                          -Fc \
+                          -t dataset* \
+                          -t django_content_type \
+                          -t django_migrations \
+                          -U onderwijs \
+                          -h db -p 5432 \
+                          onderwijs > /tmp/backups/database.dump"
+
+
+
+# DOCKER COMPOSE FOR IMPORT

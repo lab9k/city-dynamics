@@ -1,0 +1,29 @@
+version: '3.0'
+services:
+  database:
+    image: build.datapunt.amsterdam.nl:5000/atlas/postgres
+    environment:
+      POSTGRES_DB: citydynamics
+      POSTGRES_USER: citydynamics
+      POSTGRES_PASSWORD: insecure
+
+  tests:
+    build: ../../
+    links:
+      - database
+    environment:
+      SECRET_KEY: insecure
+      DATABASE_NAME: citydynamics
+      DATABASE_USER: citydynamics
+      DATABASE_PASSWORD: insecure
+      UWSGI_HTTP: ":8000"
+      UWSGI_MODULE: "citydynamics.wsgi:application"
+      UWSGI_MASTER: 1
+      UWSGI_PROCESSES: 4
+      UWSGI_MASTER: 1
+      UWSGI_STATIC_MAP: "/static=/static"
+    command: >
+        bash -c "/deploy/docker-wait.sh && \
+                 python /app/manage.py test && \
+                 python /app/manage.py migrate && \
+                 flake8 /app/"
