@@ -84,7 +84,7 @@ def parse_gvb(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv', locations
     inout['day_numeric'] = [x[1] for x in fixed_time_day]
 
     # add timestamp, fake date, mon 16 oct - sun 22 oct
-    dates = ['2017-10-' + str(i) for i in range(16, 23)]
+    dates = ['2017-12-' + str(i) for i in range(4, 11)]
     inout['date'] = [dates[d-1] for d in inout.day_numeric]
     inout['timestamp'] = [get_datetime(row) for _, row in inout.iterrows()]
     
@@ -143,6 +143,43 @@ def parse_google(datadir, filename='google_oct_nov2017.csv', locationsfile='loca
     return df
 
 
+def parse_google2(datadir):
+    fname = os.path.join(datadir, 'merged_scraped_locations_BATCH{}.csv')
+    batch1 = pd.read_csv(fname.format('1'), header=0, sep=';')
+    batch2 = pd.read_csv(fname.format('2'), header=None, sep=';', names=batch1.columns)
+    batch3 = pd.read_csv(fname.format('3'), header=None, sep=';', names=batch1.columns)
+    data = pd.concat([batch1, batch2, batch3], ignore_index=True)
+    del batch1, batch2, batch3
+
+    # select columns
+    cols = ['Place_ID', 'Expected', 'Real-time', 'ScrapeTime']
+    data = data[cols]
+
+    # rename columns
+    data.rename(columns={'Place_ID':'place_id', 'Expected':'historical', 'Real-time':'live', 'ScrapeTime':'timestamp'}, inplace=True)
+
+    # create timestamp
+    month_dict = {'Nov': 11, 'Dec': 12}
+    ts = [x.split() for x in data.timestamp]
+    def get_ts(x):
+        year = int(x[4])
+        month = month_dict[x[1]]
+        day = int(x[2])
+        hour = int(x[3].split(':')[0])
+        return datetime.datetime(year, month, day, hour)
+
+    data['timestamp'] = [get_ts(x) for x in ts]
+
+    # add locations
+    fname = os.path.join(datadir, 'scrapelist.csv')
+    locations = pd.read_csv(fname, sep=';')
+    locations = locations[['place_id', 'name', 'lat', 'lng', 'types']]
+    locations.rename(columns={'lng': 'lon'}, inplace=True)
+    data = pd.merge(data, locations, on='place_id', how='outer')
+
+    return data
+
+
 def parse_mora(datadir, filename='MORA_data_data.csv'):
     # read mora csv
     path = os.path.join(datadir, filename)
@@ -157,7 +194,7 @@ def parse_mora(datadir, filename='MORA_data_data.csv'):
     # add date time column als datetime object
     df_select['timestamp'] = pd.to_datetime(df['AA_ADWH_DATUM_AFGEROND'], format="%d-%m-%Y %H:%M:%S")
 
-    # filter NaN
+    # filter NaNs
     indx = np.logical_or(np.isnan(df_select.lat), np.isnan(df_select.lon))
     indx = np.logical_not(indx)
     df_select = df_select.loc[indx, :]
@@ -264,7 +301,9 @@ def parse_cmsa(datadir):
     return data
 
 def parse_afval(datadir, filename='WEEGGEGEVENS(1-10_30-11_2017).csv'):
-    df = df_afval.loc[:,['datum', 'tijd', 'fractie', 'nettogewicht', 'breedtegraad', 'lengtegraad']]
+    fname = os.path.join(datadir, filename)
+    df = pd.read_csv(fname, sep=';')
+    df = df.loc[:,['datum', 'tijd', 'fractie', 'nettogewicht', 'breedtegraad', 'lengtegraad']]
     df['DateTime'] = df[['datum', 'tijd']].apply(lambda x: ''.join(x), axis=1)
     df['timestamp'] = pd.to_datetime(df['DateTime'], format="%d/%m/%Y%H:%M:%S")
     df = df.drop(['datum', 'tijd', 'DateTime'], axis=1)

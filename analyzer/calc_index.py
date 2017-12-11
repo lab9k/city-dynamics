@@ -162,9 +162,14 @@ def main():
 
     # read data sources, and round timestamp
     google = import_data('google_with_bc', 'live', sql_query, conn)
+    google_dec = import_data('google_dec_with_bc', 'live', sql_query, conn)
     gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
     vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
     tellus = import_tellus('tellus_with_bc', 'meetwaarde', sql_query, conn, vollcodes=vollcodes_centrum)
+
+    # combine 2 google datasets
+    google_dec.rename(columns={'normalized_google_dec_with_bc': 'normalized_google_with_bc'}, inplace=True)
+    google = pd.concat([google, google_dec], ignore_index=True)
 
     # merge datasets
     log.debug('merge datasets')
