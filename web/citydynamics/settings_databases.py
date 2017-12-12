@@ -31,7 +31,6 @@ def in_docker():
     try:
         return ':/docker/' in open('/proc/1/cgroup', 'r').read()
     except OSError:
-        log.exception('docker test')
         return False
 
 
