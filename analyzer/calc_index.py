@@ -53,94 +53,146 @@ def normalize(x):
     return min_max(x)
 
 
-def normalize_df(df):
-    # average per area code, timestamp (rounded to the hour)
-    df = df.groupby(['vollcode', 'timestamp'])['drukte_index'].mean().reset_index()
-    # scale per timestamp (rounded to the hour)
-    df['normalized'] = df.groupby(['timestamp'])['drukte_index'].transform(normalize)
+def normalize_data(df, cols):
+    df = df.groupby(['vollcode', 'timestamp'])[cols].mean().reset_index()
+    for col in cols:
+        new_col = col + '_normalized'
+        df[new_col] = df.groupby(['timestamp'])[col].transform(normalize)
+
     return df
 
 
 def import_verblijversindex(sql_query, conn):
     verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
     verblijversindex = verblijversindex[['wijk', 'oppervlakte_m2']]
-    verblijversindex.rename(columns={'wijk': 'vollcode'}, inplace=True)
-    verblijversindex['normalized_verblijversindex'] = normalize(verblijversindex.oppervlakte_m2)
+    verblijversindex.rename(columns={'wijk': 'vollcode', 'oppervlakte_m2': 'verblijversindex'}, inplace=True)
+    verblijversindex = verblijversindex[['vollcode', 'verblijversindex']]
     return verblijversindex
 
 
-def import_data(table, colname, sql_query, conn):
-    df = pd.read_sql(sql=sql_query.format(table), con=conn)
-    df['timestamp'] = df.timestamp.dt.round('60min')
-    if 'timestamp from' in df.columns:
-        df.rename(columns={'timestamp from': 'timestamp'}, inplace=True)
-    df['timestamp'] = df['timestamp'].dt.floor('60min')
-    df['day'] = [ts.weekday() for ts in df.timestamp]
-    df['hour'] = [ts.hour for ts in df.timestamp]
-    df.rename(columns={colname: 'drukte_index'}, inplace=True)
-    df['drukte_index'] = df['drukte_index'].astype(float)
-    df = normalize_df(df)
-    new_name = 'normalized_' + table
-    df.rename(columns={'normalized': new_name}, inplace=True)
-    return df
+def import_google(sql_query, conn):
+    def read_table(sql_query, conn):
+        df = pd.read_sql(sql=sql_query, con=conn)
+        df['timestamp'] = df.timestamp.dt.round('60min')
+        df = df[['place_id', 'vollcode', 'timestamp', 'live', 'historical']]
+        return df
+
+    # read raw data
+    google_octnov = read_table(sql_query.format('google_with_bc'), conn=conn)
+    google_dec = read_table(sql_query.format('google_dec_with_bc'), conn=conn)
+    google = pd.concat([google_octnov, google_dec])
+    del google_octnov, google_dec
+
+    # historical weekpatroon
+    google['weekday'] = [ts.weekday() for ts in google.timestamp]
+    google['hour'] = [ts.hour for ts in google.timestamp]
+    google_week = google.groupby(['weekday', 'hour', 'vollcode', 'place_id'])['historical'].mean().reset_index()
+    google_week = google.groupby(['vollcode', 'weekday', 'hour'])['historical'].mean().reset_index()
+
+    # live data
+    google_live = google[['place_id', 'vollcode', 'timestamp', 'live']]
+    google_live = google_live.groupby(['vollcode', 'timestamp'])['live'].mean().reset_index()
+    google_live['weekday'] = [ts.weekday() for ts in google_live.timestamp]
+    google_live['hour'] = [ts.hour for ts in google_live.timestamp]
+
+    # column names
+    google_live.rename(columns={'live': 'google_live'}, inplace=True)
+    google_week.rename(columns={'historical': 'google_week'}, inplace=True)
+
+    return google_week, google_live
 
 
-def import_tellus(table, colname, sql_query, conn, vollcodes):
-    df = pd.read_sql(sql=sql_query.format(table), con=conn)
+def import_gvb(sql_query, conn, haltes):
+    def read_table(sql_query, conn):
+        df = pd.read_sql(sql=sql_query, con=conn)
+        df['timestamp'] = df.timestamp.dt.round('60min')
+        df['weekday'] = [ts.weekday() for ts in df.timestamp]
+        df['hour'] = [ts.hour for ts in df.timestamp]
+        df = df[['halte', 'incoming', 'weekday', 'hour', 'lat', 'lon', 'vollcode']]
+        return df
+
+    # read raw
+    gvb = read_table(sql_query.format('gvb_with_bc'), conn=conn)
+
+    # hele stad over tijd
+    indx = gvb.halte.isin(haltes)
+    gvb_stad = gvb.loc[indx, :]
+    gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].sum().reset_index()
+
+    # per buurt
+    gvb_buurt = gvb.loc[np.logical_not(indx), :]
+    gvb_buurt = gvb_buurt.groupby(['vollcode', 'weekday', 'hour'])['incoming'].sum().reset_index()
+
+    # column names
+    gvb_stad.rename(columns={'incoming': 'gvb_stad'}, inplace=True)
+    gvb_buurt.rename(columns={'incoming': 'gvb_buurt'}, inplace=True)
+
+    return gvb_stad, gvb_buurt
+
+
+def import_tellus(sql_query, conn, vollcodes):
+    df = pd.read_sql(sql=sql_query.format('tellus_with_bc'), con=conn)
     df['timestamp'] = df.timestamp.dt.round('60min')
     df = df[['meetwaarde', 'timestamp', 'vollcode']]
-    df.rename(columns={'meetwaarde':'drukte_index'}, inplace=True)
-    df['drukte_index'] = df['drukte_index'].astype(int)
-    df = df.groupby('timestamp')['drukte_index'].sum().reset_index()
-    df['date'] = [ts.date() for ts in df.timestamp]
+    df['meetwaarde'] = df.meetwaarde.astype(int)
+    df = df.groupby('timestamp')['meetwaarde'].sum().reset_index()
 
-    data = []
-    for vc in vollcodes:
-            new_df = df.copy()
-            new_df['vollcode'] = vc
-            data.append(new_df)
+    # add all vollcodes per timestamp
+    vc_ts = [(vc, ts) for vc in vollcodes for ts in df.timestamp.unique()]
+    vc_ts = pd.DataFrame({
+        'vollcode': [x[0] for x in vc_ts],
+        'timestamp': [x[1] for x in vc_ts]
+        })
+    df = pd.merge(df, vc_ts, on='timestamp', how='outer')
 
-    df = pd.concat(data, ignore_index=True)
-    df['normalized_tellus'] = df.groupby(['date'])['drukte_index'].apply(lambda x: (x - x.min()) / (x.max() - x.min()))
-    df = df[['timestamp', 'drukte_index', 'normalized_tellus', 'vollcode']]
+    # column names
+    df.rename(columns={'meetwaarde': 'tellus'}, inplace=True)
+
     return df
 
 
-def merge_datasets(data):
-    return reduce(lambda x, y: pd.merge(x, y, on = ['timestamp', 'vollcode'], how='outer'), data)
+# def merge_datasets(**kwargs):
 
+#     with_timestamp = [kwargs[dname] for dname in kwargs.keys() if 'timestamp' in kwargs[dname].columns]
+#     drukte = reduce(lambda x, y: pd.merge(x, y, on = ['timestamp', 'vollcode'], how='outer'), with_timestamp)
+#     print(drukte.shape)
+#     return reduce(lambda x, y: pd.merge(**kwargs, on = ['timestamp', 'vollcode'], how='outer'), data)
+# merge_datasets(tellus=tellus, google_live=google_live, google_week=google_week, gvb_buurt=gvb_buurt, gvb_stad=gvb_stad)
 
 def complete_ts_vollcode(data, vollcodes):
     # get list of timestamps
     start = np.min(data.timestamp)
     end = np.max(data.timestamp)
     timestamps = pd.date_range(start=start, end=end, freq='H')
-    # timestamps = [dt for dt in datetime_range(start, end, {'days': 0, 'hours': 1})]
 
-    # add multi-index
-    mind = pd.MultiIndex.from_product([timestamps, vollcodes])
-    data = data.reindex(mind, fill_value=np.nan).reset_index()
+    # create new dataframe
+    ts_vc = [(ts, vc) for ts in data.timestamp for vc in vollcodes]
+    mind = pd.DataFrame({
+        'timestamp': [x[0] for x in ts_vc],
+        'vollcode': [x[1] for x in ts_vc]
+        })
 
-    # drop columns
-    data.drop(['vollcode', 'timestamp'], axis=1, inplace=True)
+    # merge data
+    data = pd.merge(mind, data, on=['timestamp', 'vollcode'], how='outer')
 
-    # rename columns
-    data.rename(columns={'level_0':'timestamp', 'level_1':'vollcode'}, inplace=True)
+    # fill in missing weekdays and hours
+    data['weekday'] = [ts.weekday() for ts in data.timestamp]
+    data['hour'] = [ts.hour for ts in data.timestamp]
 
     return data
 
 
 def weighted_mean(data, cols, weights):
     # create numpy array with right columns
-    X = np.array(data.loc[:, cols])
+    x = np.array(data.loc[:, cols])
 
     # calculate weight matrix
     n_weights = len(weights)
-    weights = np.array(weights * len(X)).reshape(len(X), n_weights)
-    weights[np.isnan(X)] = 0
+    weights = np.array(weights * len(x)).reshape(len(x), n_weights)
+    weights[np.isnan(x)] = 0
 
     # calculate overall index
-    wmean = np.array(X * weights)
+    wmean = np.array(x * weights)
     wmean = np.nanmean(wmean, axis=1) / weights.sum(axis=1)
 
     return wmean
@@ -157,58 +209,65 @@ def main():
     buurtcodes = pd.read_sql(sql=sql_query.format('buurtcombinatie'), con=conn)
 
     # verblijversindex
-    verblijversindex = import_verblijversindex(sql_query=sql_query, conn=conn)
     log.debug('verblijversindex')
+    verblijversindex = import_verblijversindex(sql_query=sql_query, conn=conn)
 
-    # read data sources, and round timestamp
-    google = import_data('google_with_bc', 'live', sql_query, conn)
-    google_dec = import_data('google_dec_with_bc', 'live', sql_query, conn)
-    gvb = import_data('gvb_with_bc', 'incoming', sql_query, conn)
+    # read google weekly pattern and live data
+    google_week, google_live = import_google(sql_query, conn)
+
+    # read GVB overall city and neighborhood-specific patterns
+    haltes = list(pd.read_csv('metro_or_train.csv', sep=',')['station'])
+    gvb_stad, gvb_buurt = import_gvb(sql_query, conn, haltes)
+
+    # read tellus for city centre neighborhoods
     vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
-    tellus = import_tellus('tellus_with_bc', 'meetwaarde', sql_query, conn, vollcodes=vollcodes_centrum)
-
-    # combine 2 google datasets
-    google_dec.rename(columns={'normalized_google_dec_with_bc': 'normalized_google_with_bc'}, inplace=True)
-    google = pd.concat([google, google_dec], ignore_index=True)
+    tellus = import_tellus(sql_query, conn, vollcodes_centrum)
 
     # merge datasets
     log.debug('merge datasets')
-    select_cols = 'vollcode|timestamp|normalized_'
-    data = [
-        google.filter(regex=select_cols),
-        gvb.filter(regex=select_cols),
-        tellus.filter(regex=select_cols)
-    ]
-    df = merge_datasets(data=data)
+    # google_live
+    # goovle_week
+    # gvb_stad
+    # gvb_buurt
+    # tellus
+
+    # merge data with timestamps
+    drukte = google_live.copy()
 
     # filter on october onwards
-    df = df[df['timestamp'] >= '2017-10-01 00:00:00']
+    drukte = drukte.loc[drukte['timestamp'] >= '2017-10-01 00:00:00', :]
 
     # fill in missing timestamp-vollcode combinations
     all_vollcodes = [bc for bc in buurtcodes.vollcode.unique()]
-    df = complete_ts_vollcode(data=df, vollcodes=all_vollcodes)
+    drukte = complete_ts_vollcode(data=drukte, vollcodes=all_vollcodes)
 
-    # add buurtcode information
-    df = pd.merge(df, buurtcodes, on='vollcode', how='left')
+    # add google historical
+    drukte = pd.merge(drukte, google_week, on=['vollcode', 'weekday', 'hour'], how='outer')
+
+    # add gvb buurt
+    drukte = pd.merge(drukte, gvb_buurt, on=['vollcode', 'weekday', 'hour'], how='outer')
 
     # add verblijversindex
-    df = pd.merge(df, verblijversindex, on='vollcode', how='left')
+    drukte = pd.merge(drukte, verblijversindex, on='vollcode', how='outer')
+
+    # add buurtcode information
+    # drukte = pd.merge(drukte, buurtcodes, on='vollcode', how='left')
 
     log.debug('calculating overall index')
 
-    # normalized columns for index
-    cols = [col for col in df.columns if 'normalized' in col]
-
     # define weights, have to be in same order als columns!
-    weights = [0.6, 0.1, 0.1, 0.2]
-    df['drukte_index'] = weighted_mean(data=df, cols=cols, weights=weights)
+    cols = ['google_live', 'google_week', 'gvb_buurt', 'verblijversindex']
+    drukte = normalize_data(df=drukte, cols=cols)
+    weights = [0.3, 0.3, 0.2, 0.2]
+    normalized_cols = [col + '_normalized' for col in cols]
+    drukte['drukte_index'] = weighted_mean(data=drukte, cols=normalized_cols, weights=weights)
 
     # drop obsolete columns
     df.drop(cols, axis=1, inplace=True)
 
     # write to db
     log.debug('writing data to db')
-    df.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
+    drukte.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
     conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
     log.debug('Done you are awesome <3')
 
