@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import re
 import csv
+import glob
 
 
 def parse_gvb(datadir,
@@ -369,3 +370,20 @@ def parse_afval(datadir, filename='WEEGGEGEVENS(1-10_30-11_2017).csv'):
     df = df.loc[indx, :]
 
     return df
+
+
+def parse_parkeren(datadir):
+    allfiles = glob.glob(datadir + "/2017-10*.csv")
+    df_parkeer = pd.DataFrame()
+    list_ = []
+    for file_ in allfiles:
+        df = pd.read_csv(file_, index_col=None, header=0, delimiter=';')
+        list_.append(df)
+    df_parkeer = pd.concat(list_)
+    df_parkeer['DateTime'] = pd.to_datetime(df_parkeer['timestamp'], format="%Y-%m-%d %H:%M:%S") 
+    df_parkeer['weekday'] = df_parkeer.apply(lambda x: x['DateTime'].weekday(), axis=1)
+    df_parkeer['hour'] = df_parkeer.apply(lambda x: x['DateTime'].hour, axis=1)
+    df_parkeer = df_parkeer.replace(0.000000, np.nan)
+    df_parkeer = df_parkeer.drop(['timestamp', 'DateTime'], axis=1)
+
+    return df_parkeer
