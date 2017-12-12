@@ -263,7 +263,7 @@ def main():
     drukte['drukte_index'] = weighted_mean(data=drukte, cols=normalized_cols, weights=weights)
 
     # drop obsolete columns
-    df.drop(cols, axis=1, inplace=True)
+    drukte.drop(cols, axis=1, inplace=True)
 
     # write to db
     log.debug('writing data to db')
