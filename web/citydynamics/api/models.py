@@ -4,13 +4,16 @@ from rest_framework import serializers
 from datetime import datetime
 from django.contrib.gis.db import models as geo
 
-# objects = models.GeoManager()
 
 class Cmsa(models.Model):
     index = models.BigIntegerField(primary_key=True)
     timestamp = models.DateTimeField(blank=True, null=True)
-    field_in = models.BigIntegerField(db_column=' In', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'.
-    field_out = models.BigIntegerField(db_column=' Out', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'.
+    # Field name made lowercase. Field renamed to remove unsuitable
+    # characters. Field renamed because it started with '_'.
+    field_in = models.BigIntegerField(db_column=' In', blank=True, null=True)
+    # Field name made lowercase. Field renamed to remove unsuitable
+    # characters. Field renamed because it started with '_'.
+    field_out = models.BigIntegerField(db_column=' Out', blank=True, null=True)
     cam_number = models.TextField(blank=True, null=True)
 
     class Meta:
@@ -20,26 +23,61 @@ class Cmsa(models.Model):
 
 class Functiekaart(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    objectnummer = models.BigIntegerField(db_column='OBJECTNUMMER', blank=True, null=True)  # Field name made lowercase.
-    functie2_oms = models.TextField(db_column='FUNCTIE2_OMS', blank=True, null=True)  # Field name made lowercase.
-    zaaknaam = models.TextField(db_column='ZAAKNAAM', blank=True, null=True)  # Field name made lowercase.
-    functie2_eng = models.TextField(db_column='FUNCTIE2_ENG', blank=True, null=True)  # Field name made lowercase.
-    functie1_id = models.TextField(db_column='FUNCTIE1_ID', blank=True, null=True)  # Field name made lowercase.
-    functie1_oms = models.TextField(db_column='FUNCTIE1_OMS', blank=True, null=True)  # Field name made lowercase.
-    functie1_eng = models.TextField(db_column='FUNCTIE1_ENG', blank=True, null=True)  # Field name made lowercase.
-    functie2_id = models.TextField(db_column='FUNCTIE2_ID', blank=True, null=True)  # Field name made lowercase.
-    laag = models.BigIntegerField(db_column='LAAG', blank=True, null=True)  # Field name made lowercase.
-    adressen_lijst = models.TextField(db_column='ADRESSEN_LIJST', blank=True, null=True)  # Field name made lowercase.
-    adressen_vot = models.TextField(db_column='ADRESSEN_VOT', blank=True, null=True)  # Field name made lowercase.
-    adressen_aantal = models.BigIntegerField(db_column='ADRESSEN_AANTAL', blank=True, null=True)  # Field name made lowercase.
-    oppervlakte_som = models.BigIntegerField(db_column='OPPERVLAKTE_SOM', blank=True, null=True)  # Field name made lowercase.
-    oppervlakte_nul = models.BigIntegerField(db_column='OPPERVLAKTE_NUL', blank=True, null=True)  # Field name made lowercase.
-    checkdatum = models.TextField(db_column='CHECKDATUM', blank=True, null=True)  # Field name made lowercase.
-    zaak_id = models.BigIntegerField(db_column='ZAAK_ID', blank=True, null=True)  # Field name made lowercase.
-    coords = models.TextField(db_column='COORDS', blank=True, null=True)  # Field name made lowercase.
-    lng = models.TextField(db_column='LNG', blank=True, null=True)  # Field name made lowercase.
-    lat = models.TextField(db_column='LAT', blank=True, null=True)  # Field name made lowercase.
-    unnamed_19 = models.FloatField(db_column='Unnamed: 19', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    # Field name made lowercase.
+    objectnummer = models.BigIntegerField(
+        db_column='OBJECTNUMMER', blank=True, null=True)
+    # Field name made lowercase.
+    functie2_oms = models.TextField(
+        db_column='FUNCTIE2_OMS', blank=True, null=True)
+    # Field name made lowercase.
+    zaaknaam = models.TextField(db_column='ZAAKNAAM', blank=True, null=True)
+    # Field name made lowercase.
+    functie2_eng = models.TextField(
+        db_column='FUNCTIE2_ENG', blank=True, null=True)
+    # Field name made lowercase.
+    functie1_id = models.TextField(
+        db_column='FUNCTIE1_ID', blank=True, null=True)
+    # Field name made lowercase.
+    functie1_oms = models.TextField(
+        db_column='FUNCTIE1_OMS', blank=True, null=True)
+    # Field name made lowercase.
+    functie1_eng = models.TextField(
+        db_column='FUNCTIE1_ENG', blank=True, null=True)
+    # Field name made lowercase.
+    functie2_id = models.TextField(
+        db_column='FUNCTIE2_ID', blank=True, null=True)
+    # Field name made lowercase.
+    laag = models.BigIntegerField(db_column='LAAG', blank=True, null=True)
+    # Field name made lowercase.
+    adressen_lijst = models.TextField(
+        db_column='ADRESSEN_LIJST', blank=True, null=True)
+    # Field name made lowercase.
+    adressen_vot = models.TextField(
+        db_column='ADRESSEN_VOT', blank=True, null=True)
+    # Field name made lowercase.
+    adressen_aantal = models.BigIntegerField(
+        db_column='ADRESSEN_AANTAL', blank=True, null=True)
+    # Field name made lowercase.
+    oppervlakte_som = models.BigIntegerField(
+        db_column='OPPERVLAKTE_SOM', blank=True, null=True)
+    # Field name made lowercase.
+    oppervlakte_nul = models.BigIntegerField(
+        db_column='OPPERVLAKTE_NUL', blank=True, null=True)
+    # Field name made lowercase.
+    checkdatum = models.TextField(
+        db_column='CHECKDATUM', blank=True, null=True)
+    # Field name made lowercase.
+    zaak_id = models.BigIntegerField(
+        db_column='ZAAK_ID', blank=True, null=True)
+    # Field name made lowercase.
+    coords = models.TextField(db_column='COORDS', blank=True, null=True)
+    # Field name made lowercase.
+    lng = models.TextField(db_column='LNG', blank=True, null=True)
+    # Field name made lowercase.
+    lat = models.TextField(db_column='LAT', blank=True, null=True)
+    # Field name made lowercase. Field renamed to remove unsuitable characters.
+    unnamed_19 = models.FloatField(
+        db_column='Unnamed: 19', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -83,7 +121,8 @@ class Buurtcombinatie(models.Model):
     type = models.CharField(max_length=255, blank=True, null=True)
     uri = models.CharField(max_length=255, blank=True, null=True)
     wkb_geometry = models.GeometryField(blank=True, null=True)
-    wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
+    wkb_geometry_simplified = models.GeometryField(
+        srid=0, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -131,32 +170,21 @@ class Drukteindex(models.Model):
         db_table = 'drukteindex'
 
 
-class Functiekaart(models.Model):
+class DrukteindexTest(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    objectnummer = models.BigIntegerField(db_column='OBJECTNUMMER', blank=True, null=True)  # Field name made lowercase.
-    functie2_oms = models.TextField(db_column='FUNCTIE2_OMS', blank=True, null=True)  # Field name made lowercase.
-    zaaknaam = models.TextField(db_column='ZAAKNAAM', blank=True, null=True)  # Field name made lowercase.
-    functie2_eng = models.TextField(db_column='FUNCTIE2_ENG', blank=True, null=True)  # Field name made lowercase.
-    functie1_id = models.TextField(db_column='FUNCTIE1_ID', blank=True, null=True)  # Field name made lowercase.
-    functie1_oms = models.TextField(db_column='FUNCTIE1_OMS', blank=True, null=True)  # Field name made lowercase.
-    functie1_eng = models.TextField(db_column='FUNCTIE1_ENG', blank=True, null=True)  # Field name made lowercase.
-    functie2_id = models.TextField(db_column='FUNCTIE2_ID', blank=True, null=True)  # Field name made lowercase.
-    laag = models.BigIntegerField(db_column='LAAG', blank=True, null=True)  # Field name made lowercase.
-    adressen_lijst = models.TextField(db_column='ADRESSEN_LIJST', blank=True, null=True)  # Field name made lowercase.
-    adressen_vot = models.TextField(db_column='ADRESSEN_VOT', blank=True, null=True)  # Field name made lowercase.
-    adressen_aantal = models.BigIntegerField(db_column='ADRESSEN_AANTAL', blank=True, null=True)  # Field name made lowercase.
-    oppervlakte_som = models.BigIntegerField(db_column='OPPERVLAKTE_SOM', blank=True, null=True)  # Field name made lowercase.
-    oppervlakte_nul = models.BigIntegerField(db_column='OPPERVLAKTE_NUL', blank=True, null=True)  # Field name made lowercase.
-    checkdatum = models.TextField(db_column='CHECKDATUM', blank=True, null=True)  # Field name made lowercase.
-    zaak_id = models.BigIntegerField(db_column='ZAAK_ID', blank=True, null=True)  # Field name made lowercase.
-    coords = models.TextField(db_column='COORDS', blank=True, null=True)  # Field name made lowercase.
-    lng = models.TextField(db_column='LNG', blank=True, null=True)  # Field name made lowercase.
-    lat = models.TextField(db_column='LAT', blank=True, null=True)  # Field name made lowercase.
-    unnamed_19 = models.FloatField(db_column='Unnamed: 19', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-
-    class Meta:
-        managed = False
-        db_table = 'functiekaart'
+    timestamp = models.DateTimeField(blank=True, null=True)
+    vollcode = models.TextField(blank=True, null=True)
+    ogc_fid = models.BigIntegerField(blank=True, null=True)
+    gml_id = models.TextField(blank=True, null=True)
+    id = models.TextField(blank=True, null=True)
+    naam = models.TextField(blank=True, null=True)
+    display = models.TextField(blank=True, null=True)
+    type = models.TextField(blank=True, null=True)
+    uri = models.TextField(blank=True, null=True)
+    wkb_geometry = geo.PolygonField(null=True, srid=28992)
+    wkb_geometry_simplified = models.TextField(blank=True, null=True)
+    oppervlakte_m2 = models.FloatField(blank=True, null=True)
+    drukte_index = models.FloatField(blank=True, null=True)
 
 
 class Gebiedsgerichtwerken(models.Model):
@@ -177,7 +205,8 @@ class Gebiedsgerichtwerken(models.Model):
 
 class Google(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    location = models.TextField(db_column='Location', blank=True, null=True)  # Field name made lowercase.
+    # Field name made lowercase.
+    location = models.TextField(db_column='Location', blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
     historical = models.FloatField(blank=True, null=True)
     live = models.FloatField(blank=True, null=True)
@@ -197,7 +226,8 @@ class Google(models.Model):
 
 class GoogleWithBc(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    location = models.TextField(db_column='Location', blank=True, null=True)  # Field name made lowercase.
+    # Field name made lowercase.
+    location = models.TextField(db_column='Location', blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
     historical = models.FloatField(blank=True, null=True)
     live = models.FloatField(blank=True, null=True)

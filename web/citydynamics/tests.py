@@ -5,15 +5,28 @@ from rest_framework.test import APITestCase
 class BrowseDatasetsTestCase(APITestCase):
 
     datasets = [
-        'citydynamics/drukteindex',
+        'citydynamics/api/drukteindex',
     ]
 
     def setUp(self):
         # TODO add some test data!
         pass
 
+    def valid_html_response(self, url, response):
+        """
+        Helper method to check common status/json
+        """
+
+        self.assertEqual(
+            200, response.status_code,
+            'Wrong response code for {}'.format(url))
+
+        self.assertEqual(
+            'text/html; charset=utf-8', response['Content-Type'],
+            'Wrong Content-Type for {}'.format(url))
+
     def test_index_pages(self):
-        url = 'citydynamics'
+        url = 'citydynamics/api'
 
         response = self.client.get('/{}/'.format(url))
 
