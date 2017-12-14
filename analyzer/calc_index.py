@@ -1,9 +1,6 @@
 import configparser
 import argparse
 import logging
-import json
-import requests
-import time
 import pandas as pd
 import numpy as np
 
@@ -20,20 +17,22 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
-def get_conn(dbConfig):
-    POSTGRES_URL = URL(
+def get_conn(dbconfig):
+    """Create a connection to the database."""
+    postgres_url = URL(
         drivername='postgresql',
-        username=config_auth.get(dbConfig, 'user'),
-        password=config_auth.get(dbConfig, 'password'),
-        host=config_auth.get(dbConfig, 'host'),
-        port=config_auth.get(dbConfig, 'port'),
-        database=config_auth.get(dbConfig, 'dbname')
+        username=config_auth.get(dbconfig, 'user'),
+        password=config_auth.get(dbconfig, 'password'),
+        host=config_auth.get(dbconfig, 'host'),
+        port=config_auth.get(dbconfig, 'port'),
+        database=config_auth.get(dbconfig, 'dbname')
     )
-    conn = create_engine(POSTGRES_URL)
+    conn = create_engine(postgres_url)
     return conn
 
 
 def datetime_range(start, end, delta):
+    """Create a range of timestamps."""
     current = start
     if not isinstance(delta, timedelta):
         delta = timedelta(**delta)
@@ -43,17 +42,20 @@ def datetime_range(start, end, delta):
 
 
 def min_max(x):
+    """Scale numeric array to [0, 1]."""
     x = np.array(x)
     x = (x - min(x)) / (max(x) - min(x))
     return x
 
 
 def normalize(x):
+    """Normalize a numeric array."""
     x = rankdata(x)
     return min_max(x)
 
 
 def normalize_data(df, cols):
+    """Normalize all specified columns in dataframe."""
     df = df.groupby(['vollcode', 'timestamp'])[cols].mean().reset_index()
     for col in cols:
         new_col = col + '_normalized'
@@ -63,14 +65,20 @@ def normalize_data(df, cols):
 
 
 def import_verblijversindex(sql_query, conn):
-    verblijversindex = pd.read_sql(sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
+    """Read data on verblijversindex."""
+    verblijversindex = pd.read_sql(
+        sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
     verblijversindex = verblijversindex[['wijk', 'oppervlakte_m2']]
-    verblijversindex.rename(columns={'wijk': 'vollcode', 'oppervlakte_m2': 'verblijversindex'}, inplace=True)
+    verblijversindex.rename(columns={
+        'wijk': 'vollcode',
+        'oppervlakte_m2': 'verblijversindex'
+    }, inplace=True)
     verblijversindex = verblijversindex[['vollcode', 'verblijversindex']]
     return verblijversindex
 
 
 def import_google(sql_query, conn):
+    """Function to read google data."""
     def read_table(sql_query, conn):
         df = pd.read_sql(sql=sql_query, con=conn)
         df['timestamp'] = df.timestamp.dt.round('60min')
@@ -103,12 +111,15 @@ def import_google(sql_query, conn):
 
 
 def import_gvb(sql_query, conn, haltes):
+    """Import GVB data and create weekly pattern."""
     def read_table(sql_query, conn):
         df = pd.read_sql(sql=sql_query, con=conn)
         df['timestamp'] = df.timestamp.dt.round('60min')
         df['weekday'] = [ts.weekday() for ts in df.timestamp]
         df['hour'] = [ts.hour for ts in df.timestamp]
-        df = df[['halte', 'incoming', 'weekday', 'hour', 'lat', 'lon', 'vollcode']]
+        cols = ['halte', 'incoming', 'weekday',
+                'hour', 'lat', 'lon', 'vollcode']
+        df = df[cols]
         return df
 
     # read raw
@@ -131,6 +142,7 @@ def import_gvb(sql_query, conn, haltes):
 
 
 def import_tellus(sql_query, conn, vollcodes):
+    """Import and manipulate tellus data."""
     df = pd.read_sql(sql=sql_query.format('tellus_with_bc'), con=conn)
     df['timestamp'] = df.timestamp.dt.round('60min')
     df = df[['meetwaarde', 'timestamp', 'vollcode']]
@@ -142,7 +154,7 @@ def import_tellus(sql_query, conn, vollcodes):
     vc_ts = pd.DataFrame({
         'vollcode': [x[0] for x in vc_ts],
         'timestamp': [x[1] for x in vc_ts]
-        })
+    })
     df = pd.merge(df, vc_ts, on='timestamp', how='outer')
 
     # column names
@@ -151,29 +163,68 @@ def import_tellus(sql_query, conn, vollcodes):
     return df
 
 
-# def merge_datasets(**kwargs):
+def dataset_type(cols, to_match=['timestamp', 'vollcode', 'weekday', 'hour']):
+    """Determine type of data present in dataframe."""
+    cols = np.array(cols)
+    if np.all([tm in cols for tm in [to_match[0]]]):
+        return 'with_timestamp'
+    elif np.all([tm in cols for tm in to_match[1:]]):
+        return 'weekday_hour'
+    elif 'vollcode' in cols:
+        return 'static_vollcode'
+    else:
+        return 'static_city'
 
-#     with_timestamp = [kwargs[dname] for dname in kwargs.keys() if 'timestamp' in kwargs[dname].columns]
-#     drukte = reduce(lambda x, y: pd.merge(x, y, on = ['timestamp', 'vollcode'], how='outer'), with_timestamp)
-#     print(drukte.shape)
-#     return reduce(lambda x, y: pd.merge(**kwargs, on = ['timestamp', 'vollcode'], how='outer'), data)
-# merge_datasets(tellus=tellus, google_live=google_live, google_week=google_week, gvb_buurt=gvb_buurt, gvb_stad=gvb_stad)
+
+def merge_datasets(**kwargs):
+    """Merge datasets.
+
+    Takes named arguments and merges them based on
+    the type of data in them.
+    """
+    dataset_types = {dname: dataset_type(kwargs[dname].columns) for dname in kwargs.keys()}
+
+    drukte_timestamp = [kwargs[dname] for dname in kwargs.keys() if dataset_types[dname] == 'with_timestamp']
+    drukte_timestamp = reduce(lambda x, y: pd.merge(x, y, on=['timestamp', 'vollcode'], how='outer'), drukte_timestamp)
+    drukte_timestamp['weekday'] = [ts.weekday() for ts in drukte_timestamp.timestamp]
+    drukte_timestamp['hour'] = [ts.hour for ts in drukte_timestamp.timestamp]
+    drukte_timestamp = drukte_timestamp.drop_duplicates()
+
+    drukte_day_hour = [kwargs[dname] for dname in kwargs.keys() if dataset_types[dname] == 'weekday_hour']
+    drukte_day_hour = reduce(lambda x, y: pd.merge(x, y, on=['vollcode', 'weekday', 'hour'], how='outer'), drukte_day_hour)
+    drukte_day_hour = drukte_day_hour.drop_duplicates()
+
+    drukte_static_vollcode = [kwargs[dname] for dname in kwargs.keys() if dataset_types[dname] == 'static_vollcode']
+    drukte_static_vollcode = reduce(lambda x, y: pd.merge(x, y, on='vollcode', how='outer'), drukte_static_vollcode)
+    drukte_static_vollcode = drukte_static_vollcode.drop_duplicates()
+
+    drukte_static_city = [kwargs[dname] for dname in kwargs.keys() if dataset_types[dname] == 'static_city']
+    drukte_static_city = reduce(lambda x, y: pd.merge(x, y, on='vollcode', how='outer'), drukte_static_city)
+    drukte_static_city = drukte_static_city.drop_duplicates()
+
+    drukte = pd.merge(drukte_timestamp, drukte_day_hour, on=['vollcode', 'weekday', 'hour'], how='outer').drop_duplicates()
+    drukte = pd.merge(drukte, drukte_static_vollcode, on='vollcode', how='outer').drop_duplicates()
+    drukte = pd.merge(drukte, drukte_static_city, on=['weekday', 'hour'], how='outer').drop_duplicates()
+
+    return drukte
+
 
 def complete_ts_vollcode(data, vollcodes):
+    """Complete dataframe to include all vollcode-timestamp combinations."""
     # get list of timestamps
     start = np.min(data.timestamp)
     end = np.max(data.timestamp)
     timestamps = pd.date_range(start=start, end=end, freq='H')
 
     # create new dataframe
-    ts_vc = [(ts, vc) for ts in data.timestamp for vc in vollcodes]
+    ts_vc = [(ts, vc) for ts in timestamps for vc in vollcodes]
     mind = pd.DataFrame({
         'timestamp': [x[0] for x in ts_vc],
         'vollcode': [x[1] for x in ts_vc]
-        })
+    })
 
     # merge data
-    data = pd.merge(mind, data, on=['timestamp', 'vollcode'], how='outer')
+    data = pd.merge(mind, data, on=['timestamp', 'vollcode'], how='left')
 
     # fill in missing weekdays and hours
     data['weekday'] = [ts.weekday() for ts in data.timestamp]
@@ -183,6 +234,7 @@ def complete_ts_vollcode(data, vollcodes):
 
 
 def weighted_mean(data, cols, weights):
+    """Calculate weighted mean."""
     # create numpy array with right columns
     x = np.array(data.loc[:, cols])
 
@@ -199,6 +251,7 @@ def weighted_mean(data, cols, weights):
 
 
 def main():
+    """Run program."""
     # create connection
     conn = get_conn(dbConfig=args.dbConfig[0])
 
@@ -220,54 +273,55 @@ def main():
     gvb_stad, gvb_buurt = import_gvb(sql_query, conn, haltes)
 
     # read tellus for city centre neighborhoods
-    vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique() if 'A' in bc]
+    vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique()
+                         if 'A' in bc]
     tellus = import_tellus(sql_query, conn, vollcodes_centrum)
 
     # merge datasets
     log.debug('merge datasets')
-    # google_live
-    # goovle_week
-    # gvb_stad
-    # gvb_buurt
-    # tellus
 
-    # merge data with timestamps
-    drukte = google_live.copy()
+    # merge datasetss
+    drukte = merge_datasets(
+        google_live=google_live,
+        google_week=google_week,
+        tellus=tellus,
+        gvb_stad=gvb_stad,
+        gvb_buurt=gvb_buurt,
+        verblijversindex=verblijversindex)
 
-    # filter on october onwards
-    drukte = drukte.loc[drukte['timestamp'] >= '2017-10-01 00:00:00', :]
-
-    # fill in missing timestamp-vollcode combinations
-    all_vollcodes = [bc for bc in buurtcodes.vollcode.unique()]
-    drukte = complete_ts_vollcode(data=drukte, vollcodes=all_vollcodes)
-
-    # add google historical
-    drukte = pd.merge(drukte, google_week, on=['vollcode', 'weekday', 'hour'], how='outer')
-
-    # add gvb buurt
-    drukte = pd.merge(drukte, gvb_buurt, on=['vollcode', 'weekday', 'hour'], how='outer')
-
-    # add verblijversindex
-    drukte = pd.merge(drukte, verblijversindex, on='vollcode', how='outer')
-
-    # add buurtcode information
-    # drukte = pd.merge(drukte, buurtcodes, on='vollcode', how='left')
+    # filter on date
+    drukte = drukte.loc[drukte['timestamp'] >= '2017-10-15 00:00:00', :]
 
     log.debug('calculating overall index')
 
+    # combine google columns
+    google_cols = ['google_live', 'google_week']
+    drukte['google'] = drukte[google_cols].mean(axis=1)
+    drukte.drop(columns=google_cols, inplace=True)
+
     # define weights, have to be in same order als columns!
-    cols = ['google_live', 'google_week', 'gvb_buurt', 'verblijversindex']
+    cols = ['google', 'gvb_buurt', 'verblijversindex']
     drukte = normalize_data(df=drukte, cols=cols)
-    weights = [0.3, 0.3, 0.2, 0.2]
+    weights = [0.6, 0.2, 0.2]
     normalized_cols = [col + '_normalized' for col in cols]
-    drukte['drukte_index'] = weighted_mean(data=drukte, cols=normalized_cols, weights=weights)
+    drukte['drukte_index'] = weighted_mean(
+        data=drukte, cols=normalized_cols, weights=weights)
 
     # drop obsolete columns
-    drukte.drop(cols, axis=1, inplace=True)
+    all_cols = cols + normalized_cols
+    drukte.drop(columns=all_cols, inplace=True)
+
+    # fill in missing timestamp-vollcode combinations
+    all_vollcodes = buurtcodes.vollcode.unique()
+    drukte = complete_ts_vollcode(data=drukte, vollcodes=all_vollcodes)
+
+    # add buurtcode information
+    drukte = pd.merge(drukte, buurtcodes, on='vollcode', how='left')
 
     # write to db
     log.debug('writing data to db')
-    drukte.to_sql(name='drukteindex', con=conn, index=True, if_exists='replace')
+    drukte.to_sql(
+        name='drukteindex', con=conn, index=True, if_exists='replace')
     conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
     log.debug('Done you are awesome <3')
 
@@ -276,6 +330,9 @@ if __name__ == '__main__':
     desc = "Calculate index."
     log.debug(desc)
     parser = argparse.ArgumentParser(desc)
-    parser.add_argument('dbConfig', type=str, help='database config settings: dev or docker', nargs=1)
+    parser.add_argument(
+        'dbConfig', type=str,
+        help='database config settings: dev or docker',
+        nargs=1)
     args = parser.parse_args()
     main()
