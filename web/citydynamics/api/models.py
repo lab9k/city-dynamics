@@ -87,15 +87,36 @@ class DjangoMigrations(models.Model):
         db_table = 'django_migrations'
 
 
+# class Drukteindex(models.Model):
+#     index = models.BigIntegerField(primary_key=True)
+#     vollcode = models.TextField(blank=True, null=True)
+#     timestamp = models.DateTimeField(blank=True, null=True)
+#     google_live_normalized = models.FloatField(blank=True, null=True)
+#     google_week_normalized = models.FloatField(blank=True, null=True)
+#     gvb_buurt_normalized = models.FloatField(blank=True, null=True)
+#     verblijversindex_normalized = models.FloatField(blank=True, null=True)
+#     drukte_index = models.FloatField(blank=True, null=True)
+
+#     class Meta:
+#         managed = False
+#         db_table = 'drukteindex'
+
 class Drukteindex(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    vollcode = models.TextField(blank=True, null=True)
     timestamp = models.DateTimeField(blank=True, null=True)
-    google_live_normalized = models.FloatField(blank=True, null=True)
-    google_week_normalized = models.FloatField(blank=True, null=True)
-    gvb_buurt_normalized = models.FloatField(blank=True, null=True)
-    verblijversindex_normalized = models.FloatField(blank=True, null=True)
+    vollcode = models.TextField(blank=True, null=True)
     drukte_index = models.FloatField(blank=True, null=True)
+    weekday = models.BigIntegerField(blank=True, null=True)
+    hour = models.BigIntegerField(blank=True, null=True)
+    ogc_fid = models.BigIntegerField(blank=True, null=True)
+    gml_id = models.TextField(blank=True, null=True)
+    id = models.TextField(blank=True, null=True)
+    naam = models.TextField(blank=True, null=True)
+    display = models.TextField(blank=True, null=True)
+    type = models.TextField(blank=True, null=True)
+    uri = models.TextField(blank=True, null=True)
+    wkb_geometry = models.TextField(blank=True, null=True)
+    wkb_geometry_simplified = models.TextField(blank=True, null=True)
 
     class Meta:
         managed = False

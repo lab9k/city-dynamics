@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 def convert_to_date(input_date):
     try:
-        date_obj = datetime.datetime.strptime(input_date, '%Y-%m-%d-%H-%M-%S')
+        date_obj = datetime.datetime.strptime(input_date, '%d-%m-%Y-%H-%M-%S')
         #date_obj = datetime.datetime.strptime(input_date, '%Y-%m-%d-%H')
     except ValueError:
         log.exception("Got an invalid date value")
@@ -42,7 +42,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 2017-10-26-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp__gte=date)
 
         return queryset
@@ -51,7 +51,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 2017-10-26-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp__lte=date)
 
         return queryset
@@ -60,7 +60,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 2017-10-26-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp=date)
 
         return queryset
@@ -89,35 +89,6 @@ class DrukteindexViewSet(rest.DatapuntViewSet):
     serializer_detail_class = serializers.DrukteIndexSerializer
     queryset = models.Drukteindex.objects.order_by("index")
     filter_class = DateFilter
-
-
-# class RecentIndexFilter(FilterSet):
-
-#     latest_measures = filters.CharFilter(
-#         label='latest_measures', method='latest_filter')
-#     vollcode = filters.CharFilter(
-#         label='vollcode_filter', method='vollcode_filter')
-
-#     class Meta:
-#         model = models.Drukteindex
-#         fields = [
-#             'latest_measures',
-#             'vollcode'
-#         ]
-
-#     def latest_filter(self, queryset, _name, value):
-#         datetime = self.request.query_params.get('datetime', None)
-#         start_datetime = convert_to_date(datetime)
-#         end_datetime = start_datetime - datetime.timedelta(hours=24)
-#         queryset = queryset.filter(
-#             timestamp__range=(start_datetime, end_datetime))
-#         return queryset
-
-#     def vollcode_filter(self, queryset, _name, value):
-#         vollcode = self.request.query_params.get('vollcode', None)
-#         if vollcode is not None:
-#             queryset = queryset.filter(vollcode=vollcode)
-#         return queryset
 
 
 class RecentIndexViewSet(rest.DatapuntViewSet):
@@ -157,28 +128,28 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         if timestamp_str is not None:
             timestamp_dt = convert_to_date(timestamp_str)
 
-        if timestamp_dt > convert_to_date('2017-12-07-00-00-00'):
+        if timestamp_dt > convert_to_date('07-12-2017-00-00-00'):
             current_day = datetime.datetime.now().strftime("%A")
             if current_day == 'Friday':
-                end_timestamp = '2017-12-02-23-00-00'                
+                end_timestamp = '02-12-2017-23-00-00'                
             elif current_day == 'Saturday':
-                end_timestamp = '2017-12-01-23-00-00'
+                end_timestamp = '01-12-2017-23-00-00'
             elif current_day == 'Sunday':
-                end_timestamp = '2017-12-03-23-00-00'
+                end_timestamp = '03-12-2017-23-00-00'
             elif current_day == 'Monday':
-                end_timestamp = '2017-12-04-23-00-00'
+                end_timestamp = '04-12-2017-23-00-00'
             elif current_day == 'Tuesday':
-                end_timestamp = '2017-12-05-23-00-00'
+                end_timestamp = '05-12-2017-23-00-00'
             elif current_day == 'Wednesday':
-                end_timestamp = '2017-12-06-23-00-00'
+                end_timestamp = '06-12-2017-23-00-00'
             elif current_day == 'Thursday':
-                end_timestamp = '2017-12-07-23-00-00'
+                end_timestamp = '07-12-2017-23-00-00'
             end_timestamp = convert_to_date(end_timestamp)
             start_timestamp = end_timestamp - datetime.timedelta(hours=23)
 
         else:
             end_timestamp = timestamp_dt
-            start_timestamp = end_timestamp - datetime.timedelta(hours=22)
+            start_timestamp = end_timestamp - datetime.timedelta(hours=23)
 
         queryset = queryset.filter(
             timestamp__range=(start_timestamp, end_timestamp))
