@@ -295,7 +295,7 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
 
     # drop columns
     df.drop(['richting', 'richting 1',
-                     'richting 2', 'representatief'], axis=1, inplace=True)
+             'richting 2', 'representatief'], axis=1, inplace=True)
 
     return df
 
@@ -317,12 +317,12 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
     path = os.path.join(datadir, filename)
     df = pd.read_excel(path, sheet_name=3)
-    df = df.iloc[:98,:]
     indx = np.logical_and(df.wijk != 'gemiddelde',
                           np.logical_not(df.wijk.isnull()))
     cols = ['wijk', 'oppervlakte land in vierkante meters',
             'verbl. Per HA (land) 2016']
     df = df.loc[indx, cols]
+    df[cols[2]] = df[cols[2]].fillna(0)
     df[cols[2]] = np.round(df[cols[2]]).astype(int)
     df.columns = ['wijk', 'oppervlakte_m2', 'verblijversindex']
     return df
@@ -382,8 +382,10 @@ def parse_parkeren(datadir):
         df = pd.read_csv(file_, index_col=None, header=0, delimiter=';')
         list_.append(df)
     df_parkeer = pd.concat(list_)
-    df_parkeer['DateTime'] = pd.to_datetime(df_parkeer['timestamp'], format="%Y-%m-%d %H:%M:%S") 
-    df_parkeer['weekday'] = df_parkeer.apply(lambda x: x['DateTime'].weekday(), axis=1)
+    df_parkeer['DateTime'] = pd.to_datetime(
+        df_parkeer['timestamp'], format="%Y-%m-%d %H:%M:%S")
+    df_parkeer['weekday'] = df_parkeer.apply(
+        lambda x: x['DateTime'].weekday(), axis=1)
     df_parkeer['hour'] = df_parkeer.apply(lambda x: x['DateTime'].hour, axis=1)
     df_parkeer = df_parkeer.replace(0.000000, np.nan)
     df_parkeer = df_parkeer.drop(['timestamp', 'DateTime'], axis=1)
