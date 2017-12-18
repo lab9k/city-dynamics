@@ -44,13 +44,16 @@ def datetime_range(start, end, delta):
 def min_max(x):
     """Scale numeric array to [0, 1]."""
     x = np.array(x)
-    x = (x - min(x)) / (max(x) - min(x))
+    x = (x - np.nanmin(x)) / (np.nanmax(x) - np.nanmin(x))
     return x
 
 
 def normalize(x):
     """Normalize a numeric array."""
-    x = rankdata(x)
+    x = np.array(x)
+    indx = np.logical_not(np.isnan(x))
+    x_rank = rankdata(x[indx])
+    x[indx] = x_rank
     return min_max(x)
 
 
@@ -280,6 +283,21 @@ def main():
     # merge datasets
     log.debug('merge datasets')
 
+    # normalize columns
+    # google_live['google_live_norm'] = normalize(google_live.google_live)
+    # google_week['google_week_norm'] = normalize(google_week.google_week)
+    # tellus['tellus_norm'] = normalize(tellus.tellus)
+    # gvb_stad['gvb_stad_norm'] = normalize(gvb_stad.gvb_stad)
+    # gvb_buurt['gvb_buurt_norm'] = normalize(gvb_buurt.gvb_buurt)
+    # verblijversindex['verblijversindex_norm'] = normalize(verblijversindex.verblijversindex)
+
+    google_live['google_live'] = normalize(google_live.google_live)
+    google_week['google_week'] = normalize(google_week.google_week)
+    tellus['tellus'] = normalize(tellus.tellus)
+    gvb_stad['gvb_stad'] = normalize(gvb_stad.gvb_stad)
+    gvb_buurt['gvb_buurt'] = normalize(gvb_buurt.gvb_buurt)
+    verblijversindex['verblijversindex'] = normalize(verblijversindex.verblijversindex)
+
     # merge datasetss
     drukte = merge_datasets(
         google_live=google_live,
@@ -309,15 +327,14 @@ def main():
 
     # define weights, have to be in same order als columns!
     cols = ['google', 'gvb_buurt', 'verblijversindex']
-    drukte = normalize_data(df=drukte, cols=cols)
+    # drukte = normalize_data(df=drukte, cols=cols)
     weights = [0.6, 0.2, 0.2]
     normalized_cols = [col + '_normalized' for col in cols]
-    drukte['drukte_index'] = weighted_mean(
-        data=drukte, cols=normalized_cols, weights=weights)
+    drukte['drukte_index'] = weighted_mean(data=drukte, cols=cols, weights=weights)
 
     # drop obsolete columns
     all_cols = cols + normalized_cols
-    drukte.drop(columns=all_cols, inplace=True)
+    drukte.drop(columns=cols, inplace=True)
 
     # add buurtcode information
     drukte = pd.merge(drukte, buurtcodes, on='vollcode', how='left')
