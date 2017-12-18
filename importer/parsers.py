@@ -294,8 +294,8 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
     df = df.loc[np.logical_or(indx1, indx2), :]
 
     # drop columns
-    df.drop(columns=['richting', 'richting 1',
-                     'richting 2', 'representatief'], inplace=True)
+    df.drop(['richting', 'richting 1',
+                     'richting 2', 'representatief'], axis=1, inplace=True)
 
     return df
 
