@@ -245,7 +245,7 @@ def weighted_mean(data, cols, weights):
 
     # calculate overall index
     wmean = np.array(x * weights)
-    wmean = np.nanmean(wmean, axis=1) / weights.sum(axis=1)
+    wmean = np.nansum(wmean, axis=1) / weights.sum(axis=1)
 
     return wmean
 
@@ -253,7 +253,7 @@ def weighted_mean(data, cols, weights):
 def main():
     """Run program."""
     # create connection
-    conn = get_conn(dbConfig=args.dbConfig[0])
+    conn = get_conn(dbconfig=args.dbConfig[0])
 
     # base call
     sql_query = """ SELECT * FROM "{}" """
@@ -292,12 +292,20 @@ def main():
     # filter on date
     drukte = drukte.loc[drukte['timestamp'] >= '2017-10-15 00:00:00', :]
 
+    # fill in missing timestamp-vollcode combinations
+    all_vollcodes = buurtcodes.vollcode.unique()
+    drukte = complete_ts_vollcode(data=drukte, vollcodes=all_vollcodes)
+
     log.debug('calculating overall index')
 
     # combine google columns
     google_cols = ['google_live', 'google_week']
     drukte['google'] = drukte[google_cols].mean(axis=1)
     drukte.drop(columns=google_cols, inplace=True)
+
+    # add verblijversindex
+    drukte.drop(columns='verblijversindex', inplace=True)
+    drukte = pd.merge(drukte, verblijversindex, on='vollcode', how='left')
 
     # define weights, have to be in same order als columns!
     cols = ['google', 'gvb_buurt', 'verblijversindex']
@@ -310,10 +318,6 @@ def main():
     # drop obsolete columns
     all_cols = cols + normalized_cols
     drukte.drop(columns=all_cols, inplace=True)
-
-    # fill in missing timestamp-vollcode combinations
-    all_vollcodes = buurtcodes.vollcode.unique()
-    drukte = complete_ts_vollcode(data=drukte, vollcodes=all_vollcodes)
 
     # add buurtcode information
     drukte = pd.merge(drukte, buurtcodes, on='vollcode', how='left')
