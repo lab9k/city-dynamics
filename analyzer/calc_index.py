@@ -253,7 +253,7 @@ def weighted_mean(data, cols, weights):
 def main():
     """Run program."""
     # create connection
-    conn = get_conn(dbConfig=args.dbConfig[0])
+    conn = get_conn(dbconfig=args.dbConfig[0])
 
     # base call
     sql_query = """ SELECT * FROM "{}" """
@@ -317,9 +317,10 @@ def main():
 
     # add buurtcode information
     drukte = pd.merge(drukte, buurtcodes, on='vollcode', how='left')
-
+    log.debug(drukte.columns.tolist())
     # write to db
     log.debug('writing data to db')
+
     drukte.to_sql(
         name='drukteindex', con=conn, index=True, if_exists='replace')
     conn.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
