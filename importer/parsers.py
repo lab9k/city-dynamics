@@ -104,6 +104,7 @@ def parse_gvb(datadir,
     locations.rename(columns={
         'ortnr_eind': 'ortnr',
         'haltenaam_eind': 'halte',
+        'lat_eind': 'lat',
         'lng_eind': 'lon'}, inplace=True)
     mean_locations = locations.groupby(
         'halte')['lat', 'lon'].mean().reset_index()
