@@ -21,17 +21,16 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
 from citydynamics.api.views import DrukteindexViewSet
-
+from citydynamics.api.views import RecentIndexViewSet
 
 router = DefaultRouter()
-router.register(prefix='drukteindex', viewset=DrukteindexViewSet)
+router.register('drukteindex', DrukteindexViewSet, 'drukteindex')
+router.register('recentmeasures', RecentIndexViewSet ,'recentmeasures')
 
 urlpatterns = router.urls
 
 urlpatterns = [
     url(r'^citydynamics/api/', include(router.urls)),
-
-    # url(r'^citydynamics/api/beeldmaatlattengeojson/$', BeeldmaatlatGeoJsonViewSet, name='beeldmaatlattengeojson'),
 ]
 
 
