@@ -23,13 +23,13 @@ node {
         checkout scm
     }
 
-    stage("Test") {
-        tryStep "Test", {
-            sh "docker-compose -p test -f -f /web/deploy/test/docker-compose.yml up tests"
-	}, {
-            sh "docker-compose -p test -f -f /web/deploy/test/docker-compose.yml down"
-        }
-    }
+#    stage("Test") {
+#        tryStep "Test", {
+#            sh "docker-compose -p test -f -f /web/deploy/test/docker-compose.yml up tests"
+#	}, {
+#            sh "docker-compose -p test -f -f /web/deploy/test/docker-compose.yml down"
+#        }
+#    }
 
     stage("Build dockers") {
         tryStep "build", {
