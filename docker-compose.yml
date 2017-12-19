@@ -33,8 +33,8 @@ services:
       # E.g. by running in terminal
       # export EXTERN_DATASERVICES_PASSWORD="mypassword"
       EXTERN_DATASERVICES_PASSWORD:
-#    volumes:
-#      - /app/data:/data
+    volumes:
+      - /app/data:/data
 
   analyzer:
     build: ./analyzer
