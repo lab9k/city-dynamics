@@ -375,19 +375,24 @@ def main():
     # google live
     cols = ['timestamp', 'vollcode', 'google_live']
     drukte = pd.merge(drukte, google_live[cols], on=['timestamp', 'vollcode'], how='left')
+    print(len(drukte))
 
     # google week
     cols = ['vollcode', 'weekday', 'hour', 'google_week']
     drukte = pd.merge(drukte, google_week[cols], on=['weekday', 'hour', 'vollcode'], how='left')
+    print(len(drukte))
 
     # gvb buurt
     drukte = pd.merge(drukte, gvb_buurt, on=['vollcode', 'weekday', 'hour'], how='left')
+    print(len(drukte))
 
     # gvb stad
     drukte = pd.merge(drukte, gvb_stad, on=['weekday', 'hour'], how='left')
+    print(len(drukte))
 
     # verblijversindex
     drukte = pd.merge(drukte, verblijversindex, on='vollcode', how='left')
+    print(len(drukte))
     #--------------------------------------
 
     log.debug('calculating overall index')
