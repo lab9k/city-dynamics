@@ -16,4 +16,4 @@ class RecentIndexSerializer(ModelSerializer):
 
     class Meta:
         model = Drukteindex
-        fields = ('drukte_index', 'timestamp', 'naam')
+        fields = ('drukte_index', 'timestamp')

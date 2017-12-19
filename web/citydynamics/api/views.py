@@ -151,9 +151,9 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         start_timestamp = end_timestamp.replace(
             hour=1, minute=0, second=0, microsecond=0)
         # start_timestamp = end_timestamp - datetime.timedelta(hours=23)
-        current_day = end_timestamp.day
+        end_timestamp = end_timestamp + datetime.timedelta(days=1)
         end_timestamp = end_timestamp.replace(
-            day=current_day + 1, hour=0, minute=0, second=0, microsecond=0)
+            hour=0, minute=0, second=0, microsecond=0)
 
         queryset = queryset.filter(
             timestamp__range=(start_timestamp, end_timestamp))
