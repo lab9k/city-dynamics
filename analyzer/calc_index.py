@@ -82,10 +82,9 @@ def import_verblijversindex(sql_query, conn):
     """Read data on verblijversindex."""
     verblijversindex = pd.read_sql(
         sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
-    verblijversindex = verblijversindex[['wijk', 'oppervlakte_m2']]
+    verblijversindex = verblijversindex[['wijk', 'verblijversindex']]
     verblijversindex.rename(columns={
-        'wijk': 'vollcode',
-        'oppervlakte_m2': 'verblijversindex'
+        'wijk': 'vollcode'
     }, inplace=True)
     verblijversindex = verblijversindex[['vollcode', 'verblijversindex']]
     return verblijversindex
@@ -186,82 +185,82 @@ def import_tellus(sql_query, conn, vollcodes):
     return df
 
 
-def dataset_type(cols, to_match=['timestamp', 'vollcode', 'weekday', 'hour']):
-    """Determine type of data present in dataframe."""
-    cols = np.array(cols)
-    if np.all([tm in cols for tm in [to_match[0]]]):
-        return 'with_timestamp'
-    elif np.all([tm in cols for tm in to_match[1:]]):
-        return 'weekday_hour'
-    elif 'vollcode' in cols:
-        return 'static_vollcode'
-    else:
-        return 'static_city'
+# def dataset_type(cols, to_match=['timestamp', 'vollcode', 'weekday', 'hour']):
+#     """Determine type of data present in dataframe."""
+#     cols = np.array(cols)
+#     if np.all([tm in cols for tm in [to_match[0]]]):
+#         return 'with_timestamp'
+#     elif np.all([tm in cols for tm in to_match[1:]]):
+#         return 'weekday_hour'
+#     elif 'vollcode' in cols:
+#         return 'static_vollcode'
+#     else:
+#         return 'static_city'
 
 
-def merge_datasets(**kwargs):
-    """Merge datasets.
+# def merge_datasets(**kwargs):
+#     """Merge datasets.
 
-    Takes named arguments and merges them based on
-    the type of data in them.
-    """
-    dataset_types = {dname: dataset_type(kwargs[dname].columns)
-                     for dname in kwargs.keys()}
+#     Takes named arguments and merges them based on
+#     the type of data in them.
+#     """
+#     dataset_types = {dname: dataset_type(kwargs[dname].columns)
+#                      for dname in kwargs.keys()}
 
-    # datasets with a timestamp column
-    drukte_timestamp = [
-        kwargs[dname] for dname in kwargs.keys()
-        if dataset_types[dname] == 'with_timestamp']
+#     # datasets with a timestamp column
+#     drukte_timestamp = [
+#         kwargs[dname] for dname in kwargs.keys()
+#         if dataset_types[dname] == 'with_timestamp']
 
-    # merge data with timestamps first
-    drukte_timestamp = reduce(lambda x, y: pd.merge(
-        x, y, on=['timestamp', 'vollcode'], how='outer'), drukte_timestamp)
+#     # merge data with timestamps first
+#     drukte_timestamp = reduce(lambda x, y: pd.merge(
+#         x, y, on=['timestamp', 'vollcode'], how='outer'), drukte_timestamp)
 
-    # create day of week column
-    drukte_timestamp['weekday'] = [ts.weekday()
-                                   for ts in drukte_timestamp.timestamp]
+#     # create day of week column
+#     drukte_timestamp['weekday'] = [ts.weekday()
+#                                    for ts in drukte_timestamp.timestamp]
 
-    # create hour of day column
-    drukte_timestamp['hour'] = [ts.hour for ts in drukte_timestamp.timestamp]
-    drukte_timestamp = drukte_timestamp.drop_duplicates()
+#     # create hour of day column
+#     drukte_timestamp['hour'] = [ts.hour for ts in drukte_timestamp.timestamp]
+#     drukte_timestamp = drukte_timestamp.drop_duplicates()
 
-    # datasets with week patterns only
-    drukte_day_hour = [kwargs[dname]
-                       for dname in kwargs.keys()
-                       if dataset_types[dname] == 'weekday_hour']
+#     # datasets with week patterns only
+#     drukte_day_hour = [kwargs[dname]
+#                        for dname in kwargs.keys()
+#                        if dataset_types[dname] == 'weekday_hour']
 
-    # merge data with only weekpatterns
-    drukte_day_hour = reduce(lambda x, y: pd.merge(
-        x, y, on=['vollcode', 'weekday', 'hour'], how='outer'),
-        drukte_day_hour)
-    drukte_day_hour = drukte_day_hour.drop_duplicates()
+#     # merge data with only weekpatterns
+#     drukte_day_hour = reduce(lambda x, y: pd.merge(
+#         x, y, on=['vollcode', 'weekday', 'hour'], how='outer'),
+#         drukte_day_hour)
+#     drukte_day_hour = drukte_day_hour.drop_duplicates()
 
-    # datasets with only one static value per buurt
-    drukte_static_vollcode = [kwargs[dname]
-                              for dname in kwargs.keys()
-                              if dataset_types[dname] == 'static_vollcode']
-    drukte_static_vollcode = reduce(lambda x, y: pd.merge(
-        x, y, on='vollcode', how='outer'), drukte_static_vollcode)
-    drukte_static_vollcode = drukte_static_vollcode.drop_duplicates()
+#     # datasets with only one static value per buurt
+#     drukte_static_vollcode = [kwargs[dname]
+#                               for dname in kwargs.keys()
+#                               if dataset_types[dname] == 'static_vollcode']
+#     drukte_static_vollcode = reduce(lambda x, y: pd.merge(
+#         x, y, on='vollcode', how='outer'), drukte_static_vollcode)
+#     drukte_static_vollcode = drukte_static_vollcode.drop_duplicates()
 
-    # datasets with only one value for entire city
-    drukte_static_city = [kwargs[dname]
-                          for dname in kwargs.keys()
-                          if dataset_types[dname] == 'static_city']
-    drukte_static_city = reduce(lambda x, y: pd.merge(
-        x, y, on='vollcode', how='outer'), drukte_static_city)
-    drukte_static_city = drukte_static_city.drop_duplicates()
+#     # datasets with only one value for entire city
+#     drukte_static_city = [kwargs[dname]
+#                           for dname in kwargs.keys()
+#                           if dataset_types[dname] == 'static_city']
+#     drukte_static_city = reduce(lambda x, y: pd.merge(
+#         x, y, on='vollcode', how='outer'), drukte_static_city)
+#     drukte_static_city = drukte_static_city.drop_duplicates()
 
-    # merge all above datasets
-    drukte = pd.merge(drukte_timestamp, drukte_day_hour,
-                      on=['vollcode', 'weekday', 'hour'],
-                      how='outer').drop_duplicates()
-    drukte = pd.merge(drukte, drukte_static_vollcode,
-                      on='vollcode', how='outer').drop_duplicates()
-    drukte = pd.merge(drukte, drukte_static_city,
-                      on=['weekday', 'hour'], how='outer').drop_duplicates()
+#     # merge all above datasets
+#     drukte = pd.merge(drukte_timestamp, drukte_day_hour,
+#                       on=['vollcode', 'weekday', 'hour'],
+#                       how='outer').drop_duplicates()
+#     drukte = pd.merge(drukte, drukte_static_vollcode,
+#                       on='vollcode', how='outer').drop_duplicates()
+#     drukte = pd.merge(drukte, drukte_static_city,
+#                       on=['weekday', 'hour'], how='outer').drop_duplicates()
 
-    return drukte
+#     return drukte
 
 
 def complete_ts_vollcode(data, vollcodes):
@@ -358,18 +357,43 @@ def main():
     verblijversindex['verblijversindex'] = normalize(
         verblijversindex.verblijversindex)
 
-    # merge datasetss
-    drukte = merge_datasets(
-        google_live=google_live,
-        google_week=google_week,
-        tellus=tellus,
-        gvb_stad=gvb_stad,
-        gvb_buurt=gvb_buurt,
-        verblijversindex=verblijversindex)
+    #--------------------------------------
+    # merge datasets
 
-    # fill in missing timestamp-vollcode combinations
-    all_vollcodes = list(buurtcodes.vollcode.unique())
-    drukte = complete_ts_vollcode(data=drukte, vollcodes=all_vollcodes)
+    start = np.min(google_live.timestamp)
+    end = np.max(google_live.timestamp)
+    timestamps = pd.date_range(start=start, end=end, freq='H')
+    vollcodes = list(buurtcodes.vollcode.unique())
+    ts_vc = [(ts, vc) for ts in timestamps for vc in vollcodes]
+    drukte = pd.DataFrame({
+        'timestamp': [x[0] for x in ts_vc],
+        'vollcode': [x[1] for x in ts_vc]
+    }).sort_values(['timestamp', 'vollcode'])
+    drukte['weekday'] = [ts.weekday() for ts in drukte.timestamp]
+    drukte['hour'] = [ts.hour for ts in drukte.timestamp]
+
+    # google live
+    cols = ['timestamp', 'vollcode', 'google_live']
+    drukte = pd.merge(drukte, google_live[cols], on=['timestamp', 'vollcode'], how='left')
+    print(len(drukte))
+
+    # google week
+    cols = ['vollcode', 'weekday', 'hour', 'google_week']
+    drukte = pd.merge(drukte, google_week[cols], on=['weekday', 'hour', 'vollcode'], how='left')
+    print(len(drukte))
+
+    # gvb buurt
+    drukte = pd.merge(drukte, gvb_buurt, on=['vollcode', 'weekday', 'hour'], how='left')
+    print(len(drukte))
+
+    # gvb stad
+    drukte = pd.merge(drukte, gvb_stad, on=['weekday', 'hour'], how='left')
+    print(len(drukte))
+
+    # verblijversindex
+    drukte = pd.merge(drukte, verblijversindex, on='vollcode', how='left')
+    print(len(drukte))
+    #--------------------------------------
 
     log.debug('calculating overall index')
 
@@ -378,41 +402,27 @@ def main():
     drukte['google'] = drukte[google_cols].mean(axis=1)
     drukte.drop(columns=google_cols, inplace=True)
 
-    # add verblijversindex
-    # drukte.drop(columns='verblijversindex', inplace=True)
-    # drukte = pd.merge(drukte, verblijversindex, on='vollcode', how='left')
+    # combine gvb columns
+    gvb_cols = ['gvb_buurt', 'gvb_stad']
+    drukte['gvb'] = drukte[gvb_cols].mean(axis=1)
+    drukte.drop(columns=gvb_cols, inplace=True)
 
     # define weights, have to be in same order als columns!
-    cols = ['google', 'gvb_buurt', 'verblijversindex']
+    cols = ['google', 'gvb', 'verblijversindex']
     # drukte = normalize_data(df=drukte, cols=cols)
     weights = [0.6, 0.2, 0.2]
     drukte['drukte_index'] = weighted_mean(
         data=drukte, cols=cols, weights=weights)
 
-    # drop obsolete columns
-    # obs_cols = cols + ['tellus', 'gvb_stad']
-    # drukte.drop(columns=obs_cols, inplace=True)
-
-    # weekpatroon per stadsdeel
-    drukte['stadsdeel'] = [x[0] for x in drukte.vollcode]
-    weekpatroon_stadsdeel = drukte.loc[drukte.drukte_index.notnull(), :]
-    weekpatroon_stadsdeel = weekpatroon_stadsdeel.groupby([
-        'timestamp', 'stadsdeel'])['drukte_index'].mean().reset_index()
-    weekpatroon_stadsdeel.rename(columns={'drukte_index': 'weekpatroon'}, inplace=True)
-
-    # add weekpatroon
-    drukte = pd.merge(drukte, weekpatroon_stadsdeel, on=['timestamp', 'stadsdeel'], how='outer')
-    indx = drukte.drukte_index.isnull()
-    drukte.loc[indx, 'drukte_index'] = drukte.loc[indx, 'weekpatroon']
-
     # add buurtcode information
     drukte = pd.merge(drukte, buurtcodes, on='vollcode', how='left')
+
+    # sort values
+    drukte = drukte.sort_values(['timestamp', 'vollcode'])
+
     log.debug(drukte.columns.tolist())
     # write to db
     log.debug('writing data to db')
-
-    # filter timestamp
-    drukte = drukte.loc[drukte.timestamp > '2017-10-15 00:00:00', :]
 
     drukte.to_sql(
         name='drukteindex', con=conn, index=True, if_exists='replace')
