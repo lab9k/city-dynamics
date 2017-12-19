@@ -8,7 +8,8 @@ class DrukteIndexSerializer(ModelSerializer):
     class Meta:
         model = Drukteindex
         # geo_field = 'wkb_geometry'
-        fields = ('vollcode', 'drukte_index')
+        fields = ('vollcode', 'naam', 'drukte_index')
+
 
 class RecentIndexSerializer(ModelSerializer):
     """ A class to serialize locations as GeoJSON compatible data """
