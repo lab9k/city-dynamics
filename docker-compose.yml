@@ -6,17 +6,17 @@ services:
       - "5403:5432"
     environment:
       POSTGRES_PASSWORD: insecure
-      POSTGRES_DB: citydynamics
-      POSTGRES_USER: citydynamics
+      POSTGRES_DB: city-dynamics
+      POSTGRES_USER: city-dynamics
 
   web:
     build: ./web
     ports:
-      - "8117:8001"
+      - "8125:8001"
     links:
       - database:database
     environment:
-      DB_NAME: citydynamics
+      DB_NAME: city-dynamics
       DB_PASSWORD: insecure
       UWSGI_HTTP: ":8001"
       UWSGI_MODULE: "citydynamics.wsgi:application"
@@ -33,8 +33,8 @@ services:
       # E.g. by running in terminal
       # export EXTERN_DATASERVICES_PASSWORD="mypassword"
       EXTERN_DATASERVICES_PASSWORD:
-    volumes:
-      - /app/data:/data
+#    volumes:
+#      - /app/data:/data
 
   analyzer:
     build: ./analyzer
