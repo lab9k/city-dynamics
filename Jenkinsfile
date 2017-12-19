@@ -25,15 +25,15 @@ node {
 
     stage("Build dockers") {
         tryStep "build", {
-            def kibana = docker.build("build.datapunt.amsterdam.nl:5000/datapunt/city_dynamics_importer:${env.BUILD_NUMBER}", "importer")
+            def kibana = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics_importer:${env.BUILD_NUMBER}", "importer")
             kibana.push()
             kibana.push("acceptance")
 
-	    def logstash = docker.build("build.datapunt.amsterdam.nl:5000/datapunt/city_dynamics_analyzer:${env.BUILD_NUMBER}", "analyzer")
-            logstash.push()
-            logstash.push("acceptance")
+            def logstash = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics_analyzer:${env.BUILD_NUMBER}", "analyzer")
+                logstash.push()
+                logstash.push("acceptance")
 
-            def csvimporter = docker.build("build.datapunt.amsterdam.nl:5000/datapunt/city_dynamics:${env.BUILD_NUMBER}", "web")
+            def csvimporter = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}", "web")
             csvimporter.push()
             csvimporter.push("acceptance")
         }
@@ -47,7 +47,7 @@ if (BRANCH == "master") {
     node {
         stage('Push acceptance image') {
             tryStep "image tagging", {
-                def image = docker.image("build.datapunt.amsterdam.nl:5000/datapunt/city_dynamics:${env.BUILD_NUMBER}")
+                def image = docker.image("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
                 image.pull()
                 image.push("acceptance")
             }
@@ -75,7 +75,7 @@ if (BRANCH == "master") {
     node {
         stage('Push production image') {
             tryStep "image tagging", {
-                def kibana = docker.image("build.datapunt.amsterdam.nl:5000/datapunt/city_dynamics:${env.BUILD_NUMBER}")
+                def kibana = docker.image("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
                 kibana.pull()
                 kibana.push("production")
                 kibana.push("latest")
