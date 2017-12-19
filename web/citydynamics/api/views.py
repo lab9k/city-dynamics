@@ -119,7 +119,6 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         if vollcode is not None:
             queryset = queryset.filter(vollcode=vollcode)
 
-
         timestamp_str = self.request.query_params.get('timestamp', None)
 
         if timestamp_str is None:
@@ -131,7 +130,7 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         if timestamp_dt > convert_to_date('07-12-2017-00-00-00'):
             current_day = datetime.datetime.now().strftime("%A")
             if current_day == 'Friday':
-                end_timestamp = '02-12-2017-23-00-00'                
+                end_timestamp = '02-12-2017-23-00-00'
             elif current_day == 'Saturday':
                 end_timestamp = '01-12-2017-23-00-00'
             elif current_day == 'Sunday':
@@ -145,11 +144,16 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
             elif current_day == 'Thursday':
                 end_timestamp = '07-12-2017-23-00-00'
             end_timestamp = convert_to_date(end_timestamp)
-            start_timestamp = end_timestamp - datetime.timedelta(hours=23)
 
         else:
             end_timestamp = timestamp_dt
-            start_timestamp = end_timestamp - datetime.timedelta(hours=23)
+
+        start_timestamp = end_timestamp.replace(
+            hour=1, minute=0, second=0, microsecond=0)
+        # start_timestamp = end_timestamp - datetime.timedelta(hours=23)
+        current_day = end_timestamp.day
+        end_timestamp = end_timestamp.replace(
+            day=current_day + 1, hour=0, minute=0, second=0, microsecond=0)
 
         queryset = queryset.filter(
             timestamp__range=(start_timestamp, end_timestamp))
