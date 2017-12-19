@@ -1,0 +1,11 @@
+{
+	"en": {
+		"header_title": "Urban Density Index",
+		"header_info": "The Urban Density Index represents the level of density in each district of Amsterdam in comparisson to the other districts in Amsterdam."
+	},
+	"nl": {
+		"header_title": "Drukte Radar",
+		"header_info": "Je begrijpt m wel ;)"
+	}
+
+}

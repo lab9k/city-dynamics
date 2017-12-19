@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="25px" height="24px" viewBox="0 0 25 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Back button</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Back-button">
+            <rect id="Box" fill-opacity="0.75" fill="#FFFFFF" x="0" y="0" width="25" height="24" rx="5"></rect>
+            <g id="Arrows" transform="translate(3.000000, 4.000000)" stroke-linecap="square" stroke-width="2" stroke="#EC0000">
+                <g id="Arrow">
+                    <path d="M5,0 L0.56239843,7.10016251" id="Line-12"></path>
+                    <path d="M0.5,8 L4.46911151,15.4090081" id="Line-14"></path>
+                </g>
+                <g id="Arrow" transform="translate(7.000000, 0.000000)">
+                    <path d="M5,0 L0.56239843,7.10016251" id="Line-12"></path>
+                    <path d="M0.5,8 L4.46911151,15.4090081" id="Line-14"></path>
+                </g>
+                <g id="Arrow" transform="translate(14.000000, 0.000000)">
+                    <path d="M5,0 L0.56239843,7.10016251" id="Line-12"></path>
+                    <path d="M0.5,8 L4.46911151,15.4090081" id="Line-14"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

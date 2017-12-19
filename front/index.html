@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Amsterdam - Urban Density Index</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="js/leaflet.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+	<!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="js/jquery-d3-arc-gauge.js"></script>
+	<script src="js/index.js"></script>
+
+	<link rel="stylesheet" href="css/leaflet.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="css/index.css">
+
+
+</head>
+<body id="overwrite">
+
+
+
+<div id="mapid">
+	<div class="header">
+		<div class="header_top"></div>
+		<div class="header_bot">
+			<h1>Amsterdam | <span>Urban Density Index</span></h1>
+			<div class="info_b">
+				<i class="material-icons">info_outline</i>
+			</div>
+			<div class="ui-widget">
+				<label for="loc_i">&nbsp;</label>
+				<input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam">
+			</div>
+			<div class="ui-widget">
+				<label for="date_i">&nbsp;</label>
+				<input type="text" id="date_i" class="date_i" value="" placeholder="Today">
+			</div>
+			<div class="ui-widget">
+				<label for="time_i">&nbsp;</label>
+				<input type="text" id="time_i" class="time_i" value="" placeholder="Now">
+			</div>
+			<div class="analyse_b">
+
+			</div>
+		</div>
+	</div>
+
+	<div class="controls">
+		<i class="material-icons">all_out</i>
+	</div>
+
+	<div class="legend">
+		<div class="density"></div>
+		<span class="min">Quiet</span>
+		<span class="max">Crowded</span>
+	</div>
+
+	<div class="info">
+		<h2>What do I see</h2>
+		The Urban Density Index represents the level of density in each district of Amsterdam in comparisson to the other districts in Amsterdam.
+	</div>
+
+	<div class="leftbox">
+		<div class="leftbox_top clearfix"><h2></h2><i class="material-icons">close</i></div>
+		<div class="content">
+		</div>
+	</div>
+
+	<div class="themas">
+		<ul>
+			<li class="park_b"></li>
+			<li class="cam_b"></li>
+		</ul>
+	</div>
+
+	<div class="detail">
+		<div class="detail_top clearfix"><h2>Amsterdam</h2><i class="material-icons">chevron_right</i></div>
+		<div class="detail_bot">
+			<div class="gauge" data-width="150" data-height="150">
+				<div class="gauge-text">
+					<span class="value">0</span>
+				</div>
+			</div>
+			<div class="hours_graph">
+				<svg class="svg_hours" width="460" height="120"></svg>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="analyses_1">
+
+	</div>
+
+	<div class="analyses_2">
+
+	</div>
+
+	<svg xmlns="w3.org/2000/svg" version="1.1" style="width:0;height:0;">
+		<defs>
+			<filter id="shadow" width="3" height="3" x="-.25" y="-.25">
+				<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+				<feColorMatrix result="bluralpha" type="matrix" values=
+						"1 0 0 0   0
+             0 1 0 0   0
+             0 0 1 0   0
+             0 0 0 0.4 0 "/>
+				<feOffset in="bluralpha" dx="3" dy="3" result="offsetBlur"/>
+				<feMerge>
+					<feMergeNode in="offsetBlur"/>
+					<feMergeNode in="SourceGraphic"/>
+				</feMerge>
+			</filter>
+		</defs>
+	</svg>
+
+
+</div>
+
+<div class="time_i_content">
+	<ul>
+		<li>00</li>
+		<li>01</li>
+		<li>02</li>
+		<li>03</li>
+		<li>04</li>
+		<li>05</li>
+		<li>06</li>
+		<li>07</li>
+		<li>08</li>
+		<li>09</li>
+		<li>10</li>
+		<li>11</li>
+		<li>12</li>
+		<li>13</li>
+		<li>14</li>
+		<li>15</li>
+		<li>16</li>
+		<li>17</li>
+		<li>18</li>
+		<li>19</li>
+		<li>20</li>
+		<li>21</li>
+		<li>22</li>
+		<li>23</li>
+	</ul>
+</div>
+</body>
+</html>
