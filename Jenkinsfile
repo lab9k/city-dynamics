@@ -55,7 +55,7 @@ if (BRANCH == "master") {
     node {
         stage('Push acceptance image') {
             tryStep "image tagging", {
-                def image = docker.image("build.datapunt.amsterdam.nl:5000/datapunt/predictive_parking:${env.BUILD_NUMBER}")
+                def image = docker.image("build.datapunt.amsterdam.nl:5000/datapunt/city_dynamics:${env.BUILD_NUMBER}")
                 image.pull()
                 image.push("acceptance")
             }
@@ -76,14 +76,14 @@ if (BRANCH == "master") {
 
 
     stage('Waiting for approval') {
-        slackSend channel: '#ci-channel', color: 'warning', message: 'predictive Parking is waiting for Production Release - please confirm'
+        slackSend channel: '#ci-channel', color: 'warning', message: 'City dynamics is waiting for Production Release - please confirm'
         input "Deploy to Production?"
     }
 
     node {
         stage('Push production image') {
             tryStep "image tagging", {
-                def kibana = docker.image("build.datapunt.amsterdam.nl:5000/datapunt/predictive_parking:${env.BUILD_NUMBER}")
+                def kibana = docker.image("build.datapunt.amsterdam.nl:5000/datapunt/city_dynamics:${env.BUILD_NUMBER}")
                 kibana.pull()
                 kibana.push("production")
                 kibana.push("latest")
@@ -97,7 +97,7 @@ if (BRANCH == "master") {
                 build job: 'Subtask_Openstack_Playbook',
                 parameters: [
                         [$class: 'StringParameterValue', name: 'INVENTORY', value: 'production'],
-                        [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-city-dynamics.yml'],
+                        [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-citydynamics.yml'],
                 ]
             }
         }
