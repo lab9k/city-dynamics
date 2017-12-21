@@ -151,13 +151,13 @@ def import_gvb(sql_query, conn, haltes):
     # hele stad over tijd
     indx = gvb.halte.isin(haltes)
     gvb_stad = gvb.loc[indx, :]
-    gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].sum()
+    gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].mean()
     gvb_stad = gvb_stad.reset_index()
 
     # per buurt
     gvb_buurt = gvb.loc[np.logical_not(indx), :]
     gvb_buurt = gvb_buurt.groupby([
-        'vollcode', 'weekday', 'hour'])['incoming'].sum().reset_index()
+        'vollcode', 'weekday', 'hour'])['incoming'].mean().reset_index()
 
     # column names
     gvb_stad.rename(columns={'incoming': 'gvb_stad'}, inplace=True)
