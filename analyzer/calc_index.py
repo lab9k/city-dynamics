@@ -104,10 +104,12 @@ def import_google(sql_query, conn):
     google = pd.concat([google_octnov, google_dec])
     del google_octnov, google_dec
 
-    # historical weekpatroon
+    # add time data
     google['weekday'] = [ts.weekday() for ts in google.timestamp]
     google['hour'] = [ts.hour for ts in google.timestamp]
     google_week = google.loc[google.historical.notnull(), :]
+
+    # historical weekpatroon
     google_week = google_week.groupby([
         'weekday', 'hour', 'vollcode', 'place_id'])['historical'].mean()
     google_week = google_week.reset_index()
@@ -118,6 +120,7 @@ def import_google(sql_query, conn):
     # live data
     google_live = google[['place_id', 'vollcode', 'timestamp', 'live']]
     google_live = google_live.loc[google_live.live.notnull(), :]
+
     google_live = google_live.groupby(['vollcode', 'timestamp'])['live'].mean()
     google_live = google_live.reset_index()
     google_live['weekday'] = [ts.weekday() for ts in google_live.timestamp]
@@ -183,84 +186,6 @@ def import_tellus(sql_query, conn, vollcodes):
     df.rename(columns={'meetwaarde': 'tellus'}, inplace=True)
 
     return df
-
-
-# def dataset_type(cols, to_match=['timestamp', 'vollcode', 'weekday', 'hour']):
-#     """Determine type of data present in dataframe."""
-#     cols = np.array(cols)
-#     if np.all([tm in cols for tm in [to_match[0]]]):
-#         return 'with_timestamp'
-#     elif np.all([tm in cols for tm in to_match[1:]]):
-#         return 'weekday_hour'
-#     elif 'vollcode' in cols:
-#         return 'static_vollcode'
-#     else:
-#         return 'static_city'
-
-
-# def merge_datasets(**kwargs):
-#     """Merge datasets.
-
-#     Takes named arguments and merges them based on
-#     the type of data in them.
-#     """
-#     dataset_types = {dname: dataset_type(kwargs[dname].columns)
-#                      for dname in kwargs.keys()}
-
-#     # datasets with a timestamp column
-#     drukte_timestamp = [
-#         kwargs[dname] for dname in kwargs.keys()
-#         if dataset_types[dname] == 'with_timestamp']
-
-#     # merge data with timestamps first
-#     drukte_timestamp = reduce(lambda x, y: pd.merge(
-#         x, y, on=['timestamp', 'vollcode'], how='outer'), drukte_timestamp)
-
-#     # create day of week column
-#     drukte_timestamp['weekday'] = [ts.weekday()
-#                                    for ts in drukte_timestamp.timestamp]
-
-#     # create hour of day column
-#     drukte_timestamp['hour'] = [ts.hour for ts in drukte_timestamp.timestamp]
-#     drukte_timestamp = drukte_timestamp.drop_duplicates()
-
-#     # datasets with week patterns only
-#     drukte_day_hour = [kwargs[dname]
-#                        for dname in kwargs.keys()
-#                        if dataset_types[dname] == 'weekday_hour']
-
-#     # merge data with only weekpatterns
-#     drukte_day_hour = reduce(lambda x, y: pd.merge(
-#         x, y, on=['vollcode', 'weekday', 'hour'], how='outer'),
-#         drukte_day_hour)
-#     drukte_day_hour = drukte_day_hour.drop_duplicates()
-
-#     # datasets with only one static value per buurt
-#     drukte_static_vollcode = [kwargs[dname]
-#                               for dname in kwargs.keys()
-#                               if dataset_types[dname] == 'static_vollcode']
-#     drukte_static_vollcode = reduce(lambda x, y: pd.merge(
-#         x, y, on='vollcode', how='outer'), drukte_static_vollcode)
-#     drukte_static_vollcode = drukte_static_vollcode.drop_duplicates()
-
-#     # datasets with only one value for entire city
-#     drukte_static_city = [kwargs[dname]
-#                           for dname in kwargs.keys()
-#                           if dataset_types[dname] == 'static_city']
-#     drukte_static_city = reduce(lambda x, y: pd.merge(
-#         x, y, on='vollcode', how='outer'), drukte_static_city)
-#     drukte_static_city = drukte_static_city.drop_duplicates()
-
-#     # merge all above datasets
-#     drukte = pd.merge(drukte_timestamp, drukte_day_hour,
-#                       on=['vollcode', 'weekday', 'hour'],
-#                       how='outer').drop_duplicates()
-#     drukte = pd.merge(drukte, drukte_static_vollcode,
-#                       on='vollcode', how='outer').drop_duplicates()
-#     drukte = pd.merge(drukte, drukte_static_city,
-#                       on=['weekday', 'hour'], how='outer').drop_duplicates()
-
-#     return drukte
 
 
 def complete_ts_vollcode(data, vollcodes):
@@ -343,7 +268,8 @@ def main():
     # subset verblijversindex so this is not taken into account
     # when a buurt does not have any data available other
     # than this verblijversindex
-    verblijversindex = verblijversindex.loc[verblijversindex.vollcode.isin(has_data), :]
+    verblijversindex = verblijversindex.loc[verblijversindex.vollcode.isin(
+        has_data), :]
 
     # merge datasets
     log.debug('merge datasets')
@@ -354,10 +280,9 @@ def main():
     tellus['tellus'] = normalize(tellus.tellus)
     gvb_stad['gvb_stad'] = normalize(gvb_stad.gvb_stad)
     gvb_buurt['gvb_buurt'] = normalize(gvb_buurt.gvb_buurt)
-    verblijversindex['verblijversindex'] = normalize(
-        verblijversindex.verblijversindex)
+    # verblijversindex['verblijversindex'] = normalize(
+    #     verblijversindex.verblijversindex)
 
-    #--------------------------------------
     # merge datasets
 
     start = np.min(google_live.timestamp)
@@ -374,48 +299,57 @@ def main():
 
     # google live
     cols = ['timestamp', 'vollcode', 'google_live']
-    drukte = pd.merge(drukte, google_live[cols], on=['timestamp', 'vollcode'], how='left')
-    print(len(drukte))
+    drukte = pd.merge(
+        drukte, google_live[cols], on=['timestamp', 'vollcode'], how='left')
 
     # google week
     cols = ['vollcode', 'weekday', 'hour', 'google_week']
-    drukte = pd.merge(drukte, google_week[cols], on=['weekday', 'hour', 'vollcode'], how='left')
-    print(len(drukte))
+    drukte = pd.merge(
+        drukte, google_week[cols],
+        on=['weekday', 'hour', 'vollcode'], how='left')
 
     # gvb buurt
-    drukte = pd.merge(drukte, gvb_buurt, on=['vollcode', 'weekday', 'hour'], how='left')
-    print(len(drukte))
+    drukte = pd.merge(
+        drukte, gvb_buurt,
+        on=['vollcode', 'weekday', 'hour'], how='left')
 
     # gvb stad
-    drukte = pd.merge(drukte, gvb_stad, on=['weekday', 'hour'], how='left')
-    print(len(drukte))
+    drukte = pd.merge(
+        drukte, gvb_stad,
+        on=['weekday', 'hour'], how='left')
 
     # verblijversindex
-    drukte = pd.merge(drukte, verblijversindex, on='vollcode', how='left')
-    print(len(drukte))
-    #--------------------------------------
+    drukte = pd.merge(
+        drukte, verblijversindex,
+        on='vollcode', how='left')
 
-    log.debug('calculating overall index')
+    # middel google
+    drukte['google'] = drukte[['google_week', 'google_live']].mean(axis=1)
 
-    # combine google columns
-    google_cols = ['google_live', 'google_week']
-    drukte['google'] = drukte[google_cols].mean(axis=1)
-    drukte.drop(columns=google_cols, inplace=True)
+    # middel gvb
+    drukte['gvb'] = drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1)
 
-    # combine gvb columns
-    gvb_cols = ['gvb_buurt', 'gvb_stad']
-    drukte['gvb'] = drukte[gvb_cols].mean(axis=1)
-    drukte.drop(columns=gvb_cols, inplace=True)
+    # schaal kolommen waar nodig
+    drukte['google'] = normalize(drukte.google)
+    drukte['gvb'] = normalize(drukte.gvb)
 
-    # define weights, have to be in same order als columns!
-    cols = ['google', 'gvb', 'verblijversindex']
-    # drukte = normalize_data(df=drukte, cols=cols)
-    weights = [0.6, 0.2, 0.2]
-    drukte['drukte_index'] = weighted_mean(
-        data=drukte, cols=cols, weights=weights)
+    # drukte index
+    cols = ['google', 'gvb']
+    # weights = [0.5, 0.5]
+    drukte['drukte_index'] = drukte[cols].mean(axis=1)
+    # drukte['drukte_index'] = weighted_mean(
+    #     data=drukte, cols=cols, weights=weights)
+    drukte['drukte_index'] = min_max(drukte.drukte_index)
 
-    # add buurtcode information
-    drukte = pd.merge(drukte, buurtcodes, on='vollcode', how='left')
+    # schaal naar [1, 3]
+    drukte['verblijversindex'] = min_max(drukte['verblijversindex'])
+    drukte['verblijversindex'] = (drukte['verblijversindex'] * 2) + 1
+
+    drukte['drukte_index'] = drukte.drukte_index * drukte.verblijversindex
+    indx = drukte.drukte_index.isnull()
+    drukte.loc[indx, 'drukte_index'] = 0
+
+    drukte['drukte_index'] = min_max(drukte['drukte_index'])
 
     # sort values
     drukte = drukte.sort_values(['timestamp', 'vollcode'])
