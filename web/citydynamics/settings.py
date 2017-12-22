@@ -148,7 +148,7 @@ USE_L10N = True  # TO override date notation
 
 DATE_FORMAT = '%d %b %Y'
 
-USE_TZ = False
+USE_TZ = True
 
 REST_FRAMEWORK = dict(
     PAGE_SIZE=500,
