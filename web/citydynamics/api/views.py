@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from datapunt_api import rest
 from . import models
 from . import serializers
-import datetime
+from datetime import datetime
 import logging
 
 log = logging.getLogger(__name__)
@@ -14,8 +14,7 @@ log = logging.getLogger(__name__)
 
 def convert_to_date(input_date):
     try:
-        date_obj = datetime.datetime.strptime(input_date, '%d-%m-%Y-%H-%M-%S')
-        # date_obj = datetime.datetime.strptime(input_date, '%Y-%m-%d-%H')
+        date_obj = datetime.strptime(input_date, '%d-%m-%Y-%H-%M-%S')
     except ValueError:
         log.exception("Got an invalid date value")
         date_obj = None
@@ -99,7 +98,7 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         timestamp_str = self.request.query_params.get('timestamp', None)
 
         if timestamp_str is None:
-            timestamp_dt = datetime.datetime.now()
+            timestamp_dt = datetime.now()
 
         if timestamp_str is not None:
             timestamp_dt = convert_to_date(timestamp_str)
@@ -123,11 +122,10 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
             timestamp_dt = convert_to_date(timestamp_dt)
 
         date_dt = timestamp_dt.date()
-        start_timestamp = datetime.datetime.combine(date_dt, datetime.datetime.min.time())
-        end_timestamp = datetime.datetime.combine(date_dt, datetime.datetime.max.time())
+        start_timestamp = datetime.combine(date_dt, datetime.min.time())
+        end_timestamp = datetime.combine(date_dt, datetime.max.time())
 
         queryset = queryset.filter(timestamp__gte=start_timestamp)
-
         queryset = queryset.filter(timestamp__lte=end_timestamp)
 
         return queryset
