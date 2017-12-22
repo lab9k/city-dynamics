@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 def convert_to_date(input_date):
     try:
         date_obj = datetime.datetime.strptime(input_date, '%d-%m-%Y-%H-%M-%S')
-        #date_obj = datetime.datetime.strptime(input_date, '%Y-%m-%d-%H')
+        # date_obj = datetime.datetime.strptime(input_date, '%Y-%m-%d-%H')
     except ValueError:
         log.exception("Got an invalid date value")
         date_obj = None
@@ -128,34 +128,40 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
             timestamp_dt = convert_to_date(timestamp_str)
 
         if timestamp_dt > convert_to_date('07-12-2017-00-00-00'):
-            current_day = datetime.datetime.now().strftime("%A")
+            current_day = timestamp_dt.strftime("%A")
             if current_day == 'Friday':
-                end_timestamp = '02-12-2017-23-00-00'
+                timestamp_dt = '02-12-2017-23-00-00'
             elif current_day == 'Saturday':
-                end_timestamp = '01-12-2017-23-00-00'
+                timestamp_dt = '01-12-2017-23-00-00'
             elif current_day == 'Sunday':
-                end_timestamp = '03-12-2017-23-00-00'
+                timestamp_dt = '03-12-2017-23-00-00'
             elif current_day == 'Monday':
-                end_timestamp = '04-12-2017-23-00-00'
+                timestamp_dt = '04-12-2017-23-00-00'
             elif current_day == 'Tuesday':
-                end_timestamp = '05-12-2017-23-00-00'
+                timestamp_dt = '05-12-2017-23-00-00'
             elif current_day == 'Wednesday':
-                end_timestamp = '06-12-2017-23-00-00'
+                timestamp_dt = '06-12-2017-23-00-00'
             elif current_day == 'Thursday':
-                end_timestamp = '07-12-2017-23-00-00'
-            end_timestamp = convert_to_date(end_timestamp)
+                timestamp_dt = '07-12-2017-23-00-00'
+            timestamp_dt = convert_to_date(timestamp_dt)
 
-        else:
-            end_timestamp = timestamp_dt
+        # start_timestamp = timestamp_dt.replace(
+        #     hour=2, minute=0, second=0, microsecond=0)
+        # # start_timestamp = end_timestamp - datetime.timedelta(hours=23)
+        # end_timestamp = timestamp_dt + datetime.timedelta(days=1)
+        # end_timestamp = end_timestamp.replace(
+        #     hour=1, minute=0, second=0, microsecond=0)
 
-        start_timestamp = end_timestamp.replace(
-            hour=1, minute=0, second=0, microsecond=0)
-        # start_timestamp = end_timestamp - datetime.timedelta(hours=23)
-        end_timestamp = end_timestamp + datetime.timedelta(days=1)
-        end_timestamp = end_timestamp.replace(
-            hour=0, minute=0, second=0, microsecond=0)
+        # queryset = queryset.filter(
+        # timestamp__range=(start_timestamp, end_timestamp))    
 
-        queryset = queryset.filter(
-            timestamp__range=(start_timestamp, end_timestamp))
+        date_dt = timestamp_dt.date()
+        start_timestamp = datetime.datetime.combine(date_dt, datetime.datetime.min.time())
+        end_timestamp = datetime.datetime.combine(date_dt, datetime.datetime.max.time())
+
+
+        queryset = queryset.filter(timestamp__gt=start_timestamp)
+
+        queryset = queryset.filter(timestamp__lte=end_timestamp)
 
         return queryset
