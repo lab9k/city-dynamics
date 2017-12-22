@@ -8,7 +8,7 @@ class DrukteIndexSerializer(ModelSerializer):
     class Meta:
         model = Drukteindex
         # geo_field = 'wkb_geometry'
-        fields = ('vollcode', 'naam', 'drukte_index')
+        fields = ('vollcode', 'drukte_index')
 
 
 class RecentIndexSerializer(ModelSerializer):

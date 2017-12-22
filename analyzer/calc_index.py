@@ -254,7 +254,7 @@ def main():
     # read tellus for city centre neighborhoods
     vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique()
                          if 'A' in bc]
-    tellus = import_tellus(sql_query, conn, vollcodes_centrum)
+    # tellus = import_tellus(sql_query, conn, vollcodes_centrum)
 
     # buurtcodes with data
     data_vollcodes = [
@@ -277,7 +277,7 @@ def main():
     # normalize columns
     google_live['google_live'] = normalize(google_live.google_live)
     google_week['google_week'] = normalize(google_week.google_week)
-    tellus['tellus'] = normalize(tellus.tellus)
+    # tellus['tellus'] = normalize(tellus.tellus)
     gvb_stad['gvb_stad'] = normalize(gvb_stad.gvb_stad)
     gvb_buurt['gvb_buurt'] = normalize(gvb_buurt.gvb_buurt)
     # verblijversindex['verblijversindex'] = normalize(

@@ -7,7 +7,6 @@ from datapunt_api import rest
 from . import models
 from . import serializers
 import datetime
-
 import logging
 
 log = logging.getLogger(__name__)
@@ -65,20 +64,6 @@ class DateFilter(FilterSet):
 
         return queryset
 
-    # def datetime_filter(self, queryset, _name, value, **kwargs):
-    #     date = convert_to_date(value)
-    #     if not date:
-    #         raise ValidationError(
-    #             'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 2017-10-26-16-00-00')
-    #     log.debug(kwargs)
-    #     queryset = queryset.filter(kwargs['timestamp'])
-
-    #     return queryset
-
-    # def op_filter(self, queryset, _name, value):
-    #     queryset = datetime_filter(**{'timestamp':'date'})
-    #     return queryset
-
 
 class DrukteindexViewSet(rest.DatapuntViewSet):
     """
@@ -99,21 +84,13 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
     serializer_class = serializers.RecentIndexSerializer
     serializer_detail_class = serializers.RecentIndexSerializer
     queryset = models.Drukteindex.objects.order_by("index")
-    #filter_class = RecentIndexFilter
-
-    # def latest_filter(self, queryset, _name, value):
-    #     datetime = self.request.query_params.get('datetime', None)
-    #     start_datetime = convert_to_date(datetime)
-    #     end_datetime = start_datetime - datetime.timedelta(hours=24)
-    #     queryset = queryset.filter(
-    #         timestamp__range=(start_datetime, end_datetime))
 
     def get_queryset(self):
         """
         Optionally restricts the returned purchases to a given user,
         by filtering against a `username` query parameter in the URL.
         """
-        queryset = models.Drukteindex.objects.all()
+        queryset = models.Drukteindex.objects.all().order_by("index")
 
         vollcode = self.request.query_params.get('vollcode', None)
         if vollcode is not None:
@@ -145,22 +122,11 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
                 timestamp_dt = '07-12-2017-23-00-00'
             timestamp_dt = convert_to_date(timestamp_dt)
 
-        # start_timestamp = timestamp_dt.replace(
-        #     hour=2, minute=0, second=0, microsecond=0)
-        # # start_timestamp = end_timestamp - datetime.timedelta(hours=23)
-        # end_timestamp = timestamp_dt + datetime.timedelta(days=1)
-        # end_timestamp = end_timestamp.replace(
-        #     hour=1, minute=0, second=0, microsecond=0)
-
-        # queryset = queryset.filter(
-        # timestamp__range=(start_timestamp, end_timestamp))    
-
         date_dt = timestamp_dt.date()
         start_timestamp = datetime.datetime.combine(date_dt, datetime.datetime.min.time())
         end_timestamp = datetime.datetime.combine(date_dt, datetime.datetime.max.time())
 
-
-        queryset = queryset.filter(timestamp__gt=start_timestamp)
+        queryset = queryset.filter(timestamp__gte=start_timestamp)
 
         queryset = queryset.filter(timestamp__lte=end_timestamp)
 
