@@ -26,7 +26,7 @@ node {
     stage('Test') {
         tryStep "test", {
             sh "docker-compose -p testcitydynamics -f web/deploy/test/docker-compose.yml build && " +
-               "docker-compose -p testcitydynamics -f web/deploy/test/docker-compose.yml run tests"
+               "docker-compose -p testcitydynamics -f web/deploy/test/docker-compose.yml up"
         }, {
             sh "docker-compose -p testcitydynamics -f web/deploy/test/docker-compose.yml down"
         }
