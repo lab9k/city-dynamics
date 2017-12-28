@@ -8,6 +8,9 @@ services:
       POSTGRES_PASSWORD: insecure
       POSTGRES_DB: citydynamics
       POSTGRES_USER: citydynamics
+    volumes:
+      - ./deploy/backup-db.sh:/backup-db.sh
+      - ./deploy/backup:/backup
 
   web:
     build: ./web
