@@ -9,17 +9,14 @@ var gauge;
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
 var proj4RD = proj4('WGS84', def);
 var markers = new Array();
+var current_date;
+var vollcode;
 
 var origin = 'http://127.0.0.1:8000';
 var dindex_api = 'http://127.0.0.1:8000/citydynamics/api/drukteindex/?format=json&op=';
 var dindex_hours_api = 'http://127.0.0.1:8000/citydynamics/api/recentmeasures/?format=json';
-var jsonCallback = '&jsonp=?';
-//var jsonCallback = '';
-
-
-var current_date;
-var vollcode;
-
+var jsonCallback = '&callback=?';
+var jsonCallback = '';
 
 // layers
 var parkjson;
@@ -48,7 +45,6 @@ $(document).ready(function(){
 
 	$( "#time_i" ).val(getHours());
 
-
 	// wgs map
 	map = L.map('mapid').setView([52.36, 4.95], 12);
 
@@ -58,29 +54,31 @@ $(document).ready(function(){
 	}).addTo(map);
 
 	var dindexJsonUrl = dindex_api + getCurrentDate() + jsonCallback;
+	// var dindexJsonUrl = 'data/dindex.json';
 	console.log(dindexJsonUrl);
-	//var dindexJsonUrl = 'data/dindex.json';
 
 	var geoJsonUrl = 'https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&Typename=ms:buurtcombinatie&version=2.0.0&service=wfs&outputformat=geojson&srsname=epsg:4326';
 
-	jQuery.ajax({
-		async: true,
-		url: dindexJsonUrl,
-		method: "GET"
-	}).done(function(dindexJson) {
-
-	// $.getJSON(dindexJsonUrl).done(function(dindexJson) {
+	$.getJSON(dindexJsonUrl).done(function (dindexJson) {
 
 		console.log(dindexJson);
 
 		var calc_index = 0;
 		var count_index = 0;
 
-		$.each(dindexJson.select, function(key,value) {
+		$.each(dindexJson.results, function (key, value) {
 			var buurtcode = this.vollcode;
 			var $dataset = [];
 			$dataset["buurt"] = this.naam;
-			$dataset["index"] =  this.drukte_index;
+			if(this.drukte_index>0)
+			{
+				$dataset["index"] = this.drukte_index;
+			}
+			else
+			{
+				$dataset["index"] = 0;
+			}
+
 
 			calc_index += Math.round($dataset["index"] * 100);
 			count_index++;
@@ -88,19 +86,20 @@ $(document).ready(function(){
 			buurtcode_prop_array[buurtcode] = $dataset;
 		});
 
-		total_index = Math.round(calc_index / count_index );
+		total_index = Math.round(calc_index / count_index);
 
 		gauge = $('.gauge').arcGauge({
-			value: total_index,
-			colors: '#014699',
+			value     : total_index,
+			colors    : '#014699',
 			transition: 500,
-			thickness:10,
-			onchange: function (value) {
+			thickness : 10,
+			onchange  : function (value) {
 				$('.gauge-text .value').text(value);
-			} });
+			}
+		});
 
-		$.getJSON(geoJsonUrl).done(function(geoJson){
-			geojson = L.geoJSON(geoJson,{style: style, onEachFeature: onEachFeature}).addTo(map);
+		$.getJSON(geoJsonUrl).done(function (geoJson) {
+			geojson = L.geoJSON(geoJson, {style: style, onEachFeature: onEachFeature}).addTo(map);
 
 			geojson.eachLayer(function (layer) {
 				layer._path.id = 'feature-' + layer.feature.properties.vollcode;
@@ -108,6 +107,7 @@ $(document).ready(function(){
 			});
 		});
 	});
+
 
 	// init auto complete
 	$('#loc_i').autocomplete({
@@ -225,6 +225,20 @@ $(document).ready(function(){
 		hideLeftBox();
 	});
 
+	$( document).on('click', ".fiets_b",function () {
+		if($(this).hasClass('active'))
+		{
+			hideMarkers();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			resetTheme();
+			showOvFiets();
+			$(this).addClass('active');
+		}
+	});
+
 	$( document).on('click', ".cam_b",function () {
 		if($(this).hasClass('active'))
 		{
@@ -233,7 +247,37 @@ $(document).ready(function(){
 		}
 		else
 		{
+			resetTheme();
 			showFeeds();
+			$(this).addClass('active');
+		}
+	});
+
+	$( document).on('click', ".events_b",function () {
+		if($(this).hasClass('active'))
+		{
+			hideMarkers();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			resetTheme();
+			showEvents();
+			$(this).addClass('active');
+		}
+	});
+
+	$( document).on('click', ".hotspots_b",function () {
+		if($(this).hasClass('active'))
+		{
+
+			closeThemaDetails();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			resetTheme();
+			openThemaDetails('hotspots');
 			$(this).addClass('active');
 		}
 	});
@@ -246,6 +290,7 @@ $(document).ready(function(){
 		}
 		else
 		{
+			resetTheme();
 			addParkLayer();
 			$(this).addClass('active');
 		}
@@ -288,6 +333,7 @@ function getDate()
 		mm='0'+mm;
 	}
 	var today = dd+'/'+mm+'/'+yyyy;
+	var today = '07-12-2017';
 
 	return today;
 }
@@ -316,6 +362,14 @@ function getCurrentDate()
 	return current_date;
 }
 
+function getCurrentDateOnly()
+{
+	// get date
+	var date = $('.date_i').val();
+
+	return date.replace('/','-').replace('/','-');
+}
+
 function submitQuery()
 {
 	current_date = getCurrentDate();
@@ -336,7 +390,14 @@ function submitQuery()
 			var buurtcode = this.vollcode;
 			var $dataset = [];
 			$dataset["buurt"] = this.naam;
-			$dataset["index"] =  1-this.drukte_index;
+			if(this.drukte_index>0)
+			{
+				$dataset["index"] = this.drukte_index;
+			}
+			else
+			{
+				$dataset["index"] = 0;
+			}
 
 			calc_index += Math.round($dataset["index"] * 100);
 			count_index++;
@@ -357,6 +418,18 @@ function submitQuery()
 		// set gauge
 		gauge[0].set(Math.round(dindex * 100) );
 	});
+}
+
+function openThemaDetails(content)
+{
+	// open detail
+	$('.themas').addClass('open');
+}
+
+function closeThemaDetails()
+{
+	// close detail
+	$('.themas').removeClass('open');
 }
 
 function getLatLangArray(point) {
@@ -482,7 +555,7 @@ function setLayerActive(layer)
 	// set name
 	$('.detail h2').html(buurt);
 
-	initHourGraph();
+	initHourGraph(vollcode);
 
 	$(layer.getElement()).addClass("active_path");
 
@@ -505,43 +578,46 @@ function initHourGraph(vollcode)
 {
 	var data = new Array;
 
-	data[0] = {time:"00", dindex:"20"};
-	data[1] = {time:"01", dindex:"15"};
-	data[2] = {time:"02", dindex:"10"};
-	data[3] = {time:"03", dindex:"9"};
-	data[4] = {time:"04", dindex:"7"};
-	data[5] = {time:"05", dindex:"9"};
-	data[6] = {time:"06", dindex:"14"};
-	data[7] = {time:"07", dindex:"36"};
-	data[8] = {time:"08", dindex:"75"};
-	data[9] = {time:"09", dindex:"66"};
-	data[10] = {time:"10", dindex:"60"};
-	data[11] = {time:"11", dindex:"40"};
-	data[12] = {time:"12", dindex:"49"};
-	data[13] = {time:"13", dindex:"50"};
-	data[14] = {time:"14", dindex:"53"};
-	data[15] = {time:"15", dindex:"46"};
-	data[16] = {time:"16", dindex:"45"};
-	data[17] = {time:"17", dindex:"69"};
-	data[18] = {time:"18", dindex:"81"};
-	data[19] = {time:"19", dindex:"56"};
-	data[20] = {time:"20", dindex:"31"};
-	data[21] = {time:"21", dindex:"40"};
-	data[22] = {time:"22", dindex:"32"};
-	data[23] = {time:"23", dindex:"29"};
+	// data[0] = {time:"00", dindex:"20"};
+	// data[1] = {time:"01", dindex:"15"};
+	// data[2] = {time:"02", dindex:"10"};
+	// data[3] = {time:"03", dindex:"9"};
+	// data[4] = {time:"04", dindex:"7"};
+	// data[5] = {time:"05", dindex:"9"};
+	// data[6] = {time:"06", dindex:"14"};
+	// data[7] = {time:"07", dindex:"36"};
+	// data[8] = {time:"08", dindex:"75"};
+	// data[9] = {time:"09", dindex:"66"};
+	// data[10] = {time:"10", dindex:"60"};
+	// data[11] = {time:"11", dindex:"40"};
+	// data[12] = {time:"12", dindex:"49"};
+	// data[13] = {time:"13", dindex:"50"};
+	// data[14] = {time:"14", dindex:"53"};
+	// data[15] = {time:"15", dindex:"46"};
+	// data[16] = {time:"16", dindex:"45"};
+	// data[17] = {time:"17", dindex:"69"};
+	// data[18] = {time:"18", dindex:"81"};
+	// data[19] = {time:"19", dindex:"56"};
+	// data[20] = {time:"20", dindex:"31"};
+	// data[21] = {time:"21", dindex:"40"};
+	// data[22] = {time:"22", dindex:"32"};
+	// data[23] = {time:"23", dindex:"29"};
 
 	var hoursJsonUrl = dindex_hours_api+'&vollcode='+vollcode+'&timestamp='+ getCurrentDate() + jsonCallback;
+	//var hoursJsonUrl = 'data/hours.json';
+	console.log(hoursJsonUrl);
 
 	$.getJSON(hoursJsonUrl).done(function(hoursJson) {
+		console.log(hoursJson);
 
 		$.each(hoursJson.results, function (key, value) {
 			var buurtcode = this.vollcode;
 			var $dataset = [];
-			$dataset["buurt"] = this.naam;
-			$dataset["dindex"] = 1 - this.drukte_index;
+			//$dataset["buurt"] = this.naam;
+			$dataset["dindex"] = this.drukte_index * 100;
 			$dataset["time"] = this.timestamp.substr(11, 2);
 
-			buurtcode_prop_array[buurtcode] = $dataset;
+			data.push($dataset);
 		});
 
 
@@ -589,18 +665,43 @@ function initHourGraph(vollcode)
 	});
 }
 
+function resetTheme()
+{
+	// remove buttons acitve state
+	$('.themas_buttons li').removeClass('active');
+
+	// close the theme if its open
+	closeThemaDetails();
+
+	// remove all markers
+	hideMarkers();
+
+	// remove custom layers
+	if(parkjson)
+	{
+		removeParkLayer();
+	}
+}
+
 function showFeeds()
 {
 	var feeds = new Array();
 
 	feeds[0] = {name:"Dam",url:"https://www.youtube.com/embed/ZMQFsNqGavU?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3732104", lon:"4.8914401"};
-	feeds[1] = {name:"Oudezijds Voorburgwal",url:"https://www.youtube.com/embed/_uj8ELeiYKs?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3747178", lon:"4.8991389"};
+	feeds[1] = {name:"Centraal Station (zicht op het IJ)",url:"https://www.portofamsterdam.com/nl/havenbedrijf/webcam	", lat:"52.380149", lon:"4.900437"};
+	feeds[2] = {name:"Knooppunt Watergraafsmeer",url:"https://vid.nl/Camera/stream/cam_61", lat:"52.351620", lon:"4.962818"};
+	feeds[3] = {name:"Knooppunt Amstel",url:"https://vid.nl/Camera/stream/cam_5", lat:"52.329157", lon:"4.913159"};
+	feeds[4] = {name:"A10 Afslag S107",url:"https://vid.nl/Camera/stream/cam_14", lat:"52.340781", lon:"4.841226"};
+	feeds[5] = {name:"Knooppunt Holendrecht",url:"https://vid.nl/Camera/stream/cam_36", lat:"52.286287", lon:"4.948061"};
+	feeds[6] = {name:"A4 Amsterdam-Sloten",url:"https://vid.nl/Camera/stream/cam_18", lat:"52.338195", lon:"4.813557"};
+	feeds[7] = {name:"Knooppunt Westpoort",url:"https://vid.nl/Camera/stream/cam_41", lat:"52.396049", lon:"4.844490"};
+	//feeds[x] = {name:"Oudezijds Voorburgwal",url:"https://www.youtube.com/embed/_uj8ELeiYKs?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3747178", lon:"4.8991389"};
 
 	var camIcon = L.icon({
 		iconUrl: 'images/cam_marker.svg',
 
-		iconSize:     [60, 60], // size of the icon
-		iconAnchor:   [30, 52], // point of the icon which will correspond to marker's location
+		iconSize:     [35, 40], // size of the icon
+		iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
 		popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 	});
 
@@ -650,19 +751,12 @@ function hideMarkers()
 
 function addParkLayer()
 {
-	var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json?jsonp=?";
-	//var parkJsonUrl = 'data/parkjson.json';
-
-	// $.getJSON(parkJsonUrl).done(function(parkJson) {
-	// 	$.each(parkJson, function(key,value) {
-	// 		var cam_marker = L.marker([this.lat,this.lon], {icon: camIcon,title:this.name,alt:this.url}).addTo(map).on('click', function(){showFeed(this.options.title,this.options.alt);});
-	// 		markers.push(cam_marker);
-	// 	});
-	// });
+	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
+	var parkJsonUrl = 'data/parkjson.json';
 
 	$.getJSON(parkJsonUrl).done(function(parkJson){
 		console.log(parkJson);
-		parkjson = L.geoJSON(parkJson,{style: stylePark, onEachFeature: onEachFeaturePark}).addTo(map);
+		parkjson = L.geoJSON(parkJson,{style: stylePark, onEachFeature: onEachFeaturePark, pointToLayer: pointToLayerPark}).addTo(map);
 
 		// geojson.eachLayer(function (layer) {
 		// 	layer._path.id = 'feature-' + layer.feature.properties.vollcode;
@@ -670,6 +764,17 @@ function addParkLayer()
 		// });
 	});
 
+}
+
+function pointToLayerPark(feature, latlng) {
+	var parkIcon = L.icon({
+		iconUrl: 'images/park_marker.svg',
+
+		iconSize:     [35, 40], // size of the icon
+		iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
+		popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+	});
+	return L.marker(latlng, {icon: parkIcon});
 }
 
 function stylePark(feature) {
@@ -706,6 +811,77 @@ function onEachFeaturePark(feature, layer) {
 function removeParkLayer()
 {
 	map.removeLayer(parkjson);
+}
+
+
+function showOvFiets()
+{
+	var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
+
+	$.getJSON(fietsJsonUrl).done(function(fietsJson){
+		//console.log(fietsJson);
+
+		var ams_locaties = ['ASB','RAI','ASA','ASDM','ASDZ','ASD','ASDL','ASS'];
+
+		var camIcon = L.icon({
+			iconUrl: 'images/fiets_marker.svg',
+
+			iconSize:     [35, 40], // size of the icon
+			iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
+			popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+		});
+
+		$.each(fietsJson.locaties, function(key,value) {
+			if(ams_locaties.indexOf(this.stationCode)>=0)
+			{
+				console.log(this.stationCode);
+				if(this.lat>0 && this.lng>0)
+				{
+					var fiets_marker = L.marker([this.lat,this.lng], {icon: camIcon,title:this.description,alt:this.url}).addTo(map).on('click', function(){alert(this.options.title);});
+					markers.push(fiets_marker);
+				}
+			}
+		});
+
+	});
+}
+
+function showEvents()
+{
+	var eventsJsonUrl = 'data/Evenementen.json';
+
+	$.getJSON(eventsJsonUrl).done(function(eventsJson){
+		console.log(eventsJsonUrl);
+		// console.log(eventsJson);
+
+		var camIcon = L.icon({
+			iconUrl: 'images/musea_marker.svg',
+
+			iconSize:     [35, 40], // size of the icon
+			iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
+			popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+		});
+
+		$.each(eventsJson, function(key,value) {
+
+
+			var current_date = getCurrentDateOnly();
+
+			if(typeof(this.dates.singles)=='object')
+			{
+				//console.log(this.dates.singles);
+				if(this.dates.singles.indexOf(current_date)>=0)
+				{
+					var latitude = this.location.latitude.replace(',','.');
+					var longitude = this.location.longitude.replace(',','.');
+					var event_marker = L.marker([latitude,longitude], {icon: camIcon,title:this.details.nl.title}).addTo(map).on('click', function(){alert(this.options.title);});
+					markers.push(event_marker);
+				}
+			}
+
+		});
+
+	});
 }
 
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="35px" height="56px" viewBox="0 0 35 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Museum poly</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Museum-poly">
+            <g id="Museum-Icon">
+                <g id="Polygon">
+                    <path d="M19.2888544,16.7522375 L21,20.1745288 L34.5690577,50.7049087 L34.5690577,50.7049087 C34.8531888,51.3442037 35,52.0360093 35,52.735601 L35,55.1745288 L0,55.1745288 L0,52.735601 L7.10542736e-15,52.735601 C7.01975208e-15,52.0360093 0.146811151,51.3442037 0.430942257,50.7049087 L14,20.1745288 L15.7111456,16.7522375 L15.7111456,16.7522375 C16.2051241,15.7642805 17.4064702,15.3638319 18.3944272,15.8578103 C18.781482,16.0513378 19.095327,16.3651827 19.2888544,16.7522375 Z" id="Triangle-3" fill="#333333" transform="translate(17.500000, 36.337264) scale(1, -1) translate(-17.500000, -36.337264) "></path>
+                    <circle id="Oval-8" fill="#333333" cx="17.5" cy="17.5" r="17.5"></circle>
+                    <circle id="Oval-9" fill="#FFFFFF" cx="17.5" cy="17.5" r="15.75"></circle>
+                </g>
+            </g>
+            <g id="Museum-Icon" transform="translate(5.000000, 4.000000)">
+                <g id="Museum">
+                    <path d="M1,22 L24,22" id="Line-10" stroke="#333333" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M2.5,20.5 L22.5,20.5" id="Line" stroke="#333333" stroke-linecap="square"></path>
+                    <path d="M4.16666667,9.45410628 L4.16666667,18.5120773" id="Line-11" stroke="#333333" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M8.33333333,9.45410628 L8.33333333,18.5120773" id="Line-11" stroke="#333333" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M12.5,9.45410628 L12.5,18.5120773" id="Line-11" stroke="#333333" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M16.6666667,9.45410628 L16.6666667,18.5120773" id="Line-11" stroke="#333333" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M20.8333333,9.45410628 L20.8333333,18.5120773" id="Line-11" stroke="#333333" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M2.5,7.5 L22.5,7.5" id="Line-2" stroke="#333333" stroke-linecap="square"></path>
+                    <polygon id="Triangle-4" fill="#333333" points="12.5 0.25 25 6.59057971 0 6.59057971"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

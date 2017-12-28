@@ -1,11 +1,49 @@
 {
 	"en": {
-		"header_title": "Urban Density Index",
-		"header_info": "The Urban Density Index represents the level of density in each district of Amsterdam in comparisson to the other districts in Amsterdam."
+		"header_title": "Urban Density Radar",
+		"header_info": "What is this? The Amsterdam Urban Density Index represents the relative crowdedness in each district of the city, compared to other districts. This index is a weighted value consisting of several data sources. It is still being developed and tested. We are interested to hear your feedback. The index currently consists of data on public transport and road traffic, parking, and visits to public places.",
+		"location_placeholder": "Amsterdam",
+		"date_placeholder": "Date",
+		"time_placeholder": "Time",
+		"parking_info": "Parking data",
+		"ovfiets_info": "OV bicycles availability",
+		"ovfiets_content": "available",
+		"hotspot_info": "Hotspots in the city",
+		"events_info": "Events in the city",
+		"cctv_title": "Live images of the city",
+		"cctv_info": "Webcam",
+		"legend_info": "Quiet Crowded",
+		"analysis_button_info": "Go to Analysis",
+		"parks_info": "City parks",
+		"museums_info": "Museums",
+		"markets_info": "Markets",
+		"infobox_toggle_day": "Day",
+		"infobox_toggle_week": "Week",
+		"analysis_header_title": "Urban Density Analysis",
+		"back_button_info": "Go back to the Urban Density Index"
 	},
 	"nl": {
 		"header_title": "Drukte Radar",
-		"header_info": "Je begrijpt m wel ;)"
+		"header_info": "Wat is dit? De Drukte Radar geeft drukte in de stad weer aan de hand van een dichtheids-index voor iedere buurt van Amsterdam, vergeleken met de andere buurten van de stad. De dichtheids-index is een gewogen waarde samengesteld uit verschillende databronnen en is nog onder constructie. Momenteel bevat de index wegverkeer- en OV-data, parkeerdata, en [?]. Nieuwe databronnen worden nog toegevoegd.",
+		"location_placeholder": "Amsterdam",
+		"date_placeholder": "Datum",
+		"time_placeholder": "Tijdstip",
+		"parking_info": "Parkeer data",
+		"ovfiets_info": "OV fiets beschikbaarheid",
+		"ovfiets_content": "vrij",
+		"hotspot_info": "Veelbezochte plekken in de stad",
+		"events_info": "Evenementen in de stad",
+		"cctv_title": "Live beelden van de stad",
+		"cctv_info": "Webcam",
+		"legend_info": "Rustig Druk",
+		"analysis_button_info": "Ga naar Analyse",
+		"parks_info": "Stadsparken",
+		"museums_info": "Musea",
+		"markets_info": "Markten",
+		"infobox_toggle_day": "Dag",
+		"infobox_toggle_week": "Week",
+		"analysis_header_title": "Drukte Analyse",
+		"back_button_info": "Ga terug naar de Drukte Radar"
 	}
 
 }

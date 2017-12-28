@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="35px" height="56px" viewBox="0 0 35 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>CCTV poly</title>
+    <title>Markt poly</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="CCTV-poly">
-            <g id="CCTV-icon">
+        <g id="Markt-poly">
+            <g id="Markt-Icon">
                 <g id="Polygon">
                     <path d="M19.2888544,16.7522375 L21,20.1745288 L34.5690577,50.7049087 L34.5690577,50.7049087 C34.8531888,51.3442037 35,52.0360093 35,52.735601 L35,55.1745288 L0,55.1745288 L0,52.735601 L7.10542736e-15,52.735601 C7.01975208e-15,52.0360093 0.146811151,51.3442037 0.430942257,50.7049087 L14,20.1745288 L15.7111456,16.7522375 L15.7111456,16.7522375 C16.2051241,15.7642805 17.4064702,15.3638319 18.3944272,15.8578103 C18.781482,16.0513378 19.095327,16.3651827 19.2888544,16.7522375 Z" id="Triangle-3" fill="#333333" transform="translate(17.500000, 36.337264) scale(1, -1) translate(-17.500000, -36.337264) "></path>
                     <circle id="Oval-8" fill="#333333" cx="17.5" cy="17.5" r="17.5"></circle>
                     <circle id="Oval-9" fill="#FFFFFF" cx="17.5" cy="17.5" r="15.75"></circle>
                 </g>
-                <rect id="Rectangle-4" fill="#333333" x="19.25" y="22.75" width="8.75" height="1.75"></rect>
-                <g id="Camera" transform="translate(14.875000, 18.375000) rotate(-20.000000) translate(-14.875000, -18.375000) translate(5.250000, 12.250000)" fill="#333333">
-                    <rect id="Rectangle-2" x="0" y="1.75" width="3.5" height="3.5"></rect>
-                    <rect id="Rectangle" x="5.25" y="0" width="14" height="7"></rect>
-                    <rect id="Rectangle-3" x="12.25" y="7" width="1.75" height="5.25"></rect>
-                </g>
+            </g>
+            <g id="Markt-stand" transform="translate(5.000000, 7.000000)" stroke="#333333">
+                <path d="M5.5,4.5 L5.5,22.5 C9.83333333,22.5 10,22.5 12.5,22.5 L14.568251,22.5 L17.1428571,22.5 C18.1706149,22.5 18.3504725,22.5 19.2867603,22.5 L19.5,4.5 L5.5,4.5 Z" id="Rectangle-6" transform="translate(12.500000, 13.500000) scale(1, -1) rotate(90.000000) translate(-12.500000, -13.500000) "></path>
+                <path d="M3.32969808,0.5 L0.758269508,6.5 L24.2417305,6.5 L21.6703019,0.5 L3.32969808,0.5 Z" id="Rectangle-7"></path>
+                <path d="M3,2.5 L22,2.5" id="Line" stroke-linecap="square"></path>
+                <path d="M2,4.5 L23,4.5" id="Line-2" stroke-linecap="square"></path>
+                <path d="M3.5,13.5 L21.5,13.5" id="Line-3" stroke-linecap="square"></path>
             </g>
         </g>
     </g>
