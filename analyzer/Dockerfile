@@ -14,4 +14,4 @@ ADD /run_index.sh /app/run_index.sh
 
 WORKDIR /app/
 
-CMD run_index.sh
+CMD ./run_index.sh
