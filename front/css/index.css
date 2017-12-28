@@ -69,13 +69,18 @@ html,body {width:100%;height:100%;padding:0;margin:0;color:#333;font-family:Aria
 .leftbox .leftbox_top i{color:#fe0000;display:block;float:right;line-height:27px;cursor:pointer;}
 
 /*themas*/
-.themas {box-sizing: border-box;position:absolute;right:20px;top:100px; z-index:500;width:60px;height:200px;background-color: rgba(255,255,255,0.65);border-radius:5px;border:1px solid #fff;box-shadow: 0 3px 14px rgba(0,0,0,0.4);padding:10px;}
-.themas ul {list-style:none;margin:0;padding:0;}
-.themas li {margin:0;padding:0;background-color :rgba(255,255,255,0.7);background-repeat:no-repeat;border-radius:5px;cursor:pointer;width:40px;height :40px;line-height :40px;}
-.themas li.active,.themas li.active:hover {background-color: rgba(254, 0, 0, 0.6);}
+.themas {box-sizing: border-box;transition: width 0.5s;position:absolute;right:20px;top:100px; z-index:500;width:60px;min-height:200px;background-color: rgba(255,255,255,0.65);border-radius:5px;border:1px solid #fff;box-shadow: 0 3px 14px rgba(0,0,0,0.4);padding:10px;}
+.themas.open {width:460px;}
+.themas_content {float:left;}
+.themas_buttons {float:left;list-style:none;margin:0;padding:0;}
+.themas li {margin:0 0 4px 0;padding:0;background-color :rgba(255,255,255,1);background-repeat:no-repeat;border-radius:5px;cursor:pointer;width:40px;height :40px;line-height :40px;}
+.themas li.active,.themas li.active:hover {background-color :unset;}
 .themas li:hover {background-color:#fff;}
-.themas .cam_b {background-image:url(../images/cam_marker.svg);background-size: 20px 32px;background-position: 10px 4px;}
-.themas .park_b {background-image:url(../images/cam_marker.svg);background-size: 20px 32px;background-position: 10px 4px;}
+.themas .fiets_b {background-image:url(../images/fiets_icon.svg);background-size: 35px 40px;background-position: 4px 0px;}
+.themas .cam_b {background-image:url(../images/cam_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
+.themas .hotspots_b {background-image:url(../images/hotspots_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
+.themas .events_b {background-image:url(../images/event_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
+.themas .park_b {background-image:url(../images/park_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
 
 /*detail*/
 .detail {box-sizing: border-box;transition: width 0.5s;position:absolute;right:20px;bottom:40px; z-index:500;width:200px;height:200px;background-color: rgba(255,255,255,0.65);border-radius:5px;border:1px solid #fff;box-shadow: 0 3px 14px rgba(0,0,0,0.4);padding:10px;}
