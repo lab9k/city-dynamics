@@ -22,8 +22,6 @@ services:
       UWSGI_PROCESSES: 4
       UWSGI_MASTER: 1
       UWSGI_STATIC_MAP: "/static=/static"
-    command: >
-        bash -c "/deploy/docker-wait.sh && \
-                 yes yes | python /app/manage.py test && \
-                 python /app/manage.py migrate && \
-                 flake8 /app/"
+    volumes:
+      - ./test.sh:/app/test.sh
+    command: /app/test.sh

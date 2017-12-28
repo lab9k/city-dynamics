@@ -128,4 +128,3 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         queryset = queryset.filter(timestamp__lte=end_timestamp)
 
         return queryset
-
