@@ -12,4 +12,6 @@ COPY . /app/
 
 ADD /run_index.sh /app/run_index.sh
 
-CMD /app/run_index.sh
+WORKDIR /app/
+
+CMD run_index.sh

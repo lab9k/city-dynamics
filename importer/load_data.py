@@ -108,7 +108,7 @@ def main(datadir, dbConfig):
 
 
 if __name__ == '__main__':
-    desc = 'Upload city-dynamics datasets into PostgreSQL.'
+    desc = 'Upload citydynamics datasets into PostgreSQL.'
     parser = argparse.ArgumentParser(desc)
     parser.add_argument(
         'datadir', type=str, help='Local data directory', nargs=1)

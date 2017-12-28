@@ -1,13 +1,13 @@
 version: "3.0"
 services:
   database:
-    build: ./database
+    image: build.datapunt.amsterdam.nl:5000/atlas/postgres
     ports:
-      - "5403:5432"
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: insecure
-      POSTGRES_DB: city-dynamics
-      POSTGRES_USER: city-dynamics
+      POSTGRES_DB: citydynamics
+      POSTGRES_USER: citydynamics
 
   web:
     build: ./web
