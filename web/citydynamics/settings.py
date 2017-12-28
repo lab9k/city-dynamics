@@ -84,20 +84,9 @@ TEMPLATES = [
     },
 ]
 
-# LEAFLET_CONFIG = {
-#     # conf here
-#     'DEFAULT_CENTER': (52.370216, 4.895168),
-#     'DEFAULT_ZOOM': 12,
-#     'MIN_ZOOM': 11,
-#     'MAX_ZOOM': 24,
-#     'SPATIAL_EXTENT': (4.72, 52.28, 5.08, 52.43),
-#     'SUBDOMAINS': ['t1', 't2', 't3', 't4'],
-#     'TILES': 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png',
-#     'RESET_VIEW': True,
-# }
-
 
 WSGI_APPLICATION = 'citydynamics.wsgi.application'
+TEST_RUNNER = 'citydynamics.runner.UnManagedModelTestRunner'
 
 
 DATABASE_OPTIONS = {
