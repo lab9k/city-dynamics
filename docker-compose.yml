@@ -32,7 +32,7 @@ services:
       # Following are secret, should be provided as environment variables.
       # E.g. by running in terminal
       # export EXTERN_DATASERVICES_PASSWORD="mypassword"
-      EXTERN_DATASERVICES_PASSWORD: ${EXTERN_DATASERVICES_PASSWORD}
+      EXTERN_DATASERVICES_PASSWORD:
     volumes:
       - /app/data:/data
 

@@ -25,4 +25,4 @@ ADD /run_import.sh /app/run_import.sh
 # and loads them into the database
 WORKDIR /app/
 
-CMD run_import.sh
+CMD ./run_import.sh
