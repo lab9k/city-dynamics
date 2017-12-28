@@ -1,7 +1,6 @@
 from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 from rest_framework.serializers import ValidationError
-from django_filters.rest_framework import DjangoFilterBackend
 
 from datapunt_api import rest
 from . import models
@@ -129,3 +128,4 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         queryset = queryset.filter(timestamp__lte=end_timestamp)
 
         return queryset
+

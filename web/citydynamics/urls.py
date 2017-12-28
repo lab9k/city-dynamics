@@ -25,7 +25,7 @@ from citydynamics.api.views import RecentIndexViewSet
 
 router = DefaultRouter()
 router.register('drukteindex', DrukteindexViewSet, 'drukteindex')
-router.register('recentmeasures', RecentIndexViewSet ,'recentmeasures')
+router.register('recentmeasures', RecentIndexViewSet, 'recentmeasures')
 
 urlpatterns = router.urls
 

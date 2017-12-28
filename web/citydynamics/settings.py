@@ -124,11 +124,13 @@ DATABASES = {
 
 HEALTH_MODEL = 'api.Drukteindex'
 
+
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
+
 
 LANGUAGE_CODE = 'nl-NL'
 

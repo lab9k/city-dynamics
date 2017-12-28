@@ -23,14 +23,14 @@ node {
         checkout scm
     }
 
-    //stage('Test') {
-    //    tryStep "test", {
-    //        sh "docker-compose -p dataselectie -f .jenkins-test/docker-compose.yml build && " +
-    //                "docker-compose -p dataselectie -f .jenkins-test/docker-compose.yml run --rm -u root tests"
-    //    }, {
-    //        sh "docker-compose -p dataselectie -f .jenkins-test/docker-compose.yml down"
-    //    }
-    //}
+    stage('Test') {
+        tryStep "test", {
+            sh "docker-compose -p citydynamics -f web/deploy/test/docker-compose.yml build && " +
+                    "docker-compose -p citydynamics -f web/deploy/test/docker-compose.yml run --rm -u root tests"
+        }, {
+            sh "docker-compose -p citydynamics -f web/deploy/test/docker-compose.yml down"
+        }
+    }
 
     stage("Build dockers") {
         tryStep "build", {

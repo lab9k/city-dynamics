@@ -13,7 +13,7 @@ from django.http import HttpResponse
 
 try:
     model = get_model(settings.HEALTH_MODEL)
-except:
+except ImproperlyConfigured:
     raise ImproperlyConfigured(
         'settings.HEALTH_MODEL doesn\'t resolve to a useable model')
 
@@ -27,7 +27,7 @@ def health(request):
         with connection.cursor() as cursor:
             cursor.execute("select 1")
             assert cursor.fetchone()
-    except:
+    except:   # noqa
         log.exception("Database connectivity failed")
         return HttpResponse(
             "Database connectivity failed",
@@ -47,8 +47,8 @@ def check_data(request):
     # check bag
     try:
         assert model.objects.count() > 1000
-    except:
-        #log.exception("No Drukte Index data found")
+    except AssertionError:   # noqa
+        # log.exception("No Drukte Index data found")
         return HttpResponse(
             "No Drukte data found",
             content_type="text/plain", status=500)
@@ -56,8 +56,8 @@ def check_data(request):
     # check geoviews data
     try:
         assert model.objects.count() > 1000
-    except:
-        #log.exception("No Drukte data found")
+    except AssertionError:
+        # log.exception("No Drukte data found")
         return HttpResponse(
             "No Drukte data found",
             content_type="text/plain", status=500)
