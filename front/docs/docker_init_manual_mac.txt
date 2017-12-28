@@ -1,0 +1,30 @@
+- pull from git
+- change docker-compose.yml -> app to private folder
+- change importer/run_import.sh -> comment out: download from object store.
+  This requires the data to be put in the local private/data/ folder manually
+- change sources.conf to comment out the unneeded data sources.
+
+
+Go to terminal on the city-dynamics folder
+
+Run:
+
+(For this step it is needed to be connected to the internal AMS network)
+docker-compose build database
+docker-compose up database
+
+(For this step it is important not to be connected to the internal AMS network)
+docker-compose build importer
+docker-compose up database
+
+(now it doesn't matter as long as you have internet)
+docker-compose build analyzer
+docker-compose up analyzer
+
+OR
+cd analyzer
+python calc_index.py dev
+
+cd web
+source activate citydynamics
+python manage.py runserver 8000
