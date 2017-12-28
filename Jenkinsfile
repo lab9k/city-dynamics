@@ -23,19 +23,28 @@ node {
         checkout scm
     }
 
+    //stage('Test') {
+    //    tryStep "test", {
+    //        sh "docker-compose -p dataselectie -f .jenkins-test/docker-compose.yml build && " +
+    //                "docker-compose -p dataselectie -f .jenkins-test/docker-compose.yml run --rm -u root tests"
+    //    }, {
+    //        sh "docker-compose -p dataselectie -f .jenkins-test/docker-compose.yml down"
+    //    }
+    //}
+
     stage("Build dockers") {
         tryStep "build", {
-            def kibana = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics_importer:${env.BUILD_NUMBER}", "importer")
-            kibana.push()
-            kibana.push("acceptance")
+            def importer = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics_importer:${env.BUILD_NUMBER}", "importer")
+            importer.push()
+            importer.push("acceptance")
 
-            def logstash = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics_analyzer:${env.BUILD_NUMBER}", "analyzer")
-                logstash.push()
-                logstash.push("acceptance")
+            def analyzer = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics_analyzer:${env.BUILD_NUMBER}", "analyzer")
+                analyzer.push()
+                analyzer.push("acceptance")
 
-            def csvimporter = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}", "web")
-            csvimporter.push()
-            csvimporter.push("acceptance")
+            def web = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}", "web")
+            web.push()
+            web.push("acceptance")
         }
     }
 }
@@ -65,7 +74,6 @@ if (BRANCH == "master") {
             }
         }
     }
-
 
     stage('Waiting for approval') {
         slackSend channel: '#ci-channel', color: 'warning', message: 'City dynamics is waiting for Production Release - please confirm'

@@ -46,14 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'django_filters',
     'django_extensions',
+
     'datapunt_api',
     'citydynamics',
     'citydynamics.api',
 
     'rest_framework',
     'rest_framework_gis',
-
-
+    'health',
 ]
 
 MIDDLEWARE = [
@@ -109,14 +109,16 @@ DATABASE_OPTIONS = {
         'HOST': 'database',
         'PORT': '5432'
     },
+
     LocationKey.local: {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': os.getenv('DATABASE_NAME', 'citydynamics'),
         'USER': os.getenv('DATABASE_USER', 'citydynamics'),
         'PASSWORD': os.getenv('DATABASE_PASSWORD', 'insecure'),
         'HOST': get_docker_host(),
-        'PORT': '5403'
+        'PORT': '5432'
     },
+
     LocationKey.override: {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': os.getenv('DATABASE_NAME', 'citydynamics'),
@@ -131,6 +133,7 @@ DATABASES = {
     'default': DATABASE_OPTIONS[get_database_key()]
 }
 
+HEALTH_MODEL = 'api.Drukteindex'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
