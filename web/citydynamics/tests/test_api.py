@@ -1,5 +1,11 @@
+
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 # Packages
 from rest_framework.test import APITestCase
+
+from . import factories
 
 
 class BrowseDatasetsTestCase(APITestCase):
@@ -9,8 +15,14 @@ class BrowseDatasetsTestCase(APITestCase):
     ]
 
     def setUp(self):
-        # TODO add some test data!
-        pass
+        stamp = datetime(2017, 1, 1, 1, 1, tzinfo=timezone.utc)
+        one_hour = timedelta(seconds=3600)
+
+        for i in range(1001):
+            factories.DrukteindexFactory(
+                timestamp=stamp,
+            )
+            stamp = stamp + one_hour
 
     def valid_html_response(self, url, response):
         """

@@ -48,18 +48,18 @@ def check_data(request):
     try:
         assert model.objects.count() > 1000
     except:
-        log.exception("No HR data found")
+        #log.exception("No Drukte Index data found")
         return HttpResponse(
-            "No HR data found",
+            "No Drukte data found",
             content_type="text/plain", status=500)
 
     # check geoviews data
     try:
         assert model.objects.count() > 1000
     except:
-        log.exception("No HR data found")
+        #log.exception("No Drukte data found")
         return HttpResponse(
-            "No HR data found",
+            "No Drukte data found",
             content_type="text/plain", status=500)
 
     return HttpResponse("Data OK", content_type='text/plain', status=200)
