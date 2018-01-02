@@ -19,7 +19,7 @@ var jsonCallback = '&callback=?';
 var jsonCallback = '';
 
 // layers
-var parkjson;
+var theme_layer;
 var geojson;
 
 $(document).ready(function(){
@@ -151,7 +151,7 @@ $(document).ready(function(){
 
 						iconSize:     [60, 60], // size of the icon
 						iconAnchor:   [30, 52], // point of the icon which will correspond to marker's location
-						popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+						popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
 					});
 
 					marker = L.marker(latLang, {icon: blackIcon}).addTo(map);
@@ -267,6 +267,48 @@ $(document).ready(function(){
 		}
 	});
 
+	$( document).on('click', ".option_museum",function () {
+		if($(this).hasClass('active'))
+		{
+			hideMarkers();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			resetThemeDetail();
+			showMuseum();
+			$(this).addClass('active');
+		}
+	});
+
+	$( document).on('click', ".option_parc",function () {
+		if($(this).hasClass('active'))
+		{
+			hideMarkers();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			resetThemeDetail();
+			addParcLayer();
+			$(this).addClass('active');
+		}
+	});
+
+	$( document).on('click', ".option_market",function () {
+		if($(this).hasClass('active'))
+		{
+			hideMarkers();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			resetThemeDetail();
+			addMarketLayer();
+			$(this).addClass('active');
+		}
+	});
+
 	$( document).on('click', ".hotspots_b",function () {
 		if($(this).hasClass('active'))
 		{
@@ -277,7 +319,8 @@ $(document).ready(function(){
 		else
 		{
 			resetTheme();
-			openThemaDetails('hotspots');
+			var content = getHotspotsContent();
+			openThemaDetails(content);
 			$(this).addClass('active');
 		}
 	});
@@ -424,12 +467,18 @@ function openThemaDetails(content)
 {
 	// open detail
 	$('.themas').addClass('open');
+
+	// set content
+	$('.themas .themas_content').html(content);
 }
 
 function closeThemaDetails()
 {
 	// close detail
 	$('.themas').removeClass('open');
+
+	// remove content
+	$('.themas .themas_content').html('');
 }
 
 function getLatLangArray(point) {
@@ -677,9 +726,24 @@ function resetTheme()
 	hideMarkers();
 
 	// remove custom layers
-	if(parkjson)
+	if(theme_layer)
 	{
-		removeParkLayer();
+		removeThemeLayer();
+	}
+}
+
+function resetThemeDetail()
+{
+	// remove buttons acitve state
+	$('.hotspots_content li').removeClass('active');
+
+	// remove all markers
+	hideMarkers();
+
+	// remove custom layers
+	if(theme_layer)
+	{
+		removeThemeLayer();
 	}
 }
 
@@ -688,25 +752,27 @@ function showFeeds()
 	var feeds = new Array();
 
 	feeds[0] = {name:"Dam",url:"https://www.youtube.com/embed/ZMQFsNqGavU?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3732104", lon:"4.8914401"};
-	feeds[1] = {name:"Centraal Station (zicht op het IJ)",url:"https://www.portofamsterdam.com/nl/havenbedrijf/webcam	", lat:"52.380149", lon:"4.900437"};
-	feeds[2] = {name:"Knooppunt Watergraafsmeer",url:"https://vid.nl/Camera/stream/cam_61", lat:"52.351620", lon:"4.962818"};
-	feeds[3] = {name:"Knooppunt Amstel",url:"https://vid.nl/Camera/stream/cam_5", lat:"52.329157", lon:"4.913159"};
-	feeds[4] = {name:"A10 Afslag S107",url:"https://vid.nl/Camera/stream/cam_14", lat:"52.340781", lon:"4.841226"};
-	feeds[5] = {name:"Knooppunt Holendrecht",url:"https://vid.nl/Camera/stream/cam_36", lat:"52.286287", lon:"4.948061"};
-	feeds[6] = {name:"A4 Amsterdam-Sloten",url:"https://vid.nl/Camera/stream/cam_18", lat:"52.338195", lon:"4.813557"};
-	feeds[7] = {name:"Knooppunt Westpoort",url:"https://vid.nl/Camera/stream/cam_41", lat:"52.396049", lon:"4.844490"};
+	feeds[1] = {name:"Knooppunt Watergraafsmeer",url:"https://vid.nl/EmbedStream/cam/61?w=100p", lat:"52.351620", lon:"4.962818"};
+	feeds[2] = {name:"Knooppunt Amstel",url:"https://vid.nl/EmbedStream/cam/5?w=100p", lat:"52.329157", lon:"4.913159"};
+	feeds[3] = {name:"A10 Afslag S107",url:"https://vid.nl/EmbedStream/cam/14?w=100p", lat:"52.340781", lon:"4.841226"};
+	feeds[4] = {name:"Knooppunt Holendrecht",url:"https://vid.nl/EmbedStream/cam/36?w=100p", lat:"52.286287", lon:"4.948061"};
+	feeds[5] = {name:"A4 Amsterdam-Sloten",url:"https://vid.nl/EmbedStream/cam/18?w=100p", lat:"52.338195", lon:"4.813557"};
+	feeds[6] = {name:"Knooppunt Westpoort",url:"https://vid.nl/EmbedStream/cam/41?w=100p", lat:"52.396049", lon:"4.844490"};
 	//feeds[x] = {name:"Oudezijds Voorburgwal",url:"https://www.youtube.com/embed/_uj8ELeiYKs?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3747178", lon:"4.8991389"};
+// feeds[1] = {name:"Centraal Station (zicht op het IJ)",url:"https://www.portofamsterdam.com/nl/havenbedrijf/webcam	", lat:"52.380149", lon:"4.900437"};
+
 
 	var camIcon = L.icon({
 		iconUrl: 'images/cam_marker.svg',
 
 		iconSize:     [35, 40], // size of the icon
 		iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
-		popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+		popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
 	});
 
 	$.each(feeds, function(key,value) {
 		var cam_marker = L.marker([this.lat,this.lon], {icon: camIcon,title:this.name,alt:this.url}).addTo(map).on('click', function(){showFeed(this.options.title,this.options.alt);});
+		cam_marker.bindPopup("<b>" + this.name + "</b>");
 		markers.push(cam_marker);
 	});
 
@@ -716,7 +782,7 @@ function showFeeds()
 function showLeftBox(content,header)
 {
 	$( ".leftbox .content" ).html('');
-	$( ".leftbox .content h2" ).html('');
+	$( ".leftbox h2" ).html('');
 
 	$( ".legend" ).fadeOut( "slow" );
 	$( ".leftbox" ).fadeIn( "slow" );
@@ -731,7 +797,7 @@ function hideLeftBox()
 	$( ".legend" ).fadeIn( "slow" );
 
 	$( ".leftbox .content" ).html('');
-	$( ".leftbox .content h2" ).html('');
+	$( ".leftbox h2" ).html('');
 }
 
 function showFeed(title, url)
@@ -749,6 +815,11 @@ function hideMarkers()
 	});
 }
 
+function removeThemeLayer()
+{
+	map.removeLayer(theme_layer);
+}
+
 function addParkLayer()
 {
 	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
@@ -756,7 +827,7 @@ function addParkLayer()
 
 	$.getJSON(parkJsonUrl).done(function(parkJson){
 		console.log(parkJson);
-		parkjson = L.geoJSON(parkJson,{style: stylePark, onEachFeature: onEachFeaturePark, pointToLayer: pointToLayerPark}).addTo(map);
+		theme_layer = L.geoJSON(parkJson,{style: stylePark, onEachFeature: onEachFeaturePark, pointToLayer: pointToLayerPark}).addTo(map);
 
 		// geojson.eachLayer(function (layer) {
 		// 	layer._path.id = 'feature-' + layer.feature.properties.vollcode;
@@ -772,9 +843,23 @@ function pointToLayerPark(feature, latlng) {
 
 		iconSize:     [35, 40], // size of the icon
 		iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
-		popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+		popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
 	});
-	return L.marker(latlng, {icon: parkIcon});
+
+	var marker = L.marker(latlng, {icon: parkIcon});
+	var long ='';
+	var short ='';
+
+	if(feature.properties.ShortCapacity>0)
+	{
+		short = "<br>Parkeren kort: " + feature.properties.FreeSpaceShort + " / " + feature.properties.ShortCapacity;
+	}
+	if(feature.properties.LongCapacity>0)
+	{
+		long = "<br>Parkeren lang: " + feature.properties.FreeSpaceLong + " / " + feature.properties.LongCapacity;
+	}
+	marker.bindPopup("<b>" + feature.properties.Name + "</b>"+ short + long );
+	return marker;
 }
 
 function stylePark(feature) {
@@ -808,12 +893,6 @@ function onEachFeaturePark(feature, layer) {
 }
 
 
-function removeParkLayer()
-{
-	map.removeLayer(parkjson);
-}
-
-
 function showOvFiets()
 {
 	var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
@@ -828,7 +907,7 @@ function showOvFiets()
 
 			iconSize:     [35, 40], // size of the icon
 			iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
-			popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+			popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
 		});
 
 		$.each(fietsJson.locaties, function(key,value) {
@@ -837,7 +916,11 @@ function showOvFiets()
 				console.log(this.stationCode);
 				if(this.lat>0 && this.lng>0)
 				{
-					var fiets_marker = L.marker([this.lat,this.lng], {icon: camIcon,title:this.description,alt:this.url}).addTo(map).on('click', function(){alert(this.options.title);});
+					var marker_info = {};
+					marker_info.name = this.name;
+					marker_info.free = this.extra.rentalBikes;
+					var fiets_marker = L.marker([this.lat,this.lng], {icon: camIcon,title:this.description,alt:this.url}).addTo(map);
+					fiets_marker.bindPopup("<b>" + this.name + "</b><br>Fietsen beschikbaar: " + this.extra.rentalBikes);
 					markers.push(fiets_marker);
 				}
 			}
@@ -855,11 +938,11 @@ function showEvents()
 		// console.log(eventsJson);
 
 		var camIcon = L.icon({
-			iconUrl: 'images/musea_marker.svg',
+			iconUrl: 'images/events_marker.svg',
 
 			iconSize:     [35, 40], // size of the icon
 			iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
-			popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+			popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
 		});
 
 		$.each(eventsJson, function(key,value) {
@@ -874,7 +957,8 @@ function showEvents()
 				{
 					var latitude = this.location.latitude.replace(',','.');
 					var longitude = this.location.longitude.replace(',','.');
-					var event_marker = L.marker([latitude,longitude], {icon: camIcon,title:this.details.nl.title}).addTo(map).on('click', function(){alert(this.options.title);});
+					var event_marker = L.marker([latitude,longitude], {icon: camIcon,title:this.details.nl.title}).addTo(map);
+					event_marker.bindPopup("<b>" + this.title + "</b><br>" + this.details.nl.shortdescription + "<br>" + this.urls[0]);
 					markers.push(event_marker);
 				}
 			}
@@ -883,6 +967,168 @@ function showEvents()
 
 	});
 }
+
+function getHotspotsContent()
+{
+	return $('.hotspots_content').clone();
+}
+
+function showMuseum()
+{
+	var eventsJsonUrl = 'data/MuseaGalleries.json';
+
+	$.getJSON(eventsJsonUrl).done(function(eventsJson){
+		console.log(eventsJsonUrl);
+		// console.log(eventsJson);
+
+		var camIcon = L.icon({
+			iconUrl: 'images/musea_marker.svg',
+
+			iconSize:     [35, 40], // size of the icon
+			iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
+			popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
+		});
+
+		$.each(eventsJson, function(key,value) {
+			var latitude = this.location.latitude.replace(',','.');
+			var longitude = this.location.longitude.replace(',','.');
+			var event_marker = L.marker([latitude,longitude], {icon: camIcon,title:this.details.nl.title}).addTo(map);
+			event_marker.bindPopup("<b>" + this.title + "</b><br>" + this.details.nl.shortdescription + "<br>" + this.urls[0]);
+			markers.push(event_marker);
+		});
+
+	});
+}
+
+function addParcLayer()
+{
+	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
+	var parcJsonUrl = 'data/AGROEN_7_STADSPARK.json';
+
+	$.getJSON(parcJsonUrl).done(function(parcJson){
+		console.log(parcJson);
+		theme_layer = L.geoJSON(parcJson,{style: styleParc, onEachFeature: onEachFeatureParc, pointToLayer: pointToLayerParc}).addTo(map);
+
+		// geojson.eachLayer(function (layer) {
+		// 	layer._path.id = 'feature-' + layer.feature.properties.vollcode;
+		// 	buurtcode_prop_array[layer.feature.properties.vollcode]['layer'] = layer;
+		// });
+	});
+
+}
+
+function pointToLayerParc(feature, latlng) {
+	var parkIcon = L.icon({
+		iconUrl: 'images/parc_marker.svg',
+
+		iconSize:     [35, 40], // size of the icon
+		iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
+		popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
+	});
+	var marker = L.marker(latlng, {icon: parkIcon});
+	marker.bindPopup("<b>" + feature.properties.Naam + "</b>");
+	return marker;
+}
+
+function styleParc(feature) {
+
+	return {
+		fillColor: '#fff',
+		weight: 1,
+		opacity: 0.6,
+		color: '#fff',
+		fillOpacity: 0.7
+	};
+}
+
+function onEachFeatureParc(feature, layer) {
+	/*	layer.on({
+	 mouseover: highlightFeature,
+	 mouseout: resetHighlight,
+	 click: zoomToFeature
+	 });
+
+	 var buurt = buurtcode_prop_array[layer.feature.properties.vollcode].buurt;
+	 var dindex = buurtcode_prop_array[layer.feature.properties.vollcode].index;
+
+	 layer.bindPopup('<div><h3>' + buurt + '</h3><span>'+ Math.round(dindex * 100) +'</span></div>');
+	 layer.on('mouseover', function (e) {
+	 this.openPopup();
+	 });
+	 layer.on('mouseout', function (e) {
+	 this.closePopup();
+	 });*/
+}
+
+
+function addMarketLayer()
+{
+	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
+	var marketJsonUrl = 'data/MARKTEN.json';
+
+	$.getJSON(marketJsonUrl).done(function(marketJson){
+		console.log(marketJson);
+		theme_layer = L.geoJSON(marketJson,{style: styleMarket, onEachFeature: onEachFeatureMarket, pointToLayer: pointToLayerMarket}).addTo(map);
+
+		// geojson.eachLayer(function (layer) {
+		// 	layer._path.id = 'feature-' + layer.feature.properties.vollcode;
+		// 	buurtcode_prop_array[layer.feature.properties.vollcode]['layer'] = layer;
+		// });
+	});
+
+}
+
+function pointToLayerMarket(feature, latlng) {
+	var marketIcon = L.icon({
+		iconUrl: 'images/market_marker.svg',
+
+		iconSize:     [35, 40], // size of the icon
+		iconAnchor:   [17.5, 40], // point of the icon which will correspond to marker's location
+		popupAnchor:  [0, -50] // point from which the popup should open relative to the iconAnchor
+	});
+	var marker =  L.marker(latlng, {icon: marketIcon});
+	var website = '';
+	if(feature.properties.Website)
+	{
+		website = "<br>" + feature.properties.Website;
+	}
+	marker.bindPopup("<b>" + feature.properties.Locatie + "</b><br>" + feature.properties.Artikelen + website);
+	return marker;
+}
+
+function styleMarket(feature) {
+
+	return {
+		fillColor: '#fff',
+		weight: 1,
+		opacity: 0.6,
+		color: '#fff',
+		fillOpacity: 0.7
+	};
+}
+
+function onEachFeatureMarket(feature, layer) {
+	/*	layer.on({
+	 mouseover: highlightFeature,
+	 mouseout: resetHighlight,
+	 click: zoomToFeature
+	 });
+
+	 var buurt = buurtcode_prop_array[layer.feature.properties.vollcode].buurt;
+	 var dindex = buurtcode_prop_array[layer.feature.properties.vollcode].index;
+
+	 layer.bindPopup('<div><h3>' + buurt + '</h3><span>'+ Math.round(dindex * 100) +'</span></div>');
+	 layer.on('mouseover', function (e) {
+	 this.openPopup();
+	 });
+	 layer.on('mouseout', function (e) {
+	 this.closePopup();
+	 });*/
+}
+
+
+
+
 
 
 

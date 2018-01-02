@@ -71,16 +71,24 @@ html,body {width:100%;height:100%;padding:0;margin:0;color:#333;font-family:Aria
 /*themas*/
 .themas {box-sizing: border-box;transition: width 0.5s;position:absolute;right:20px;top:100px; z-index:500;width:60px;min-height:200px;background-color: rgba(255,255,255,0.65);border-radius:5px;border:1px solid #fff;box-shadow: 0 3px 14px rgba(0,0,0,0.4);padding:10px;}
 .themas.open {width:460px;}
-.themas_content {float:left;}
+.themas_content {float:left;box-sizing: border-box;background-color :rgba(255,255,255,1);border-radius:5px;}
+.themas.open .themas_content{width:calc(100% - 40px);height:220px;padding:10px;}
+.themas_content h3 {border-bottom:1px solid #ccc;margin:0 0 10px 0;line-height:30px;color:#014699;}
 .themas_buttons {float:left;list-style:none;margin:0;padding:0;}
-.themas li {margin:0 0 4px 0;padding:0;background-color :rgba(255,255,255,1);background-repeat:no-repeat;border-radius:5px;cursor:pointer;width:40px;height :40px;line-height :40px;}
-.themas li.active,.themas li.active:hover {background-color :unset;}
-.themas li:hover {background-color:#fff;}
+.themas_buttons li {margin:0 0 4px 0;padding:0;background-color :unset;background-repeat:no-repeat;border-radius:5px;cursor:pointer;width:40px;height :40px;line-height :40px;}
+.themas_buttons li.active,.themas_buttons li.active:hover {background-color :rgba(255,255,255,1);border-top-right-radius:0px;border-bottom-right-radius:0px;}
 .themas .fiets_b {background-image:url(../images/fiets_icon.svg);background-size: 35px 40px;background-position: 4px 0px;}
 .themas .cam_b {background-image:url(../images/cam_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
 .themas .hotspots_b {background-image:url(../images/hotspots_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
 .themas .events_b {background-image:url(../images/event_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
 .themas .park_b {background-image:url(../images/park_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
+
+.hotspot_list {margin:0;padding:0;}
+.hotspot_list li{background-size: 26px 30px;background-position:  0px 0px;background-repeat:no-repeat;text-indent:30px;line-height:30px;font-size:14px;cursor:pointer;border-radius: 5px;}
+.hotspot_list li:hover, .hotspot_list li.active{background-color:#eee;}
+.option_museum {list-style:none;background-image:url(../images/musea_icon.svg);}
+.option_parc {list-style:none;background-image:url(../images/parc_icon.svg);}
+.option_market {list-style:none;background-image:url(../images/market_icon.svg);}
 
 /*detail*/
 .detail {box-sizing: border-box;transition: width 0.5s;position:absolute;right:20px;bottom:40px; z-index:500;width:200px;height:200px;background-color: rgba(255,255,255,0.65);border-radius:5px;border:1px solid #fff;box-shadow: 0 3px 14px rgba(0,0,0,0.4);padding:10px;}
@@ -115,12 +123,13 @@ html,body {width:100%;height:100%;padding:0;margin:0;color:#333;font-family:Aria
 .leaflet-top .leaflet-control-zoom {margin-top:100px;}
 .leaflet-interactive {cursor:pointer;}
 #overwrite .leaflet-interactive:hover:not(.active_path) {fill-opacity:0.9;}
-.leaflet-popup-content-wrapper {background-color:rgba(255, 255, 255, 0.85);border-radius:5px;border:1px solid #fff;padding:4px;}
-.leaflet-popup-content {margin:4px;}
-.leaflet-popup-content-wrapper h3 {margin:0;}
-.leaflet-popup-content-wrapper span {display:block;text-align:center;font-size:14px;}
-.leaflet-popup-close-button {display:none;}
-.leaflet-popup-tip-container {display:none;}
+
+/*.leaflet-popup-content-wrapper {background-color:rgba(255, 255, 255, 0.85);border-radius:5px;border:1px solid #fff;padding:4px;}*/
+/*.leaflet-popup-content {margin:4px;}*/
+/*.leaflet-popup-content-wrapper h3 {margin:0;}*/
+/*.leaflet-popup-content-wrapper span {display:block;text-align:center;font-size:14px;}*/
+/*.leaflet-popup-close-button {display:none;}*/
+/*.leaflet-popup-tip-container {display:none;}*/
 
 /*gauge*/
 .gauge {float:left; position: relative; margin:0 15px;width:150px;height:150px;}
