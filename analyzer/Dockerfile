@@ -1,5 +1,5 @@
 # Use Python Docker image created by Amsterdam
-FROM amsterdam/docker_python:latest
+FROM amsterdam/python
 
 # Copy requirements.txt to root
 ADD /requirements.txt /requirements.txt
