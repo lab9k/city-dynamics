@@ -1,5 +1,5 @@
 # Use Python Docker image created by Amsterdam
-FROM amsterdam/docker_python:latest
+FROM amsterdam/python
 
 # Create directory for data
 RUN mkdir /data
