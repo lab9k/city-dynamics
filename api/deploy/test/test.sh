@@ -9,5 +9,3 @@ cd /app/
 source deploy/docker-wait.sh
 python manage.py test --noinput
 flake8 .
-
-
