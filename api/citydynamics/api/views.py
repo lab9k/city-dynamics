@@ -1,11 +1,12 @@
 from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 from rest_framework.serializers import ValidationError
+from django.db.models import Avg
 
 from datapunt_api import rest
 from . import models
 from . import serializers
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 
 log = logging.getLogger(__name__)
@@ -81,7 +82,6 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
 
     serializer_class = serializers.RecentIndexSerializer
     serializer_detail_class = serializers.RecentIndexSerializer
-    queryset = models.Drukteindex.objects.order_by("index")
 
     def get_queryset(self):
         """
@@ -120,11 +120,17 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
                 timestamp_dt = '07-12-2017-23-00-00'
             timestamp_dt = convert_to_date(timestamp_dt)
 
-        date_dt = timestamp_dt.date()
-        start_timestamp = datetime.combine(date_dt, datetime.min.time())
-        end_timestamp = datetime.combine(date_dt, datetime.max.time())
+        today = timestamp_dt.date()
 
-        queryset = queryset.filter(timestamp__gte=start_timestamp)
-        queryset = queryset.filter(timestamp__lte=end_timestamp)
+        level = self.request.query_params.get('level', None)
+        if level == 'day':
+            queryset = queryset.filter(timestamp__date = today)
+
+        if level == 'week':
+            yesterday = today - timedelta(days=1)
+            previous_week = yesterday - timedelta(days=7)
+            queryset = queryset.filter(timestamp__gte=previous_week, timestamp__lt=yesterday)
+            current_hour = timestamp_dt.hour
+            queryset = queryset.filter(timestamp__hour=current_hour)
 
         return queryset

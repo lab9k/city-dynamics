@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', insecure_secret)
 DEBUG = SECRET_KEY == insecure_secret
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -140,7 +140,7 @@ USE_L10N = True  # TO override date notation
 
 DATE_FORMAT = '%d %b %Y'
 
-USE_TZ = True
+USE_TZ = False
 
 REST_FRAMEWORK = dict(
     PAGE_SIZE=500,
@@ -162,6 +162,8 @@ REST_FRAMEWORK = dict(
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/citydynamics/static/'
+STATIC_URL = '/static/'
+
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 
 # STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'),)
