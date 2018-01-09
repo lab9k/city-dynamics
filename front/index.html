@@ -17,7 +17,7 @@
 	<script src="js/index.js"></script>
 
 	<link rel="stylesheet" href="css/leaflet.css">
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" href="css/index.css">
 
@@ -31,7 +31,7 @@
 	<div class="header">
 		<div class="header_top"></div>
 		<div class="header_bot">
-			<h1>Amsterdam | <span>Urban Density Index</span></h1>
+			<h1>Amsterdam | <span>DrukteRadar</span></h1>
 			<div class="info_b">
 				<i class="material-icons">info_outline</i>
 			</div>
@@ -47,8 +47,30 @@
 				<label for="time_i">&nbsp;</label>
 				<input type="text" id="time_i" class="time_i" value="" placeholder="Now">
 			</div>
+			<div class="ui-widget">
+				<button type="text" id="now_b" class="now_b active">NU</button>
+			</div>
 			<div class="analyse_b">
 
+			</div>
+		</div>
+		<div class="header_analyses">
+			<div class="analyses_block">
+				<div class="analyse_header"><h2>Correlatie DrukteRadar / CMSA telling</h2></div>
+				<div class="analyse_body">
+					<img src="content/analyse_1.png">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed luctus ligula, ac sagittis massa. Nam maximus tellus id dapibus aliquet. Nam vitae quam placerat, eleifend velit quis, consequat nisi. Suspendisse aliquet, ipsum vel rhoncus maximus, erat quam varius magna, ut semper sem elit ac eros. Nullam sagittis consectetur augue quis sagittis. Quisque et consectetur enim, blandit lacinia neque. Nam pellentesque diam ac magna tempor posuere. Integer et aliquam nunc. Maecenas at dictum leo, et hendrerit turpis. Integer eros neque, placerat quis scelerisque nec, consequat vitae ante. Quisque cursus ipsum odio, in tincidunt mi ullamcorper eu. Proin non consectetur tellus. Morbi in mauris dignissim, efficitur nibh sed, consectetur leo. Fusce aliquet pulvinar lorem vel condimentum.</p>
+				</div>
+				<div class="analyse_footer"></div>
+			</div>
+
+			<div class="analyses_block">
+				<div class="analyse_header"><h2>Correlatie DrukteRadar / Afval telling</h2></div>
+				<div class="analyse_body">
+					<img src="content/analyse_2.png">
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed luctus ligula, ac sagittis massa. Nam maximus tellus id dapibus aliquet. Nam vitae quam placerat, eleifend velit quis, consequat nisi. Suspendisse aliquet, ipsum vel rhoncus maximus, erat quam varius magna, ut semper sem elit ac eros. Nullam sagittis consectetur augue quis sagittis. Quisque et consectetur enim, blandit lacinia neque. Nam pellentesque diam ac magna tempor posuere. Integer et aliquam nunc. Maecenas at dictum leo, et hendrerit turpis. Integer eros neque, placerat quis scelerisque nec, consequat vitae ante. Quisque cursus ipsum odio, in tincidunt mi ullamcorper eu. Proin non consectetur tellus. Morbi in mauris dignissim, efficitur nibh sed, consectetur leo. Fusce aliquet pulvinar lorem vel condimentum.</p>
+				</div>
+				<div class="analyse_footer"></div>
 			</div>
 		</div>
 	</div>
@@ -59,13 +81,19 @@
 
 	<div class="legend">
 		<div class="density"></div>
-		<span class="min">Quiet</span>
-		<span class="max">Crowded</span>
+		<span class="min">Stil</span>
+		<span class="max">Druk</span>
 	</div>
 
 	<div class="info">
-		<h2>What do I see</h2>
-		The Urban Density Index represents the level of density in each district of Amsterdam in comparisson to the other districts in Amsterdam.
+		<!--<h2>What do I see</h2>-->
+		<!--The Urban Density Index represents the level of density in each district of Amsterdam in comparisson to the other districts in Amsterdam.		-->
+		<h2>DrukteRadar uitleg.</h2>
+		<p>De Amsterdam Drukte Radar geeft drukte in de stad weer aan de hand van een dichtheids-index voor iedere buurt van Amsterdam, vergeleken met de andere buurten van de stad.</p>
+
+		<p>DDe dichtheids-index is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Data van wegverkeer, OV, parkeren, en bezoeken aan openbare plekken wordt continue verzameld.</p>
+
+		<p>DNieuwe databronnen worden nog toegevoegd en de index is nog in ontwikkeling. We horen graag je feedback.</p>
 	</div>
 
 	<div class="leftbox">
@@ -76,11 +104,13 @@
 
 	<div class="themas">
 		<ul class="themas_buttons">
-			<li class="fiets_b"></li>
-			<li class="park_b"></li>
-			<li class="hotspots_b"></li>
+			<li class="fiets_b" now></li>
+			<li class="park_b" now></li>
+			<li class="hotspots_b" now></li>
+			<li class="google_b" now></li>
 			<li class="events_b"></li>
-			<li class="cam_b"></li>
+			<li class="cam_b" now></li>
+			<li class="water_b"></li>
 		</ul>
 		<div class="themas_content"></div>
 	</div>
@@ -93,19 +123,24 @@
 					<span class="value">0</span>
 				</div>
 			</div>
-			<div class="hours_graph">
-				<svg class="svg_hours" width="460" height="120"></svg>
+			<div class="details_graph">
+				<div class="graph_controls">
+					<a class="graph_hours_b active">Dag</a>
+					<a class="graph_days_b">Week</a>
+				</div>
+				<div class="hours_graph">
+					<svg class="svg_hours" width="460" height="120"></svg>
+				</div>
+				<div class="days_graph">
+					<svg class="svg_days" width="460" height="120"></svg>
+				</div>
 			</div>
-
 		</div>
 	</div>
 
-	<div class="analyses_1">
-
-	</div>
-
-	<div class="analyses_2">
-
+	<div class="cta">
+		<a target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D">Wat doet de gemeente aan de drukte?</a>
+		<a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Maak een melding van overlast.</a>
 	</div>
 
 	<svg xmlns="w3.org/2000/svg" version="1.1" style="width:0;height:0;">
@@ -131,30 +166,39 @@
 
 <div class="time_i_content">
 	<ul>
-		<li>00</li>
-		<li>01</li>
-		<li>02</li>
-		<li>03</li>
-		<li>04</li>
-		<li>05</li>
-		<li>06</li>
-		<li>07</li>
-		<li>08</li>
-		<li>09</li>
-		<li>10</li>
-		<li>11</li>
-		<li>12</li>
-		<li>13</li>
-		<li>14</li>
-		<li>15</li>
-		<li>16</li>
-		<li>17</li>
-		<li>18</li>
-		<li>19</li>
-		<li>20</li>
-		<li>21</li>
-		<li>22</li>
-		<li>23</li>
+		<li class="time00">00</li>
+		<li class="time01">01</li>
+		<li class="time02">02</li>
+		<li class="time03">03</li>
+		<li class="time04">04</li>
+		<li class="time05">05</li>
+		<li class="time06">06</li>
+		<li class="time07">07</li>
+		<li class="time08">08</li>
+		<li class="time09">09</li>
+		<li class="time10">10</li>
+		<li class="time11">11</li>
+		<li class="time12">12</li>
+		<li class="time13">13</li>
+		<li class="time14">14</li>
+		<li class="time15">15</li>
+		<li class="time16">16</li>
+		<li class="time17">17</li>
+		<li class="time18">18</li>
+		<li class="time19">19</li>
+		<li class="time20">20</li>
+		<li class="time21">21</li>
+		<li class="time22">22</li>
+		<li class="time23">23</li>
+	</ul>
+</div>
+
+<div class="hotspots_content">
+	<h3>Hotspots</h3>
+	<ul class="hotspot_list">
+		<li class="option_museum">Museums</li>
+		<li class="option_parc">Public parcs</li>
+		<li class="option_market">Markets</li>
 	</ul>
 </div>
 </body>

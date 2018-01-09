@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="35px" height="40px" viewBox="0 0 35 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Water Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="square">
+        <g id="Water-Icon" stroke-width="2" stroke="#333333">
+            <g id="Water" transform="translate(4.000000, 10.000000)">
+                <polyline id="Line" points="0 3 2.5 0 5 3 7.5 0 10 3 12.5 0 15 3 17.5 0 20 3 22.5 0 25 3 27.5 0"></polyline>
+                <polyline id="Line" points="0 11 2.5 8 5 11 7.5 8 10 11 12.5 8 15 11 17.5 8 20 11 22.5 8 25 11 27.5 8"></polyline>
+                <polyline id="Line" points="0 19 2.5 16 5 19 7.5 16 10 19 12.5 16 15 19 17.5 16 20 19 22.5 16 25 19 27.5 16"></polyline>
+            </g>
+        </g>
+    </g>
+</svg>

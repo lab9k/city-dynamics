@@ -76,8 +76,6 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
             ],
         },
@@ -180,13 +178,14 @@ LOGGING = {
 
     'formatters': {
         'console': {
-            # 'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            'format': '%(levelname)s - %(name)s - %(message)s',
+            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            # 'format': '%(levelname)s - %(name)s - %(message)s',
         },
     },
 
     'handlers': {
         'console': {
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'console',
         },
@@ -194,7 +193,15 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': 'DEBUG',
+        },
+        'django.db': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+        },
+        'django.template': {
+            'handlers': ['console'],
+            'level': 'ERROR',
         },
     },
 }
