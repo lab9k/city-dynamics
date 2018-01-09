@@ -46,7 +46,7 @@ node {
                 api.push()
                 api.push("acceptance")
 
-            def front = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}", "front")
+            def front = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_front:${env.BUILD_NUMBER}", "front")
                 front.push()
                 front.push("acceptance")
         }
