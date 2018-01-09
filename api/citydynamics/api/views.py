@@ -1,7 +1,7 @@
 from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 from rest_framework.serializers import ValidationError
-from django.db.models import Avg
+# from django.db.models import Avg
 
 from datapunt_api import rest
 from . import models
@@ -124,12 +124,13 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
 
         level = self.request.query_params.get('level', None)
         if level == 'day':
-            queryset = queryset.filter(timestamp__date = today)
+            queryset = queryset.filter(timestamp__date=today)
 
         if level == 'week':
             yesterday = today - timedelta(days=1)
             previous_week = yesterday - timedelta(days=7)
-            queryset = queryset.filter(timestamp__gte=previous_week, timestamp__lt=yesterday)
+            queryset = queryset.filter(
+                timestamp__gte=previous_week, timestamp__lt=yesterday)
             current_hour = timestamp_dt.hour
             queryset = queryset.filter(timestamp__hour=current_hour)
 
