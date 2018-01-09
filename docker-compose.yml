@@ -12,8 +12,8 @@ services:
       - ./deploy/backup-db.sh:/backup-db.sh
       - ./deploy/backup:/backup
 
-  web:
-    build: ./web
+  api:
+    build: ./api
     ports:
       - "8117:8001"
     links:

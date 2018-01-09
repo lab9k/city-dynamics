@@ -25,11 +25,11 @@ node {
 
     stage('Test') {
         tryStep "test", {
-            sh "docker-compose -p testcitydynamics -f web/deploy/test/docker-compose.yml build && " +
-	       "docker-compose -p testcitydynamics -f web/deploy/test/docker-compose.yml down && " +
-               "docker-compose -p testcitydynamics -f web/deploy/test/docker-compose.yml up"
+            sh "docker-compose -p testcitydynamics -f api/deploy/test/docker-compose.yml build && " +
+	       "docker-compose -p testcitydynamics -f api/deploy/test/docker-compose.yml down && " +
+               "docker-compose -p testcitydynamics -f api/deploy/test/docker-compose.yml up"
         }, {
-            sh "docker-compose -p testcitydynamics -f web/deploy/test/docker-compose.yml down"
+            sh "docker-compose -p testcitydynamics -f api/deploy/test/docker-compose.yml down"
         }
     }
 
@@ -43,9 +43,9 @@ node {
                 analyzer.push()
                 analyzer.push("acceptance")
 
-            def web = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}", "web")
-            web.push()
-            web.push("acceptance")
+            def api = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}", "api")
+            api.push()
+            api.push("acceptance")
         }
     }
 }
