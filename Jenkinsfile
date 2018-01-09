@@ -36,16 +36,20 @@ node {
     stage("Build dockers") {
         tryStep "build", {
             def importer = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics_importer:${env.BUILD_NUMBER}", "importer")
-            importer.push()
-            importer.push("acceptance")
+                importer.push()
+                importer.push("acceptance")
 
             def analyzer = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics_analyzer:${env.BUILD_NUMBER}", "analyzer")
                 analyzer.push()
                 analyzer.push("acceptance")
 
             def api = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}", "api")
-            api.push()
-            api.push("acceptance")
+                api.push()
+                api.push("acceptance")
+
+            def front = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}", "front")
+                front.push()
+                front.push("acceptance")
         }
     }
 }

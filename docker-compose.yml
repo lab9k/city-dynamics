@@ -49,3 +49,10 @@ services:
     build: ./analyzer
     links:
       - database:database
+
+  front:
+    ports:
+      - "8080:80"
+    build: ./front
+    #links:
+    #  - api:api
