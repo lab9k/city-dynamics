@@ -188,6 +188,7 @@ LOGGING = {
             'formatter': 'console',
         },
     },
+
     'loggers': {
         'django': {
             'handlers': ['console'],
