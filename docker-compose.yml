@@ -27,7 +27,6 @@ services:
       - UWSGI_STATIC_MAP=/citydynamics/static=/static
       - UWSGI_CALLABLE=application
       - UWSGI_VACUUM=1
-      - UWSGI_STATIC_SAFE=static/
       - UWSGI_STATIC_EXPIRES=/* 3600
       - UWSGI_OFFLOAD_THREADS=1
       - UWSGI_HARAKIRI=15

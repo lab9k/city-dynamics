@@ -5,8 +5,7 @@ ENV PYTHONUNBUFFERED 1
 
 
 
-RUN mkdir -p /static \
-	&& chown datapunt /static
+RUN mkdir -p /static && chown datapunt /static
 
 COPY requirements.txt /app/
 

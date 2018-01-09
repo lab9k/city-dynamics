@@ -32,7 +32,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', insecure_secret)
 DEBUG = SECRET_KEY == insecure_secret
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+#DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -162,7 +163,6 @@ REST_FRAMEWORK = dict(
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/citydynamics/static/'
-STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 
