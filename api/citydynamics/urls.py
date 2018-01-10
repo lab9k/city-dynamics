@@ -30,7 +30,7 @@ router.register('recentmeasures', RecentIndexViewSet, 'recentmeasures')
 urlpatterns = router.urls
 
 urlpatterns = [
-    url(r'^citydynamics/api/', include(router.urls)),
+    url(r'^citydynamics/', include(router.urls)),
     url(r'^status/', include('health.urls', namespace='health')),
 ]
 
