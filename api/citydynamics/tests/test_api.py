@@ -38,7 +38,7 @@ class BrowseDatasetsTestCase(APITestCase):
             'Wrong Content-Type for {}'.format(url))
 
     def test_index_pages(self):
-        url = 'citydynamics/'
+        url = 'citydynamics'
 
         response = self.client.get('/{}/'.format(url))
 
