@@ -11,7 +11,7 @@ from . import factories
 class BrowseDatasetsTestCase(APITestCase):
 
     datasets = [
-        'citydynamics/api/drukteindex',
+        'citydynamics/drukteindex',
     ]
 
     def setUp(self):
@@ -38,7 +38,7 @@ class BrowseDatasetsTestCase(APITestCase):
             'Wrong Content-Type for {}'.format(url))
 
     def test_index_pages(self):
-        url = 'citydynamics/api'
+        url = 'citydynamics/'
 
         response = self.client.get('/{}/'.format(url))
 
