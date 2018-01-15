@@ -1,2 +1,4 @@
 # Ignore the virtual environment folder (venv)
 venv/
+/.idea
+/.DS_Store
