@@ -125,6 +125,7 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         level = self.request.query_params.get('level', None)
         if level == 'day':
             queryset = queryset.filter(timestamp__date=today)
+            exclude = ('weekday',)
 
         if level == 'week':
             yesterday = today - timedelta(days=1)

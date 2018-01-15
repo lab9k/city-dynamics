@@ -3,7 +3,6 @@ from citydynamics.api.models import Drukteindex
 
 
 class DrukteIndexSerializer(ModelSerializer):
-    """ A class to serialize locations as GeoJSON compatible data """
 
     class Meta:
         model = Drukteindex
@@ -12,8 +11,7 @@ class DrukteIndexSerializer(ModelSerializer):
 
 
 class RecentIndexSerializer(ModelSerializer):
-    """ A class to serialize locations as GeoJSON compatible data """
 
     class Meta:
         model = Drukteindex
-        fields = ('drukte_index', 'timestamp')
+        fields = ('drukte_index', 'timestamp', 'weekday')
