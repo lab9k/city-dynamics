@@ -10,12 +10,11 @@ Go to terminal on the city-dynamics folder
 Run:
 
 (For this step it is needed to be connected to the internal AMS network)
-docker-compose build database
 docker-compose up database
 
 (For this step it is important not to be connected to the internal AMS network)
 docker-compose build importer
-docker-compose up database
+docker-compose up importer
 
 (now it doesn't matter as long as you have internet)
 docker-compose build analyzer
