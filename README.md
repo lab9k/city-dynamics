@@ -6,7 +6,7 @@ Collaborators: Jerome Cremers, Rene Luijk, Swaan Dekkers, Thomas Jongstra, Steph
 
 ---
 
-Create a local environment named `venv` and activate it. 
+Create a local environment named `venv` inside the city-dynamics project directory, and activate it. 
 Exiting a virtual environment can be done using `deactivate`.
 
 ```
@@ -18,7 +18,8 @@ Install required packages.
 
 ```
 pip install -r importer/requirements.txt
-pip install -r web/requirements.txt
+pip install -r analyzer/requirements.txt
+pip install -r api/requirements.txt
 ```
 
 Create database
@@ -54,6 +55,27 @@ docker-compose up importer
 The database is now filled with data and can be queried.
 
 ---
+
+To get the front end working, the **analyzer**, **api** and **front** containers should be built and activated in Docker. This can be done with the following commands:
+
+```
+docker-compose build analyzer
+docker-compose build api
+docker-compose build front
+docker-compose up analyzer
+docker-compose up api
+docker-compose up front
+```
+
+To combine all building and activation steps at the same time, we can also run:
+```
+docker-compose build
+docker-compose up
+```
+
+---
+
+The front end of the application can now be visualized locally by opening `front/index.html` in a browser.
 
 ## Additional info for developers ##
 
