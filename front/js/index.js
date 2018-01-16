@@ -13,9 +13,9 @@ var current_date;
 var is_now = true;
 var vollcode;
 
-var origin = 'http://127.0.0.1:8000';
-var dindex_api = 'http://127.0.0.1:8000/citydynamics/api/drukteindex/?format=json&op=';
-var dindex_hours_api = 'http://127.0.0.1:8000/citydynamics/api/recentmeasures/?format=json';
+var origin = 'http://127.0.0.1:8117';
+var dindex_api = 'http://127.0.0.1:8117/citydynamics/drukteindex/?format=json&op=';
+var dindex_hours_api = 'http://127.0.0.1:8117/citydynamics/recentmeasures/?format=json';
 var jsonCallback = '&callback=?';
 var jsonCallback = '';
 
