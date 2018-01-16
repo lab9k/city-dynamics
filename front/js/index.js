@@ -13,9 +13,10 @@ var current_date;
 var is_now = true;
 var vollcode;
 
-var origin = 'http://127.0.0.1:8000';
-var dindex_api = 'http://127.0.0.1:8000/citydynamics/api/drukteindex/?format=json&op=';
-var dindex_hours_api = 'http://127.0.0.1:8000/citydynamics/api/recentmeasures/?format=json';
+var origin = 'http://127.0.0.1:8117';
+var dindex_api = 'http://127.0.0.1:8117/citydynamics/drukteindex/?format=json&op=';
+var dindex_hours_api = 'http://127.0.0.1:8117/citydynamics/recentmeasures/?level=day&format=json';
+var dindex_days_api = 'http://127.0.0.1:8117/citydynamics/recentmeasures/?level=week&format=json';
 var jsonCallback = '&callback=?';
 var jsonCallback = '';
 
@@ -1015,7 +1016,8 @@ function initHourGraph(vollcode)
 			var buurtcode = this.vollcode;
 			var $dataset = [];
 			//$dataset["buurt"] = this.naam;
-			$dataset["dindex"] = this.drukte_index * 100 * data2[i].dindex;
+			// $dataset["dindex"] = this.drukte_index * 100 * data2[i].dindex;
+			$dataset["dindex"] = this.drukte_index * 100;
 			// console.log(data2[i].dindex);
 			$dataset["time"] = this.timestamp.substr(11, 2);
 			i++;
@@ -1071,8 +1073,17 @@ function initWeekGraph(vollcode)
 {
 	var data = new Array;
 
-	//var daysJsonUrl = dindex_days_api+'&vollcode='+vollcode+'&timestamp='+ getCurrentDate() + jsonCallback;
-	var daysJsonUrl = 'data/days.json';
+	var weekdays = new Array;
+	weekdays[1] = 'Maandag';
+	weekdays[2] = 'Dinsdag';
+	weekdays[3] = 'Woensdag';
+	weekdays[4] = 'Donderdag';
+	weekdays[5] = 'Vrijdag';
+	weekdays[6] = 'Zaterdag';
+	weekdays[7] = 'Zondag';
+
+	var daysJsonUrl = dindex_days_api+'&vollcode='+vollcode+'&timestamp='+ getCurrentDate() + jsonCallback;
+	//var daysJsonUrl = 'data/days.json';
 	console.log(daysJsonUrl);
 
 	$.getJSON(daysJsonUrl).done(function(daysJson) {
@@ -1082,7 +1093,7 @@ function initWeekGraph(vollcode)
 			var $dataset = [];
 			//$dataset["buurt"] = this.naam;
 			$dataset["dindex"] = this.drukte_index * 100;
-			$dataset["day"] = this.dayOfTheWeek;
+			$dataset["day"] = weekdays[this.weekday];
 			data.push($dataset);
 		});
 

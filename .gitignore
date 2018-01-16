@@ -1,4 +1,8 @@
 # Ignore the virtual environment folder (venv)
 venv/
+
+# Ignore the Pycharm .idea folder
 /.idea
+
+# Ignore OSX folders
 /.DS_Store
