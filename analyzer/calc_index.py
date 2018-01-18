@@ -296,6 +296,10 @@ def main():
     drukte[float_cols] = drukte[float_cols].rank(axis=1)
     drukte[float_cols] = drukte[float_cols].apply(lambda x: min_max(x), axis=1)
 
+    # schaal verblijversindex naar [1, 3]
+    drukte['verblijversindex'] = min_max(drukte['verblijversindex'])
+    drukte['verblijversindex'] = (drukte['verblijversindex'] * 2) + 1
+
     # middel google
     drukte['google'] = drukte[['google_week', 'google_live']].mean(axis=1)
 
@@ -306,23 +310,25 @@ def main():
     drukte['google'] = min_max(drukte.google)
     drukte['gvb'] = min_max(drukte.gvb)
 
-    # drukte index
-    cols = ['google', 'gvb']
-    # weights = [0.5, 0.5]
-    drukte['drukte_index'] = drukte[cols].mean(axis=1)
-    # drukte['drukte_index'] = weighted_mean(
-    #     data=drukte, cols=cols, weights=weights)
-    drukte['drukte_index'] = min_max(drukte.drukte_index)
+    # init drukte index
+    drukte['drukte_index'] = np.nan
 
-    # schaal verblijversindex naar [1, 3]
-    drukte['verblijversindex'] = min_max(drukte['verblijversindex'])
-    drukte['verblijversindex'] = (drukte['verblijversindex'] * 2) + 1
+    linear_weigths = {'verblijversindex': 0,
+                      'google': 1,
+                      'gvb': 0,
+                      'google_week': 1,
+                      'google_live': 0}
 
-    drukte['drukte_index'] = drukte.drukte_index * drukte.verblijversindex
-    indx = drukte.drukte_index.isnull()
-    drukte.loc[indx, 'drukte_index'] = 0
+    for col, weight in linear_weigths.items():
+        if col in drukte.columns:
+            drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col]*weight, fill_value=0)
 
-    drukte['drukte_index'] = min_max(drukte['drukte_index'])
+
+    #drukte['drukte_index'] = drukte.drukte_index * drukte.verblijversindex
+    #indx = drukte.drukte_index.isnull()
+    #drukte.loc[indx, 'drukte_index'] = 0
+
+    #drukte['drukte_index'] = min_max(drukte['drukte_index'])
 
     # sort values
     drukte = drukte.sort_values(['timestamp', 'vollcode'])
