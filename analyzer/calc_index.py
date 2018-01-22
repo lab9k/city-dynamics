@@ -85,10 +85,7 @@ def import_verblijversindex(sql_query, conn):
     verblijversindex = pd.read_sql(
         sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
     verblijversindex = verblijversindex[['wijk', 'verblijversindex']]
-    verblijversindex.rename(columns={
-        'wijk': 'vollcode'
-    }, inplace=True)
-    verblijversindex = verblijversindex[['vollcode', 'verblijversindex']]
+    verblijversindex.rename(columns={'wijk': 'vollcode'}, inplace=True)
     return verblijversindex
 
 
@@ -259,7 +256,7 @@ def main():
     haltes = list(pd.read_csv('metro_or_train.csv', sep=',')['station'])
     gvb_stad, gvb_buurt = import_gvb(sql_query, conn, haltes)
 
-    # vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique()
+        # vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique()
     #                      if 'A' in bc]
     # tellus = import_tellus(sql_query, conn, vollcodes_centrum)
 
@@ -314,9 +311,9 @@ def main():
     drukte['drukte_index'] = np.nan
 
     linear_weigths = {'verblijversindex': 0,
-                      'google': 1,
-                      'gvb': 0,
-                      'google_week': 1,
+                      'google': 0,
+                      'gvb': 1,
+                      'google_week': 0,
                       'google_live': 0}
 
     for col, weight in linear_weigths.items():
