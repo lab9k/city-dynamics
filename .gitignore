@@ -6,3 +6,6 @@ venv/
 
 # Ignore OSX folders
 /.DS_Store
+
+# Ignore local Jupyter Notebook Folder
+/jupyter_notebook
