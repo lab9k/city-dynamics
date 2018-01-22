@@ -106,7 +106,7 @@ def import_google(sql_query, conn):
     google = pd.concat([google_octnov, google_dec])
     del google_octnov, google_dec
 
-    # add time data
+    # add time datae
     google['weekday'] = [ts.weekday() for ts in google.timestamp]
     google['hour'] = [ts.hour for ts in google.timestamp]
     google_week = google.loc[google.historical.notnull(), :]
@@ -313,15 +313,20 @@ def main():
     # init drukte index
     drukte['drukte_index'] = np.nan
 
+    # make sure the sum of the weights != 0
     linear_weigths = {'verblijversindex': 0,
                       'google': 1,
                       'gvb': 0,
                       'google_week': 1,
                       'google_live': 0}
 
+    lw_normalize = sum(linear_weigths.values())
+
     for col, weight in linear_weigths.items():
         if col in drukte.columns:
             drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col]*weight, fill_value=0)
+
+    drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
 
 
     #drukte['drukte_index'] = drukte.drukte_index * drukte.verblijversindex
