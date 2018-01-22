@@ -6,3 +6,4 @@ venv/
 
 # Ignore OSX folders
 /.DS_Store
+.DS_Store

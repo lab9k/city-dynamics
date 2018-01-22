@@ -258,7 +258,11 @@ $(document).ready(function(){
 	// wgs map
 	map = L.map('mapid').setView([52.36, 4.95], 12);
 
-	L.tileLayer('https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png', {
+	var geomap1 = 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png';
+	var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
+	var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
+
+	L.tileLayer(geomap2, {
 		minZoom: 12,
 		maxZoom: 16
 	}).addTo(map);
@@ -267,7 +271,8 @@ $(document).ready(function(){
 	// var dindexJsonUrl = 'data/dindex.json';
 	console.log(dindexJsonUrl);
 
-	var geoJsonUrl = 'https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&Typename=ms:buurtcombinatie&version=2.0.0&service=wfs&outputformat=geojson&srsname=epsg:4326';
+	// var geoJsonUrl = 'https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&Typename=ms:buurtcombinatie&version=2.0.0&service=wfs&outputformat=geojson&srsname=epsg:4326';
+	var geoJsonUrl = 'data/buurtcombinaties.json';
 
 	$.getJSON(dindexJsonUrl).done(function (dindexJson) {
 
@@ -316,9 +321,8 @@ $(document).ready(function(){
 				layer._path.id = 'feature-' + layer.feature.properties.vollcode;
 				buurtcode_prop_array[layer.feature.properties.vollcode]['layer'] = layer;
 			});
+
 		});
-
-
 	});
 
 
@@ -1074,13 +1078,13 @@ function initWeekGraph(vollcode)
 	var data = new Array;
 
 	var weekdays = new Array;
-	weekdays[1] = 'Maandag';
-	weekdays[2] = 'Dinsdag';
-	weekdays[3] = 'Woensdag';
-	weekdays[4] = 'Donderdag';
-	weekdays[5] = 'Vrijdag';
-	weekdays[6] = 'Zaterdag';
-	weekdays[7] = 'Zondag';
+	weekdays[0] = 'Ma';
+	weekdays[1] = 'Di';
+	weekdays[2] = 'Wo';
+	weekdays[3] = 'Do';
+	weekdays[4] = 'Vr';
+	weekdays[5] = 'Za';
+	weekdays[6] = 'Zo';
 
 	var daysJsonUrl = dindex_days_api+'&vollcode='+vollcode+'&timestamp='+ getCurrentDate() + jsonCallback;
 	//var daysJsonUrl = 'data/days.json';
@@ -1436,7 +1440,11 @@ function showEvents()
 
 function getHotspotsContent()
 {
-	return $('.hotspots_content').clone();
+	var content =  $('.hotspots_content').clone();
+
+	$(content).show();
+
+	return content;
 }
 
 function showMuseum()
