@@ -103,7 +103,7 @@ def import_google(sql_query, conn):
     google = pd.concat([google_octnov, google_dec])
     del google_octnov, google_dec
 
-    # add time datae
+    # add time data
     google['weekday'] = [ts.weekday() for ts in google.timestamp]
     google['hour'] = [ts.hour for ts in google.timestamp]
     google_week = google.loc[google.historical.notnull(), :]
