@@ -87,10 +87,7 @@ def import_verblijversindex(sql_query, conn):
     verblijversindex = pd.read_sql(
         sql=sql_query.format('VERBLIJVERSINDEX'), con=conn)
     verblijversindex = verblijversindex[['wijk', 'verblijversindex']]
-    verblijversindex.rename(columns={
-        'wijk': 'vollcode'
-    }, inplace=True)
-    verblijversindex = verblijversindex[['vollcode', 'verblijversindex']]
+    verblijversindex.rename(columns={'wijk': 'vollcode'}, inplace=True)
     return verblijversindex
 
 
@@ -111,7 +108,7 @@ def import_google(sql_query, conn):
     google = google.loc[google.historical.notnull(), :]
     del google_octnov, google_dec
 
-    # add time datae
+    # add time data
     google['weekday'] = [ts.weekday() for ts in google.timestamp]
     google['hour'] = [ts.hour for ts in google.timestamp]
 
@@ -287,7 +284,7 @@ def main():
     haltes = list(pd.read_csv('metro_or_train.csv', sep=',')['station'])
     gvb_stad, gvb_buurt = import_gvb(sql_query, conn, haltes)
 
-    # vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique()
+        # vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique()
     #                      if 'A' in bc]
     # tellus = import_tellus(sql_query, conn, vollcodes_centrum)
 
