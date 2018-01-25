@@ -12,6 +12,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from datetime import timedelta
 
+import matplotlib
+
 from sklearn.preprocessing import MinMaxScaler
 
 config_auth = configparser.RawConfigParser()
@@ -94,33 +96,59 @@ def import_verblijversindex(sql_query, conn):
 
 def import_google(sql_query, conn):
     """Function to read google data."""
+
     def read_table(sql_query, conn):
         df = pd.read_sql(sql=sql_query, con=conn)
         df['timestamp'] = df.timestamp.dt.round('60min')
-        df = df[['place_id', 'vollcode', 'timestamp', 'live', 'historical']]
+        df = df[['name', 'vollcode', 'timestamp', 'live', 'historical', 'stadsdeel_code']]
         return df
 
     # read raw data
     google_octnov = read_table(sql_query.format('google_with_bc'), conn=conn)
     google_dec = read_table(sql_query.format('google_dec_with_bc'), conn=conn)
     google = pd.concat([google_octnov, google_dec])
+    # remove useless rows
+    google = google.loc[google.historical.notnull(), :]
     del google_octnov, google_dec
 
     # add time datae
     google['weekday'] = [ts.weekday() for ts in google.timestamp]
     google['hour'] = [ts.hour for ts in google.timestamp]
-    google_week = google.loc[google.historical.notnull(), :]
+
+    area_mapping = google[['vollcode', 'stadsdeel_code']].drop_duplicates()
 
     # historical weekpatroon
-    google_week = google_week.groupby([
-        'weekday', 'hour', 'vollcode', 'place_id'])['historical'].mean()
-    google_week = google_week.reset_index()
-    google_week = google_week.groupby([
-        'vollcode', 'weekday', 'hour'])['historical'].mean()
-    google_week = google_week.reset_index()
+    # first calculate the average weekpatroon per location
+    google_week_location = google.groupby([
+        'weekday', 'hour', 'vollcode', 'name'])['historical'].mean().reset_index()
+    google_week_location = google_week_location.merge(area_mapping, on='vollcode')
+
+    # and then calculate the average weekpatroon per vollcode
+    google_week_vollcode = google_week_location.groupby([
+        'vollcode', 'weekday', 'hour'])['historical'].mean().reset_index()
+
+    # also calculate the average weekpatroon per stadsdeel
+    google_week_stadsdeel = google_week_location.groupby([
+        'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
+
+    # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
+    # in case of sparse data, take the stadsdeelcode aggregation
+    minimal_hours = 98
+    cnt = google_week_vollcode.vollcode.value_counts()
+    sparse_vollcodes = cnt[cnt < minimal_hours].index.tolist()
+
+    # first take the vollcode aggregation for vollcodes that have enough data
+    google_week_vollcode = google_week_vollcode[~google_week_vollcode.vollcode.isin(sparse_vollcodes)]
+
+    # then take the staddeelcode aggregation for vollcodes for which data is sparse
+    google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeel_code')
+    google_week_stadsdeel.drop('stadsdeel_code', axis=1, inplace=True)
+    google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_vollcodes)]
+
+    google_week = pd.concat([google_week_vollcode, google_week_stadsdeel])
 
     # live data
-    google_live = google[['place_id', 'vollcode', 'timestamp', 'live']]
+    google_live = google[['name', 'vollcode', 'timestamp', 'live']]
     google_live = google_live.loc[google_live.live.notnull(), :]
 
     google_live = google_live.groupby(['vollcode', 'timestamp'])['live'].mean()
@@ -291,23 +319,23 @@ def main():
         drukte, verblijversindex,
         on='vollcode', how='left')
 
-    # rank and scale
-    float_cols = drukte.select_dtypes(include=['float64']).columns.tolist()
-    drukte[float_cols] = drukte[float_cols].rank(axis=1)
-    drukte[float_cols] = drukte[float_cols].apply(lambda x: min_max(x), axis=1)
+    #     # rank and scale
+    #     float_cols = drukte.select_dtypes(include=['float64']).columns.tolist()
+    #     drukte[float_cols] = drukte[float_cols].rank(axis=0)
+    #     drukte[float_cols] = drukte[float_cols].apply(lambda x: min_max(x), axis=1)
 
     # schaal verblijversindex naar [1, 3]
     drukte['verblijversindex'] = min_max(drukte['verblijversindex'])
     drukte['verblijversindex'] = (drukte['verblijversindex'] * 2) + 1
 
-    # middel google
+    ## middel google expected en google live
     drukte['google'] = drukte[['google_week', 'google_live']].mean(axis=1)
 
     # middel gvb
     drukte['gvb'] = drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1)
 
     # schaal kolommen waar nodig
-    drukte['google'] = min_max(drukte.google)
+    # drukte['google'] = min_max(drukte.google)
     drukte['gvb'] = min_max(drukte.gvb)
 
     # init drukte index
@@ -315,7 +343,7 @@ def main():
 
     # make sure the sum of the weights != 0
     linear_weigths = {'verblijversindex': 0,
-                      'google': 1,
+                      'google': 0,
                       'gvb': 0,
                       'google_week': 1,
                       'google_live': 0}
@@ -324,16 +352,15 @@ def main():
 
     for col, weight in linear_weigths.items():
         if col in drukte.columns:
-            drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col]*weight, fill_value=0)
+            drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col] * weight, fill_value=0)
 
     drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
 
+    # drukte['drukte_index'] = drukte.drukte_index * drukte.verblijversindex
+    # indx = drukte.drukte_index.isnull()
+    # drukte.loc[indx, 'drukte_index'] = 0
 
-    #drukte['drukte_index'] = drukte.drukte_index * drukte.verblijversindex
-    #indx = drukte.drukte_index.isnull()
-    #drukte.loc[indx, 'drukte_index'] = 0
-
-    #drukte['drukte_index'] = min_max(drukte['drukte_index'])
+    # drukte['drukte_index'] = min_max(drukte['drukte_index'])
 
     # sort values
     drukte = drukte.sort_values(['timestamp', 'vollcode'])
