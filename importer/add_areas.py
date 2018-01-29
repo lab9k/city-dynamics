@@ -38,7 +38,7 @@ def simplify_polygon(table):
   ALTER TABLE "{0}"
     ADD COLUMN wkb_geometry_simplified geometry;
   UPDATE "{0}"
-    SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.1);
+    SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.5);
   """.format(table)
 
 def add_bc_codes(table):
