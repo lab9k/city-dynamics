@@ -1,6 +1,7 @@
 from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 from rest_framework.serializers import ValidationError
+from rest_framework import viewsets
 # from django.db.models import Avg
 
 from datapunt_api import rest
@@ -136,3 +137,9 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
             queryset = queryset.filter(timestamp__hour=current_hour)
 
         return queryset
+
+
+class BuurtcombinatieViewset(viewsets.ModelViewSet):
+    """ ViewSet for retrieving buurtcombinatie polygons """
+    queryset = models.Buurtcombinatie.objects.all()
+    serializer_class = serializers.BuurtcombinatieSerializer

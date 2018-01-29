@@ -22,10 +22,13 @@ from rest_framework.routers import DefaultRouter
 
 from citydynamics.api.views import DrukteindexViewSet
 from citydynamics.api.views import RecentIndexViewSet
+from citydynamics.api.views import BuurtcombinatieViewset
+
 
 router = DefaultRouter()
 router.register('drukteindex', DrukteindexViewSet, 'drukteindex')
 router.register('recentmeasures', RecentIndexViewSet, 'recentmeasures')
+router.register('buurtcombinatie', BuurtcombinatieViewset, 'buurtcombinatie')
 
 urlpatterns = router.urls
 
