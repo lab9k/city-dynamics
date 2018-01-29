@@ -9,3 +9,4 @@ venv/
 
 # Ignore local Jupyter Notebook Folder
 /jupyter_notebook
+
