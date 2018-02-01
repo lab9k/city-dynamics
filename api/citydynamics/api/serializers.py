@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from citydynamics.api.models import Drukteindex, Buurtcombinatie
+from citydynamics.api.models import Drukteindex, Buurtcombinatie, DrukteindexHotspots
 
 
 class DrukteIndexSerializer(ModelSerializer):
@@ -23,3 +23,10 @@ class BuurtcombinatieSerializer(GeoFeatureModelSerializer):
         model = Buurtcombinatie
         geo_field = 'wkb_geometry_simplified'
         fields = ('vollcode', 'naam')
+
+class HotspotIndexSerializer(ModelSerializer):
+
+    class Meta:
+        model = DrukteindexHotspots
+        fields = ('hotspot', 'hour', 'drukteindex', 'latitude', 'longitude')
+

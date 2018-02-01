@@ -107,6 +107,20 @@ class Drukteindex(models.Model):
         db_table = 'drukteindex'
 
 
+class DrukteindexHotspots(models.Model):
+    index = models.BigIntegerField(primary_key=True)
+    hotspot = models.TextField(db_column='Hotspot', blank=True, null=True)  # Field name made lowercase.
+    hour = models.BigIntegerField(blank=True, null=True)
+    drukteindex = models.FloatField(blank=True, null=True)
+    latitude = models.FloatField(db_column='Latitude', blank=True, null=True)  # Field name made lowercase.
+    longitude = models.FloatField(db_column='Longitude', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'drukteindex_hotspots'
+
+
+
 class Gebiedsgerichtwerken(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
     gml_id = models.CharField(max_length=255)

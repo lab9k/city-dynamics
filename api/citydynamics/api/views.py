@@ -143,3 +143,24 @@ class BuurtcombinatieViewset(viewsets.ModelViewSet):
     """ ViewSet for retrieving buurtcombinatie polygons """
     queryset = models.Buurtcombinatie.objects.all()
     serializer_class = serializers.BuurtcombinatieSerializer
+
+
+class DrukteindexHotspotViewset(rest.DatapuntViewSet):
+    """
+    Drukteindex API
+    """
+
+    serializer_class = serializers.HotspotIndexSerializer
+    serializer_detail_class = serializers.HotspotIndexSerializer
+
+    def get_queryset(self):
+
+        queryset = models.DrukteindexHotspots.objects.order_by("hour")
+        hotspot = self.request.query_params.get('hotspot', None)
+        if hotspot is not None:
+            queryset = queryset.filter(hotspot=hotspot)
+
+        timestamp_str = self.request.query_params.get('timestamp', None)
+
+
+        return queryset
