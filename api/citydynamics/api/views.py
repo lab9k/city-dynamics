@@ -1,6 +1,7 @@
 from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 from rest_framework.serializers import ValidationError
+from rest_framework import viewsets
 # from django.db.models import Avg
 
 from datapunt_api import rest
@@ -134,5 +135,32 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
                 timestamp__gte=previous_week, timestamp__lt=yesterday)
             current_hour = timestamp_dt.hour
             queryset = queryset.filter(timestamp__hour=current_hour)
+
+        return queryset
+
+
+class BuurtcombinatieViewset(viewsets.ModelViewSet):
+    """ ViewSet for retrieving buurtcombinatie polygons """
+    queryset = models.Buurtcombinatie.objects.all()
+    serializer_class = serializers.BuurtcombinatieSerializer
+
+
+class DrukteindexHotspotViewset(rest.DatapuntViewSet):
+    """
+    Drukteindex API
+    """
+
+    serializer_class = serializers.HotspotIndexSerializer
+    serializer_detail_class = serializers.HotspotIndexSerializer
+
+    def get_queryset(self):
+
+        queryset = models.DrukteindexHotspots.objects.order_by("hour")
+        hotspot = self.request.query_params.get('hotspot', None)
+        if hotspot is not None:
+            queryset = queryset.filter(hotspot=hotspot)
+
+        timestamp_str = self.request.query_params.get('timestamp', None)
+
 
         return queryset
