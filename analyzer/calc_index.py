@@ -12,8 +12,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from datetime import timedelta
 
-import matplotlib
-
 from sklearn.preprocessing import MinMaxScaler
 
 config_auth = configparser.RawConfigParser()
