@@ -12,10 +12,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from datetime import timedelta
 
-import matplotlib
-
-from sklearn.preprocessing import MinMaxScaler
-
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
 
@@ -281,7 +277,7 @@ def main():
     verblijversindex = import_verblijversindex(sql_query=sql_query, conn=conn)
     google_week, google_live = import_google(sql_query, conn)
 
-    haltes = list(pd.read_csv('metro_or_train.csv', sep=',')['station'])
+    haltes = list(pd.read_csv('lookup_tables/metro_or_train.csv', sep=',')['station'])
     gvb_stad, gvb_buurt = import_gvb(sql_query, conn, haltes)
 
         # vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique()
