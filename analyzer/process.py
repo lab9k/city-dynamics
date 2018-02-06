@@ -27,7 +27,6 @@ import argparse
 import logging
 import numpy as np
 import pandas as pd
-
 import q
 
 from sqlalchemy import create_engine
@@ -40,6 +39,21 @@ config_auth.read('auth.conf')
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
+
+# Global variables
+vollcodes_list = ['A07', 'F77', 'K53', 'F87', 'K24', 'K44', 'K47', 'M27',
+                  'M28', 'M30', 'N64', 'N66', 'M33', 'N60', 'N61', 'N62',
+                  'N73', 'T93', 'T98', 'K52', 'M29', 'M34', 'A08', 'A09',
+                  'B10', 'F84', 'K59', 'N71', 'N72', 'T95', 'T96', 'E14',
+                  'E17', 'A00', 'A05', 'A03', 'E41', 'E42', 'A04', 'E21',
+                  'E43', 'F76', 'F78', 'F79', 'F81', 'F82', 'F83', 'E20',
+                  'F86', 'E18', 'E19', 'E22', 'K25', 'K45', 'K46', 'N63',
+                  'K49', 'K54', 'T92', 'M31', 'T97', 'M32', 'A01', 'M56',
+                  'M57', 'A02', 'N65', 'F80', 'K48', 'F88', 'E16', 'K23',
+                  'F89', 'A06', 'E40', 'K90', 'E12', 'K91', 'E36', 'E13',
+                  'E15', 'M50', 'E37', 'E38', 'K26', 'E39', 'E75', 'F11',
+                  'N68', 'M35', 'M51', 'M55', 'F85', 'M58', 'N67', 'N69',
+                  'N70', 'N74', 'T94']
 
 ##############################################################################
 class Process():
@@ -116,7 +130,7 @@ class Process():
 
     def normalize_acreage(self, cols_norm_m2):
         """Normalize all specified columns based on the surface area."""
-        # TODO: Dit implementeren
+        # TODO: Implement the surface area normalization method
         pass
 
 
@@ -184,6 +198,7 @@ class Process_gvb_buurt(Process):
 class Process_alpha(Process):
     """This class implements all data importing and pre-processing steps, specifically for the alpha datasource."""
 
+    # TODO: Implement the alpha importing process
     def __init__(self, dbconfig):
         Process.__init__(self, 'live', dbconfig)
 
@@ -219,14 +234,6 @@ class Process_tellus(Process):
 
     def dataset_specific(self):
         self.data['meetwaarde'] = self.data.meetwaarde.astype(int)
-        vollcodes = list(self.data.vollcode.unique())
-        vollcodes2 = ['A07', 'F77', 'K53', 'F87', 'K24', 'K44', 'K47', 'M27', 'M28', 'M30', 'N64', 'N66', 'M33', 'N60', 'N61', 'N62', 'N73', 'T93', 'T98', 'K52', 'M29', 'M34', 'A08', 'A09', 'B10', 'F84', 'K59', 'N71', 'N72', 'T95', 'T96', 'E14', 'E17', 'A00', 'A05', 'A03', 'E41', 'E42', 'A04', 'E21', 'E43', 'F76', 'F78', 'F79', 'F81', 'F82', 'F83', 'E20', 'F86', 'E18', 'E19', 'E22', 'K25', 'K45', 'K46', 'N63', 'K49', 'K54', 'T92', 'M31', 'T97', 'M32', 'A01', 'M56', 'M57', 'A02', 'N65', 'F80', 'K48', 'F88', 'E16', 'K23', 'F89', 'A06', 'E40', 'K90', 'E12', 'K91', 'E36', 'E13', 'E15', 'M50', 'E37', 'E38', 'K26', 'E39', 'E75', 'F11', 'N68', 'M35', 'M51', 'M55', 'F85', 'M58', 'N67', 'N69', 'N70', 'N74', 'T94']
-        vc_ts = [(vc, ts) for vc in vollcodes2 for ts in self.data.timestamp.unique()]
-        vc_ts = pd.DataFrame({
-            'vollcode': [x[0] for x in vc_ts],
-            'timestamp': [x[1] for x in vc_ts]
-        })
-        self.data = pd.merge(self.data, vc_ts, on='timestamp', how='outer')
 
 ##############################################################################
 class Process_buurtcombinatie(Process):
@@ -242,16 +249,58 @@ class Process_buurtcombinatie(Process):
         self.run(dbconfig, tables, columns, cols_rename, cols_norm_m2, cols_norm)
 
 ##############################################################################
+def init_drukte_df(start_datetime, end_datetime, vollcodes):
+    timestamps = pd.date_range(start=start_datetime, end=end_datetime, freq='H')
+    ts_vc = [(ts, vc) for ts in timestamps for vc in vollcodes]
+    drukte = pd.DataFrame({
+        'timestamp': [x[0] for x in ts_vc],
+        'vollcode': [x[1] for x in ts_vc]
+    }).sort_values(['timestamp', 'vollcode'])
+    drukte['weekday'] = [ts.weekday() for ts in drukte.timestamp]
+    drukte['hour'] = [ts.hour for ts in drukte.timestamp]
+    return drukte
+
+##############################################################################
 def main():
     """Run the main process of this file: loading all datasets"""
 
+    # Import datasets
     dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
-    # brt = Process_buurtcombinatie(dbconfig)
-    # vollcodes = list(brt.data.vollcode.unique())
-    # vbi = Process_verblijversindex(dbconfig)
-    # gvb_st = Process_gvb_stad(dbconfig)
-    # gvb_bc = Process_gvb_buurt(dbconfig)
+    brt = Process_buurtcombinatie(dbconfig)
+    vollcodes = list(brt.data.vollcode.unique())
+    vbi = Process_verblijversindex(dbconfig)
+    gvb_st = Process_gvb_stad(dbconfig)
+    gvb_bc = Process_gvb_buurt(dbconfig)
     tel = Process_tellus(dbconfig)
+
+    # TODO: Implement overarching merging method of computing the drukte index (possibly in other file?)
+    # # Initialize dataframe
+    # start = np.min(google_live.timestamp)
+    # end = np.max(google_live.timestamp)
+    # drukte = init_drukte_df(start, end, vollcodes)
+    #
+    # # merge datasets
+    # cols = ['timestamp', 'vollcode', 'google_live']
+    # drukte = pd.merge(
+    #     drukte, google_live[cols], on=['timestamp', 'vollcode'], how='left')
+    #
+    # cols = ['vollcode', 'weekday', 'hour', 'google_week']
+    # drukte = pd.merge(
+    #     drukte, google_week[cols],
+    #     on=['weekday', 'hour', 'vollcode'], how='left')
+    #
+    # drukte = pd.merge(
+    #     drukte, gvb_buurt,
+    #     on=['vollcode', 'weekday', 'hour'], how='left')
+    #
+    # drukte = pd.merge(
+    #     drukte, gvb_stad,
+    #     on=['weekday', 'hour'], how='left')
+    #
+    # drukte = pd.merge(
+    #     drukte, verblijversindex,
+    #     on='vollcode', how='left')
+
     q.d()
 
 ##############################################################################
