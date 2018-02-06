@@ -85,11 +85,11 @@ def main(dbConfig):
     pg_str = get_pg_str(config_auth.get(dbConfig,'host'),config_auth.get(dbConfig,'port'),config_auth.get(dbConfig,'dbname'), config_auth.get(dbConfig,'user'), config_auth.get(dbConfig,'password'))
     execute_sql(pg_str, simplify_polygon('buurtcombinatie'))
 
-    # for table in tables_to_modify:
-    #     logger.info('Handling {} table'.format(table))
-    #     execute_sql(pg_str, create_geometry_query(table))
-    #     execute_sql(pg_str, add_bc_codes(table))
-    #     execute_sql(pg_str, set_primary_key(table + '_with_bc'))
+    for table in tables_to_modify:
+        logger.info('Handling {} table'.format(table))
+        execute_sql(pg_str, create_geometry_query(table))
+        execute_sql(pg_str, add_bc_codes(table))
+        execute_sql(pg_str, set_primary_key(table + '_with_bc'))
 
 
 if __name__ == '__main__':
