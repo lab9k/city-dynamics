@@ -279,7 +279,7 @@ def main():
     verblijversindex = import_verblijversindex(sql_query=sql_query, conn=conn)
     google_week, google_live = import_google(sql_query, conn)
 
-    haltes = list(pd.read_csv('metro_or_train.csv', sep=',')['station'])
+    haltes = list(pd.read_csv('lookup_tables/metro_or_train.csv', sep=',')['station'])
     gvb_stad, gvb_buurt = import_gvb(sql_query, conn, haltes)
 
         # vollcodes_centrum = [bc for bc in buurtcodes.vollcode.unique()
