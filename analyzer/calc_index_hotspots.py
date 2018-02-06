@@ -32,18 +32,6 @@ def set_primary_key(table):
   """.format(table)
 
 
-def execute_sql(pg_str, sql):
-    with psycopg2.connect(pg_str) as conn:
-        with conn.cursor() as cursor:
-            cursor.execute(sql)
-
-
-def get_pg_str(host, port, user, dbname, password):
-    return 'host={} port={} user={} dbname={} password={}'.format(
-        host, port, user, dbname, password
-    )
-
-
 def concat_google(sql_query, conn):
     """Function to read google data."""
 
@@ -70,8 +58,8 @@ def concat_google(sql_query, conn):
 def main():
     conn = get_conn(dbconfig=args.dbConfig[0])
 
-    #TO BE DELETED / REFACTORED
-    pg_str = get_pg_str('localhost', '5432', 'citydynamics', 'citydynamics', 'insecure')
+    # #TO BE DELETED / REFACTORED
+    # pg_str = get_pg_str('localhost', '5432', 'citydynamics', 'citydynamics', 'insecure')
 
 
     sql_query = """ SELECT * FROM "{}" """
@@ -80,7 +68,7 @@ def main():
     hotspots_df = pd.read_csv('lookup_tables/Amsterdam Hotspots - Sheet1.csv')
 
     hotspots_df.to_sql(name='hotspots', con=conn, if_exists='replace')
-    execute_sql(pg_str, set_primary_key('hotspots'))
+    conn.execute(set_primary_key('hotspots'))
 
     create_geom_hotspots = """
     ALTER TABLE hotspots
@@ -89,7 +77,7 @@ def main():
     UPDATE hotspots SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "Longitude", "Latitude"), 4326), 3857)
     """
 
-    execute_sql(pg_str, create_geom_hotspots)
+    conn.execute(create_geom_hotspots)
 
     create_geom_google = """
     ALTER TABLE google_all
@@ -98,7 +86,7 @@ def main():
     UPDATE google_all SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
     """
 
-    execute_sql(pg_str, create_geom_google)
+    conn.execute(create_geom_google)
 
     join_hotspots_query = """
       DROP TABLE IF EXISTS google_all_hotspots;
@@ -122,7 +110,7 @@ def main():
           )
       """
 
-    execute_sql(pg_str, join_hotspots_query)
+    conn.execute(join_hotspots_query)
 
     google_hotspots = pd.read_sql(sql="SELECT * FROM google_all_hotspots", con=conn)
 
@@ -141,7 +129,7 @@ def main():
 
     google_week_hotspots.rename(columns={'historical': 'drukteindex'}, inplace=True)
     google_week_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
-    execute_sql(pg_str, set_primary_key('drukteindex_hotspots'))
+    conn.execute(set_primary_key('drukteindex_hotspots'))
     log.debug('done.')
 
 
