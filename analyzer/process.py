@@ -130,7 +130,13 @@ class Process():
 
     def normalize_acreage(self, cols_norm_m2):
         """Normalize all specified columns based on the surface area."""
-        # TODO: Implement the surface area normalization method
+        # TODO: Implement the surface area normalization method.
+        pass
+
+
+    def aggregate_on_column(self, column):
+        """Aggregate the dataframe in self.data on the given column."""
+        # TODO: Implement this method.
         pass
 
 
