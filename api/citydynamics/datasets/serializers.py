@@ -51,6 +51,7 @@ class HotspotIndexSerializer(ModelSerializer):
     class Meta:
         model = Hotspots
         fields = (
+            'index',
             'hotspot',
             'coordinates',
             'druktecijfers'
