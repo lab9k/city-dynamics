@@ -1,0 +1,70 @@
+from  rest_framework import serializers
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework_gis.serializers import GeoFeatureModelSerializer
+from citydynamics.datasets.models import Drukteindex, Buurtcombinatie, Hotspots, HotspotsDrukteIndex
+
+
+class DrukteIndexSerializer(ModelSerializer):
+
+    class Meta:
+        model = Drukteindex
+        fields = ('vollcode', 'drukte_index')
+
+
+class RecentIndexSerializer(ModelSerializer):
+
+    class Meta:
+        model = Drukteindex
+        fields = ('drukte_index', 'timestamp', 'weekday')
+
+class BuurtcombinatieSerializer(GeoFeatureModelSerializer):
+    """ A class to serialize locations as GeoJSON compatible data """
+
+    class Meta:
+        model = Buurtcombinatie
+        geo_field = 'wkb_geometry_simplified'
+        fields = ('vollcode', 'naam')
+
+
+class CijferSerializer(ModelSerializer):
+
+    h = serializers.IntegerField(source='hour')
+    d = serializers.FloatField(source='drukteindex')
+
+    class Meta:
+        model = HotspotsDrukteIndex
+        fields = (
+            'h',
+            'd'
+        )
+
+
+class HotspotIndexSerializer(ModelSerializer):
+
+    druktecijfers = CijferSerializer(many=True, read_only=True)
+
+    coordinates = SerializerMethodField()
+
+    def get_coordinates(self, obj):
+        return [obj.latitude, obj.longitude]
+
+    class Meta:
+        model = Hotspots
+        fields = (
+            'hotspot',
+            'coordinates',
+            'druktecijfers'
+        )
+
+
+# class HotspotIndexSerializer(ModelSerializer):
+#     coordinates = SerializerMethodField()
+#
+#     def get_coordinates(self, obj):
+#         return [obj.latitude, obj.longitude]
+#
+#
+#     class Meta:
+#         model = Hotspots
+#         fields = ('index', 'hotspot', 'coordinates', 'drukte')
+
