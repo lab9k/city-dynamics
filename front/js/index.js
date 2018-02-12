@@ -1,22 +1,35 @@
 var geojson;
 var map;
 var legend;
-var buurtcode_prop_array = new Array();
+var buurtcode_prop_array = [];
+var hotspot_array = [];
+var amsterdam_array = [];
 var marker;
 var lastClickedLayer;
 var total_index;
 var gauge;
+var areaGraph;
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
 var proj4RD = proj4('WGS84', def);
-var markers = new Array();
+
 var current_date;
 var is_now = true;
 var vollcode;
+var mobile = false;
+
+var geomap1 = 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png';
+var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
+var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
 var origin = 'http://127.0.0.1:8117';
 var dindex_api = 'http://127.0.0.1:8117/citydynamics/drukteindex/?format=json&op=';
 var dindex_hours_api = 'http://127.0.0.1:8117/citydynamics/recentmeasures/?level=day&format=json';
 var dindex_days_api = 'http://127.0.0.1:8117/citydynamics/recentmeasures/?level=week&format=json';
+var dindex_hotspots_api = 'http://127.0.0.1:8117/citydynamics/hotspots/?format=json';
+
+var geoJsonUrl = 'data/buurtcombinaties.json';
+var geoJsonUrl = 'http://localhost:8117/citydynamics/buurtcombinatie/';
+
 var jsonCallback = '&callback=?';
 var jsonCallback = '';
 
@@ -24,213 +37,23 @@ var jsonCallback = '';
 // layers
 var theme_layer;
 var geojson;
+var markers = [];
 
-
-var vdata = new Array();
-
-vdata["A00"] = {vindex:8053};
-vdata["A01"] = {vindex:3957};
-vdata["A02"] = {vindex:3444};
-vdata["A03"] = {vindex:3925};
-vdata["A04"] = {vindex:1094};
-vdata["A05"] = {vindex:1999};
-vdata["A06"] = {vindex:2129};
-vdata["A07"] = {vindex:3174};
-vdata["A08"] = {vindex:989};
-vdata["A09"] = {vindex:481};
-vdata["B10"] = {vindex:19};
-vdata["E12"] = {vindex:151};
-vdata["E13"] = {vindex:300};
-vdata["E14"] = {vindex:1012};
-vdata["E15"] = {vindex:309};
-vdata["E16"] = {vindex:748};
-vdata["E17"] = {vindex:1178};
-vdata["E18"] = {vindex:2639};
-vdata["E19"] = {vindex:1605};
-vdata["E20"] = {vindex:1042};
-vdata["E21"] = {vindex:1186};
-vdata["E22"] = {vindex:1242};
-vdata["E36"] = {vindex:95};
-vdata["E37"] = {vindex:889};
-vdata["E38"] = {vindex:486};
-vdata["E39"] = {vindex:501};
-vdata["E40"] = {vindex:954};
-vdata["E41"] = {vindex:1252};
-vdata["E42"] = {vindex:1646};
-vdata["E43"] = {vindex:694};
-vdata["E75"] = {vindex:1010};
-vdata["F11"] = {vindex:113};
-vdata["F76"] = {vindex:619};
-vdata["F77"] = {vindex:201};
-vdata["F78"] = {vindex:367};
-vdata["F79"] = {vindex:46};
-vdata["F80"] = {vindex:8};
-vdata["F81"] = {vindex:770};
-vdata["F82"] = {vindex:478};
-vdata["F83"] = {vindex:486};
-vdata["F84"] = {vindex:440};
-vdata["F85"] = {vindex:223};
-vdata["F86"] = {vindex:297};
-vdata["F87"] = {vindex:324};
-vdata["F88"] = {vindex:174};
-vdata["F89"] = {vindex:465};
-vdata["K23"] = {vindex:567};
-vdata["K24"] = {vindex:2837};
-vdata["K25"] = {vindex:1823};
-vdata["K26"] = {vindex:911};
-vdata["K44"] = {vindex:744};
-vdata["K45"] = {vindex:846};
-vdata["K46"] = {vindex:309};
-vdata["K47"] = {vindex:656};
-vdata["K48"] = {vindex:387};
-vdata["K49"] = {vindex:496};
-vdata["K52"] = {vindex:855};
-vdata["K53"] = {vindex:646};
-vdata["K54"] = {vindex:283};
-vdata["K59"] = {vindex:265};
-vdata["K90"] = {vindex:182};
-vdata["K91"] = {vindex:141};
-vdata["M27"] = {vindex:834};
-vdata["M28"] = {vindex:664};
-vdata["M29"] = {vindex:2052};
-vdata["M30"] = {vindex:859};
-vdata["M31"] = {vindex:1580};
-vdata["M32"] = {vindex:354};
-vdata["M33"] = {vindex:417};
-vdata["M34"] = {vindex:12};
-vdata["M35"] = {vindex:144};
-vdata["M50"] = {vindex:150};
-vdata["M51"] = {vindex:150};
-vdata["M55"] = {vindex:133};
-vdata["M56"] = {vindex:93};
-vdata["M57"] = {vindex:30};
-vdata["M58"] = {vindex:101};
-vdata["N60"] = {vindex:460};
-vdata["N61"] = {vindex:298};
-vdata["N62"] = {vindex:295};
-vdata["N63"] = {vindex:352};
-vdata["N64"] = {vindex:858};
-vdata["N65"] = {vindex:267};
-vdata["N66"] = {vindex:79};
-vdata["N67"] = {vindex:75};
-vdata["N68"] = {vindex:262};
-vdata["N69"] = {vindex:567};
-vdata["N70"] = {vindex:304};
-vdata["N71"] = {vindex:264};
-vdata["N72"] = {vindex:420};
-vdata["N73"] = {vindex:4};
-vdata["N74"] = {vindex:95};
-vdata["T92"] = {vindex:891};
-vdata["T93"] = {vindex:618};
-vdata["T94"] = {vindex:220};
-vdata["T95"] = {vindex:67};
-vdata["T96"] = {vindex:340};
-vdata["T97"] = {vindex:289};
-vdata["T98"] = {vindex:8};
-
-var vdata2 = new Array();
-
-vdata2["A00"] = {vindex:0.9};
-vdata2["A01"] = {vindex:0.9};
-vdata2["A02"] = {vindex:0.9};
-vdata2["A03"] = {vindex:0.9};
-vdata2["A04"] = {vindex:0.9};
-vdata2["A05"] = {vindex:0.9};
-vdata2["A06"] = {vindex:0.9};
-vdata2["A07"] = {vindex:0.9};
-vdata2["A08"] = {vindex:0.9};
-vdata2["A09"] = {vindex:0.9};
-vdata2["B10"] = {vindex:0.5};
-vdata2["E12"] = {vindex:0.5};
-vdata2["E13"] = {vindex:0.5};
-vdata2["E14"] = {vindex:0.5};
-vdata2["E15"] = {vindex:0.5};
-vdata2["E16"] = {vindex:0.5};
-vdata2["E17"] = {vindex:0.5};
-vdata2["E18"] = {vindex:0.5};
-vdata2["E19"] = {vindex:0.5};
-vdata2["E20"] = {vindex:0.5};
-vdata2["E21"] = {vindex:0.5};
-vdata2["E22"] = {vindex:0.5};
-vdata2["E36"] = {vindex:0.5};
-vdata2["E37"] = {vindex:0.5};
-vdata2["E38"] = {vindex:0.5};
-vdata2["E39"] = {vindex:0.5};
-vdata2["E40"] = {vindex:0.5};
-vdata2["E41"] = {vindex:0.5};
-vdata2["E42"] = {vindex:0.5};
-vdata2["E43"] = {vindex:0.5};
-vdata2["E75"] = {vindex:0.5};
-vdata2["F11"] = {vindex:0.5};
-vdata2["F76"] = {vindex:0.5};
-vdata2["F77"] = {vindex:0.5};
-vdata2["F78"] = {vindex:0.5};
-vdata2["F79"] = {vindex:0.5};
-vdata2["F80"] = {vindex:0.5};
-vdata2["F81"] = {vindex:0.5};
-vdata2["F82"] = {vindex:0.5};
-vdata2["F83"] = {vindex:0.5};
-vdata2["F84"] = {vindex:0.5};
-vdata2["F85"] = {vindex:0.5};
-vdata2["F86"] = {vindex:0.5};
-vdata2["F87"] = {vindex:0.5};
-vdata2["F88"] = {vindex:0.5};
-vdata2["F89"] = {vindex:0.5};
-vdata2["K23"] = {vindex:0.5};
-vdata2["K24"] = {vindex:0.5};
-vdata2["K25"] = {vindex:0.5};
-vdata2["K26"] = {vindex:0.5};
-vdata2["K44"] = {vindex:0.5};
-vdata2["K45"] = {vindex:0.5};
-vdata2["K46"] = {vindex:0.5};
-vdata2["K47"] = {vindex:0.5};
-vdata2["K48"] = {vindex:0.5};
-vdata2["K49"] = {vindex:0.5};
-vdata2["K52"] = {vindex:0.5};
-vdata2["K53"] = {vindex:0.5};
-vdata2["K54"] = {vindex:0.5};
-vdata2["K59"] = {vindex:0.5};
-vdata2["K90"] = {vindex:0.5};
-vdata2["K91"] = {vindex:0.5};
-vdata2["M27"] = {vindex:0.5};
-vdata2["M28"] = {vindex:0.5};
-vdata2["M29"] = {vindex:0.5};
-vdata2["M30"] = {vindex:0.5};
-vdata2["M31"] = {vindex:0.5};
-vdata2["M32"] = {vindex:0.5};
-vdata2["M33"] = {vindex:0.5};
-vdata2["M34"] = {vindex:0.5};
-vdata2["M35"] = {vindex:0.5};
-vdata2["M50"] = {vindex:0.5};
-vdata2["M51"] = {vindex:0.5};
-vdata2["M55"] = {vindex:0.5};
-vdata2["M56"] = {vindex:0.5};
-vdata2["M57"] = {vindex:0.5};
-vdata2["M58"] = {vindex:0.5};
-vdata2["N60"] = {vindex:0.5};
-vdata2["N61"] = {vindex:0.5};
-vdata2["N62"] = {vindex:0.5};
-vdata2["N63"] = {vindex:0.5};
-vdata2["N64"] = {vindex:0.5};
-vdata2["N65"] = {vindex:0.5};
-vdata2["N66"] = {vindex:0.5};
-vdata2["N67"] = {vindex:0.5};
-vdata2["N68"] = {vindex:0.5};
-vdata2["N69"] = {vindex:0.5};
-vdata2["N70"] = {vindex:0.5};
-vdata2["N71"] = {vindex:0.5};
-vdata2["N72"] = {vindex:0.5};
-vdata2["N73"] = {vindex:0.5};
-vdata2["N74"] = {vindex:0.5};
-vdata2["T92"] = {vindex:0.5};
-vdata2["T93"] = {vindex:0.5};
-vdata2["T94"] = {vindex:0.5};
-vdata2["T95"] = {vindex:0.5};
-vdata2["T96"] = {vindex:0.5};
-vdata2["T97"] = {vindex:0.5};
-vdata2["T98"] = {vindex:0.5};
 
 $(document).ready(function(){
+
+	// check device resolution
+	mobile = ($( document ).width()<=360);
+
+	if(mobile) {
+		var map_center = [52.368, 4.897];
+		var zoom = 13.5;
+	}
+	else {
+		var map_center = [52.36, 4.95];
+		var zoom = 12;
+	}
+
 
 	$( "#date_i" ).datepicker({
 		onSelect: function(date) {
@@ -256,11 +79,7 @@ $(document).ready(function(){
 	$( ".time_i_content .time"+hours.substring(0, 2) ).addClass('active');
 
 	// wgs map
-	map = L.map('mapid').setView([52.36, 4.95], 12);
-
-	var geomap1 = 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png';
-	var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
-	var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
+	map = L.map('mapid').setView(map_center, zoom);
 
 	L.tileLayer(geomap2, {
 		minZoom: 12,
@@ -268,63 +87,132 @@ $(document).ready(function(){
 	}).addTo(map);
 
 	var dindexJsonUrl = dindex_api + getCurrentDate() + jsonCallback;
-	// var dindexJsonUrl = 'data/dindex.json';
 	console.log(dindexJsonUrl);
 
-	// var geoJsonUrl = 'https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&Typename=ms:buurtcombinatie&version=2.0.0&service=wfs&outputformat=geojson&srsname=epsg:4326';
-	var geoJsonUrl = 'data/buurtcombinaties.json';
+	if(mobile)
+	{
 
-	$.getJSON(dindexJsonUrl).done(function (dindexJson) {
+		dindex_hotspots_api = 'data/hotspots.json';
+		var hotspotsJsonUrl = dindex_hotspots_api+'?timestamp='+ getCurrentDate() + jsonCallback;
 
-		console.log(dindexJson);
+		console.log(hotspotsJsonUrl);
 
-		var calc_index = 0;
-		var count_index = 0;
+		$.getJSON(hotspotsJsonUrl).done(function(hotspotsJson) {
+			console.log(hotspotsJson);
 
-		$.each(dindexJson.results, function (key, value) {
-			var buurtcode = this.vollcode;
-			var $dataset = [];
-			//$dataset["buurt"] = this.naam + '-' + buurtcode;
-			$dataset["buurt"] = this.naam;
-			if(this.drukte_index>0)
-			{
-				dindex = fixIndex(this.drukte_index,buurtcode);
-				$dataset["index"] = dindex;
-			}
-			else
-			{
-				$dataset["index"] = 0;
-			}
+			$.each(hotspotsJson.results, function (key, value) {
 
-			calc_index += Math.round($dataset["index"] * 100);
-			count_index++;
+				var dataset = this;
 
-			buurtcode_prop_array[buurtcode] = $dataset;
-		});
+				hotspot_array.push(dataset);
 
-		total_index = Math.round(calc_index / count_index);
-
-		gauge = $('.gauge').arcGauge({
-			value     : total_index,
-			colors    : '#014699',
-			transition: 500,
-			thickness : 10,
-			onchange  : function (value) {
-				$('.gauge-text .value').text(value);
-			}
-		});
-
-		$.getJSON(geoJsonUrl).done(function (geoJson) {
-			geojson = L.geoJSON(geoJson, {style: style, onEachFeature: onEachFeature}).addTo(map);
-
-			geojson.eachLayer(function (layer) {
-				layer._path.id = 'feature-' + layer.feature.properties.vollcode;
-				buurtcode_prop_array[layer.feature.properties.vollcode]['layer'] = layer;
 			});
 
-		});
-	});
+			// console.log(hotspot_array);
+			initLineGraph();
 
+			var skipAmsterdam = true;
+			var circles = new Array();
+			$.each(hotspot_array, function (key, value) {
+
+				if(!skipAmsterdam)
+				{
+					var hh = getHourDigit();
+					var dindex = this.timeIndex[hh].d;
+
+					circles[key] = L.circle(this.latlong, {
+						color: '#61FEEE',
+						fillColor: '#61FEEE',
+						stroke: 0,
+						fillOpacity: 0.7,
+						radius: (dindex * 100),
+						name: this.name
+					});
+					circles[key].addTo(map);
+					$(circles[key]._path).attr('hotspot' , this.id);
+					$(circles[key]._path).addClass('hotspot_'+ this.id);
+					circles[key].bindPopup("<b>" + this.name + "</b>", {autoClose: false});
+					circles[key].on("click", circleClick);
+
+
+				}
+
+				d3.select('path.hotspot_'+ this.id)
+					.datum(graph.data)
+					.transition()
+					.duration(1000)
+					.attrTween('d', function() {
+						var interpolator = d3.interpolateArray( graph.data, newData );
+						return function( t ) {
+							var show = interpolator( t );
+							return graph.topline( interpolator( t ) );
+						}
+					});
+
+				skipAmsterdam = false;
+
+			});
+
+
+
+		});
+
+	}
+	else
+	{
+		$.getJSON(dindexJsonUrl).done(function (dindexJson) {
+
+			console.log(dindexJson);
+
+			var calc_index = 0;
+			var count_index = 0;
+
+			$.each(dindexJson.results, function (key, value) {
+				var buurtcode = this.vollcode;
+				var $dataset = [];
+
+				if(this.drukte_index>0)
+				{
+					dindex = fixIndex(this.drukte_index,buurtcode);
+					$dataset["index"] = dindex;
+				}
+				else
+				{
+					$dataset["index"] = 0;
+				}
+
+				calc_index += Math.round($dataset["index"] * 100);
+				count_index++;
+
+				buurtcode_prop_array[buurtcode] = $dataset;
+			});
+
+			console.log(buurtcode_prop_array);
+
+			total_index = Math.round(calc_index / count_index);
+
+			gauge = $('.gauge').arcGauge({
+				value     : total_index,
+				colors    : '#014699',
+				transition: 500,
+				thickness : 10,
+				onchange  : function (value) {
+					$('.gauge-text .value').text(value);
+				}
+			});
+
+			$.getJSON(geoJsonUrl).done(function (geoJson) {
+				geojson = L.geoJSON(geoJson.results, {style: style, onEachFeature: onEachFeature}).addTo(map);
+
+				geojson.eachLayer(function (layer) {
+					layer._path.id = 'feature-' + layer.feature.properties.vollcode;
+					buurtcode_prop_array[layer.feature.properties.vollcode]['layer'] = layer;
+					buurtcode_prop_array[layer.feature.properties.vollcode]['buurt'] = layer.feature.properties.naam;
+				});
+
+			});
+		});
+	}
 
 	// init auto complete
 	$('#loc_i').autocomplete({
@@ -391,7 +279,6 @@ $(document).ready(function(){
 
 		}
 	});
-
 
 
 	$('h1').on('click',function () {
@@ -652,6 +539,20 @@ $(document).ready(function(){
 
 });
 
+function circleClick(e) {
+	var clickedCircle = e.target;
+
+	updateLineGraph($(clickedCircle._path).attr('hotspot'));
+
+	// do something, like:
+	$('.location').text(clickedCircle.options.name);
+}
+
+function startAnimation()
+{
+
+}
+
 function getDate()
 {
 	var today = new Date();
@@ -666,7 +567,7 @@ function getDate()
 		mm='0'+mm;
 	}
 	var today = dd+'/'+mm+'/'+yyyy;
-	var today = '07-12-2017';
+	var today = "07/12/2017";
 
 	return today;
 }
@@ -682,6 +583,14 @@ function getHours()
 	}
 
 	return hh + ':00';
+}
+
+function getHourDigit()
+{
+	var today = new Date();
+	var hh = today.getHours();
+
+	return hh;
 }
 
 function getNowDate()
@@ -755,7 +664,6 @@ function submitQuery()
 		$.each(dindexJson.results, function(key,value) {
 			var buurtcode = this.vollcode;
 			var $dataset = [];
-			$dataset["buurt"] = this.naam;
 			if(this.drukte_index>0)
 			{
 				dindex = fixIndex(this.drukte_index,buurtcode);
@@ -844,8 +752,8 @@ function getLatLang(point) {
 
 function getColor(dindex)
 {
-	var a = '#FFFFFF';
-	var b = '#014699';
+	var a = '#50e6db';
+	var b = '#ff0000';
 
 	var ah = parseInt(a.replace(/#/g, ''), 16),
 		ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
@@ -901,10 +809,7 @@ function onEachFeature(feature, layer) {
 		click: zoomToFeature
 	});
 
-	var buurt = buurtcode_prop_array[layer.feature.properties.vollcode].buurt;
-	var dindex = buurtcode_prop_array[layer.feature.properties.vollcode].index;
-
-	layer.bindPopup('<div><h3>' + buurt + '</h3></div>'); //<span>'+ Math.round(dindex * 100) +'</span>
+	layer.bindPopup('<div><h3>' + layer.feature.properties.naam + '</h3></div>');
 	layer.on('mouseover', function (e) {
 		this.openPopup();
 	});
@@ -931,8 +836,6 @@ function zoomToFeature(e) {
 
 	// set layer active
 	setLayerActive(layer);
-
-
 }
 
 function setLayerActive(layer)
@@ -982,33 +885,6 @@ function initHourGraph(vollcode)
 {
 	var data = new Array;
 
-	var data2 = new Array;
-
-	data2[0] = {time:"00", dindex:0.3};
-	data2[1] = {time:"01", dindex:0.3};
-	data2[2] = {time:"02", dindex:0.3};
-	data2[3] = {time:"03", dindex:0.4};
-	data2[4] = {time:"04", dindex:0.5};
-	data2[5] = {time:"05", dindex:0.6};
-	data2[6] = {time:"06", dindex:1};
-	data2[7] = {time:"07", dindex:1};
-	data2[8] = {time:"08", dindex:1};
-	data2[9] = {time:"09", dindex:1};
-	data2[10] = {time:"10", dindex:1};
-	data2[11] = {time:"11", dindex:1};
-	data2[12] = {time:"12", dindex:1};
-	data2[13] = {time:"13", dindex:1};
-	data2[14] = {time:"14", dindex:1};
-	data2[15] = {time:"15", dindex:1};
-	data2[16] = {time:"16", dindex:1};
-	data2[17] = {time:"17", dindex:1};
-	data2[18] = {time:"18", dindex:1};
-	data2[19] = {time:"19", dindex:1};
-	data2[20] = {time:"20", dindex:1};
-	data2[21] = {time:"21", dindex:1};
-	data2[22] = {time:"22", dindex:0.4};
-	data2[23] = {time:"23", dindex:0.3};
-
 	var hoursJsonUrl = dindex_hours_api+'&vollcode='+vollcode+'&timestamp='+ getCurrentDate() + jsonCallback;
 	//var hoursJsonUrl = 'data/hours.json';
 	console.log(hoursJsonUrl);
@@ -1019,10 +895,9 @@ function initHourGraph(vollcode)
 		$.each(hoursJson.results, function (key, value) {
 			var buurtcode = this.vollcode;
 			var $dataset = [];
-			//$dataset["buurt"] = this.naam;
-			// $dataset["dindex"] = this.drukte_index * 100 * data2[i].dindex;
+
 			$dataset["dindex"] = this.drukte_index * 100;
-			// console.log(data2[i].dindex);
+
 			$dataset["time"] = this.timestamp.substr(11, 2);
 			i++;
 			data.push($dataset);
@@ -1033,6 +908,10 @@ function initHourGraph(vollcode)
 			margin = {top: 0, right: 0, bottom: 20, left: 0},
 			width = +svg.attr("width") - margin.left - margin.right,
 			height = +svg.attr("height") - margin.top - margin.bottom;
+
+		var valueline = d3.line()
+			.x(function(d) { return x(d.time); })
+			.y(function(d) { return y(d.dindex); });
 
 		var x = d3.scaleBand().rangeRound([0, width]).padding(0.6),
 			y = d3.scaleLinear().rangeRound([height, 0]);
@@ -1054,6 +933,11 @@ function initHourGraph(vollcode)
 			.attr("dx", "5px")
 			.attr("dy", ".15em");
 
+		g.append("path")
+			.data(data)
+			.attr("class", "line")
+			.attr("d", valueline);
+
 		g.selectAll(".bar")
 			.data(data)
 			.enter().append("rect")
@@ -1072,6 +956,44 @@ function initHourGraph(vollcode)
 
 	});
 }
+
+function initLineGraph()
+{
+	var data = [];
+
+	$.each(hotspot_array[0].timeIndex, function (key, value) {
+
+		var dataset = {};
+		dataset.y = Math.round(this.d * 100);
+		dataset.x = parseInt(this.h);
+
+		data.push(dataset);
+	});
+
+	areaGraph = $('.m_graph').areaGraph(data);
+
+	setTimeout(areaGraph[0].startCount(),3000); //todo: replace timeout for proper load flow
+
+}
+
+function updateLineGraph(hotspot)
+{
+	// get proper data from json array
+	var data = [];
+
+	$.each(hotspot_array[hotspot].timeIndex, function (key, value) {
+
+		var dataset = {};
+		dataset.y = Math.round(this.d * 100);
+		dataset.x = parseInt(this.h);
+
+		data.push(dataset);
+	});
+
+
+	areaGraph[0].update(data);
+}
+
 
 function initWeekGraph(vollcode)
 {
@@ -1191,7 +1113,7 @@ function showFeeds()
 	feeds[5] = {name:"A4 Amsterdam-Sloten",url:"https://vid.nl/EmbedStream/cam/18?w=100p", lat:"52.338195", lon:"4.813557"};
 	feeds[6] = {name:"Knooppunt Westpoort",url:"https://vid.nl/EmbedStream/cam/41?w=100p", lat:"52.396049", lon:"4.844490"};
 	//feeds[x] = {name:"Oudezijds Voorburgwal",url:"https://www.youtube.com/embed/_uj8ELeiYKs?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3747178", lon:"4.8991389"};
-// feeds[1] = {name:"Centraal Station (zicht op het IJ)",url:"https://www.portofamsterdam.com/nl/havenbedrijf/webcam	", lat:"52.380149", lon:"4.900437"};
+	// feeds[1] = {name:"Centraal Station (zicht op het IJ)",url:"https://www.portofamsterdam.com/nl/havenbedrijf/webcam	", lat:"52.380149", lon:"4.900437"};
 
 
 	var camIcon = L.icon({
@@ -1657,13 +1579,12 @@ function fixIndex(in_index,buurtcode)
 	// if(dindex>1) {dindex=1;}
 	// console.log(buurtcode + ':' + in_index + ' * ' + vdata2_ratio + ' = ' + dindex);
 
-
-
-
-
 	//return dindex;
 	return in_index;
 }
+
+
+
 
 
 
