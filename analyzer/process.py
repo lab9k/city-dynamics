@@ -41,6 +41,7 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 # Global variables
+# TODO: deze lijsten variabelen on-the-fly binnenhalen uit de database
 vollcodes_list = ['A07', 'F77', 'K53', 'F87', 'K24', 'K44', 'K47', 'M27',
                   'M28', 'M30', 'N64', 'N66', 'M33', 'N60', 'N61', 'N62',
                   'N73', 'T93', 'T98', 'K52', 'M29', 'M34', 'A08', 'A09',
@@ -55,31 +56,43 @@ vollcodes_list = ['A07', 'F77', 'K53', 'F87', 'K24', 'K44', 'K47', 'M27',
                   'N68', 'M35', 'M51', 'M55', 'F85', 'M58', 'N67', 'N69',
                   'N70', 'N74', 'T94']
 
+vollcodes_m2 = {'A00': 125858.0, 'A01': 334392.0, 'A02': 139566.0, 'A03': 180643.0, 'A04': 370827.0, 'A05': 229771.0, 'A06': 296826.0, 'A07': 252101.0, 'A08': 288812.0, 'A09': 429920.0, 'B10': 9365503.0, 'E12': 218000.0, 'E13': 637040.0, 'E14': 203183.0, 'E15': 240343.0, 'E16': 173372.0, 'E17': 112541.0, 'E18': 83752.0, 'E19': 114338.0, 'E20': 130217.0, 'E21': 114415.0, 'E22': 72691.0, 'E36': 925362.0, 'E37': 435193.0, 'E38': 193750.0, 'E39': 280652.0, 'E40': 105993.0, 'E41': 95942.0, 'E42': 173133.0, 'E43': 141665.0, 'E75': 87376.0, 'F11': 3905101.0, 'F76': 445519.0, 'F77': 1335095.0, 'F78': 567032.0, 'F79': 737444.0, 'F80': 5695263.0, 'F81': 678581.0, 'F82': 449585.0, 'F83': 232898.0, 'F84': 459192.0, 'F85': 622215.0, 'F86': 807666.0, 'F87': 557372.0, 'F88': 1621957.0, 'F89': 444324.0, 'K23': 1129635.0, 'K24': 308345.0, 'K25': 195632.0, 'K26': 153464.0, 'K44': 321894.0, 'K45': 91017.0, 'K46': 420005.0, 'K47': 728062.0, 'K48': 464700.0, 'K49': 419051.0, 'K52': 462443.0, 'K53': 125127.0, 'K54': 515835.0, 'K59': 115825.0, 'K90': 1973117.0, 'K91': 1018235.0, 'M27': 173249.0, 'M28': 472189.0, 'M29': 236464.0, 'M30': 148598.0, 'M31': 205950.0, 'M32': 430360.0, 'M33': 767262.0, 'M34': 3353718.0, 'M35': 1524659.0, 'M51': 686452.0, 'M55': 2509678.0, 'M56': 3825448.0, 'M57': 1777311.0, 'M58': 1553531.0, 'N60': 604294.0, 'N61': 489380.0, 'N62': 159771.0, 'N63': 64419.0, 'N64': 33674.0, 'N65': 552047.0, 'N66': 1605957.0, 'N67': 588100.0, 'N68': 702026.0, 'N69': 711440.0, 'N70': 680151.0, 'N71': 835342.0, 'N72': 81074.0, 'N73': 8639562.0, 'N74': 391998.0, 'T92': 691673.0, 'T93': 1310109.0, 'T94': 1817539.0, 'T95': 739520.0, 'T96': 807588.0, 'T97': 527617.0, 'T98': 2310156.0}
+
+
+##############################################################################
+# Helper Functions
+
+def connect_database(dbconfig):
+    """Create connection with a database."""
+    postgres_url = URL(
+        drivername='postgresql',
+        host=config_auth.get(dbconfig, 'host'),
+        port=config_auth.get(dbconfig, 'port'),
+        database=config_auth.get(dbconfig, 'dbname'),
+        username=config_auth.get(dbconfig, 'user'),
+        password=config_auth.get(dbconfig, 'password')
+    )
+    return create_engine(postgres_url)
+
+def norm(x):
+    """Scale numeric array to [0, 1]."""
+    x = np.array(x)
+    x = (x - np.nanmin(x)) / (np.nanmax(x) - np.nanmin(x))
+    return x
+
 ##############################################################################
 class Process():
     """This class implements the process of loading and pre-processing all data from one datasource."""
 
-    def __init__(self):
-        self.name = ''                  # Name of datasource
-        self.data = pd.DataFrame()      # Data of datasource
-        self.conn = ''                  # Database connection of datasource
+    def __init__(self, dbconfig):
+        self.name = ''                                  # Name of datasource
+        self.data = pd.DataFrame()                      # Data of datasource
+        self.pattern = pd.DataFrame()                   # Patterns of datasource
+        self.conn = connect_database(dbconfig)          # Database connection of datasource
 
     def __str__(self):
         """Print string representation of Process"""
         return "Dataset name: %s\nData: %s" % (self.name, self.data)
-
-
-    def connect_database(self, dbconfig):
-        """Create a connection with the datasource storage."""
-        postgres_url = URL(
-            drivername='postgresql',
-            host=config_auth.get(dbconfig, 'host'),
-            port=config_auth.get(dbconfig, 'port'),
-            database=config_auth.get(dbconfig, 'dbname'),
-            username=config_auth.get(dbconfig, 'user'),
-            password=config_auth.get(dbconfig, 'password')
-        )
-        self.conn = create_engine(postgres_url)
 
 
     def import_data(self, tables, columns):
@@ -90,9 +103,10 @@ class Process():
             if columns == []:
                 pass
             else:
-                d[table] = d[table][columns]                    # Only select relevant columns
+                d[table] = d[table][columns]                # Only select relevant columns
         self.data = pd.concat([v for v in d.values()])      # Combine dataframes
         del d
+        self.process_timestamps()
 
 
     def import_table(self, table):
@@ -121,50 +135,73 @@ class Process():
 
 
     def normalize(self, cols_norm):
-        """Normalize all specified columns. Adapted from: https://stackoverflow.com/a/36475297"""
-        if cols_norm != []:
-            scaler = preprocessing.MinMaxScaler()
-            for col in cols_norm:
-                self.data[col + '_normalized'] = scaler.fit_transform(self.data[[col]])
+        """Normalize all specified columns"""
+        if cols_norm != []:                 # Check if any columns should be normalized at all.
+            if type(cols_norm) == str:      # Check whether we have a single column name string,
+                cols_norm = [cols_norm]     # if so, wrap this single name in a list.
+            for col in cols_norm:           # Now process the list of 1+ column names :)
+                self.data[col] = norm(self.data[col])
 
 
     def normalize_acreage(self, cols_norm_m2):
         """Normalize all specified columns based on the surface area."""
-        # TODO: Implement the surface area normalization method.
-        pass
+        # In onderstaande stappen kunnen momenteel locaties wegvallen welke geen vollcode
+        # bevatten die in de verblijversindex voorkomt (dit is bijv. het geval bij de gvb data).
+        if cols_norm_m2 != []:                 # Check if any columns should be normalized at all.
+            if type(cols_norm_m2) == str:      # Check whether we have a single column name string,
+                cols_norm_m2 = [cols_norm_m2]  # if so, wrap this single name in a list.
+            for col in cols_norm_m2:           # Now process the list of 1+ column names.
+                m2 = pd.DataFrame(list(vollcodes_m2.items()), columns=['vollcode','oppervlakte_m2'])
+                temp = self.data.merge(m2)
+                temp.gvb_buurt = temp.gvb_buurt / temp.oppervlakte_m2  # Normalize based on surface area
+                self.data = temp
 
 
     def aggregate_on_column(self, column):
         """Aggregate the dataframe in self.data on the given column."""
-        # TODO: Implement this method.
+        # TODO: (4) Implement aggregate on column method.
         pass
 
 
-    def run(self, dbconfig, tables, columns, cols_rename, cols_norm_m2, cols_norm):
-        """Run the entire data import process."""
-        self.connect_database(dbconfig)
-        self.import_data(tables, columns)       # Import specified tables/columns. When no columns specified, import all.
-        self.process_timestamps()               # If timestamp column exists, create weekday & hour columns
-        self.dataset_specific()                 # Run dataset specific data manipulations
-        self.rename(cols_rename)                # Rename columns
-        self.normalize_acreage(cols_norm_m2)    # Normalize on size of the area
-        self.normalize(cols_norm)               # Normalize data in given columns
+    def create_pattern(self, time_period, area_precision):
+        """Create a crowdedness pattern.
+        # TODO: Implement pattern creation method
+        Keyword arguments:
+        time_period - the period for which we create the pattern (e.g. 'day', 'week', 'year')
+        area_precision - the "area" precision of the pattern (e.g. 'lat/long', 'vollcode', 'stadsdeel_code', 'stad')
+        """
+        pass
+
+
+    # def create_pattern_week_lat_long(self):
+    #     area_mapping = self.data[['vollcode', 'stadsdeel_code']].drop_duplicates()
+    #     # first calculate the average weekpatroon per location
+    #     google_week_location = self.data.groupby([
+    #         'weekday', 'hour', 'vollcode', 'name'])['historical'].mean().reset_index()
+    #     google_week_location = google_week_location.merge(area_mapping, on='vollcode')
+    #
+    #
+    # def create_pattern_week_vollcode(self):
+    #     # and then calculate the average weekpatroon per vollcode
+    #     google_week_vollcode = google_week_location.groupby([
+    #         'vollcode', 'weekday', 'hour'])['historical'].mean().reset_index()
+    #
+    #     # also calculate the average weekpatroon per stadsdeel
+    #     google_week_stadsdeel = google_week_location.groupby([
+    #         'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
 
 ##############################################################################
 class Process_gvb_stad(Process):
     """This class implements all data importing and pre-processing steps, specifically for the GVB datasource."""
 
     def __init__(self, dbconfig):
-        super().__init__()
-        self.name = 'gvb_stad'                          # Name of the datasource
-        tables = ['gvb_with_bc']                        # Tables to be imported
-        columns = ['halte', 'incoming', 'timestamp',    # Columns to be selected
-                   'lat', 'lon', 'vollcode']
-        cols_rename = {'incoming': 'gvb_stad'}          # Columns to be renamed, e.g.  [(old, new)]
-        cols_norm_m2 = []                               # Columns to be normalized based on surface area
-        cols_norm = []                                  # Columns to be normalized
-        self.run(dbconfig, tables, columns,             # Run import process
-                 cols_rename, cols_norm_m2, cols_norm)
+        super().__init__(dbconfig)
+        self.name = 'gvb_stad'
+        self.import_data(['gvb_with_bc'],
+                         ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
+        self.dataset_specific()
+        self.rename({'incoming': 'gvb_stad'})
+
 
     def dataset_specific(self):
         haltes = list(pd.read_csv('lookup_tables/metro_or_train.csv', sep=',')['station'])
@@ -180,16 +217,14 @@ class Process_gvb_buurt(Process):
     """This class implements all data importing and pre-processing steps, specifically for the GVB datasource."""
 
     def __init__(self, dbconfig):
-        super().__init__()
-        self.name = 'gvb_buurt'                         # Name of the datasource
-        tables = ['gvb_with_bc']                        # Tables to be imported
-        columns = ['halte', 'incoming', 'timestamp',    # Columns to be selected
-                   'lat', 'lon', 'vollcode']
-        cols_rename = {'incoming': 'gvb_buurt'}         # Columns to be renamed, e.g.  [(old, new)]
-        cols_norm = []                                  # Columns to be normalized
-        cols_norm_m2 = []                               # Columns to be normalized based on surface area
-        self.run(dbconfig, tables, columns,             # Run import process
-                 cols_rename, cols_norm_m2, cols_norm)
+        super().__init__(dbconfig)
+        self.name = 'gvb_buurt'
+        self.import_data(['gvb_with_bc'],
+                         ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
+        self.dataset_specific()
+        self.rename({'incoming': 'gvb_buurt'})
+        self.normalize_acreage('gvb_buurt')
+
 
     def dataset_specific(self):
         haltes = list(pd.read_csv('lookup_tables/metro_or_train.csv', sep=',')['station'])
@@ -197,46 +232,100 @@ class Process_gvb_buurt(Process):
 
         # Buurtniveau
         gvb_buurt = self.data.loc[np.logical_not(indx), :]
-        self.data = gvb_buurt.groupby([
-            'vollcode', 'weekday', 'hour'])['incoming'].mean().reset_index()
+        self.data = gvb_buurt.groupby(['vollcode', 'weekday', 'hour'])['incoming'].mean().reset_index()
 
 ##############################################################################
-class Process_alpha(Process):
-    """This class implements all data importing and pre-processing steps, specifically for the alpha datasource."""
+class Process_alpha_historical(Process):
+    """This class implements all data importing and pre-processing steps for the alpha datasource."""
 
-    # TODO: Implement the alpha importing process
     def __init__(self, dbconfig):
-        Process.__init__(self, 'live', dbconfig)
+        super().__init__(dbconfig)
+        self.name = 'alpha_historical_week'
+        self.import_data(['google_with_bc', 'google_dec_with_bc'],
+                         ['name', 'vollcode', 'timestamp', 'historical', 'stadsdeel_code'])
+        self.dataset_specific()
+        self.rename({'historical': 'alpha_week'})
+        self.normalize('alpha_week')
+
+
+    def dataset_specific(self):
+        area_mapping = self.data[['vollcode', 'stadsdeel_code']].drop_duplicates()
+
+        # historical weekpatroon
+        # first calculate the average weekpatroon per location
+        google_week_location = self.data.groupby([
+            'weekday', 'hour', 'vollcode', 'name'])['historical'].mean().reset_index()
+        google_week_location = google_week_location.merge(area_mapping, on='vollcode')
+
+        # and then calculate the average weekpatroon per vollcode
+        google_week_vollcode = google_week_location.groupby([
+            'vollcode', 'weekday', 'hour'])['historical'].mean().reset_index()
+
+        # also calculate the average weekpatroon per stadsdeel
+        google_week_stadsdeel = google_week_location.groupby([
+            'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
+
+        # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
+        # in case of sparse data, take the stadsdeelcode aggregation
+        minimal_hours = 98
+        cnt = google_week_vollcode.vollcode.value_counts()
+        sparse_vollcodes = cnt[cnt < minimal_hours].index.tolist()
+
+        # first take the vollcode aggregation for vollcodes that have enough data
+        google_week_vollcode = google_week_vollcode[~google_week_vollcode.vollcode.isin(sparse_vollcodes)]
+
+        # then take the staddeelcode aggregation for vollcodes for which data is sparse
+        google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeel_code')
+        google_week_stadsdeel.drop('stadsdeel_code', axis=1, inplace=True)
+        google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_vollcodes)]
+
+        self.data = pd.concat([google_week_vollcode, google_week_stadsdeel])
+
+##############################################################################
+class Process_alpha_live(Process):
+    """This class implements all data importing and pre-processing steps for the alpha datasource."""
+
+    def __init__(self, dbconfig):
+        super().__init__(dbconfig)
+        self.name = 'alpha_live'
+        self.import_data(['google_with_bc', 'google_dec_with_bc'],
+                         ['name', 'vollcode', 'timestamp', 'live', 'stadsdeel_code'])
+        self.dataset_specific()
+        self.rename({'live': 'alpha_live'})
+        self.normalize('alpha_live')
+
+
+    def dataset_specific(self):
+        self.data = self.data.loc[self.data.live.notnull(), :]
+        self.data = self.data.groupby(['vollcode', 'timestamp'])['live'].mean()
+        self.data = self.data.reset_index()
+        self.data['weekday'] = [ts.weekday() for ts in self.data.timestamp]
+        self.data['hour'] = [ts.hour for ts in self.data.timestamp]
 
 ##############################################################################
 class Process_verblijversindex(Process):
     """This class implements all data importing and pre-processing steps for the verblijversindex datasource."""
 
     def __init__(self, dbconfig):
-        super().__init__()
-        self.name = 'verblijversindex'                              # Name of the datasource
-        tables = ['VERBLIJVERSINDEX']                               # Tables to be imported
-        columns = ['wijk', 'verblijversindex', 'oppervlakte_m2']    # Columns to be selected
-        cols_rename = {'wijk': 'vollcode'}                          # Columns to be renamed, e.g. {'old': 'new'}
-        cols_norm_m2 = []                                           # Columns to be normalized based on surface area
-        cols_norm = []                                              # Columns to be normalized
-        self.run(dbconfig, tables, columns,                         # Run import process
-                 cols_rename, cols_norm_m2, cols_norm)
+        super().__init__(dbconfig)
+        self.name = 'verblijversindex'
+        self.import_data(['VERBLIJVERSINDEX'],
+                    ['wijk', 'verblijversindex', 'oppervlakte_m2'])
+        self.rename({'wijk': 'vollcode'})
 
 ##############################################################################
 class Process_tellus(Process):
     """This class implements all data importing and pre-processing steps for the tellus datasource."""
 
     def __init__(self, dbconfig):
-        super().__init__()
-        self.name = 'tellus'                                        # Name of the datasource
-        tables = ['tellus_with_bc']                                 # Tables to be imported
-        columns = ['meetwaarde', 'timestamp', 'vollcode']           # Columns to be selected
-        cols_rename = {'meetwaarde': 'tellus'}                      # Columns to be renamed, e.g. {'old': 'new'}
-        cols_norm_m2 = []                                           # Columns to be normalized based on surface area
-        cols_norm = []                                              # Columns to be normalized
-        self.run(dbconfig, tables, columns,                         # Run import process
-                 cols_rename, cols_norm_m2, cols_norm)
+        super().__init__(dbconfig)
+        self.name = 'tellus'
+        self.import_data(['tellus_with_bc'],
+                         ['meetwaarde', 'timestamp', 'vollcode'])
+        self.dataset_specific()
+        self.rename({'meetwaarde': 'tellus'})
+        self.normalize('tellus')
+
 
     def dataset_specific(self):
         self.data['meetwaarde'] = self.data.meetwaarde.astype(int)
@@ -245,15 +334,13 @@ class Process_tellus(Process):
 class Process_buurtcombinatie(Process):
 
     def __init__(self, dbconfig):
-        super().__init__()
+        super().__init__(dbconfig)
         self.name = 'bc_codes'
-        tables = ['buurtcombinatie']
-        columns = ['vollcode']
-        cols_rename = {}
-        cols_norm_m2 = []                               # Columns to be normalized based on surface area
-        cols_norm = []
-        self.run(dbconfig, tables, columns, cols_rename, cols_norm_m2, cols_norm)
+        self.import_data(['buurtcombinatie'], ['vollcode'])
 
+
+
+'''
 ##############################################################################
 def init_drukte_df(start_datetime, end_datetime, vollcodes):
     timestamps = pd.date_range(start=start_datetime, end=end_datetime, freq='H')
@@ -273,41 +360,79 @@ def main():
     # Import datasets
     dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
     brt = Process_buurtcombinatie(dbconfig)
-    vollcodes = list(brt.data.vollcode.unique())
     vbi = Process_verblijversindex(dbconfig)
+    # vollcodes = list(brt.data.vollcode.unique())
+    # vollcodes_m2 = pd.Series(vbi.data.oppervlakte_m2.values, index=vbi.data.vollcode).to_dict()
     gvb_st = Process_gvb_stad(dbconfig)
     gvb_bc = Process_gvb_buurt(dbconfig)
     tel = Process_tellus(dbconfig)
+    alp_hist = Process_alpha_historical(dbconfig)
+    alp_live = Process_alpha_live(dbconfig)
 
-    # TODO: Implement overarching merging method of computing the drukte index (possibly in other file?)
-    # # Initialize dataframe
-    # start = np.min(google_live.timestamp)
-    # end = np.max(google_live.timestamp)
-    # drukte = init_drukte_df(start, end, vollcodes)
-    #
-    # # merge datasets
-    # cols = ['timestamp', 'vollcode', 'google_live']
-    # drukte = pd.merge(
-    #     drukte, google_live[cols], on=['timestamp', 'vollcode'], how='left')
-    #
-    # cols = ['vollcode', 'weekday', 'hour', 'google_week']
-    # drukte = pd.merge(
-    #     drukte, google_week[cols],
-    #     on=['weekday', 'hour', 'vollcode'], how='left')
-    #
-    # drukte = pd.merge(
-    #     drukte, gvb_buurt,
-    #     on=['vollcode', 'weekday', 'hour'], how='left')
-    #
-    # drukte = pd.merge(
-    #     drukte, gvb_stad,
-    #     on=['weekday', 'hour'], how='left')
-    #
-    # drukte = pd.merge(
-    #     drukte, verblijversindex,
-    #     on='vollcode', how='left')
+    # initialize drukte dataframe
+    start = np.min(alp_live.data.timestamp)
+    end = np.max(alp_live.data.timestamp)
+    drukte = init_drukte_df(start, end, vollcodes_list)
 
-    q.d()
+    # merge datasets
+    cols = ['timestamp', 'vollcode', 'alpha_live']
+    drukte = pd.merge(
+        drukte, alp_live.data[cols], on=['timestamp', 'vollcode'], how='left')
+
+    cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
+    drukte = pd.merge(
+        drukte, alp_hist.data[cols],
+        on=['weekday', 'hour', 'vollcode'], how='left')
+
+    drukte = pd.merge(
+        drukte, gvb_bc.data,
+        on=['vollcode', 'weekday', 'hour'], how='left')
+
+    drukte = pd.merge(
+        drukte, gvb_st.data,
+        on=['weekday', 'hour'], how='left')
+
+    drukte = pd.merge(
+        drukte, vbi.data,
+        on='vollcode', how='left')
+
+    # Middel alpha expected en alpha live
+    drukte['alpha'] = drukte[['alpha_week', 'alpha_live']].mean(axis=1)
+
+    # Middel gvb
+    drukte['gvb'] = norm(drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1))
+
+    # init drukte index
+    drukte['drukte_index'] = np.nan
+
+    # Normaliseer verblijversindex
+    drukte['verblijversindex'] = norm(drukte.verblijversindex)
+
+    # make sure the sum of the weights != 0
+    linear_weigths = {'verblijversindex': 0.25,
+                      'alpha': 0,
+                      'gvb': 1,
+                      'alpha_week': 1,
+                      'alpha_live': 0}
+
+    lw_normalize = sum(linear_weigths.values())
+
+    for col, weight in linear_weigths.items():
+        if col in drukte.columns:
+            drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col] * weight, fill_value=0)
+
+    drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
+
+    # sort values
+    drukte = drukte.sort_values(['timestamp', 'vollcode'])
+
+    # Write data to database
+    log.debug('Writing data to database.')
+    connection = connect_database(dbconfig)
+    drukte.to_sql(
+        name='drukteindex', con=connection, index=True, if_exists='replace')
+    connection.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
+    log.debug('done.')
 
 ##############################################################################
 # Simple test for this module
@@ -322,3 +447,4 @@ if __name__ == "__main__":
         nargs=1)
     args = parser.parse_args()
     main()
+'''
