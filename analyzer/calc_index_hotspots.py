@@ -1,4 +1,3 @@
-import psycopg2
 import configparser
 import argparse
 import logging
@@ -58,18 +57,19 @@ def concat_google(sql_query, conn):
 def main():
     conn = get_conn(dbconfig=args.dbConfig[0])
 
-    # #TO BE DELETED / REFACTORED
-    # pg_str = get_pg_str('localhost', '5432', 'citydynamics', 'citydynamics', 'insecure')
-
-
     sql_query = """ SELECT * FROM "{}" """
 
     concat_google(sql_query, conn)
     hotspots_df = pd.read_csv('lookup_tables/Amsterdam Hotspots - Sheet1.csv')
 
+    log.debug('Writing hotspots to db..')
     hotspots_df.to_sql(name='hotspots', con=conn, if_exists='replace')
     conn.execute(set_primary_key('hotspots'))
+    log.debug('..done.')
 
+    hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)
+
+    log.debug('Creating geometries on hotspots..')
     create_geom_hotspots = """
     ALTER TABLE hotspots
     ADD COLUMN point_sm geometry;
@@ -78,7 +78,9 @@ def main():
     """
 
     conn.execute(create_geom_hotspots)
+    log.debug('..done.')
 
+    log.debug('Creating geometries on Google locations..')
     create_geom_google = """
     ALTER TABLE google_all
     ADD COLUMN point_sm geometry;
@@ -87,7 +89,9 @@ def main():
     """
 
     conn.execute(create_geom_google)
+    log.debug('..done.')
 
+    log.debug('Linking Google locations to hotspots..')
     join_hotspots_query = """
       DROP TABLE IF EXISTS google_all_hotspots;
       create
@@ -111,6 +115,7 @@ def main():
       """
 
     conn.execute(join_hotspots_query)
+    log.debug('..done.')
 
     google_hotspots = pd.read_sql(sql="SELECT * FROM google_all_hotspots", con=conn)
 
@@ -119,17 +124,37 @@ def main():
     google_week_location = google_hotspots.groupby([
         'hour', 'Hotspot', 'name'])['historical'].mean().reset_index()
 
-    # and then calculate the average weekpatroon per vollcode
-    google_week_hotspot = google_week_location.groupby([
+    # and then calculate the average weekpatroon per hotspot
+    google_week_hotspots = google_week_location.groupby([
         'Hotspot', 'hour'])['historical'].mean().reset_index()
 
-    google_week_hotspots = google_week_hotspot.merge(google_hotspots[['Hotspot', 'Latitude', 'Longitude']]
-                                                     .drop_duplicates(),
-                                                     on='Hotspot')
-
     google_week_hotspots.rename(columns={'historical': 'drukteindex'}, inplace=True)
+
+    log.debug('Writing to db..')
     google_week_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
-    conn.execute(set_primary_key('drukteindex_hotspots'))
+
+    insert_into_models = """
+    Truncate table datasets_hotspotsdrukteindex;
+    insert into datasets_hotspotsdrukteindex (
+    index,
+    hour,
+    drukteindex,
+    hotspot_id
+    ) select c.index, hour, drukteindex, h.index from hotspots h, drukteindex_hotspots c
+    where  h."Hotspot" = c."Hotspot";
+    
+    Truncate table datasets_hotspots;
+    insert into datasets_hotspots (
+    index, 
+    "Hotspot", 
+    "Latitude", 
+    "Longitude"
+    )
+    select index, "Hotspot", "Latitude", "Longitude" from hotspots;
+
+    """
+
+    conn.execute(insert_into_models)
     log.debug('done.')
 
 
