@@ -5,7 +5,8 @@ services:
     image: amsterdam/postgres
     environment:
       POSTGRES_PASSWORD: insecure
-      POSTGRES_USER: sportparken
+      POSTGRES_DB: citydynamics
+      POSTGRES_USER: citydynamics
     volumes:
       - ./backups:/tmp/backups
 
