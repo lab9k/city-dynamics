@@ -18,7 +18,7 @@ config_src = configparser.RawConfigParser()
 config_src.read('sources.conf')
 
 tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections() if
-                    config_src.get(x, 'CREATE_POINT') == 'YES']
+                    config_src.get(x, 'CREATE_POINT') == 'YES' ]
 
 
 def create_geometry_query(tablename):
@@ -86,22 +86,36 @@ def get_pg_str(host, port, user, dbname, password):
     )
 
 
-def main(dbConfig):
+def main(dbConfig, datasets):
     pg_str = get_pg_str(config_auth.get(dbConfig, 'host'), config_auth.get(dbConfig, 'port'),
                         config_auth.get(dbConfig, 'dbname'), config_auth.get(dbConfig, 'user'),
                         config_auth.get(dbConfig, 'password'))
     execute_sql(pg_str, simplify_polygon('buurtcombinatie'))
 
-    for table in tables_to_modify:
-        logger.info('Handling {} table'.format(table))
-        execute_sql(pg_str, create_geometry_query(table))
-        execute_sql(pg_str, add_bc_codes(table))
-        execute_sql(pg_str, set_primary_key(table + '_with_bc'))
+    for dataset in datasets:
+        logger.info('Handling {} table'.format(dataset))
+        execute_sql(pg_str, create_geometry_query(dataset))
+        execute_sql(pg_str, add_bc_codes(dataset))
+        execute_sql(pg_str, set_primary_key(dataset + '_with_bc'))
 
 
 if __name__ == '__main__':
     desc = "Run additional SQL."
     parser = argparse.ArgumentParser(desc)
     parser.add_argument('dbConfig', type=str, help='dev or docker', nargs=1)
+    parser.add_argument('dataset', nargs='?', help="Upload specific dataset")
     args = parser.parse_args()
-    main(args.dbConfig[0])
+
+    p_datasets = config_src.sections()
+
+    datasets = []
+
+    for x in p_datasets:
+        if config_src.get(x, 'ENABLE') == 'YES':
+            if config_src.get(x, 'CREATE_POINT') == 'YES':
+                datasets.append(x)
+
+    if args.dataset:
+        datasets = [args.dataset]
+
+    main(args.dbConfig[0], datasets)
