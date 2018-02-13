@@ -71,7 +71,7 @@ def load_gebieden(pg_str):
         logger.info(areaName + ' loaded into PG.')
 
 
-def main(datadir, dbConfig):
+def main(datadir, dbConfig, datasets):
 
     POSTGRES_URL = URL(
         drivername='postgresql',
@@ -120,7 +120,17 @@ if __name__ == '__main__':
 
     parser.add_argument('dataset', nargs='?', help="Upload specific dataset")
     args = parser.parse_args()
-    datasets = config_src.sections()
+
+    p_datasets = config_src.sections()
+
+    datasets = []
+
+    for x in p_datasets:
+        if config_src.get(x, 'ENABLE') == 'YES':
+            datasets.append(x)
+
     if args.dataset:
         datasets = [args.dataset]
-    main(args.datadir[0], args.dbConfig[0])
+
+    logger.info('Loading %s', datasets)
+    main(args.datadir[0], args.dbConfig[0], datasets)
