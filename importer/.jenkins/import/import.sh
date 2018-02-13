@@ -15,7 +15,8 @@ dc() {
 rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups
 
-
+dc rm
+dc pull
 dc down
 dc build
 
