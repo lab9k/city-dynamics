@@ -134,7 +134,6 @@ def main():
     google_week_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
 
     insert_into_models = """
-    Truncate table datasets_hotspotsdrukteindex;
     insert into datasets_hotspotsdrukteindex (
     index,
     hour,
@@ -143,7 +142,6 @@ def main():
     ) select c.index, hour, drukteindex, h.index from hotspots h, drukteindex_hotspots c
     where  h."Hotspot" = c."Hotspot";
     
-    Truncate table datasets_hotspots;
     insert into datasets_hotspots (
     index, 
     "Hotspot", 

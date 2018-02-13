@@ -140,7 +140,10 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
 
 
 class BuurtcombinatieViewset(viewsets.ModelViewSet):
-    """ ViewSet for retrieving buurtcombinatie polygons """
+    """
+    ViewSet for retrieving buurtcombinatie polygons
+    """
+
     queryset = models.Buurtcombinatie.objects.all()
     serializer_class = serializers.BuurtcombinatieSerializer
 
