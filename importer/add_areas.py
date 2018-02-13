@@ -93,10 +93,11 @@ def main(dbConfig, datasets):
     execute_sql(pg_str, simplify_polygon('buurtcombinatie'))
 
     for dataset in datasets:
-        logger.info('Handling {} table'.format(dataset))
-        execute_sql(pg_str, create_geometry_query(dataset))
-        execute_sql(pg_str, add_bc_codes(dataset))
-        execute_sql(pg_str, set_primary_key(dataset + '_with_bc'))
+        table_name = config_src.get(dataset, 'TABLE_NAME')
+        logger.info('Handling {} table'.format(table_name))
+        execute_sql(pg_str, create_geometry_query(table_name))
+        execute_sql(pg_str, add_bc_codes(table_name))
+        execute_sql(pg_str, set_primary_key(table_name + '_with_bc'))
 
 
 if __name__ == '__main__':
