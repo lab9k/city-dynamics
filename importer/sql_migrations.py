@@ -11,6 +11,7 @@ config_auth.read('auth.conf')
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
+
 def get_conn(dbconfig):
     """Create a connection to the database."""
     postgres_url = URL(
@@ -23,6 +24,7 @@ def get_conn(dbconfig):
     )
     conn = create_engine(postgres_url)
     return conn
+
 
 create_hotpots = """CREATE TABLE public.datasets_hotspots
 (
@@ -74,6 +76,7 @@ CREATE INDEX datasets_hotspotsdrukteindex_hotspot_id_fd4451d0
   USING btree
   (hotspot_id);"""
 
+
 def main():
     log.debug("Creating empty tables for API..")
 
@@ -83,7 +86,9 @@ def main():
 
     log.debug("..done")
 
+
 if __name__ == '__main__':
+    desc = 'Run extra sql'
     parser = argparse.ArgumentParser(desc)
     parser.add_argument(
         'dbConfig', type=str,
@@ -91,4 +96,3 @@ if __name__ == '__main__':
         nargs=1)
     args = parser.parse_args()
     main()
-
