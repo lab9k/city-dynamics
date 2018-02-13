@@ -20,7 +20,12 @@ services:
       DATABASE_PASSWORD: insecure
       DATABASE_HOST_OVERRIDE: database
       DATABASE_PORT_OVERRIDE: 5432
-      EXTERN_DATASERVICES_PASSWORD:
+      STADSWERKEN_OBJECTSTORE_PASSWORD:
     command: >
       bash -c "/app/.jenkins/docker-wait.sh \
               && /app/run_import.sh \ "
+    volumes:
+      - data-volume:/data
+
+volumes:
+  data-volume:
