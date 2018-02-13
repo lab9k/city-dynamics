@@ -126,7 +126,7 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         level = self.request.query_params.get('level', None)
         if level == 'day':
             queryset = queryset.filter(timestamp__date=today)
-            exclude = ('weekday',)
+            # exclude = ('weekday',)
 
         if level == 'week':
             yesterday = today - timedelta(days=1)
@@ -155,13 +155,16 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
 
     def get_queryset(self):
 
-        queryset = models.Hotspots.objects.prefetch_related('druktecijfers').order_by("hotspot")
+        queryset = (
+            models.Hotspots.objects
+            .prefetch_related('druktecijfers')
+            .order_by("hotspot")
+        )
 
         hotspot = self.request.query_params.get('hotspot', None)
         if hotspot is not None:
             queryset = queryset.filter(hotspot=hotspot)
 
-        timestamp_str = self.request.query_params.get('timestamp', None)
-
+        # timestamp_str = self.request.query_params.get('timestamp', None)
 
         return queryset
