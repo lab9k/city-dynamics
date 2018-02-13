@@ -207,9 +207,11 @@ class Process_gvb_stad(Process):
         haltes = list(pd.read_csv('lookup_tables/metro_or_train.csv', sep=',')['station'])
         indx = self.data.halte.isin(haltes)
 
-        # Stadsniveau
+        # Stadsniveau (normalized by m2)
         gvb_stad = self.data.loc[indx, :]
-        gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].mean()
+        # gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].mean()
+        total_m2_stad = sum(vollcodes_m2.values())
+        gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].sum() / total_m2_stad
         self.data = gvb_stad.reset_index()
 
 ##############################################################################
