@@ -28,5 +28,13 @@ services:
     volumes:
       - data-volume:/data
 
+  analyzer:
+    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${ENVIRONMENT}
+    # build: ./analyzer
+    links:
+      - database:database
+
+
+
 volumes:
   data-volume:

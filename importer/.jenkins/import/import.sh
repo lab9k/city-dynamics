@@ -16,13 +16,14 @@ rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups
 
 dc rm
-dc pull
 dc down
+dc pull
 dc build
 
 dc up -d database
 
 dc run --rm importer
 
+dc run --rm analyzer
 
 dc exec -T database backup-db.sh citydynamics
