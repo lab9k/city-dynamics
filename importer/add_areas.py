@@ -12,15 +12,17 @@ logger = logging.getLogger(__name__)
 
 # parse authentication configuration
 config_auth = configparser.RawConfigParser()
-config_auth.read('auth.conf') 
+config_auth.read('auth.conf')
 
 config_src = configparser.RawConfigParser()
-config_src.read('sources.conf') 
+config_src.read('sources.conf')
 
-tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections() if config_src.get(x, 'CREATE_POINT') == 'YES']
+tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections() if
+                    config_src.get(x, 'CREATE_POINT') == 'YES']
+
 
 def create_geometry_query(tablename):
-  return """
+    return """
   ALTER TABLE "{0}"
     DROP COLUMN IF EXISTS geom;
   ALTER TABLE "{0}"
@@ -32,7 +34,7 @@ def create_geometry_query(tablename):
 
 
 def simplify_polygon(table):
-  return """
+    return """
   ALTER TABLE "{0}"
     DROP COLUMN IF EXISTS wkb_geometry_simplified;
   ALTER TABLE "{0}"
@@ -41,8 +43,9 @@ def simplify_polygon(table):
     SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.0001);
   """.format(table)
 
+
 def add_bc_codes(table):
-  return """
+    return """
   DROP TABLE IF EXISTS "{0}";
   create
   table
@@ -64,10 +67,12 @@ def add_bc_codes(table):
       )
   """.format(table + '_with_bc', table)
 
+
 def set_primary_key(table):
-  return """
+    return """
   ALTER TABLE "{}" ADD PRIMARY KEY (index)
   """.format(table)
+
 
 def execute_sql(pg_str, sql):
     with psycopg2.connect(pg_str) as conn:
@@ -82,7 +87,9 @@ def get_pg_str(host, port, user, dbname, password):
 
 
 def main(dbConfig):
-    pg_str = get_pg_str(config_auth.get(dbConfig,'host'),config_auth.get(dbConfig,'port'),config_auth.get(dbConfig,'dbname'), config_auth.get(dbConfig,'user'), config_auth.get(dbConfig,'password'))
+    pg_str = get_pg_str(config_auth.get(dbConfig, 'host'), config_auth.get(dbConfig, 'port'),
+                        config_auth.get(dbConfig, 'dbname'), config_auth.get(dbConfig, 'user'),
+                        config_auth.get(dbConfig, 'password'))
     execute_sql(pg_str, simplify_polygon('buurtcombinatie'))
 
     for table in tables_to_modify:
