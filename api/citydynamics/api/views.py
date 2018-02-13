@@ -41,7 +41,8 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime' +
+                'Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp__gte=date)
 
         return queryset
@@ -50,7 +51,8 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime' +
+                'Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp__lte=date)
 
         return queryset
@@ -59,7 +61,8 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime' +
+                'Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp=date)
 
         return queryset
@@ -126,7 +129,7 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
         level = self.request.query_params.get('level', None)
         if level == 'day':
             queryset = queryset.filter(timestamp__date=today)
-            exclude = ('weekday',)
+            # exclude = ('weekday',)
 
         if level == 'week':
             yesterday = today - timedelta(days=1)
@@ -160,7 +163,6 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
         if hotspot is not None:
             queryset = queryset.filter(hotspot=hotspot)
 
-        timestamp_str = self.request.query_params.get('timestamp', None)
-
+        # timestamp_str = self.request.query_params.get('timestamp', None)
 
         return queryset
