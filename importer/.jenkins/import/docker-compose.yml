@@ -1,0 +1,26 @@
+version: '3.0'
+services:
+
+  database:
+    image: amsterdam/postgres
+    environment:
+      POSTGRES_PASSWORD: insecure
+      POSTGRES_USER: sportparken
+    volumes:
+      - ./backups:/tmp/backups
+
+  importer:
+    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_importer:${ENVIRONMENT}
+    # build: ../../
+    links:
+      - database
+    environment:
+      DATABASE_NAME: citydynamics
+      DATABASE_USER: citydynamics
+      DATABASE_PASSWORD: insecure
+      DATABASE_HOST_OVERRIDE: database
+      DATABASE_PORT_OVERRIDE: 5432
+      EXTERN_DATASERVICES_PASSWORD:
+    command: >
+      bash -c "/app/.jenkins/docker-wait.sh \
+              && /app/run_import.sh \ "
