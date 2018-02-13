@@ -1,7 +1,8 @@
-from  rest_framework import serializers
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from citydynamics.datasets.models import Drukteindex, Buurtcombinatie, Hotspots, HotspotsDrukteIndex
+from citydynamics.datasets.models import Drukteindex, Buurtcombinatie
+from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
 
 
 class DrukteIndexSerializer(ModelSerializer):
@@ -16,6 +17,7 @@ class RecentIndexSerializer(ModelSerializer):
     class Meta:
         model = Drukteindex
         fields = ('drukte_index', 'timestamp', 'weekday')
+
 
 class BuurtcombinatieSerializer(GeoFeatureModelSerializer):
     """ A class to serialize locations as GeoJSON compatible data """
@@ -68,4 +70,3 @@ class HotspotIndexSerializer(ModelSerializer):
 #     class Meta:
 #         model = Hotspots
 #         fields = ('index', 'hotspot', 'coordinates', 'drukte')
-
