@@ -2,7 +2,7 @@
 
 Gaining and presenting insights regarding crowdedness in Amsterdam. How many people are where, at what moment?
 
-Collaborators: Jerome Cremers, Rene Luijk, Swaan Dekkers, Thomas Jongstra, Stephan Preeker
+Collaborators: Jerome Cremers, Rene Luijk, Swaan Dekkers, Thomas Jongstra
 
 ---
 
