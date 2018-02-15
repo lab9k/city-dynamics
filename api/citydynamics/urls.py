@@ -20,10 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
-from citydynamics.api.views import DrukteindexViewSet, DrukteindexHotspotViewset
-from citydynamics.api.views import RecentIndexViewSet
-from citydynamics.api.views import BuurtcombinatieViewset
-
+from citydynamics.datasets.views import DrukteindexViewSet, RecentIndexViewSet, BuurtcombinatieViewset, \
+    DrukteindexHotspotViewset
 
 
 router = DefaultRouter()

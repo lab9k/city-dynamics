@@ -10,3 +10,4 @@ venv/
 # Ignore local Jupyter Notebook Folder
 /jupyter_notebook
 
+.DS_Store

@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 
     'datapunt_api',
     'citydynamics',
-    'citydynamics.api',
+    'citydynamics.datasets',
 
     'rest_framework',
     'rest_framework_gis',
@@ -121,7 +121,7 @@ DATABASES = {
     'default': DATABASE_OPTIONS[get_database_key()]
 }
 
-HEALTH_MODEL = 'api.Drukteindex'
+HEALTH_MODEL = 'datasets.Drukteindex'
 
 
 # Password validation

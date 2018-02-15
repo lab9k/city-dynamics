@@ -32,7 +32,7 @@ config_src = configparser.RawConfigParser()
 config_src.read('sources.conf')
 
 # find object store password in environmental variables
-OBJECTSTORE_PASSWORD = os.environ['EXTERN_DATASERVICES_PASSWORD']
+OBJECTSTORE_PASSWORD = os.environ['STADSWERKEN_OBJECTSTORE_PASSWORD']
 
 OS_CONNECT = {
     'auth_version': config_auth.get('extern_dataservices', 'ST_AUTH_VERSION'),
