@@ -8,8 +8,8 @@
         <g id="Evenementen-Icon">
             <g transform="translate(5.000000, 9.000000)" id="Calendar">
                 <g>
-                    <rect id="Rectangle-17" stroke="#FFFFFF" x="0.5" y="0.5" width="24" height="18.7916667" rx="1"></rect>
-                    <g id="Date-ovals" transform="translate(4.166667, 4.166667)" fill="#FFFFFF">
+                    <rect id="Rectangle-17" stroke="#4a4a4a" x="0.5" y="0.5" width="24" height="18.7916667" rx="1"></rect>
+                    <g id="Date-ovals" transform="translate(4.166667, 4.166667)" fill="#4a4a4a">
                         <circle id="Oval-14" cx="1.5625" cy="1.5625" r="1.5625"></circle>
                         <circle id="Oval-14" cx="7.8125" cy="1.5625" r="1.5625"></circle>
                         <circle id="Oval-14" cx="14.0625" cy="1.5625" r="1.5625"></circle>
@@ -19,8 +19,8 @@
                         <circle id="Oval-14" cx="7.8125" cy="9.89583333" r="1.5625"></circle>
                         <circle id="Oval-14" cx="14.0625" cy="5.72916667" r="1.5625"></circle>
                     </g>
-                    <circle id="Oval-13" stroke="#a4a4a4" stroke-width="0.5" fill="#a4a4a4" cx="19.7916667" cy="17.7083333" r="5.20833333"></circle>
-                    <g id="Checkmark" transform="translate(18.750000, 15.625000)" stroke="#FFFFFF" stroke-linecap="square">
+                    <circle id="Oval-13" stroke="#4a4a4a" stroke-width="0.5" fill="#FFFFFF" cx="19.7916667" cy="17.7083333" r="5.20833333"></circle>
+                    <g id="Checkmark" transform="translate(18.750000, 15.625000)" stroke="#4a4a4a" stroke-linecap="square">
                         <path d="M1.04166667,3.125 L3.125,1.04166667" id="Line-33"></path>
                         <polyline id="Line-32" points="0 2.08333333 1.04166667 3.125 2.08333333 2.08333333"></polyline>
                     </g>
