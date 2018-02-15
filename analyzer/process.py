@@ -143,21 +143,27 @@ class Process():
                 self.data[col] = norm(self.data[col])
 
 
-    def normalize_acreage(self, cols_norm_m2):
+    def normalize_acreage(self, cols):
         """Normalize all specified columns based on the surface area."""
         # In onderstaande stappen kunnen momenteel locaties wegvallen welke geen vollcode
-        # bevatten die in de verblijversindex voorkomt (dit is bijv. het geval bij de gvb data).
-        if cols_norm_m2 != []:                 # Check if any columns should be normalized at all.
-            if type(cols_norm_m2) == str:      # Check whether we have a single column name string,
-                cols_norm_m2 = [cols_norm_m2]  # if so, wrap this single name in a list.
-            for col in cols_norm_m2:           # Now process the list of 1+ column names.
+        # bevatten die in de verblijversindex voorkomt (dit is bijv. het geval met de gvb data).
+        if cols != []:                  # Check if any columns should be normalized at all.
+            if type(cols) == str:       # Check whether we have a single column name string,
+                cols = [cols]           # if so, wrap this single name in a list.
+            for col in cols:            # Now process the list of 1+ column names.
                 m2 = pd.DataFrame(list(vollcodes_m2.items()), columns=['vollcode','oppervlakte_m2'])
                 temp = self.data.merge(m2)
                 temp.gvb_buurt = temp.gvb_buurt / temp.oppervlakte_m2  # Normalize based on surface area
                 self.data = temp
 
 
-    def aggregate_on_column(self, column):
+    def normalize_acreage_city(self, col):
+        """Normalize on acreage on city wide """
+        total_m2_stad = sum(vollcodes_m2.values())
+        self.data[col] = self.data[col] / total_m2_stad
+
+
+    def aggregate_on_column(self, col):
         """Aggregate the dataframe in self.data on the given column."""
         # TODO: (4) Implement aggregate on column method.
         pass
@@ -201,6 +207,7 @@ class Process_gvb_stad(Process):
                          ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
         self.dataset_specific()
         self.rename({'incoming': 'gvb_stad'})
+        self.normalize_acreage_city('gvb_stad')
 
 
     def dataset_specific(self):
@@ -210,8 +217,9 @@ class Process_gvb_stad(Process):
         # Stadsniveau (normalized by m2)
         gvb_stad = self.data.loc[indx, :]
         # gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].mean()
-        total_m2_stad = sum(vollcodes_m2.values())
-        gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].sum() / total_m2_stad
+        # total_m2_stad = sum(vollcodes_m2.values())
+        # gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].sum() / total_m2_stad
+        gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].sum()
         self.data = gvb_stad.reset_index()
 
 ##############################################################################

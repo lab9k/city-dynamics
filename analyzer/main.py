@@ -170,10 +170,10 @@ def pipeline_model(drukte):
     """Implement pipeline model for creating the Drukte Index"""
 
     # Linear weights for the creation of the base value
-    base_list = {'verblijversindex': 2, 'gvb': 1}
+    base_list = {'verblijversindex': 1, 'gvb': 4}
 
     # Modification mappings defining what flex is used for each dataset
-    mod_list = {'verblijversindex': 'alpha', 'gvb': 'alpha'}
+    mod_list = {'verblijversindex': 'alpha'}
 
     # Specify view to choose scaling method (options: 'toerist', 'ois', 'politie')
     view = 'toerist'
@@ -189,7 +189,7 @@ def pipeline_model(drukte):
 
             # Compute weighted base value
             drukte[base_name] = drukte[base_name].add(drukte[base] * weight, fill_value=0)
-            drukte[base_name] /= sum(base.values())  # Normalize base weights
+            drukte[base_name] /= sum(base_list.values())  # Normalize base weights
 
 
     #### (2) Modify base values  (use relative sources)
