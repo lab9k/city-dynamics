@@ -4,6 +4,8 @@ import logging
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 import pandas as pd
+import numpy as np
+import itertools
 
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
@@ -129,6 +131,11 @@ def main():
         'Hotspot', 'hour'])['historical'].mean().reset_index()
 
     google_week_hotspots.rename(columns={'historical': 'drukteindex'}, inplace=True)
+
+    x = {"hour": np.arange(24), "Hotspot": hotspots_df['Hotspot'].unique().tolist()}
+    hs_hour_combinations = pd.DataFrame(list(itertools.product(*x.values())), columns=x.keys())
+    google_week_hotspots = google_week_hotspots.merge(hs_hour_combinations, on=['hour', 'Hotspot'], how='outer')
+    google_week_hotspots['drukteindex'].fillna(value=0, inplace=True)
 
     log.debug('Writing to db..')
     google_week_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
