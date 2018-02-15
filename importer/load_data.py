@@ -120,4 +120,5 @@ if __name__ == '__main__':
     datasets = config_src.sections()
     if args.dataset:
         datasets = [args.dataset]
+
     main(args.datadir[0], args.dbConfig[0])
