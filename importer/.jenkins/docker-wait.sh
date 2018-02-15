@@ -2,6 +2,7 @@
 
 set -u
 set -e
+set -x
 
 # wait for postgres
 while ! nc -z database 5432
