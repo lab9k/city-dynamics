@@ -315,7 +315,7 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
 
 
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
-    path = os.path.join(datadir, filename)  
+    path = os.path.join(datadir, filename)
     df = pd.read_excel(path, sheet_name=3)
     indx = np.logical_and(df.wijk != 'gemiddelde',
                           np.logical_not(df.wijk.isnull()))
@@ -327,6 +327,11 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
             'som alle verblijvers',
             'oppervlakte land in vierkante meters',
             'oppervlakte land en water in vierkante meter']
+    df = df[cols]
+
+    # pandas.to_sql can't handle brackets within column names
+    df.rename(columns={'aantal  bezoekers (met correctie voor onderlinge overlap)':
+                            'aantal bezoekers met correctie voor onderlinge overlap'}, inplace=True)
     df.columns = [x.replace(" ", "_") for x in df.columns]
     df = df.head(98)
     return df
