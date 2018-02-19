@@ -315,7 +315,7 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
 
 
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
-    path = os.path.join(datadir, filename)
+    path = os.path.join(datadir, filename)  
     df = pd.read_excel(path, sheet_name=3)
     indx = np.logical_and(df.wijk != 'gemiddelde',
                           np.logical_not(df.wijk.isnull()))
