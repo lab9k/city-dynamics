@@ -1,8 +1,8 @@
 import logging
 
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy import Column, Integer, String, TIMESTAMP
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.schema import Sequence
 from sqlalchemy import create_engine
@@ -67,26 +67,40 @@ def make_engine(section='docker'):
     return engine
 
 
-def set_session(engine):
+def set_engine(engine):
     global session
     Session.configure(bind=engine)
     # create a configured "Session" class
     session = Session()
 
 
-class GoogleRawLocations(Base):
+class GoogleRawLocationsRealtime(Base):
     """
-    Raw json location information
+    Raw json location information realtime
     """
-    __tablename__ = 'google_raw_locations'
+    __tablename__ = 'google_raw_locations_realtime'
     id = Column(Integer, Sequence('grl_seq'), primary_key=True)
-    qa_id = Column(String, index=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
-    data = Column(JSON)
+    data = Column(JSONB)
+
+
+class GoogleRawLocationsExpected(Base):
+    """
+    Raw json location information of expected data
+    """
+    __tablename__ = 'google_raw_locations_expected'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    name = Column(String)
+    data = Column(JSONB)
 
 
 if __name__ == '__main__':
     # resets everything
+    log.warning('RECREATING DEFINED TABLES')
     engine = make_engine()
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)

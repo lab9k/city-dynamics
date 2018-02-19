@@ -24,7 +24,7 @@ class TestDB():
         self.testdatabase = config_auth.get('test', 'dbname')
         self.transaction = self.connection.begin()
         models.Base.metadata.create_all(bind=self.engine)
-        models.set_session(self.engine)
+        models.set_engine(self.engine)
 
     def tearDown(self):
         self.transaction.rollback()
@@ -39,15 +39,15 @@ class TestDBWriting(TestDB, unittest.TestCase):
     """
 
     @mock.patch('slurp_api.get_the_json')
-    def test_live_locations(self, get_json_mock):
+    def test_realtime_locations(self, get_json_mock):
 
         with open('fixtures/realtime.json') as mockjson:
             test_json = json.loads(mockjson.read())
 
         get_json_mock.return_value = test_json
-        slurp_api.locations_realtime()
+        slurp_api.get_locations('test', 'realtime')
         count = models.session.query(models.GoogleRawLocations).count()
         self.assertEqual(count, 1)
         # make sure we do not make duplicates
-        slurp_api.locations_realtime()
+        slurp_api.get_locations('test', 'realtime')
         self.assertEqual(count, 1)
