@@ -24,10 +24,6 @@ username: gemeenteAmsterdam
 
 import gevent
 import grequests
-from psycogreen.gevent import patch_psycopg
-patch_psycopg()
-
-
 # import requests
 import os
 import models
@@ -35,6 +31,9 @@ import logging
 
 from gevent.queue import JoinableQueue
 from dateutil import parser
+
+from psycogreen.gevent import patch_psycopg
+patch_psycopg()
 
 
 log = logging.getLogger(__name__)
