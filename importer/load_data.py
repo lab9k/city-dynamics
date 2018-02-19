@@ -1,11 +1,11 @@
-import os
+# import os
 import argparse
 import configparser
-import datetime
+# import datetime
 import logging
 import subprocess
 
-import pandas as pd
+# import pandas as pd
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
@@ -68,12 +68,12 @@ def load_gebieden(pg_str):
     for areaName in areaNames:
         WFS = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME=" + srsName + "&typename=" + areaName   # noqa
         wfs2psql(WFS, pg_str, areaName)
-        print(areaName + ' loaded into PG.')
+        logger.info(areaName + ' loaded into PG.')
 
 
-def main(datadir, dbConfig):
+def main(datadir, dbConfig, datasets):
 
-    LOCAL_POSTGRES_URL = URL(
+    POSTGRES_URL = URL(
         drivername='postgresql',
         username=config_auth.get(dbConfig, 'user'),
         password=config_auth.get(dbConfig, 'password'),
@@ -82,7 +82,8 @@ def main(datadir, dbConfig):
         database=config_auth.get(dbConfig, 'dbname')
     )
 
-    conn = create_engine(LOCAL_POSTGRES_URL)
+    conn = create_engine(POSTGRES_URL)
+
     pg_str = get_pg_str(
         config_auth.get(dbConfig, 'host'),
         config_auth.get(dbConfig, 'port'),
@@ -90,7 +91,7 @@ def main(datadir, dbConfig):
         config_auth.get(dbConfig, 'user'),
         config_auth.get(dbConfig, 'password'))
 
-    logger.info('Created database connection')
+    logger.info('Created database connections')
 
     for dataset in datasets:
         logger.info('Parsing and writing {} data...'.format(dataset))
@@ -112,12 +113,22 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(desc)
     parser.add_argument(
         'datadir', type=str, help='Local data directory', nargs=1)
+
     parser.add_argument(
         'dbConfig', type=str,
         help='database config settings: dev or docker', nargs=1)
+
     parser.add_argument('dataset', nargs='?', help="Upload specific dataset")
     args = parser.parse_args()
-    datasets = config_src.sections()
+
+    p_datasets = config_src.sections()
+
+    datasets = []
+
+    for x in p_datasets:
+        if config_src.get(x, 'ENABLE') == 'YES':
+            datasets.append(x)
+
     if args.dataset:
         datasets = [args.dataset]
 

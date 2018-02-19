@@ -335,7 +335,7 @@ def main():
     drukte['drukte_index'] = np.nan
 
     # make sure the sum of the weights != 0
-    linear_weigths = {'verblijversindex': 0,
+    linear_weigths = {'verblijversindex': 1,
                       'google': 0,
                       'gvb': 0,
                       'google_week': 1,
@@ -353,7 +353,7 @@ def main():
     # indx = drukte.drukte_index.isnull()
     # drukte.loc[indx, 'drukte_index'] = 0
 
-    # drukte['drukte_index'] = min_max(drukte['drukte_index'])
+    drukte['drukte_index'] = min_max(drukte['drukte_index'])
 
     # sort values
     drukte = drukte.sort_values(['timestamp', 'vollcode'])

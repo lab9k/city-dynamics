@@ -154,6 +154,7 @@ class Process():
                 m2 = pd.DataFrame(list(vollcodes_m2.items()), columns=['vollcode','oppervlakte_m2'])
                 temp = self.data.merge(m2)
                 temp.gvb_buurt = temp.gvb_buurt / temp.oppervlakte_m2  # Normalize based on surface area
+                temp.drop('oppervlakte_m2', axis=1, inplace=True)
                 self.data = temp
 
 

@@ -41,8 +41,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime' +
-                'Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp__gte=date)
 
         return queryset
@@ -51,8 +50,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime' +
-                'Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp__lte=date)
 
         return queryset
@@ -61,8 +59,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime' +
-                'Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
         queryset = queryset.filter(timestamp=date)
 
         return queryset
@@ -143,14 +140,17 @@ class RecentIndexViewSet(rest.DatapuntViewSet):
 
 
 class BuurtcombinatieViewset(viewsets.ModelViewSet):
-    """ ViewSet for retrieving buurtcombinatie polygons """
+    """
+    ViewSet for retrieving buurtcombinatie polygons
+    """
+
     queryset = models.Buurtcombinatie.objects.all()
     serializer_class = serializers.BuurtcombinatieSerializer
 
 
 class DrukteindexHotspotViewset(rest.DatapuntViewSet):
     """
-    Drukteindex API
+    Hotspot drukteindex API
     """
 
     serializer_class = serializers.HotspotIndexSerializer
@@ -158,7 +158,12 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
 
     def get_queryset(self):
 
-        queryset = models.DrukteindexHotspots.objects.order_by("hour")
+        queryset = (
+            models.Hotspots.objects
+            .prefetch_related('druktecijfers')
+            .order_by("hotspot")
+        )
+
         hotspot = self.request.query_params.get('hotspot', None)
         if hotspot is not None:
             queryset = queryset.filter(hotspot=hotspot)

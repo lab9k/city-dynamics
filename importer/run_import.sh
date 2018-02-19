@@ -12,3 +12,6 @@ python load_data.py /data docker
 
 # add geometry
 python add_areas.py docker
+
+# create empty tables
+python sql_migrations.py docker
