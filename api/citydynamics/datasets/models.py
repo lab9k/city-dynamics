@@ -18,18 +18,7 @@ class Buurtcombinatie(models.Model):
     wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'buurtcombinatie'
-
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
 
 
 class Drukteindex(models.Model):
@@ -46,10 +35,6 @@ class Drukteindex(models.Model):
     google = models.FloatField(blank=True, null=True)
     gvb = models.FloatField(blank=True, null=True)
     drukte_index = models.FloatField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'drukteindex'
 
 
 class Hotspots(models.Model):
