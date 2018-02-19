@@ -132,6 +132,7 @@ def main():
 
     google_week_hotspots.rename(columns={'historical': 'drukteindex'}, inplace=True)
 
+    # fill the dataframe with all missing hotspot-hour combinations
     x = {"hour": np.arange(24), "Hotspot": hotspots_df['Hotspot'].unique().tolist()}
     hs_hour_combinations = pd.DataFrame(list(itertools.product(*x.values())), columns=x.keys())
     google_week_hotspots = google_week_hotspots.merge(hs_hour_combinations, on=['hour', 'Hotspot'], how='outer')
