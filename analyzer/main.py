@@ -11,6 +11,7 @@ import argparse
 import logging
 import numpy as np
 import pandas as pd
+import datetime
 import q
 
 import process
@@ -64,8 +65,6 @@ def run_imports():
     dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
     brt = process.Process_buurtcombinatie(dbconfig)
     vbi = process.Process_verblijversindex(dbconfig)
-    # vollcodes = list(brt.data.vollcode.unique())
-    # vollcodes_m2 = pd.Series(vbi.data.oppervlakte_m2.values, index=vbi.data.vollcode).to_dict()
     gvb_st = process.Process_gvb_stad(dbconfig)
     gvb_bc = process.Process_gvb_buurt(dbconfig)
     tel = process.Process_tellus(dbconfig)
@@ -73,15 +72,11 @@ def run_imports():
     alp_live = process.Process_alpha_live(dbconfig)
 
     # initialize drukte dataframe
-    start = np.min(alp_live.data.timestamp)
-    end = np.max(alp_live.data.timestamp)
+    start = datetime.datetime(2018, 2, 12, 0, 0)    # Start of a week: Monday at midnight
+    end = datetime.datetime(2018, 2, 18, 23, 0)     # End of this week: Sunday 1 hour before midnight
     drukte = init_drukte_df(start, end, vollcodes_list)
 
     # merge datasets
-    cols = ['timestamp', 'vollcode', 'alpha_live']
-    drukte = pd.merge(
-        drukte, alp_live.data[cols], on=['timestamp', 'vollcode'], how='left')
-
     cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
     drukte = pd.merge(
         drukte, alp_hist.data[cols],
@@ -99,14 +94,14 @@ def run_imports():
         drukte, vbi.data,
         on='vollcode', how='left')
 
-    # Middel alpha expected en alpha live
-    drukte['alpha'] = drukte[['alpha_week', 'alpha_live']].mean(axis=1)
-
     # Middel gvb
     drukte['gvb'] = drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1)
 
     # init drukte index
     drukte['drukte_index'] = np.nan
+
+    # Remove timestamps from weekpattern (only day and hour are relevant)
+    drukte.drop('timestamp', axis=1, inplace=True)
 
     return drukte
 
@@ -119,10 +114,8 @@ def linear_model(drukte):
 
     # make sure the sum of the weights != 0
     linear_weigths = {'verblijversindex': 1,
-                      'alpha': 0,
                       'gvb': 8,
-                      'alpha_week': 2,
-                      'alpha_live': 0}
+                      'alpha_week': 2}
 
     lw_normalize = sum(linear_weigths.values())
 
@@ -133,7 +126,7 @@ def linear_model(drukte):
     drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
 
     # Sort values
-    drukte = drukte.sort_values(['timestamp', 'vollcode'])
+    drukte = drukte.sort_values(['vollcode', 'weekday', 'hour'])
 
     return drukte
 
