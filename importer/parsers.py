@@ -327,6 +327,7 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
             'som alle verblijvers',
             'oppervlakte land in vierkante meters',
             'oppervlakte land en water in vierkante meter']
+    df.columns = [x.replace(" ", "_") for x in df.columns]
     df = df.loc[indx, cols]
     return df
 
