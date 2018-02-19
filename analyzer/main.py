@@ -126,7 +126,7 @@ def linear_model(drukte):
     drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
 
     # Sort values
-    drukte = drukte.sort_values(['timestamp', 'vollcode'])
+    drukte = drukte.sort_values(['vollcode', 'weekday', 'hour'])
 
     return drukte
 
@@ -232,7 +232,6 @@ def write_to_db(drukte):
 def run():
     """Run the main process of this file: loading and combining all datasets."""
     drukte = run_imports()
-    q.d()
     drukte = linear_model(drukte)
     # drukte = pipeline_model(drukte)
     write_to_db(drukte)
