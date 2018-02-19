@@ -1,0 +1,54 @@
+[
+    {
+        "BatchTime": "2018-02-15T15:31:37.115000Z",
+        "Category": 2,
+        "Expected": 0.09210526315789473,
+        "Real-time": 0,
+        "ScrapeTime": "2018-02-15T15:31:43Z",
+        "VisitDuration": "N/A",
+        "formatted_address": "Ruysdaelkade 115, 1072 AN Amsterdam, Netherlands",
+        "location": {
+            "coordinates": [
+                4.8872024000000005,
+                52.3547966
+            ],
+            "type": "Point"
+        },
+        "name": "Cafe Binnen Buiten",
+        "place_id": "ChIJZea7PvIJxkcRoSZvAsjqsUE",
+        "types": [
+            "cafe",
+            "bar",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+        ],
+        "url": "https://www.google.com/search?q=Cafe Binnen Buiten, Ruysdaelkade 115, 1072 AN Amsterdam, Netherlands"
+    },
+    {
+        "BatchTime": "2018-02-15T15:33:11.007000Z",
+        "Category": 2,
+        "Expected": 0.4342105263157895,
+        "Real-time": 0,
+        "ScrapeTime": "2018-02-15T15:33:16Z",
+        "VisitDuration": "N/A",
+        "formatted_address": "Sarphatistraat 23, 1018 EV Amsterdam, Netherlands",
+        "location": {
+            "coordinates": [
+                4.9048664,
+                52.3607136
+            ],
+            "type": "Point"
+        },
+        "name": "bar Lempicka",
+        "place_id": "ChIJe9hJypAJxkcR4QIWttJV8_M",
+        "types": [
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+        ],
+        "url": "https://www.google.com/search?q=bar Lempicka, Sarphatistraat 23, 1018 EV Amsterdam, Netherlands"
+    }
+]
