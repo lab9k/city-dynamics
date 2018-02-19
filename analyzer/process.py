@@ -321,8 +321,16 @@ class Process_verblijversindex(Process):
         super().__init__(dbconfig)
         self.name = 'verblijversindex'
         self.import_data(['VERBLIJVERSINDEX'],
-                    ['wijk', 'verblijversindex', 'oppervlakte_m2'])
-        self.rename({'wijk': 'vollcode'})
+                    ['wijk', 'verblijversindex', 'oppervlakte_m2', 'aantal_inwoners',
+                     'aantal_werkzame_personen', 'aantal studenten',
+                     'aantal_bezoekers_(met_correctie_voor_onderlinge_overlap)',
+                     'som_alle_verblijvers'])
+        self.rename({'wijk': 'vollcode',
+                     'aantal inwoners': 'inwoners',
+                     'aantal_werkzame_personen': 'werkzame_personen',
+                     'aantal_studenten': 'studenten',
+                     'aantal_bezoekers_(met_correctie_voor_onderlinge_overlap)': 'bezoekers',
+                     'som_alle_verblijvers': 'verblijvers'})
 
 ##############################################################################
 class Process_tellus(Process):
