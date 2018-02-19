@@ -319,12 +319,16 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
     df = pd.read_excel(path, sheet_name=3)
     indx = np.logical_and(df.wijk != 'gemiddelde',
                           np.logical_not(df.wijk.isnull()))
-    cols = ['wijk', 'oppervlakte land in vierkante meters',
-            'verbl. Per HA (land) 2016']
+    cols = ['wijk',
+            'aantal inwoners',
+            'aantal werkzame personen',
+            'aantal studenten',
+            'aantal  bezoekers (met correctie voor onderlinge overlap)',
+            'som alle verblijvers',
+            'oppervlakte land in vierkante meters',
+            'oppervlakte land en water in vierkante meter']
+    df.columns = [x.replace(" ", "_") for x in df.columns]
     df = df.loc[indx, cols]
-    df[cols[2]] = df[cols[2]].fillna(0)
-    df[cols[2]] = np.round(df[cols[2]]).astype(int)
-    df.columns = ['wijk', 'oppervlakte_m2', 'verblijversindex']
     return df
 
 
