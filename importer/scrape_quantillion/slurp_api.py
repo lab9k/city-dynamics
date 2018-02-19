@@ -38,6 +38,14 @@ from dateutil import parser
 
 
 log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
+logging.getLogger('urllib3').setLevel(logging.ERROR)
+
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
+
+WORKERS = 5
+
+GET_QUEUE = JoinableQueue(maxsize=1500)
 
 STATUS = {
     'done': False

@@ -1,3 +1,4 @@
+import os
 import logging
 
 from sqlalchemy.orm import sessionmaker
@@ -17,6 +18,8 @@ import configparser
 
 config_auth = configparser.RawConfigParser()
 config_auth.read('../auth.conf')
+
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
 
 
 logging.basicConfig(level=logging.DEBUG)

@@ -46,7 +46,7 @@ class TestDBWriting(TestDB, unittest.TestCase):
 
         get_json_mock.return_value = test_json
         slurp_api.get_locations('test', 'realtime')
-        count = models.session.query(models.GoogleRawLocations).count()
+        count = models.session.query(models.GoogleRawLocationsRealtime).count()
         self.assertEqual(count, 1)
         # make sure we do not make duplicates
         slurp_api.get_locations('test', 'realtime')
