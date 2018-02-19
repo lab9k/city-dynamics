@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Amsterdam - Urban Density Index</title>
+	<title>DrukteRadar - Amsterdam</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,12 +10,9 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
-	<!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
-	<script src="js/jquery-d3-arc-gauge.js"></script>
 	<script src="js/jquery-d3-area.js"></script>
-	<script src="js/ranges.js"></script>
 	<script src="js/index.js"></script>
 
 	<link rel="stylesheet" href="css/leaflet.css">
@@ -29,75 +26,28 @@
 
 
 <div id="mapid">
-	<!--<div class="header">-->
-		<!--<div class="header_top"></div>-->
-		<!--<div class="header_bot">-->
-			<!--<h1>Amsterdam | <span>DrukteRadar</span></h1>-->
-			<!--<div class="info_b">-->
-				<!--<i class="material-icons">info_outline</i>-->
-			<!--</div>-->
-			<!--<div class="ui-widget">-->
-				<!--<label for="loc_i">&nbsp;</label>-->
-				<!--<input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam">-->
-			<!--</div>-->
-			<!--<div class="ui-widget">-->
-				<!--<label for="date_i">&nbsp;</label>-->
-				<!--<input type="text" id="date_i" class="date_i" value="" placeholder="Today">-->
-			<!--</div>-->
-			<!--<div class="ui-widget">-->
-				<!--<label for="time_i">&nbsp;</label>-->
-				<!--<input type="text" id="time_i" class="time_i" value="" placeholder="Now">-->
-			<!--</div>-->
-			<!--<div class="ui-widget">-->
-				<!--<button type="text" id="now_b" class="now_b active">NU</button>-->
-			<!--</div>-->
-			<!--<div class="analyse_b">-->
-
-			<!--</div>-->
-		<!--</div>-->
-		<!--<div class="header_analyses">-->
-			<!--<div class="analyses_block">-->
-				<!--<div class="analyse_header"><h2>Correlatie DrukteRadar / CMSA telling</h2></div>-->
-				<!--<div class="analyse_body">-->
-					<!--<img src="content/analyse_1.png">-->
-					<!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed luctus ligula, ac sagittis massa. Nam maximus tellus id dapibus aliquet. Nam vitae quam placerat, eleifend velit quis, consequat nisi. Suspendisse aliquet, ipsum vel rhoncus maximus, erat quam varius magna, ut semper sem elit ac eros. Nullam sagittis consectetur augue quis sagittis. Quisque et consectetur enim, blandit lacinia neque. Nam pellentesque diam ac magna tempor posuere. Integer et aliquam nunc. Maecenas at dictum leo, et hendrerit turpis. Integer eros neque, placerat quis scelerisque nec, consequat vitae ante. Quisque cursus ipsum odio, in tincidunt mi ullamcorper eu. Proin non consectetur tellus. Morbi in mauris dignissim, efficitur nibh sed, consectetur leo. Fusce aliquet pulvinar lorem vel condimentum.</p>-->
-				<!--</div>-->
-				<!--<div class="analyse_footer"></div>-->
-			<!--</div>-->
-
-			<!--<div class="analyses_block">-->
-				<!--<div class="analyse_header"><h2>Correlatie DrukteRadar / Afval telling</h2></div>-->
-				<!--<div class="analyse_body">-->
-					<!--<img src="content/analyse_2.png">-->
-					<!--<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras sed luctus ligula, ac sagittis massa. Nam maximus tellus id dapibus aliquet. Nam vitae quam placerat, eleifend velit quis, consequat nisi. Suspendisse aliquet, ipsum vel rhoncus maximus, erat quam varius magna, ut semper sem elit ac eros. Nullam sagittis consectetur augue quis sagittis. Quisque et consectetur enim, blandit lacinia neque. Nam pellentesque diam ac magna tempor posuere. Integer et aliquam nunc. Maecenas at dictum leo, et hendrerit turpis. Integer eros neque, placerat quis scelerisque nec, consequat vitae ante. Quisque cursus ipsum odio, in tincidunt mi ullamcorper eu. Proin non consectetur tellus. Morbi in mauris dignissim, efficitur nibh sed, consectetur leo. Fusce aliquet pulvinar lorem vel condimentum.</p>-->
-				<!--</div>-->
-				<!--<div class="analyse_footer"></div>-->
-			<!--</div>-->
-		<!--</div>-->
-	<!--</div>-->
-
 	<div class="search">
 		<a href="javascript:void(0);" ><i class="material-icons">search</i></a>
 		<input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam">
 		<i class="material-icons searchclose">close</i>
 	</div>
 
+	<div class="logo"></div>
+
+	<div class="m_more">
+		<a href="javascript:void(0);"><i class="material-icons">more_vert</i></a>
+	</div>
+
+	<div class="m_menu">
+		<ul>
+			<li><a href="javascript:void(0);">DrukteRadar uitleg</a></li>
+			<li><a target="blank" href="https://formulieren.amsterdam.nl/TriplEforms/DirectRegelen/formulier/nl-NL/evAmsterdam/scmor.aspx/fMORGegevensMelding">Maak een melding van overlast:</a></li>
+			<li><a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a></li>
+		</ul>
+	</div>
+
 	<div class="controls">
-		<i class="material-icons">all_out</i>
-	</div>
-
-
-	<div class="info">
-		<h2>DrukteRadar uitleg.</h2>
-		<p>De Amsterdam Drukte Radar geeft drukte in de stad weer aan de hand van een dichtheids-index voor iedere buurt van Amsterdam, vergeleken met de andere buurten van de stad.</p>
-		<p>De dichtheids-index is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Data van wegverkeer, OV, parkeren, en bezoeken aan openbare plekken wordt continue verzameld.</p>
-		<i class="material-icons close">close</i>
-	</div>
-
-	<div class="leftbox">
-		<h2></h2><i class="material-icons close">close</i>
-		<div class="content">
-		</div>
+		<a href="javascript:void(0);"><i class="material-icons">all_out</i></a>
 	</div>
 
 	<div class="themas">
@@ -126,48 +76,22 @@
 		</div>
 	</div>
 
-	<div class="m_more">
-		<a href="javascript:void(0);"><i class="material-icons">more_vert</i></a>
+	<div class="mapswitch">
+		<a href="javascript:void(0);" class="active"><span>Buurten</span></a>
 	</div>
 
-	<div class="m_menu">
-		<ul>
-			<li><a href="javascript:void(0);">About</a></li>
-		</ul>
+	<div class="info">
+		<h2>DrukteRadar uitleg.</h2>
+		<p>De Amsterdam Drukte Radar geeft drukte in de stad weer aan de hand van een dichtheids-index voor iedere buurt van Amsterdam, vergeleken met de andere buurten van de stad.</p>
+		<p>De dichtheids-index is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Data van wegverkeer, OV, parkeren, en bezoeken aan openbare plekken wordt continue verzameld.</p>
+		<i class="material-icons close">close</i>
 	</div>
 
-	<!--<div class="detail">-->
-		<!--<div class="detail_top clearfix"><h2>Amsterdam</h2><i class="material-icons">chevron_right</i></div>-->
-		<!--<div class="detail_bot">-->
-			<!--<div class="gauge" data-width="150" data-height="150">-->
-				<!--<div class="gauge-text">-->
-					<!--<span class="value">0</span>-->
-				<!--</div>-->
-			<!--</div>-->
-			<!--<div class="details_graph">-->
-				<!--<div class="graph_controls">-->
-					<!--<a class="graph_hours_b active">Dag</a>-->
-					<!--<a class="graph_days_b">Week</a>-->
-				<!--</div>-->
-				<!--<div class="hours_graph">-->
-					<!--<svg class="svg_hours" width="460" height="160"></svg>-->
-				<!--</div>-->
-				<!--<div class="days_graph">-->
-					<!--<svg class="svg_days" width="460" height="160"></svg>-->
-				<!--</div>-->
-			<!--</div>-->
-			<!--<div class="details_temp">-->
-				<!--<iframe id="widget-frame" src="//www.weeronline.nl/Go/ExternalWidgetsNew/OneDayCitySmall?gid=4058223&temperatureScale=Celsius&defaultSettings=False" width="125" height="60" frameborder="0" scrolling="no" style="border: none;" allowtransparency="true"></iframe>-->
-			<!--</div>-->
-		<!--</div>-->
-	<!--</div>-->
-
-
-
-	<!--<div class="cta">-->
-		<!--<a target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D">Wat doet de gemeente aan de drukte?</a>-->
-		<!--<a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Maak een melding van overlast.</a>-->
-	<!--</div>-->
+	<div class="leftbox">
+		<h2></h2><i class="material-icons close">close</i>
+		<div class="content">
+		</div>
+	</div>
 
 	<svg xmlns="w3.org/2000/svg" version="1.1" style="width:0;height:0;">
 		<defs>
@@ -190,35 +114,16 @@
 			</linearGradient>
 		</defs>
 	</svg>
-
-
 </div>
 
 <div class="graphbar">
 	<div class="graphbar_left">
-		<!--<div class="legend">-->
-			<!--<div class="density"></div>-->
-			<!--<span class="min">Stil</span>-->
-			<!--<span class="max">Druk</span>-->
-		<!--</div>-->
 		<a class="map_buurten" href="javascript:void(0);"></a>
 		<a class="map_hotspots active" href="javascript:void(0);"></a>
 	</div>
 		<div class="graphbar_center">
-			<div class="graphbar_title">Amsterdam</div>
+			<div class="graphbar_title"><h2>Amsterdam</h2><span></span></div>
 			<div class="graphbar_graph">
-				<div class="details_graph">
-				<div class="graph_controls">
-				<a class="graph_hours_b active">Dag</a>
-				<a class="graph_days_b">Week</a>
-				</div>
-				<div class="hours_graph">
-				<svg class="svg_hours" width="460" height="160"></svg>
-				</div>
-				<div class="days_graph">
-				<svg class="svg_days" width="460" height="160"></svg>
-				</div>
-				</div>
 			</div>
 		</div>
 	<div class="graphbar_right">
