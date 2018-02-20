@@ -25,6 +25,7 @@ For each dataset, a subclass of class 'Process' is created to load and pre-proce
 import configparser
 import argparse
 import logging
+import datetime
 import numpy as np
 import pandas as pd
 import q
@@ -32,7 +33,6 @@ import q
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sklearn import preprocessing
-from datetime import timedelta
 
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
@@ -139,14 +139,14 @@ class Process():
         # In onderstaande stappen kunnen momenteel locaties wegvallen welke geen vollcode
         # bevatten die in de verblijversindex voorkomt (dit is bijv. het geval met de gvb data).
         if cols != []:                  # Check if any columns should be normalized at all.
+            m2 = pd.DataFrame(list(vollcodes_m2_land.items()), columns=['vollcode','oppervlakte_land_m2'])
             if type(cols) == str:       # Check whether we have a single column name string,
                 cols = [cols]           # if so, wrap this single name in a list.
             for col in cols:            # Now process the list of 1+ column names.
-                m2 = pd.DataFrame(list(vollcodes_m2_land.items()), columns=['vollcode','oppervlakte_land_m2'])
                 temp = self.data.merge(m2)
-                temp.gvb_buurt = temp.gvb_buurt / temp.oppervlakte_land_m2  # Normalize based on surface area
-                temp.drop('oppervlakte_land_m2', axis=1, inplace=True)
+                temp[col] = temp[col] / temp.oppervlakte_land_m2  # Normalize based on surface area
                 self.data = temp
+            temp.drop('oppervlakte_land_m2', axis=1, inplace=True)
 
 
     def normalize_acreage_city(self, col):
@@ -199,7 +199,7 @@ class Process_gvb_stad(Process):
                          ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
         self.dataset_specific()
         self.rename({'incoming': 'gvb_stad'})
-        self.normalize_acreage_city('gvb_stad')
+        # self.normalize_acreage_city('gvb_stad')
 
 
     def dataset_specific(self):
@@ -222,7 +222,7 @@ class Process_gvb_buurt(Process):
                          ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
         self.dataset_specific()
         self.rename({'incoming': 'gvb_buurt'})
-        self.normalize_acreage('gvb_buurt')
+        # self.normalize_acreage('gvb_buurt')
 
 
     def dataset_specific(self):
@@ -244,7 +244,7 @@ class Process_alpha_historical(Process):
                          ['name', 'vollcode', 'timestamp', 'historical', 'stadsdeel_code'])
         self.dataset_specific()
         self.rename({'historical': 'alpha_week'})
-        self.normalize('alpha_week')
+        # self.normalize('alpha_week')
 
 
     def dataset_specific(self):
@@ -291,7 +291,7 @@ class Process_alpha_live(Process):
                          ['name', 'vollcode', 'timestamp', 'live', 'stadsdeel_code'])
         self.dataset_specific()
         self.rename({'live': 'alpha_live'})
-        self.normalize('alpha_live')
+        # self.normalize('alpha_live')
 
 
     def dataset_specific(self):
@@ -323,7 +323,7 @@ class Process_tellus(Process):
         self.import_data(['tellus_with_bc'],
                          ['tellus', 'timestamp', 'vollcode'])
         self.dataset_specific()
-        self.normalize('tellus')
+        # self.normalize('tellus')
 
 ##############################################################################
 class Process_buurtcombinatie(Process):
@@ -332,3 +332,61 @@ class Process_buurtcombinatie(Process):
         super().__init__(dbconfig)
         self.name = 'bc_codes'
         self.import_data(['buurtcombinatie'], ['vollcode'])
+
+
+##############################################################################
+class Process_drukte(Process):
+    """This class implements the drukte process to combine all multiple datasources"""
+
+    def __init__(self, dbconfig):
+        super().__init__(dbconfig)
+        self.name = 'drukte'
+
+        # Run import processes of other datasets
+        brt = Process_buurtcombinatie(dbconfig)
+        vbi = Process_verblijversindex(dbconfig)
+        gvb_st = Process_gvb_stad(dbconfig)
+        gvb_bc = Process_gvb_buurt(dbconfig)
+        alp_hist = Process_alpha_historical(dbconfig)
+        alp_live = Process_alpha_live(dbconfig)
+
+        # initialize drukte dataframe
+        start = datetime.datetime(2018, 2, 12, 0, 0)  # Start of a week: Monday at midnight
+        end = datetime.datetime(2018, 2, 18, 23, 0)  # End of this week: Sunday 1 hour before midnight
+        self.data = self.init_drukte_df(start, end, list(vollcodes_m2_land.keys()))
+
+        # merge datasets
+        cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
+        self.data = pd.merge(
+            self.data, alp_hist.data[cols],
+            on=['weekday', 'hour', 'vollcode'], how='left')
+
+        self.data = pd.merge(
+            self.data, gvb_bc.data,
+            on=['vollcode', 'weekday', 'hour'], how='left')
+
+        self.data = pd.merge(
+            self.data, gvb_st.data,
+            on=['weekday', 'hour'], how='left')
+
+        self.data = pd.merge(
+            self.data, vbi.data,
+            on='vollcode', how='left')
+
+        # init drukte index
+        self.data['drukte_index'] = 0
+
+        # Remove timestamps from weekpattern (only day and hour are relevant)
+        self.data.drop('timestamp', axis=1, inplace=True)
+
+
+    def init_drukte_df(self, start_datetime, end_datetime, vollcodes):
+        timestamps = pd.date_range(start=start_datetime, end=end_datetime, freq='H')
+        ts_vc = [(ts, vc) for ts in timestamps for vc in vollcodes]
+        df = pd.DataFrame({
+            'timestamp': [x[0] for x in ts_vc],
+            'vollcode': [x[1] for x in ts_vc]
+        }).sort_values(['timestamp', 'vollcode'])
+        df['weekday'] = [ts.weekday() for ts in df.timestamp]
+        df['hour'] = [ts.hour for ts in df.timestamp]
+        return df

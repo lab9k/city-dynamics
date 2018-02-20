@@ -51,60 +51,24 @@ def init_drukte_df(start_datetime, end_datetime, vollcodes):
     return drukte
 
 ##############################################################################
-def run_imports():
-
-    # Import datasets
-    dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
-    brt = process.Process_buurtcombinatie(dbconfig)
-    vbi = process.Process_verblijversindex(dbconfig)
-    gvb_st = process.Process_gvb_stad(dbconfig)
-    gvb_bc = process.Process_gvb_buurt(dbconfig)
-    #tel = process.Process_tellus(dbconfig)
-    alp_hist = process.Process_alpha_historical(dbconfig)
-    alp_live = process.Process_alpha_live(dbconfig)
-
-    # initialize drukte dataframe
-    start = datetime.datetime(2018, 2, 12, 0, 0)    # Start of a week: Monday at midnight
-    end = datetime.datetime(2018, 2, 18, 23, 0)     # End of this week: Sunday 1 hour before midnight
-    drukte = init_drukte_df(start, end, list(vollcodes_m2_land.keys()))
-
-    # merge datasets
-    cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
-    drukte = pd.merge(
-        drukte, alp_hist.data[cols],
-        on=['weekday', 'hour', 'vollcode'], how='left')
-
-    drukte = pd.merge(
-        drukte, gvb_bc.data,
-        on=['vollcode', 'weekday', 'hour'], how='left')
-
-    drukte = pd.merge(
-        drukte, gvb_st.data,
-        on=['weekday', 'hour'], how='left')
-
-    drukte = pd.merge(
-        drukte, vbi.data,
-        on='vollcode', how='left')
-
-    # Middel gvb
-    drukte['gvb'] = drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1)
-
-    # init drukte index
-    drukte['drukte_index'] = np.nan
-
-    # Remove timestamps from weekpattern (only day and hour are relevant)
-    drukte.drop('timestamp', axis=1, inplace=True)
-
-    return drukte
-
-##############################################################################
 def linear_model(drukte):
+    """A linear model computing the drukte index values."""
+
+    # Normalize gvb data to range 0-1 to conform with Alpha data.
+    drukte.normalize_acreage_city('gvb_stad')
+    drukte.normalize_acreage('gvb_buurt')
+
+    # Normalize Alpha data to range 0-1 (not sure this is a good choice)
+    drukte.normalize('alpha_week')
+
+    # Mean gvb
+    drukte.data['gvb'] = drukte.data[['gvb_buurt', 'gvb_stad']].mean(axis=1)
 
     # Normalise verblijversindex en gvb
-    drukte['verblijvers_ha_2016'] = process.norm(drukte.verblijvers_ha_2016)
-    drukte['gvb'] = process.norm(drukte.gvb)
+    drukte.data['verblijvers_ha_2016'] = process.norm(drukte.data.verblijvers_ha_2016)
+    drukte.data['gvb'] = process.norm(drukte.data.gvb)
 
-    # make sure the sum of the weights != 0
+    # Make sure the sum of the weights != 0
     linear_weigths = {'verblijvers_ha_2016': 1,
                       'gvb': 8,
                       'alpha_week': 2}
@@ -112,16 +76,80 @@ def linear_model(drukte):
     lw_normalize = sum(linear_weigths.values())
 
     for col, weight in linear_weigths.items():
-        if col in drukte.columns:
-            drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col] * weight, fill_value=0)
+        if col in drukte.data.columns:
+            drukte.data['drukte_index'] = drukte.data['drukte_index'].add(drukte.data[col] * weight, fill_value=0)
 
-    drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
+    drukte.data['drukte_index'] = drukte.data['drukte_index'] / lw_normalize
 
     # Sort values
-    drukte = drukte.sort_values(['vollcode', 'weekday', 'hour'])
+    drukte.data = drukte.data.sort_values(['vollcode', 'weekday', 'hour'])
 
     return drukte
 
+##############################################################################
+def pipeline_model(drukte):
+    """Implement pipeline model for creating the Drukte Index"""
+
+    drukte.data['gvb'] = drukte.data[['gvb_buurt', 'gvb_stad']].mean(axis=1)
+
+    # Linear weights for the creation of the base value
+    base_list = {'verblijvers_ha_2016': 2, 'gvb': 8,}
+    # base_list = {'verblijvers_ha_2016': 2, 'gvb_buurt': 8, 'gvb_stad': 1}
+
+    # Modification mappings defining what flex is used for each dataset
+    mod_list = {'verblijvers_ha_2016': 'alpha_week'}
+
+    # Specify view to choose scaling method (options: 'toerist', 'ois', 'politie')
+    view = 'tourist'
+
+    #### (1) Calculate base values  (use absolute sources)
+    for base, weight in base_list.items():
+        if base in drukte.data.columns:
+
+            # Initialize base and result columns
+            base_name = 'base_' + base
+            drukte.data[base_name] = np.nan
+
+            # Compute weighted base value
+            drukte.data[base_name] = drukte.data[base_name].add(drukte.data[base] * weight, fill_value=0)
+            drukte.data[base_name] /= sum(base_list.values())  # Normalize base list weights
+
+
+    #### (2) Modify base values (relative sources)
+    # We assume a value of 1 in the Alpha dataset (the maximum value) implies that
+    # the base value should be multiplied/flexed with the factor given below.
+    factor = 4
+    for base, mod in mod_list.items():
+        base_name = 'base_' + base
+        mod_name = 'base_' + base + '_mod_' + mod
+        drukte.data[mod_name] = drukte.data[base_name].fillna(0) * (drukte.data[mod].fillna(0) * factor)
+
+    # Compute drukte index values
+    for base in base_list:
+        if base in mod_list.keys():
+            mod_name = 'base_' + base + '_mod_' + mod_list[base]
+            drukte.data['drukte_index'] += drukte.data[mod_name]
+        else:
+            base_name = 'base_' + base
+            drukte.data['drukte_index'] += drukte.data[base_name].fillna(0)
+
+    # Compute the drukte_index using the base and modified values (commented out because done in previous step now.)
+    # for base in base_list:
+    #     base_name = 'base_' + base
+    #     mod_name = 'base_' + base + '_mod_' + mod
+    #     if base_name + base in drukte.data.columns:
+    #         drukte.data['drukte_index'] += drukte.data[mod_name]
+
+    #### (3) Normalize on acreage
+    drukte.normalize_acreage('drukte_index')
+
+    #### (4) Scale data for specific group of viewers
+    if 'view' == 'tourist':
+        drukte.normalize('drukte_index')
+
+    return drukte
+
+'''
 ##############################################################################
 def pipeline_base(drukte):
     """ Create base column values of ."""
@@ -151,64 +179,20 @@ def pipeline_scale(drukte):
     pass
 
 ##############################################################################
-def pipeline_model(drukte):
-    """Implement pipeline model for creating the Drukte Index"""
 
-    # Linear weights for the creation of the base value
-    base_list = {'verblijvers_ha_2016': 1, 'gvb': 4}
+# Create a base crowdedness value (absolute values)
+drukte = pipeline_base(drukte)
 
-    # Modification mappings defining what flex is used for each dataset
-    mod_list = {'verblijvers_ha_2016': 'alpha'}
+# Modify base value with relative components to create a proxy crowdedness value
+# (estimating: #people/m^2)
+drukte = pipeline_mod(drukte)
 
-    # Specify view to choose scaling method (options: 'toerist', 'ois', 'politie')
-    view = 'toerist'
+# Scale proxy value to create a certain view (e.g 'Toerist', 'OIS', 'Politie', etc..)
+drukte = pipeline_scale(drukte)
 
-
-    #### (1) Calculate base values  (use absolute sources)
-    for base, weight in base_list.items():
-        if base in drukte.columns:
-
-            # Initialize base and result columns
-            base_name = 'base_' + base
-            drukte[base_name] = np.nan
-
-            # Compute weighted base value
-            drukte[base_name] = drukte[base_name].add(drukte[base] * weight, fill_value=0)
-            drukte[base_name] /= sum(base_list.values())  # Normalize base weights
-
-
-    #### (2) Modify base values  (use relative sources)
-    # We assume a value of 1 in the Alpha dataset (the maximum value) implies that
-    # the base value should be multiplied/flexed with the factor given below.
-    factor = 4
-    for base, mod in mod_list.items():
-        base_name = 'base_' + base
-        if base_name in drukte.columns:
-            drukte['drukteindex'] += drukte[base_name] * (drukte[mod] * factor)
-
-
-    #### (3) Normalize on acreage
-    # TODO: Willen we gvb acreage al bij het importen normaliseren? Of niet?
-    # TODO: Hier wellicht normaliseren
-
-    #### (4) Scale
-    # TODO: Data scalen tussen 0 en 1 voor front end (toerist view)
-
-
-    '''
-    # Create a base crowdedness value (absolute values)
-    drukte = pipeline_base(drukte)
-
-    # Modify base value with relative components to create a proxy crowdedness value
-    # (estimating: #people/m^2)
-    drukte = pipeline_mod(drukte)
-
-    # Scale proxy value to create a certain view (e.g 'Toerist', 'OIS', 'Politie', etc..)
-    drukte = pipeline_scale(drukte)
-
-    # Return dataframe
-    return drukte
-    '''
+# Return dataframe
+return drukte
+'''
 
 ##############################################################################
 def write_to_db(drukte):
@@ -216,7 +200,7 @@ def write_to_db(drukte):
     log.debug('Writing data to database.')
     dbconfig = args.dbConfig[0]
     connection = process.connect_database(dbconfig)
-    drukte.to_sql(
+    drukte.data.to_sql(
         name='drukteindex', con=connection, index=True, if_exists='replace')
     connection.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
     log.debug('done.')
@@ -224,15 +208,15 @@ def write_to_db(drukte):
 ##############################################################################
 def run():
     """Run the main process of this file: loading and combining all datasets."""
-    drukte = run_imports()
+    dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
+    drukte = process.Process_drukte(dbconfig)
     drukte = linear_model(drukte)
     # drukte = pipeline_model(drukte)
     write_to_db(drukte)
 
 ##############################################################################
-# Simple test for this module
 if __name__ == "__main__":
-
+    """Run the analyzer."""
     desc = "Calculate index."
     log.debug(desc)
     parser = argparse.ArgumentParser(desc)
