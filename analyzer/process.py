@@ -41,7 +41,7 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 # Global variables
-# TODO: deze lijsten variabelen on-the-fly binnenhalen uit de database
+# TODO: onderstaande twee lijsten on-the-fly als globals binnenhalen uit de database.
 vollcodes_list = ['A07', 'F77', 'K53', 'F87', 'K24', 'K44', 'K47', 'M27',
                   'M28', 'M30', 'N64', 'N66', 'M33', 'N60', 'N61', 'N62',
                   'N73', 'T93', 'T98', 'K52', 'M29', 'M34', 'A08', 'A09',
@@ -56,7 +56,7 @@ vollcodes_list = ['A07', 'F77', 'K53', 'F87', 'K24', 'K44', 'K47', 'M27',
                   'N68', 'M35', 'M51', 'M55', 'F85', 'M58', 'N67', 'N69',
                   'N70', 'N74', 'T94']
 
-vollcodes_m2 = {'A00': 125858.0, 'A01': 334392.0, 'A02': 139566.0, 'A03': 180643.0, 'A04': 370827.0, 'A05': 229771.0, 'A06': 296826.0, 'A07': 252101.0, 'A08': 288812.0, 'A09': 429920.0, 'B10': 9365503.0, 'E12': 218000.0, 'E13': 637040.0, 'E14': 203183.0, 'E15': 240343.0, 'E16': 173372.0, 'E17': 112541.0, 'E18': 83752.0, 'E19': 114338.0, 'E20': 130217.0, 'E21': 114415.0, 'E22': 72691.0, 'E36': 925362.0, 'E37': 435193.0, 'E38': 193750.0, 'E39': 280652.0, 'E40': 105993.0, 'E41': 95942.0, 'E42': 173133.0, 'E43': 141665.0, 'E75': 87376.0, 'F11': 3905101.0, 'F76': 445519.0, 'F77': 1335095.0, 'F78': 567032.0, 'F79': 737444.0, 'F80': 5695263.0, 'F81': 678581.0, 'F82': 449585.0, 'F83': 232898.0, 'F84': 459192.0, 'F85': 622215.0, 'F86': 807666.0, 'F87': 557372.0, 'F88': 1621957.0, 'F89': 444324.0, 'K23': 1129635.0, 'K24': 308345.0, 'K25': 195632.0, 'K26': 153464.0, 'K44': 321894.0, 'K45': 91017.0, 'K46': 420005.0, 'K47': 728062.0, 'K48': 464700.0, 'K49': 419051.0, 'K52': 462443.0, 'K53': 125127.0, 'K54': 515835.0, 'K59': 115825.0, 'K90': 1973117.0, 'K91': 1018235.0, 'M27': 173249.0, 'M28': 472189.0, 'M29': 236464.0, 'M30': 148598.0, 'M31': 205950.0, 'M32': 430360.0, 'M33': 767262.0, 'M34': 3353718.0, 'M35': 1524659.0, 'M51': 686452.0, 'M55': 2509678.0, 'M56': 3825448.0, 'M57': 1777311.0, 'M58': 1553531.0, 'N60': 604294.0, 'N61': 489380.0, 'N62': 159771.0, 'N63': 64419.0, 'N64': 33674.0, 'N65': 552047.0, 'N66': 1605957.0, 'N67': 588100.0, 'N68': 702026.0, 'N69': 711440.0, 'N70': 680151.0, 'N71': 835342.0, 'N72': 81074.0, 'N73': 8639562.0, 'N74': 391998.0, 'T92': 691673.0, 'T93': 1310109.0, 'T94': 1817539.0, 'T95': 739520.0, 'T96': 807588.0, 'T97': 527617.0, 'T98': 2310156.0}
+vollcodes_land_m2 = {'A00': 125858.0, 'A01': 334392.0, 'A02': 139566.0, 'A03': 180643.0, 'A04': 370827.0, 'A05': 229771.0, 'A06': 296826.0, 'A07': 252101.0, 'A08': 288812.0, 'A09': 429920.0, 'B10': 9365503.0, 'E12': 218000.0, 'E13': 637040.0, 'E14': 203183.0, 'E15': 240343.0, 'E16': 173372.0, 'E17': 112541.0, 'E18': 83752.0, 'E19': 114338.0, 'E20': 130217.0, 'E21': 114415.0, 'E22': 72691.0, 'E36': 925362.0, 'E37': 435193.0, 'E38': 193750.0, 'E39': 280652.0, 'E40': 105993.0, 'E41': 95942.0, 'E42': 173133.0, 'E43': 141665.0, 'E75': 87376.0, 'F11': 3905101.0, 'F76': 445519.0, 'F77': 1335095.0, 'F78': 567032.0, 'F79': 737444.0, 'F80': 5695263.0, 'F81': 678581.0, 'F82': 449585.0, 'F83': 232898.0, 'F84': 459192.0, 'F85': 622215.0, 'F86': 807666.0, 'F87': 557372.0, 'F88': 1621957.0, 'F89': 444324.0, 'K23': 1129635.0, 'K24': 308345.0, 'K25': 195632.0, 'K26': 153464.0, 'K44': 321894.0, 'K45': 91017.0, 'K46': 420005.0, 'K47': 728062.0, 'K48': 464700.0, 'K49': 419051.0, 'K52': 462443.0, 'K53': 125127.0, 'K54': 515835.0, 'K59': 115825.0, 'K90': 1973117.0, 'K91': 1018235.0, 'M27': 173249.0, 'M28': 472189.0, 'M29': 236464.0, 'M30': 148598.0, 'M31': 205950.0, 'M32': 430360.0, 'M33': 767262.0, 'M34': 3353718.0, 'M35': 1524659.0, 'M51': 686452.0, 'M55': 2509678.0, 'M56': 3825448.0, 'M57': 1777311.0, 'M58': 1553531.0, 'N60': 604294.0, 'N61': 489380.0, 'N62': 159771.0, 'N63': 64419.0, 'N64': 33674.0, 'N65': 552047.0, 'N66': 1605957.0, 'N67': 588100.0, 'N68': 702026.0, 'N69': 711440.0, 'N70': 680151.0, 'N71': 835342.0, 'N72': 81074.0, 'N73': 8639562.0, 'N74': 391998.0, 'T92': 691673.0, 'T93': 1310109.0, 'T94': 1817539.0, 'T95': 739520.0, 'T96': 807588.0, 'T97': 527617.0, 'T98': 2310156.0}
 
 
 ##############################################################################
@@ -151,16 +151,16 @@ class Process():
             if type(cols) == str:       # Check whether we have a single column name string,
                 cols = [cols]           # if so, wrap this single name in a list.
             for col in cols:            # Now process the list of 1+ column names.
-                m2 = pd.DataFrame(list(vollcodes_m2.items()), columns=['vollcode','oppervlakte_m2'])
+                m2 = pd.DataFrame(list(vollcodes_land_m2.items()), columns=['vollcode','oppervlakte_land_m2'])
                 temp = self.data.merge(m2)
-                temp.gvb_buurt = temp.gvb_buurt / temp.oppervlakte_m2  # Normalize based on surface area
-                temp.drop('oppervlakte_m2', axis=1, inplace=True)
+                temp.gvb_buurt = temp.gvb_buurt / temp.oppervlakte_land_m2  # Normalize based on surface area
+                temp.drop('oppervlakte_land_m2', axis=1, inplace=True)
                 self.data = temp
 
 
     def normalize_acreage_city(self, col):
         """Normalize on acreage on city wide """
-        total_m2_stad = sum(vollcodes_m2.values())
+        total_m2_stad = sum(vollcodes_land_m2.values())
         self.data[col] = self.data[col] / total_m2_stad
 
 
@@ -321,16 +321,22 @@ class Process_verblijversindex(Process):
         super().__init__(dbconfig)
         self.name = 'verblijversindex'
         self.import_data(['VERBLIJVERSINDEX'],
-                    ['wijk', 'verblijversindex', 'oppervlakte_m2', 'aantal_inwoners',
-                     'aantal_werkzame_personen', 'aantal studenten',
-                     'aantal_bezoekers_(met_correctie_voor_onderlinge_overlap)',
-                     'som_alle_verblijvers'])
-        self.rename({'wijk': 'vollcode',
-                     'aantal inwoners': 'inwoners',
-                     'aantal_werkzame_personen': 'werkzame_personen',
-                     'aantal_studenten': 'studenten',
-                     'aantal_bezoekers_(met_correctie_voor_onderlinge_overlap)': 'bezoekers',
-                     'som_alle_verblijvers': 'verblijvers'})
+                         ['vollcode', 'inwoners', 'werkzame_personen', 'studenten',
+                          'bezoekers', 'verblijvers', 'oppervlakte_land_m2',
+                          'oppervlakte_land_water_m2', 'verblijvers_ha_2016'])
+        # self.import_data(['VERBLIJVERSINDEX'],
+        #             ['wijk', 'som_alle_verblijvers',
+        #              'oppervlakte_land_in_vierkante_meters', 'aantal_inwoners',
+        #              'aantal_werkzame_personen', 'aantal_studenten',
+        #              'aantal_bezoekers_met_correctie_voor_onderlinge_overlap',
+        #              'som_alle_verblijvers'])
+        # self.rename({'wijk': 'vollcode',
+        #              'oppervlakte_land_in_vierkante_meters': 'oppervlakte_m2',
+        #              'aantal_inwoners': 'inwoners',
+        #              'aantal_werkzame_personen': 'werkzame_personen',
+        #              'aantal_studenten': 'studenten',
+        #              'aantal__bezoekers_(met_correctie_voor_onderlinge_overlap)': 'bezoekers',
+        #              'som_alle_verblijvers': 'verblijvers'})
 
 ##############################################################################
 class Process_tellus(Process):

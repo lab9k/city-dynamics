@@ -326,13 +326,23 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
             'aantal  bezoekers (met correctie voor onderlinge overlap)',
             'som alle verblijvers',
             'oppervlakte land in vierkante meters',
-            'oppervlakte land en water in vierkante meter']
+            'oppervlakte land en water in vierkante meter',
+            'verbl. Per HA (land) 2016']
+
     df = df[cols]
 
     # pandas.to_sql can't handle brackets within column names
-    df.rename(columns={'aantal  bezoekers (met correctie voor onderlinge overlap)':
-                            'aantal bezoekers met correctie voor onderlinge overlap'}, inplace=True)
-    df.columns = [x.replace(" ", "_") for x in df.columns]
+    df.rename(columns={ 'wijk': 'vollcode',
+                        'aantal inwoners': 'inwoners',
+                        'aantal werkzame personen': 'werkzame_personen',
+                        'aantal studenten': 'studenten',
+                        'aantal  bezoekers (met correctie voor onderlinge overlap)': 'bezoekers',
+                        'som alle verblijvers': 'verblijvers',
+                        'oppervlakte land in vierkante meters': 'oppervlakte_land_m2',
+                        'oppervlakte land en water in vierkante meter': 'oppervlakte_land_water_m2',
+                        'verbl. Per HA (land) 2016': 'verblijvers_ha_2016'}, inplace=True)
+
+    # df.columns = [x.replace(" ", "_") for x in df.columns]
     df = df.head(98)
     return df
 
