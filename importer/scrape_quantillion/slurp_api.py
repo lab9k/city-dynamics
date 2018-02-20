@@ -1,7 +1,7 @@
 """
 Quantillion provides api with scraped google data.
 
-on
+Production
 host: http://apis.quantillion.io
 port: 3001
 username: gemeenteAmsterdam
@@ -10,16 +10,6 @@ Development
 host: http://apis.development.quantillion.io
 port: 3001
 username: gemeenteAmsterdam
-ion
-host: http://apis.quantillion.io
-port: 3001
-username: gemeenteAmsterdam
-
-Development
-host: http://apis.development.quantillion.io
-port: 3001
-username: gemeenteAmsterdam
-
 """
 
 import gevent
@@ -40,7 +30,7 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 logging.getLogger('urllib3').setLevel(logging.ERROR)
 
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'acceptance')
 
 WORKERS = 5
 
@@ -57,25 +47,20 @@ PARAMS = {'limit': LIMIT}
 api_config = {
     'password_dev': os.getenv('QUANTILLION_PASSWORD_DEV'),
     'password': os.getenv('QUANTILLION_PASSWORD'),
-    'hosts': [
-        'http://apis.quantillion.io',
-        # 'http://apis.development.quantillion.io',
+    'hosts': {
+        'production': 'http://apis.quantillion.io',
+        'acceptance': 'http://apis.development.quantillion.io',
         # Production: 35.159.8.123
         # 'http://35.159.8.123',
         # Development: 18.196.227.0
         # '18.196.227.0',
-    ],
+    },
     'port': 3001,
     'username': 'gemeenteAmsterdam',
 }
 
 
-AUTHS = [
-    # (api_config['username'], api_config.get('password')),
-    (api_config['username'], api_config['password_dev']),
-]
-
-ERROR_HOSTS = set()
+AUTH = (api_config['username'], api_config.get('password'))
 
 
 def get_the_json(endpoint, params={'limit': 1000}):
@@ -88,38 +73,26 @@ def get_the_json(endpoint, params={'limit': 1000}):
     response = None
     port = api_config['port']
 
-    for i, host in enumerate(api_config['hosts']):
+    host = api_config['hosts'][ENVIRONMENT]
 
-        if host in ERROR_HOSTS:
-            # host gave errors. skip
-            continue
+    url = f'{host}:{port}/gemeenteamsterdam/{endpoint}'
 
-        auth_selected = AUTHS[i]
-        url = f'{host}:{port}/gemeenteamsterdam/{endpoint}'
+    async_r = grequests.get(url, params=params, auth=AUTH)
+    gevent.sleep()
+    gevent.spawn(async_r.send).join()
 
-        async_r = grequests.get(url, params=params, auth=auth_selected)
-        gevent.sleep()
-        gevent.spawn(async_r.send).join()
+    response = async_r.response
 
-        response = async_r.response
-
-        if response is None:
-            log.error('RESPONSE NONE %s %s', url, params)
-            continue
-
-        elif response.status_code == 200:
-            log.debug(f' OK  {response.status_code}:{url}')
-            break
-
-        elif async_r.status_code == 500:
-            ERROR_HOSTS.add(host)
-            log.debug(f'FAIL {response.status_code}:{url}')
-            continue
+    if response is None:
+        log.error('RESPONSE NONE %s %s', url, params)
+        return {}
+    elif response.status_code == 200:
+        log.debug(f' OK  {response.status_code}:{url}')
+    elif async_r.status_code == 500:
+        log.debug(f'FAIL {response.status_code}:{url}')
 
     if response:
         json = response.json()
-
-    print(json)
 
     return json
 
@@ -181,6 +154,8 @@ def get_locations(work_id, endpoint, get_params=get_params()):
 
     while True:
         # generate next step
+        if STATUS.get('done'):
+            break
 
         log.debug(f'Next for {work_id}')
         params = next(get_params)
@@ -192,9 +167,6 @@ def get_locations(work_id, endpoint, get_params=get_params()):
         if len(json_response) < LIMIT:
             # We are done
             STATUS['done'] = True
-            break
-
-        if STATUS.get('done'):
             break
 
     log.debug(f'Done {work_id}')
@@ -222,10 +194,10 @@ def main():
     # models.Base.metadata.create_all(engine)
     models.set_engine(engine)
 
-    run_workers(get_locations, 'expected')
+    # run_workers(get_locations, 'expected')
     # load the data!
-    # run_workers(get_locations, 'realtime')
-    # locations_realtime()
+    run_workers(get_locations, 'realtime')
+    #  locations_realtime()
 
 
 if __name__ == '__main__':
