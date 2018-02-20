@@ -1,8 +1,4 @@
-from django.db import models
 from django.contrib.gis.db import models
-from rest_framework import serializers
-from datetime import datetime
-from django.contrib.gis.db import models as geo
 
 
 class Buurtcombinatie(models.Model):
@@ -15,7 +11,8 @@ class Buurtcombinatie(models.Model):
     type = models.CharField(max_length=255, blank=True, null=True)
     uri = models.CharField(max_length=255, blank=True, null=True)
     wkb_geometry = models.GeometryField(blank=True, null=True)
-    wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
+    wkb_geometry_simplified = models.GeometryField(
+        srid=0, blank=True, null=True)
 
     class Meta:
         db_table = 'buurtcombinatie'
@@ -44,9 +41,7 @@ class Drukteindex(models.Model):
     drukte_index = models.FloatField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'drukteindex'
-
 
 
 class Hotspots(models.Model):
@@ -59,7 +54,8 @@ class Hotspots(models.Model):
 
 class HotspotsDrukteIndex(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    hotspot = models.ForeignKey('Hotspots', related_name='druktecijfers', on_delete=models.DO_NOTHING)
+    hotspot = models.ForeignKey(
+        'Hotspots', related_name='druktecijfers', on_delete=models.DO_NOTHING)
     hour = models.IntegerField()
     # weekday = models.IntegerField()
     drukteindex = models.FloatField()
