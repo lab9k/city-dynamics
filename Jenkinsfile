@@ -42,7 +42,7 @@ node {
                 analyzer.push()
                 analyzer.push("acceptance")
 
-            def api = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}", "api")
+            def api = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}", ".")
                 api.push()
                 api.push("acceptance")
 
