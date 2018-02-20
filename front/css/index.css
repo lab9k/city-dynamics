@@ -21,10 +21,10 @@ div {box-sizing: border-box;}
 .searchclose {display:inline-block;vertical-align:top;cursor:pointer;}
 
 /*logo*/
-.logo {position :absolute;left :80px;top :10px; z-index :499;width:100px;height:76px;background:url(../images/logo.svg);}
+.logo {position :absolute;left :80px;top :12px; z-index :499;width:100px;height:76px;background:url(../images/logo.svg);}
 
 /*info*/
-.info {position :absolute;left :50%;bottom :40px; z-index :500;width :600px;margin-left :-300px;min-height :100px;max-height :180px;overflow-y :auto;background : rgba(74, 74, 74, 0.7);color :#fff;border-radius :5px;border :0px solid #fff;box-shadow : 0 3px 14px rgba(0,0,0,0.4);padding :10px;}
+.info {display:none;position :absolute;left :50%;bottom :40px; z-index :500;width :600px;margin-left :-300px;min-height :100px;max-height :180px;overflow-y :auto;background : rgba(74, 74, 74, 0.7);color :#fff;border-radius :5px;border :0px solid #fff;box-shadow : 0 3px 14px rgba(0,0,0,0.4);padding :10px;}
 .info h2 {color:#fff;margin:0 0 10px 0;}
 
 /*mapswitch*/
@@ -152,6 +152,7 @@ div {box-sizing: border-box;}
 
 /*desktop resets*/
 .m_more {display:none;}
+.m_menu {display:none;}
 
 /*handheld styling*/
 @media only screen and (max-width: 360px) {
