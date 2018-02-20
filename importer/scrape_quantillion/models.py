@@ -28,6 +28,7 @@ log = logging.getLogger(__name__)
 Base = declarative_base()
 
 Session = sessionmaker()
+
 session = []
 
 
@@ -73,15 +74,16 @@ def make_engine(section='docker'):
 def set_engine(engine):
     global session
     Session.configure(bind=engine)
-    # create a configured "Session" class
+    # create a configured "session" object for tests
     session = Session()
+    return session
 
 
 class GoogleRawLocationsRealtime(Base):
     """
     Raw json location information realtime
     """
-    __tablename__ = 'google_raw_locations_realtime'
+    __tablename__ = f'google_raw_locations_realtime_{ENVIRONMENT}'
     id = Column(Integer, Sequence('grl_seq'), primary_key=True)
     place_id = Column(String, index=True)
     scraped_at = Column(TIMESTAMP, index=True)
@@ -93,8 +95,21 @@ class GoogleRawLocationsExpected(Base):
     """
     Raw json location information of expected data
     """
-    __tablename__ = 'google_raw_locations_expected'
+    __tablename__ = f'google_raw_locations_expected_{ENVIRONMENT}'
     id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    name = Column(String)
+    data = Column(JSONB)
+
+
+class GoogleLocations(Base):
+    """
+    Unique locations with proper bag_id / vestiging ids
+    """
+    __tablename__ = f'google_locations_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    bag_id = Column(Integer, unique=True)
     place_id = Column(String, index=True)
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
