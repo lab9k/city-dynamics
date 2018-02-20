@@ -178,6 +178,8 @@ def run_workers(parralleltask, endpoint):
     """
     jobs = []
 
+    STATUS['done'] = False
+
     for i in range(WORKERS):
         jobs.append(
             gevent.spawn(parralleltask, i, endpoint)
