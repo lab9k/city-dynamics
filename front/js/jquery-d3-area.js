@@ -83,14 +83,6 @@
 
 			graph.update = function(newData){
 
-				// graph.svg.selectAll('path.area')
-				// 	.datum(newData)
-				// 	.attr("d", graph.area);
-
-				// graph.svg.selectAll("path.area-line")
-				// 	.datum(newData)
-				// 	.attr("d", graph.topline);
-
 				graph.svg.selectAll('path.area')
 					.datum(graph.data)
 					.transition()
