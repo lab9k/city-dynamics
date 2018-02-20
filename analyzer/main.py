@@ -90,14 +90,26 @@ def linear_model(drukte):
 def pipeline_model(drukte):
     """Implement pipeline model for creating the Drukte Index"""
 
+    # Compute mean value for gvb
     drukte.data['gvb'] = drukte.data[['gvb_buurt', 'gvb_stad']].mean(axis=1)
 
+    # Normalize gvb and verblijversindex to #people/m2
+    drukte.normalize_acreage('gvb')
+    drukte.data['verblijvers_m2_2016'] = drukte.data.verblijvers_ha_2016 / 10000  # 1 ha == 10000 m2
+    # print(drukte.data.gvb.head())
+    # print(drukte.data.verblijvers_m2_2016.head())
+    # q.d()
+
     # Linear weights for the creation of the base value
-    base_list = {'verblijvers_ha_2016': 2, 'gvb': 8,}
+    base_list = {'verblijvers_ha_2016': 5, 'gvb': 1}
     # base_list = {'verblijvers_ha_2016': 2, 'gvb_buurt': 8, 'gvb_stad': 1}
 
     # Modification mappings defining what flex is used for each dataset
     mod_list = {'verblijvers_ha_2016': 'alpha_week'}
+
+    # We assume a value of 1 in the Alpha dataset (the maximum value) implies that
+    # the base value should be multiplied/flexed with the factor given below.
+    flex_factor = 2
 
     # Specify view to choose scaling method (options: 'toerist', 'ois', 'politie')
     view = 'tourist'
@@ -114,15 +126,11 @@ def pipeline_model(drukte):
             drukte.data[base_name] = drukte.data[base_name].add(drukte.data[base] * weight, fill_value=0)
             drukte.data[base_name] /= sum(base_list.values())  # Normalize base list weights
 
-
     #### (2) Modify base values (relative sources)
-    # We assume a value of 1 in the Alpha dataset (the maximum value) implies that
-    # the base value should be multiplied/flexed with the factor given below.
-    factor = 4
     for base, mod in mod_list.items():
         base_name = 'base_' + base
         mod_name = 'base_' + base + '_mod_' + mod
-        drukte.data[mod_name] = drukte.data[base_name].fillna(0) * (drukte.data[mod].fillna(0) * factor)
+        drukte.data[mod_name] = drukte.data[base_name].fillna(0) * (drukte.data[mod].fillna(0) * flex_factor)
 
     # Compute drukte index values
     for base in base_list:
@@ -144,7 +152,7 @@ def pipeline_model(drukte):
     drukte.normalize_acreage('drukte_index')
 
     #### (4) Scale data for specific group of viewers
-    if 'view' == 'tourist':
+    if view == 'tourist':
         drukte.normalize('drukte_index')
 
     return drukte

@@ -139,6 +139,7 @@ class Process():
         # In onderstaande stappen kunnen momenteel locaties wegvallen welke geen vollcode
         # bevatten die in de verblijversindex voorkomt (dit is bijv. het geval met de gvb data).
         if cols != []:                  # Check if any columns should be normalized at all.
+            # Add m2 column if not already present
             m2 = pd.DataFrame(list(vollcodes_m2_land.items()), columns=['vollcode','oppervlakte_land_m2'])
             if type(cols) == str:       # Check whether we have a single column name string,
                 cols = [cols]           # if so, wrap this single name in a list.
@@ -146,13 +147,27 @@ class Process():
                 temp = self.data.merge(m2)
                 temp[col] = temp[col] / temp.oppervlakte_land_m2  # Normalize based on surface area
                 self.data = temp
-            temp.drop('oppervlakte_land_m2', axis=1, inplace=True)
+            # temp.drop('oppervlakte_land_m2', axis=1, inplace=True)
 
 
     def normalize_acreage_city(self, col):
         """Normalize on acreage on city wide """
+
+        # TODO: Clean up this function. Current functionality is probably what we want.
+        # TODO: Other option would be to divide by city wide value, and multiply by m2 of
+        # TODO: corresponding vollcode. Then the city value would be evenly spready out over
+        # TODO: all buurtcombinaties, normalized by their size (but not normalized by m2).
+        # Add column with oppervlakte data
+        # m2 = pd.DataFrame(list(vollcodes_m2_land.items()), columns=['vollcode', 'oppervlakte_land_m2'])
+        # temp = self.data.merge(m2)
+
+        # Normalize by dividing by total city
         total_m2_stad = sum(vollcodes_m2_land.values())
+        # self.data[col] = (temp.data[col] / total_m2_stad) * temp.data.oppervlakte_land_m2
         self.data[col] = self.data[col] / total_m2_stad
+
+        # Remove m2 colums
+        # temp.drop('oppervlakte_land_m2', axis=1, inplace=True)
 
 
     def aggregate_on_column(self, col):
