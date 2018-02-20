@@ -79,31 +79,31 @@ if (BRANCH == "master") {
         }
     }
 
-    stage('Waiting for approval') {
-        slackSend channel: '#stadinbalans', color: 'warning', message: 'City dynamics is waiting for Production Release - please confirm'
-        input "Deploy to Production?"
-    }
+    //stage('Waiting for approval') {
+    //    slackSend channel: '#stadinbalans', color: 'warning', message: 'City dynamics is waiting for Production Release - please confirm'
+    //    input "Deploy to Production?"
+    //}
 
-    node {
-        stage('Push production image') {
-            tryStep "image tagging", {
-                def kibana = docker.image("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
-                kibana.pull()
-                kibana.push("production")
-                kibana.push("latest")
-            }
-        }
-    }
+    //node {
+    //    stage('Push production image') {
+    //        tryStep "image tagging", {
+    //            def kibana = docker.image("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
+    //            kibana.pull()
+    //            kibana.push("production")
+    //            kibana.push("latest")
+    //        }
+    //    }
+    //}
 
-    node {
-        stage("Deploy") {
-            tryStep "deployment", {
-                build job: 'Subtask_Openstack_Playbook',
-                parameters: [
-                        [$class: 'StringParameterValue', name: 'INVENTORY', value: 'production'],
-                        [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-citydynamics.yml'],
-                ]
-            }
-        }
-    }
+    //node {
+    //    stage("Deploy") {
+    //        tryStep "deployment", {
+    //            build job: 'Subtask_Openstack_Playbook',
+    //            parameters: [
+    //                    [$class: 'StringParameterValue', name: 'INVENTORY', value: 'production'],
+    //                    [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-citydynamics.yml'],
+    //            ]
+    //        }
+    //    }
+    //}
 }
