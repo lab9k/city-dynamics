@@ -1,8 +1,4 @@
-from django.db import models
 from django.contrib.gis.db import models
-from rest_framework import serializers
-from datetime import datetime
-from django.contrib.gis.db import models as geo
 
 
 class Buurtcombinatie(models.Model):
@@ -19,7 +15,6 @@ class Buurtcombinatie(models.Model):
         srid=0, blank=True, null=True)
 
     class Meta:
-        managed = True
         db_table = 'buurtcombinatie'
 
 
@@ -46,9 +41,7 @@ class Drukteindex(models.Model):
     drukte_index = models.FloatField(blank=True, null=True)
 
     class Meta:
-        managed = True
         db_table = 'drukteindex'
-
 
 
 class Hotspots(models.Model):
