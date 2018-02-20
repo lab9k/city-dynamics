@@ -56,7 +56,7 @@ class Buurt(models.Model):
     wkb_geometry = models.GeometryField(blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'buurt'
 
 
@@ -73,18 +73,8 @@ class Buurtcombinatie(models.Model):
     wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'buurtcombinatie'
-
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
 
 
 class Drukteindex(models.Model):

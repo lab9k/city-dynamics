@@ -1,9 +1,14 @@
 Babel==2.5.1
-certifi==2017.11.5
+certifi==2018.1.18
 chardet==3.0.4
 datapunt-config-loader==1.0.0
 -e git+https://github.com/Amsterdam/objectstore.git@fad63da39ac7354b1a0a46c711474c9d2cfb37e8#egg=datapunt_objectstore
 debtcollector==1.19.0
+flake8==3.5.0
+frosted==1.4.1
+gevent==1.2.2
+greenlet==0.4.13
+grequests==0.3.0
 idna==2.6
 iso8601==0.1.12
 jsonschema==2.6.0
@@ -20,8 +25,11 @@ oslo.utils==3.32.0
 pandas==0.21.0
 pbr==3.1.1
 positional==1.2.1
+psycogreen==1.0
 psycopg2==2.7.3.2
+pyflakes==1.6.0
 pyparsing==2.2.0
+pytest==3.4.0
 python-dateutil==2.6.1
 python-keystoneclient==3.13.0
 python-swiftclient==3.4.0

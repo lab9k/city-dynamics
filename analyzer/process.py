@@ -330,14 +330,9 @@ class Process_tellus(Process):
         super().__init__(dbconfig)
         self.name = 'tellus'
         self.import_data(['tellus_with_bc'],
-                         ['meetwaarde', 'timestamp', 'vollcode'])
+                         ['tellus', 'timestamp', 'vollcode'])
         self.dataset_specific()
-        self.rename({'meetwaarde': 'tellus'})
         self.normalize('tellus')
-
-
-    def dataset_specific(self):
-        self.data['meetwaarde'] = self.data.meetwaarde.astype(int)
 
 ##############################################################################
 class Process_buurtcombinatie(Process):
