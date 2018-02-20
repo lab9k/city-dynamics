@@ -215,11 +215,8 @@ class Process_gvb_stad(Process):
         haltes = list(pd.read_csv('lookup_tables/metro_or_train.csv', sep=',')['station'])
         indx = self.data.halte.isin(haltes)
 
-        # Stadsniveau (normalized by m2)
+        # Stadsniveau (sum of incoming values over all areas)
         gvb_stad = self.data.loc[indx, :]
-        # gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].mean()
-        # total_m2_stad = sum(vollcodes_m2.values())
-        # gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].sum() / total_m2_stad
         gvb_stad = gvb_stad.groupby(['weekday', 'hour'])['incoming'].sum()
         self.data = gvb_stad.reset_index()
 
@@ -324,19 +321,6 @@ class Process_verblijversindex(Process):
                          ['vollcode', 'inwoners', 'werkzame_personen', 'studenten',
                           'bezoekers', 'verblijvers', 'oppervlakte_land_m2',
                           'oppervlakte_land_water_m2', 'verblijvers_ha_2016'])
-        # self.import_data(['VERBLIJVERSINDEX'],
-        #             ['wijk', 'som_alle_verblijvers',
-        #              'oppervlakte_land_in_vierkante_meters', 'aantal_inwoners',
-        #              'aantal_werkzame_personen', 'aantal_studenten',
-        #              'aantal_bezoekers_met_correctie_voor_onderlinge_overlap',
-        #              'som_alle_verblijvers'])
-        # self.rename({'wijk': 'vollcode',
-        #              'oppervlakte_land_in_vierkante_meters': 'oppervlakte_m2',
-        #              'aantal_inwoners': 'inwoners',
-        #              'aantal_werkzame_personen': 'werkzame_personen',
-        #              'aantal_studenten': 'studenten',
-        #              'aantal__bezoekers_(met_correctie_voor_onderlinge_overlap)': 'bezoekers',
-        #              'som_alle_verblijvers': 'verblijvers'})
 
 ##############################################################################
 class Process_tellus(Process):
@@ -362,114 +346,3 @@ class Process_buurtcombinatie(Process):
         super().__init__(dbconfig)
         self.name = 'bc_codes'
         self.import_data(['buurtcombinatie'], ['vollcode'])
-
-
-
-'''
-##############################################################################
-def init_drukte_df(start_datetime, end_datetime, vollcodes):
-    timestamps = pd.date_range(start=start_datetime, end=end_datetime, freq='H')
-    ts_vc = [(ts, vc) for ts in timestamps for vc in vollcodes]
-    drukte = pd.DataFrame({
-        'timestamp': [x[0] for x in ts_vc],
-        'vollcode': [x[1] for x in ts_vc]
-    }).sort_values(['timestamp', 'vollcode'])
-    drukte['weekday'] = [ts.weekday() for ts in drukte.timestamp]
-    drukte['hour'] = [ts.hour for ts in drukte.timestamp]
-    return drukte
-
-##############################################################################
-def main():
-    """Run the main process of this file: loading all datasets"""
-
-    # Import datasets
-    dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
-    brt = Process_buurtcombinatie(dbconfig)
-    vbi = Process_verblijversindex(dbconfig)
-    # vollcodes = list(brt.data.vollcode.unique())
-    # vollcodes_m2 = pd.Series(vbi.data.oppervlakte_m2.values, index=vbi.data.vollcode).to_dict()
-    gvb_st = Process_gvb_stad(dbconfig)
-    gvb_bc = Process_gvb_buurt(dbconfig)
-    tel = Process_tellus(dbconfig)
-    alp_hist = Process_alpha_historical(dbconfig)
-    alp_live = Process_alpha_live(dbconfig)
-
-    # initialize drukte dataframe
-    start = np.min(alp_live.data.timestamp)
-    end = np.max(alp_live.data.timestamp)
-    drukte = init_drukte_df(start, end, vollcodes_list)
-
-    # merge datasets
-    cols = ['timestamp', 'vollcode', 'alpha_live']
-    drukte = pd.merge(
-        drukte, alp_live.data[cols], on=['timestamp', 'vollcode'], how='left')
-
-    cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
-    drukte = pd.merge(
-        drukte, alp_hist.data[cols],
-        on=['weekday', 'hour', 'vollcode'], how='left')
-
-    drukte = pd.merge(
-        drukte, gvb_bc.data,
-        on=['vollcode', 'weekday', 'hour'], how='left')
-
-    drukte = pd.merge(
-        drukte, gvb_st.data,
-        on=['weekday', 'hour'], how='left')
-
-    drukte = pd.merge(
-        drukte, vbi.data,
-        on='vollcode', how='left')
-
-    # Middel alpha expected en alpha live
-    drukte['alpha'] = drukte[['alpha_week', 'alpha_live']].mean(axis=1)
-
-    # Middel gvb
-    drukte['gvb'] = norm(drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1))
-
-    # init drukte index
-    drukte['drukte_index'] = np.nan
-
-    # Normaliseer verblijversindex
-    drukte['verblijversindex'] = norm(drukte.verblijversindex)
-
-    # make sure the sum of the weights != 0
-    linear_weigths = {'verblijversindex': 0.25,
-                      'alpha': 0,
-                      'gvb': 1,
-                      'alpha_week': 1,
-                      'alpha_live': 0}
-
-    lw_normalize = sum(linear_weigths.values())
-
-    for col, weight in linear_weigths.items():
-        if col in drukte.columns:
-            drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col] * weight, fill_value=0)
-
-    drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
-
-    # sort values
-    drukte = drukte.sort_values(['timestamp', 'vollcode'])
-
-    # Write data to database
-    log.debug('Writing data to database.')
-    connection = connect_database(dbconfig)
-    drukte.to_sql(
-        name='drukteindex', con=connection, index=True, if_exists='replace')
-    connection.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
-    log.debug('done.')
-
-##############################################################################
-# Simple test for this module
-if __name__ == "__main__":
-
-    desc = "Calculate index."
-    log.debug(desc)
-    parser = argparse.ArgumentParser(desc)
-    parser.add_argument(
-        'dbConfig', type=str,
-        help='database config settings: dev or docker',
-        nargs=1)
-    args = parser.parse_args()
-    main()
-'''

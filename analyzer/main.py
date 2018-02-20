@@ -67,7 +67,7 @@ def run_imports():
     vbi = process.Process_verblijversindex(dbconfig)
     gvb_st = process.Process_gvb_stad(dbconfig)
     gvb_bc = process.Process_gvb_buurt(dbconfig)
-    tel = process.Process_tellus(dbconfig)
+    #tel = process.Process_tellus(dbconfig)
     alp_hist = process.Process_alpha_historical(dbconfig)
     alp_live = process.Process_alpha_live(dbconfig)
 
