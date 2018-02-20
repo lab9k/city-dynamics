@@ -22,8 +22,8 @@ class DrukteindexFactory(factory.DjangoModelFactory):
     weekday = fuzzy.FuzzyInteger(0, 6)
     hour = fuzzy.FuzzyFloat(0, 23)
 
-    #google_live = fuzzy.FuzzyFloat(0, 1)
-    #google_week = fuzzy.FuzzyFloat(0, 1)
+    # google_live = fuzzy.FuzzyFloat(0, 1)
+    # google_week = fuzzy.FuzzyFloat(0, 1)
     gvb_buurt = fuzzy.FuzzyFloat(0, 1)
     gvb_stad = fuzzy.FuzzyFloat(0, 1)
     verblijvers = fuzzy.FuzzyFloat(0, 1)
