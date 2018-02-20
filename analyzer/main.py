@@ -72,15 +72,11 @@ def run_imports():
     alp_live = process.Process_alpha_live(dbconfig)
 
     # initialize drukte dataframe
-    start = np.min(alp_live.data.timestamp)
-    end = np.max(alp_live.data.timestamp)
+    start = datetime.datetime(2018, 2, 12, 0, 0)    # Start of a week: Monday at midnight
+    end = datetime.datetime(2018, 2, 18, 23, 0)     # End of this week: Sunday 1 hour before midnight
     drukte = init_drukte_df(start, end, vollcodes_list)
 
     # merge datasets
-    cols = ['timestamp', 'vollcode', 'alpha_live']
-    drukte = pd.merge(
-        drukte, alp_live.data[cols], on=['timestamp', 'vollcode'], how='left')
-
     cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
     drukte = pd.merge(
         drukte, alp_hist.data[cols],
@@ -98,17 +94,16 @@ def run_imports():
         drukte, vbi.data,
         on='vollcode', how='left')
 
-    # Middel alpha expected en alpha live
-    drukte['alpha'] = drukte[['alpha_week', 'alpha_live']].mean(axis=1)
-
     # Middel gvb
     drukte['gvb'] = drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1)
 
     # init drukte index
     drukte['drukte_index'] = np.nan
 
-    return drukte
+    # Remove timestamps from weekpattern (only day and hour are relevant)
+    drukte.drop('timestamp', axis=1, inplace=True)
 
+    return drukte
 ##############################################################################
 def linear_model(drukte):
 
@@ -226,7 +221,8 @@ def pipeline_model(drukte):
 def write_to_db(drukte):
     """Write data to database."""
     log.debug('Writing data to database.')
-    connection = process.connect_database('dev')
+    dbconfig = args.dbConfig[0]
+    connection = process.connect_database(dbconfig)
     drukte.to_sql(
         name='drukteindex', con=connection, index=True, if_exists='replace')
     connection.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
