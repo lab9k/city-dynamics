@@ -26,7 +26,12 @@ var geomap1 = 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png';
 var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
-var origin = 'http://127.0.0.1:8117';
+var origin = 'https://acc.api.data.amsterdam.nl';
+if(window.location.href.indexOf('localhost') !== -1 )
+{
+	var origin = 'http://127.0.0.1:8117';
+}
+
 var base_api = origin + '/citydynamics/';
 var dindex_api = base_api + 'drukteindex/?format=json&op=';
 var dindex_hotspots_api = base_api + 'hotspots/?format=json';
@@ -124,10 +129,18 @@ $(document).ready(function(){
 
 		$.each(hotspotsJson.results, function (key, value) {
 
+			this.druktecijfers.sort(function (a, b) {
+				return a.h - b.h;
+			});
+
 			var dataset = this;
 
 			hotspot_array.push(dataset);
 
+		});
+
+		hotspot_array.sort(function (a, b) {
+			return a.index - b.index;
 		});
 
 		console.log(hotspot_array);
@@ -139,14 +152,16 @@ $(document).ready(function(){
 			var dindex = this.druktecijfers[hh].d;
 
 			circles[key] = L.circleMarker(this.coordinates, {
-				color: '#61FEEE',
+				color: getColor(dindex),
 				fillColor: getColor(dindex),
-				stroke: 0,
+				stroke: 6,
+				strokeOpacity: 0.6,
 				fillOpacity: 1,
-				radius: (10),
+				radius: (12),
 				name: this.hotspot
 			});
 			circles[key].addTo(map);
+			// $(circles[key]._path).attr('stroke-opacity' , 0.6);
 			$(circles[key]._path).attr('hotspot' , this.index);
 			$(circles[key]._path).addClass('hotspot_'+ this.index);
 			circles[key].bindPopup("<b>" + this.hotspot + "</b>", {autoClose: false});
@@ -206,9 +221,9 @@ $(document).ready(function(){
 					var blackIcon = L.icon({
 						iconUrl: 'images/loc.svg',
 
-						iconSize:     [60, 60], 
+						iconSize:     [60, 60],
 						iconAnchor:   [30, 52],
-						popupAnchor:  [0, -50] 
+						popupAnchor:  [0, -50]
 					});
 
 					marker = L.marker(latLang, {icon: blackIcon}).addTo(map);
@@ -395,7 +410,7 @@ $(document).ready(function(){
 			$(this).addClass('active');
 		}
 	});
-	
+
 	$( document).on('click', ".google_b",function () {
 		if($(this).hasClass('active'))
 		{
@@ -465,9 +480,12 @@ function startAnimation()
 	{
 		$.each(hotspot_array, function (key, value) {
 			circles_d3[key]
+				.attr('stroke-opacity', 0.6)
+				.attr('stroke-width', 3)
 				.transition()
 				.duration(1000)
-				.attr('fill', getColor(this.druktecijfers[0].d));
+				.attr('fill', getColor(this.druktecijfers[0].d))
+				.attr('stroke', '#4a4a4a');
 		});
 	}
 
@@ -477,11 +495,23 @@ function startAnimation()
 		if(elapsed_time > counter)
 		{
 			var hour = Math.ceil(elapsed_time);
+
+
+
 			$.each(hotspot_array, function (key, value) {
+
+				if(key==10)
+				{
+					console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
+				}
+
 				circles_d3[key]
+					.attr('stroke-opacity', 0.6)
+					.attr('stroke-width', 3)
 					.transition()
 					.duration(1000)
-					.attr('fill', getColor(this.druktecijfers[hour].d));
+					.attr('fill', getColor(this.druktecijfers[hour].d))
+					.attr('stroke', '#4a4a4a');
 			});
 
 
@@ -495,6 +525,149 @@ function startAnimation()
 	},500);
 
 }
+
+function getLatLangArray(point) {
+	return lnglat = proj4RD.inverse([point.x, point.y]);
+}
+
+function getLatLang(point) {
+	var lnglat = proj4RD.inverse([point.x, point.y]);
+	return L.latLng(lnglat[1], lnglat[0]);
+}
+
+function getColor(dindex)
+{
+	var a = '#50E6DB'; //50E6DB 63c6e6
+	var b = '#ff0000';
+
+	var ah = parseInt(a.replace(/#/g, ''), 16),
+		ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
+		bh = parseInt(b.replace(/#/g, ''), 16),
+		br = bh >> 16, bg = bh >> 8 & 0xff, bb = bh & 0xff,
+		rr = ar + dindex * (br - ar),
+		rg = ag + dindex * (bg - ag),
+		rb = ab + dindex * (bb - ab);
+
+	return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+}
+
+function style(feature) {
+
+	var dindex = buurtcode_prop_array[feature.properties.vollcode].index
+
+	return {
+		fillColor: getColor(dindex),
+		weight: 1,
+		opacity: 0.6,
+		color: '#fff',
+		fillOpacity: 0.7
+	};
+}
+
+function onEachFeature(feature, layer) {
+	layer.on({
+		mouseover: highlightFeature,
+		mouseout: resetHighlight,
+		click: zoomToFeature
+	});
+
+	layer.bindPopup('<div><h3>' + layer.feature.properties.naam + '</h3></div>');
+	layer.on('mouseover', function (e) {
+		this.openPopup();
+	});
+	layer.on('mouseout', function (e) {
+		this.closePopup();
+	});
+}
+
+function highlightFeature(e) {
+	var layer = e.target;
+
+	var dindex = buurtcode_prop_array[layer.feature.properties.vollcode].index;
+	var buurt = buurtcode_prop_array[layer.feature.properties.vollcode].buurt;
+}
+
+function resetHighlight(e) {
+	// geojson.resetStyle(e.target);
+}
+
+function zoomToFeature(e) {
+	var layer = e.target;
+
+	layer.closePopup();
+
+	// set layer active
+	setLayerActive(layer);
+}
+
+function setLayerActive(layer)
+{
+	if(lastClickedLayer){
+		geojson.resetStyle(lastClickedLayer);
+		$(lastClickedLayer.getElement()).removeClass("active_path");
+	}
+
+	vollcode = layer.feature.properties.vollcode;
+
+	var buurt = buurtcode_prop_array[vollcode].buurt;
+	var dindex = buurtcode_prop_array[vollcode].index;
+
+	// set name
+	$('.graphbar_title').html(buurt);
+
+	$(layer.getElement()).addClass("active_path");
+
+	layer.setStyle({
+		weight: 2,
+		color: '#cccccc',
+		opacity: 0.8,
+		fillOpacity: 0.6,
+		className: 'path_active'
+	});
+
+	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+		layer.bringToFront();
+	}
+
+	lastClickedLayer = layer;
+}
+
+function initLineGraph()
+{
+	var data = [];
+
+	$.each(hotspot_array[0].druktecijfers, function (key, value) {
+
+		var dataset = {};
+		dataset.y = Math.round(this.d * 100);
+		dataset.x = parseInt(this.h);
+
+		data.push(dataset);
+	});
+
+	areaGraph = $('.graphbar_graph').areaGraph(data);
+
+	setTimeout(areaGraph[0].startCount(),3000); //todo: replace timeout for proper load flow
+
+}
+
+function updateLineGraph(hotspot)
+{
+	// get proper data from json array
+	var data = [];
+
+	$.each(hotspot_array[hotspot].druktecijfers, function (key, value) {
+
+		var dataset = {};
+		dataset.y = Math.round(this.d * 100);
+		dataset.x = parseInt(this.h);
+
+		data.push(dataset);
+	});
+
+	areaGraph[0].update(data);
+}
+
 
 function getDate()
 {
@@ -589,176 +762,6 @@ function closeDetails()
 	$('.details_graph').hide();
 }
 
-function getLatLangArray(point) {
-	return lnglat = proj4RD.inverse([point.x, point.y]);
-}
-
-function getLatLang(point) {
-	var lnglat = proj4RD.inverse([point.x, point.y]);
-	return L.latLng(lnglat[1], lnglat[0]);
-}
-
-function getColor(dindex)
-{
-	var a = '#50E6DB'; //50E6DB 63c6e6
-	var b = '#ff0000';
-
-	var ah = parseInt(a.replace(/#/g, ''), 16),
-		ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
-		bh = parseInt(b.replace(/#/g, ''), 16),
-		br = bh >> 16, bg = bh >> 8 & 0xff, bb = bh & 0xff,
-		rr = ar + dindex * (br - ar),
-		rg = ag + dindex * (bg - ag),
-		rb = ab + dindex * (bb - ab);
-
-	return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
-}
-
-function style(feature) {
-
-	var dindex = buurtcode_prop_array[feature.properties.vollcode].index
-
-	return {
-		fillColor: getColor(dindex),
-		weight: 1,
-		opacity: 0.6,
-		color: '#fff',
-		fillOpacity: 0.7
-	};
-}
-
-function onEachFeature(feature, layer) {
-	layer.on({
-		mouseover: highlightFeature,
-		mouseout: resetHighlight,
-		click: zoomToFeature
-	});
-
-	layer.bindPopup('<div><h3>' + layer.feature.properties.naam + '</h3></div>');
-	layer.on('mouseover', function (e) {
-		this.openPopup();
-	});
-	layer.on('mouseout', function (e) {
-		this.closePopup();
-	});
-}
-
-function highlightFeature(e) {
-	var layer = e.target;
-
-	var dindex = buurtcode_prop_array[layer.feature.properties.vollcode].index;
-	var buurt = buurtcode_prop_array[layer.feature.properties.vollcode].buurt;
-}
-
-function resetHighlight(e) {
-	// geojson.resetStyle(e.target);
-}
-
-function zoomToFeature(e) {
-	var layer = e.target;
-
-	layer.closePopup();
-
-	// set layer active
-	setLayerActive(layer);
-}
-
-function setLayerActive(layer)
-{
-	if(lastClickedLayer){
-		geojson.resetStyle(lastClickedLayer);
-		$(lastClickedLayer.getElement()).removeClass("active_path");
-	}
-
-	vollcode = layer.feature.properties.vollcode;
-	
-	var buurt = buurtcode_prop_array[vollcode].buurt;
-	var dindex = buurtcode_prop_array[vollcode].index;
-
-	// set name
-	$('.graphbar_title').html(buurt);
-	
-	$(layer.getElement()).addClass("active_path");
-
-	layer.setStyle({
-		weight: 2,
-		color: '#cccccc',
-		opacity: 0.8,
-		fillOpacity: 0.6,
-		className: 'path_active'
-	});
-
-	if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-		layer.bringToFront();
-	}
-
-	lastClickedLayer = layer;
-}
-
-
-function initLineGraph()
-{
-	var data = [];
-
-
-	var count = 0;
-	do {
-
-		var dataset = {};
-		dataset.y = Math.round(hotspot_array[0].druktecijfers[count].d * 100);
-		dataset.x = parseInt(hotspot_array[0].druktecijfers[count].h);
-
-
-		data[count] = dataset;
-		count++;
-
-	}while(count < 24);
-
-
-	data.sort(function (a, b) {
-		return a.x - b.x;
-	});
-
-	// console.log(data);
-
-	// data.push(data[0]);
-
-	// console.log(data);
-	
-	areaGraph = $('.graphbar_graph').areaGraph(data);
-
-	setTimeout(areaGraph[0].startCount(),3000); //todo: replace timeout for proper load flow
-
-}
-
-function updateLineGraph(hotspot)
-{
-	// get proper data from json array
-	var data = [];
-
-	var count = 0;
-	do {
-
-		var dataset = {};
-		dataset.y = Math.round(hotspot_array[hotspot].druktecijfers[count].d * 100);
-		dataset.x = parseInt(hotspot_array[hotspot].druktecijfers[count].h);
-
-
-		data[count] = dataset;
-		count++;
-
-	}while(count < 24);
-
-	data.sort(function (a, b) {
-		return a.x - b.x;
-	});
-
-	// data.push(data[0]);
-
-	areaGraph[0].update(data);
-}
-
-
 function resetTheme()
 {
 	// remove buttons acitve state
@@ -810,9 +813,9 @@ function showFeeds()
 	var camIcon = L.icon({
 		iconUrl: 'images/cam_marker.svg',
 
-		iconSize:     [35, 40], 
+		iconSize:     [35, 40],
 		iconAnchor:   [17.5, 40],
-		popupAnchor:  [0, -50] 
+		popupAnchor:  [0, -50]
 	});
 
 	$.each(feeds, function(key,value) {
@@ -885,9 +888,9 @@ function pointToLayerPark(feature, latlng) {
 		var parkIcon = L.icon({
 			iconUrl: 'images/park_marker_green.svg',
 
-			iconSize:     [35, 40], 
+			iconSize:     [35, 40],
 			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
+			popupAnchor:  [0, -50]
 		});
 	}
 	else
@@ -895,9 +898,9 @@ function pointToLayerPark(feature, latlng) {
 		var parkIcon = L.icon({
 			iconUrl: 'images/park_marker.svg',
 
-			iconSize:     [35, 40], 
+			iconSize:     [35, 40],
 			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
+			popupAnchor:  [0, -50]
 		});
 	}
 
@@ -948,9 +951,9 @@ function showOvFiets()
 		var camIcon = L.icon({
 			iconUrl: 'images/fiets_marker.svg',
 
-			iconSize:     [35, 40], 
+			iconSize:     [35, 40],
 			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
+			popupAnchor:  [0, -50]
 		});
 
 		$.each(fietsJson.locaties, function(key,value) {
@@ -983,9 +986,9 @@ function showEvents()
 		var camIcon = L.icon({
 			iconUrl: 'images/events_marker.svg',
 
-			iconSize:     [35, 40], 
+			iconSize:     [35, 40],
 			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
+			popupAnchor:  [0, -50]
 		});
 
 		$.each(eventsJson, function(key,value) {
@@ -1021,9 +1024,9 @@ function showMuseum()
 		var camIcon = L.icon({
 			iconUrl: 'images/musea_marker.svg',
 
-			iconSize:     [35, 40], 
+			iconSize:     [35, 40],
 			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
+			popupAnchor:  [0, -50]
 		});
 
 		$.each(eventsJson, function(key,value) {
@@ -1053,9 +1056,9 @@ function pointToLayerParc(feature, latlng) {
 	var parkIcon = L.icon({
 		iconUrl: 'images/parc_marker.svg',
 
-		iconSize:     [35, 40], 
+		iconSize:     [35, 40],
 		iconAnchor:   [17.5, 40],
-		popupAnchor:  [0, -50] 
+		popupAnchor:  [0, -50]
 	});
 	var marker = L.marker(latlng, {icon: parkIcon});
 	marker.bindPopup("<h3>" + feature.properties.Naam + "</h3>", {autoClose: false});
@@ -1094,9 +1097,9 @@ function pointToLayerMarket(feature, latlng) {
 	var marketIcon = L.icon({
 		iconUrl: 'images/market_marker.svg',
 
-		iconSize:     [35, 40], 
+		iconSize:     [35, 40],
 		iconAnchor:   [17.5, 40],
-		popupAnchor:  [0, -50] 
+		popupAnchor:  [0, -50]
 	});
 	var marker =  L.marker(latlng, {icon: marketIcon});
 	var website = '';
@@ -1156,9 +1159,9 @@ function showGoogle()
 			var googleIcon = L.icon({
 				iconUrl: marker_icon,
 
-				iconSize:     [35, 40], 
+				iconSize:     [35, 40],
 				iconAnchor:   [17.5, 40],
-				popupAnchor:  [0, -50] 
+				popupAnchor:  [0, -50]
 			});
 
 			var header = this.name;
@@ -1180,7 +1183,7 @@ function showGoogle()
 			markers.push(event_marker);
 		});
 
-	});	
+	});
 }
 
 function showWater()
@@ -1188,9 +1191,9 @@ function showWater()
 	var waterIcon = L.icon({
 		iconUrl: 'images/water_marker.svg',
 
-		iconSize:     [35, 40], 
+		iconSize:     [35, 40],
 		iconAnchor:   [17.5, 40],
-		popupAnchor:  [0, -50] 
+		popupAnchor:  [0, -50]
 	});
 
 	var title = 'Watermeetpunt Prinsegracht';
