@@ -31,6 +31,7 @@ services:
       - UWSGI_OFFLOAD_THREADS=1
       - UWSGI_HARAKIRI=15
       - UWSGI_DIE_ON_TERM=1
+      - UWSGI_STATIC_INDEX=index.html
 
   importer:
     build: ./importer
