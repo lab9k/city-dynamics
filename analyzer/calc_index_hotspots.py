@@ -62,6 +62,7 @@ def main():
     sql_query = """ SELECT * FROM "{}" """
 
     concat_google(sql_query, conn)
+
     hotspots_df = pd.read_csv('lookup_tables/Amsterdam Hotspots - Sheet1.csv')
 
     log.debug('Writing hotspots to db..')
@@ -140,6 +141,27 @@ def main():
 
     log.debug('Writing to db..')
     google_week_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
+
+    insert_into_models_hotspots = """
+    insert into datasets_hotspotsdrukteindex (
+    index,
+    hour,
+    drukteindex,
+    hotspot_id
+    ) select c.index, hour, drukteindex, h.index from hotspots h, drukteindex_hotspots c
+    where  h."Hotspot" = c."Hotspot";
+
+    insert into datasets_hotspots (
+    index, 
+    "Hotspot", 
+    "Latitude", 
+    "Longitude"
+    )
+    select index, "Hotspot", "Latitude", "Longitude" from hotspots;
+
+    """
+
+    conn.execute(insert_into_models_hotspots)
 
     log.debug('done.')
 
