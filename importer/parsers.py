@@ -319,12 +319,31 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
     df = pd.read_excel(path, sheet_name=3)
     indx = np.logical_and(df.wijk != 'gemiddelde',
                           np.logical_not(df.wijk.isnull()))
-    cols = ['wijk', 'oppervlakte land in vierkante meters',
+    cols = ['wijk',
+            'aantal inwoners',
+            'aantal werkzame personen',
+            'aantal studenten',
+            'aantal  bezoekers (met correctie voor onderlinge overlap)',
+            'som alle verblijvers',
+            'oppervlakte land in vierkante meters',
+            'oppervlakte land en water in vierkante meter',
             'verbl. Per HA (land) 2016']
-    df = df.loc[indx, cols]
-    df[cols[2]] = df[cols[2]].fillna(0)
-    df[cols[2]] = np.round(df[cols[2]]).astype(int)
-    df.columns = ['wijk', 'oppervlakte_m2', 'verblijversindex']
+
+    df = df[cols]
+
+    # pandas.to_sql can't handle brackets within column names
+    df.rename(columns={ 'wijk': 'vollcode',
+                        'aantal inwoners': 'inwoners',
+                        'aantal werkzame personen': 'werkzame_personen',
+                        'aantal studenten': 'studenten',
+                        'aantal  bezoekers (met correctie voor onderlinge overlap)': 'bezoekers',
+                        'som alle verblijvers': 'verblijvers',
+                        'oppervlakte land in vierkante meters': 'oppervlakte_land_m2',
+                        'oppervlakte land en water in vierkante meter': 'oppervlakte_land_water_m2',
+                        'verbl. Per HA (land) 2016': 'verblijvers_ha_2016'}, inplace=True)
+
+    # df.columns = [x.replace(" ", "_") for x in df.columns]
+    df = df.head(98)
     return df
 
 

@@ -9,8 +9,8 @@
 
 			// set the dimensions and margins of the graph
 			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
-			graph.width = ($(document).width() * 1) - graph.margin.left - graph.margin.right;
-			graph.height = 90 - graph.margin.top - graph.margin.bottom;
+			graph.width = graph.container.width() - graph.margin.left - graph.margin.right;
+			graph.height = graph.container.height() - graph.margin.top - graph.margin.bottom;
 
 			// set the ranges
 			var x = d3.scaleLinear().rangeRound([0, graph.width]);
@@ -32,7 +32,7 @@
 			// append the svg obgect to the body of the page
 			graph.svg = d3.select(graph.container[0]).append("svg")
 				.on('click', function(){ graph.stopResumeCount(); })
-				.attr("width", graph.width +  graph.margin.left +  graph.margin.right)
+				.attr("width", '100%')
 				.attr("height", graph.height +  graph.margin.top +  graph.margin.bottom)
 				.attr("class", "indexgraph")
 				.append("g")
@@ -64,7 +64,7 @@
 				.call(d3.axisBottom(x).tickFormat( function(d) { return (d < 10) ? "0"+ d : d; } ).ticks(25, ",f"))
 				.selectAll("text")
 				.style("text-anchor", "middle")
-				.attr("dx", "5px")
+				.attr("dx", "0")
 				.attr("dy", ".15em");
 
 			graph.lineGroup = graph.svg.append("g")
@@ -77,7 +77,7 @@
 				.attr("x1",'0')
 				.attr("x2",'0')
 				.attr("y1",'0')
-				.attr("y2",'70')
+				.attr("y2",graph.height)
 				.attr("style",'stroke:rgb(255,255,255);stroke-width:2');
 
 
@@ -122,15 +122,18 @@
 
 				function repeat() {
 
-					// start hotspots animation
+
 
 					var time = graph.time;
 					var elapsedTime = graph.lineGroup.attr("time");
 
 					if(elapsedTime > 0 )
 					{
-						time = graph.time - (graph.time * elapsedTime);
+						time = graph.time - (graph.time * (elapsedTime/24));
 					}
+
+					// start hotspots animation
+					startAnimation();
 
 					// console.log(time);
 					// console.log(elapsedTime);
@@ -140,7 +143,7 @@
 						.ease(d3.easeLinear)
 						.duration(time)
 						.attr("transform", "translate("+ graph.width +", 0)")
-						.attr("time",1)
+						.attr("time",24)
 						.transition()
 						.duration(0)
 						.attr("time",0)
@@ -154,6 +157,7 @@
 				if(graph.lineGroup.attr('state') == 'play')
 				{
 					// stop hotspots animation
+					stopAnimation();
 
 					console.log('pause');
 					graph.lineGroup

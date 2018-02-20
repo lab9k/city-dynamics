@@ -132,6 +132,7 @@ def main():
 
     google_week_hotspots.rename(columns={'historical': 'drukteindex'}, inplace=True)
 
+    # fill the dataframe with all missing hotspot-hour combinations
     x = {"hour": np.arange(24), "Hotspot": hotspots_df['Hotspot'].unique().tolist()}
     hs_hour_combinations = pd.DataFrame(list(itertools.product(*x.values())), columns=x.keys())
     google_week_hotspots = google_week_hotspots.merge(hs_hour_combinations, on=['hour', 'Hotspot'], how='outer')
@@ -140,26 +141,6 @@ def main():
     log.debug('Writing to db..')
     google_week_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
 
-    insert_into_models = """
-    insert into datasets_hotspotsdrukteindex (
-    index,
-    hour,
-    drukteindex,
-    hotspot_id
-    ) select c.index, hour, drukteindex, h.index from hotspots h, drukteindex_hotspots c
-    where  h."Hotspot" = c."Hotspot";
-    
-    insert into datasets_hotspots (
-    index, 
-    "Hotspot", 
-    "Latitude", 
-    "Longitude"
-    )
-    select index, "Hotspot", "Latitude", "Longitude" from hotspots;
-
-    """
-
-    conn.execute(insert_into_models)
     log.debug('done.')
 
 

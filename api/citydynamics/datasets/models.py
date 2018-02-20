@@ -18,18 +18,7 @@ class Buurtcombinatie(models.Model):
     wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'buurtcombinatie'
-
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'django_migrations'
 
 
 class Drukteindex(models.Model):
@@ -38,18 +27,26 @@ class Drukteindex(models.Model):
     vollcode = models.TextField(blank=True, null=True)
     weekday = models.BigIntegerField(blank=True, null=True)
     hour = models.BigIntegerField(blank=True, null=True)
-    google_live = models.FloatField(blank=True, null=True)
-    google_week = models.FloatField(blank=True, null=True)
+    alpha_live = models.FloatField(blank=True, null=True)
+    alpha_week = models.FloatField(blank=True, null=True)
     gvb_buurt = models.FloatField(blank=True, null=True)
     gvb_stad = models.FloatField(blank=True, null=True)
-    verblijversindex = models.FloatField(blank=True, null=True)
-    google = models.FloatField(blank=True, null=True)
+    inwoners = models.FloatField(blank=True, null=True)
+    werkzame_personen = models.FloatField(blank=True, null=True)
+    studenten = models.FloatField(blank=True, null=True)
+    bezoekers = models.FloatField(blank=True, null=True)
+    verblijvers = models.FloatField(blank=True, null=True)
+    oppervlakte_land_m2 = models.FloatField(blank=True, null=True)
+    oppervlakte_land_water_m2 = models.FloatField(blank=True, null=True)
+    verblijvers_ha_2016 = models.FloatField(blank=True, null=True)
+    alpha = models.FloatField(blank=True, null=True)
     gvb = models.FloatField(blank=True, null=True)
     drukte_index = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'drukteindex'
+
 
 
 class Hotspots(models.Model):

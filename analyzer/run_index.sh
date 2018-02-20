@@ -5,5 +5,5 @@ set -u
 set -e
 
 # calculate crowdedness index
-python calc_index.py docker
+python main.py docker
 python calc_index_hotspots.py docker

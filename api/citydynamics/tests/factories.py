@@ -6,7 +6,7 @@ import factory
 from factory import fuzzy
 
 # Project
-from citydynamics.api import models
+from citydynamics.datasets import models
 
 
 class DrukteindexFactory(factory.DjangoModelFactory):
