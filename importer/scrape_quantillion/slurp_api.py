@@ -78,7 +78,6 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
     url = f'{host}:{port}/gemeenteamsterdam/{endpoint}'
 
     async_r = grequests.get(url, params=params, auth=AUTH)
-    gevent.sleep()
     gevent.spawn(async_r.send).join()
 
     response = async_r.response
@@ -155,10 +154,6 @@ def get_locations(work_id, endpoint, get_params=get_params()):
     """
 
     while True:
-        # generate next step
-        if STATUS.get('done'):
-            break
-
         log.debug(f'Next for {work_id}')
         params = next(get_params)
         log.debug(params)
@@ -169,6 +164,10 @@ def get_locations(work_id, endpoint, get_params=get_params()):
         if len(json_response) < LIMIT:
             # We are done
             STATUS['done'] = True
+            break
+
+        # generate next step
+        if STATUS.get('done'):
             break
 
     log.debug(f'Done {work_id}')
