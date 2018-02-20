@@ -272,9 +272,12 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
     # rename columns
     df.rename(columns={
         'Tellus Id': 'tellus_id', 'Tijd Van': 'timestamp',
-        'Latitude': 'lat', 'Longitude': 'lon', 'Meetwaarde': 'meetwaarde',
+        'Latitude': 'lat', 'Longitude': 'lon', 'Meetwaarde': 'tellus',
         'Representatief': 'representatief', 'Richting': 'richting',
-        'Richting 1': 'richting 1', 'Richting 2': 'richting 2'}, inplace=True)
+        'Richting 1': 'richting_1', 'Richting 2': 'richting_2'}, inplace=True)
+
+    # Process number-strings to int
+    df['tellus'] = df.tellus.astype(int)
 
     # change comma to dot and type object to type float64
     df['lon'] = df['lon'].str.replace(',', '.')
@@ -289,13 +292,13 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
     df = df.loc[indx, :]
 
     # only direction centrum
-    indx1 = np.logical_and(df['richting 1'] == 'Centrum', df.richting == '1')
-    indx2 = np.logical_and(df['richting 2'] == 'Centrum', df.richting == '2')
+    indx1 = np.logical_and(df['richting_1'] == 'Centrum', df.richting == '1')
+    indx2 = np.logical_and(df['richting_2'] == 'Centrum', df.richting == '2')
     df = df.loc[np.logical_or(indx1, indx2), :]
 
     # drop columns
-    df.drop(['richting', 'richting 1',
-             'richting 2', 'representatief'], axis=1, inplace=True)
+    df.drop(['richting', 'richting_1',
+             'richting_2', 'representatief'], axis=1, inplace=True)
 
     return df
 
@@ -317,14 +320,31 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
     path = os.path.join(datadir, filename)
     df = pd.read_excel(path, sheet_name=3)
-    indx = np.logical_and(df.wijk != 'gemiddelde',
-                          np.logical_not(df.wijk.isnull()))
-    cols = ['wijk', 'oppervlakte land in vierkante meters',
+
+    cols = ['wijk',
+            'aantal inwoners',
+            'aantal werkzame personen',
+            'aantal studenten',
+            'aantal  bezoekers (met correctie voor onderlinge overlap)',
+            'som alle verblijvers',
+            'oppervlakte land in vierkante meters',
+            'oppervlakte land en water in vierkante meter',
             'verbl. Per HA (land) 2016']
-    df = df.loc[indx, cols]
-    df[cols[2]] = df[cols[2]].fillna(0)
-    df[cols[2]] = np.round(df[cols[2]]).astype(int)
-    df.columns = ['wijk', 'oppervlakte_m2', 'verblijversindex']
+
+    df = df[cols]
+
+    # pandas.to_sql can't handle brackets within column names
+    df.rename(columns={ 'wijk': 'vollcode',
+                        'aantal inwoners': 'inwoners',
+                        'aantal werkzame personen': 'werkzame_personen',
+                        'aantal studenten': 'studenten',
+                        'aantal  bezoekers (met correctie voor onderlinge overlap)': 'bezoekers',
+                        'som alle verblijvers': 'verblijvers',
+                        'oppervlakte land in vierkante meters': 'oppervlakte_land_m2',
+                        'oppervlakte land en water in vierkante meter': 'oppervlakte_land_water_m2',
+                        'verbl. Per HA (land) 2016': 'verblijvers_ha_2016'}, inplace=True)
+
+    df = df.head(98)  # Remove last two rows (no relevant data there)
     return df
 
 

@@ -109,11 +109,11 @@ def run_imports():
 def linear_model(drukte):
 
     # Normalise verblijversindex en gvb
-    drukte['verblijversindex'] = process.norm(drukte.verblijversindex)
+    drukte['verblijvers_ha_2016'] = process.norm(drukte.verblijvers_ha_2016)
     drukte['gvb'] = process.norm(drukte.gvb)
 
     # make sure the sum of the weights != 0
-    linear_weigths = {'verblijversindex': 1,
+    linear_weigths = {'verblijvers_ha_2016': 1,
                       'gvb': 8,
                       'alpha_week': 2}
 
@@ -163,10 +163,10 @@ def pipeline_model(drukte):
     """Implement pipeline model for creating the Drukte Index"""
 
     # Linear weights for the creation of the base value
-    base_list = {'verblijversindex': 1, 'gvb': 4}
+    base_list = {'verblijvers_ha_2016': 1, 'gvb': 4}
 
     # Modification mappings defining what flex is used for each dataset
-    mod_list = {'verblijversindex': 'alpha'}
+    mod_list = {'verblijvers_ha_2016': 'alpha'}
 
     # Specify view to choose scaling method (options: 'toerist', 'ois', 'politie')
     view = 'toerist'
@@ -222,7 +222,8 @@ def pipeline_model(drukte):
 def write_to_db(drukte):
     """Write data to database."""
     log.debug('Writing data to database.')
-    connection = process.connect_database('dev')
+    dbconfig = args.dbConfig[0]
+    connection = process.connect_database(dbconfig)
     drukte.to_sql(
         name='drukteindex', con=connection, index=True, if_exists='replace')
     connection.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
