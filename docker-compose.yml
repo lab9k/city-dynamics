@@ -13,7 +13,7 @@ services:
       - ./deploy/backup:/backup
 
   api:
-    build: ./api
+    build: .
     ports:
       - "8117:8001"
     links:

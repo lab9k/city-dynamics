@@ -4,8 +4,9 @@ MAINTAINER datapunt@amsterdam.nl
 ENV PYTHONUNBUFFERED 1
 
 
-
 RUN mkdir -p /static && chown datapunt /static
+
+COPY ../front /static/radar
 
 COPY requirements.txt /app/
 
@@ -18,9 +19,12 @@ WORKDIR /app
 
 COPY ./deploy /deploy/
 
+
 USER datapunt
 
 RUN export DJANGO_SETTINGS_MODULE=citydynamics.settings
+
 RUN python manage.py collectstatic
+
 CMD uwsgi
 
