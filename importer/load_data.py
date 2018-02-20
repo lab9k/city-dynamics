@@ -132,5 +132,4 @@ if __name__ == '__main__':
     if args.dataset:
         datasets = [args.dataset]
 
-    logger.info('Loading %s', datasets)
-    main(args.datadir[0], args.dbConfig[0], datasets)
+    main(args.datadir[0], args.dbConfig[0])
