@@ -1,0 +1,27 @@
+[
+    {
+        "BatchTime": "2018-02-15T14:12:58.508000Z",
+        "Category": 3,
+        "Expected": 0.35526315789473684,
+        "Real-time": 0.7048872348509336,
+        "ScrapeTime": "2018-02-15T14:13:03Z",
+        "VisitDuration": "1 bis 2 uur",
+        "formatted_address": "Van Baerlestraat 5, 1071 AL Amsterdam, Netherlands",
+        "location": {
+            "coordinates": [
+                4.8774608,
+                52.3599323
+            ],
+            "type": "Point"
+        },
+        "name": "The Seafood Bar",
+        "place_id": "ChIJ9XOZr-UJxkcRi1-aAUAeGt0",
+        "types": [
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+        ],
+        "url": "https://www.google.com/search?q=The Seafood Bar, Van Baerlestraat 5, 1071 AL Amsterdam, Netherlands"
+    }
+]
