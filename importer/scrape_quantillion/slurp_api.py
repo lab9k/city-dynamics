@@ -45,7 +45,6 @@ LIMIT = 1000
 PARAMS = {'limit': LIMIT}
 
 api_config = {
-    'password_dev': os.getenv('QUANTILLION_PASSWORD_DEV'),
     'password': os.getenv('QUANTILLION_PASSWORD'),
     'hosts': {
         'production': 'http://apis.quantillion.io',
@@ -63,13 +62,13 @@ api_config = {
 AUTH = (api_config['username'], api_config.get('password'))
 
 
-def get_the_json(endpoint, params={'limit': 1000}):
+def get_the_json(endpoint, params={'limit': 1000}) -> list:
     """
     Get some json of endpoint!
 
     try prod. fall back on development
     """
-    json = None
+    json = []
     response = None
     port = api_config['port']
 
@@ -85,10 +84,10 @@ def get_the_json(endpoint, params={'limit': 1000}):
 
     if response is None:
         log.error('RESPONSE NONE %s %s', url, params)
-        return {}
+        return []
     elif response.status_code == 200:
         log.debug(f' OK  {response.status_code}:{url}')
-    elif async_r.status_code == 500:
+    elif response.status_code == 500:
         log.debug(f'FAIL {response.status_code}:{url}')
 
     if response:
