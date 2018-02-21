@@ -14,10 +14,11 @@ username: gemeenteAmsterdam
 
 import gevent
 import grequests
-# import requests
+from settings import LIMIT
 import os
 import models
 import logging
+import argparse
 
 from gevent.queue import JoinableQueue
 from dateutil import parser
@@ -40,7 +41,12 @@ STATUS = {
     'done': False
 }
 
-LIMIT = 1000
+ENDPOINTS = [
+        'realtime',
+        'expected',
+        'realtime/current',
+        'expected/current',
+]
 
 PARAMS = {'limit': LIMIT}
 
@@ -49,10 +55,6 @@ api_config = {
     'hosts': {
         'production': 'http://apis.quantillion.io',
         'acceptance': 'http://apis.development.quantillion.io',
-        # Production: 35.159.8.123
-        # 'http://35.159.8.123',
-        # Development: 18.196.227.0
-        # '18.196.227.0',
     },
     'port': 3001,
     'username': 'gemeenteAmsterdam',
@@ -148,7 +150,7 @@ def get_params():
 
 def get_locations(work_id, endpoint):
     """
-    Get locations with real-time data
+    Get google locations information with 'real-time' data
     """
     gen_params = get_params()
 
@@ -191,16 +193,26 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
         gevent.joinall(jobs)
 
 
-def main():
+def main(endpoint):
     engine = models.make_engine(section='docker')
     # models.Base.metadata.create_all(engine)
     models.set_engine(engine)
 
-    # run_workers(get_locations, 'expected')
-    # load the data!
-    run_workers('realtime')
-    #  locations_realtime()
+    # scrape the data!
+    run_workers(endpoint)
 
 
 if __name__ == '__main__':
-    main()
+
+    desc = "Scrape goolge quantillion api."
+    inputparser = argparse.ArgumentParser(desc)
+    inputparser.add_argument(
+        'endpoint', type=str,
+        default='realtime/current',
+        choices=ENDPOINTS,
+        help="Provide Endpoint to scrape",
+        nargs=1)
+
+    args = inputparser.parse_args()
+    endpoint = args.endpoint[0]
+    main(endpoint)

@@ -2,8 +2,8 @@ import os
 import configparser
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-os.sys.path.append(BASE_DIR)
 
+LIMIT = 1000
 
 AUTH_ROOT = os.path.abspath(os.path.join(BASE_DIR))
 config_auth = configparser.RawConfigParser()

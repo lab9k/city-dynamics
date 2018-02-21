@@ -31,4 +31,18 @@ set `QUANTILLION_PASSWORD` you can find it in rattic/password management
 Tests
 ======
 
-pytest
+`cd` into scrape_quantillion
+
+        export PYTHONPATH=.
+
+        pytest
+
+JSON
+=====
+
+not all attributes are documented
+
+category =1 : no data available were found
+category =2 : only expected data were found
+category = 3 : both live and expected data were found
+
