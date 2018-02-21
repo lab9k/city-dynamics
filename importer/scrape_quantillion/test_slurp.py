@@ -7,10 +7,10 @@ import unittest
 from unittest import mock
 import slurp_api
 import models
-import configparser
+from settings import BASE_DIR
 
-config_auth = configparser.RawConfigParser()
-config_auth.read('../auth.conf')
+
+FIX_DIR = BASE_DIR + '/scrape_quantillion'
 
 
 transaction = []
@@ -45,7 +45,7 @@ class TestDBWriting(unittest.TestCase):
     @mock.patch('slurp_api.get_the_json')
     def test_expected_locations(self, get_json_mock):
 
-        with open('fixtures/expected.json') as mockjson:
+        with open(FIX_DIR + '/fixtures/expected.json') as mockjson:
             test_json = json.loads(mockjson.read())
 
         get_json_mock.return_value = test_json
@@ -61,7 +61,7 @@ class TestDBWriting(unittest.TestCase):
     @mock.patch('slurp_api.get_the_json')
     def test_realtime_locations(self, get_json_mock):
 
-        with open('fixtures/realtime.json') as mockjson:
+        with open(FIX_DIR + '/fixtures/realtime.json') as mockjson:
             test_json = json.loads(mockjson.read())
 
         get_json_mock.return_value = test_json

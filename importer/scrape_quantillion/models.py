@@ -13,11 +13,7 @@ from sqlalchemy_utils.functions import database_exists
 from sqlalchemy_utils.functions import create_database
 from sqlalchemy_utils.functions import drop_database
 
-import configparser
-
-
-config_auth = configparser.RawConfigParser()
-config_auth.read('../auth.conf')
+from settings import config_auth
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
 
