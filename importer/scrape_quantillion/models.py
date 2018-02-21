@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, TIMESTAMP
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.schema import Sequence
+from sqlalchemy.schema import Sequence, UniqueConstraint
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
@@ -15,8 +15,8 @@ from sqlalchemy_utils.functions import drop_database
 
 from settings import config_auth
 
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
 
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
@@ -85,6 +85,7 @@ class GoogleRawLocationsRealtime(Base):
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
     data = Column(JSONB)
+    # __table_args__ = (UniqueConstraint('place_id', 'scraped_at'), )
 
 
 class GoogleRawLocationsExpected(Base):
@@ -97,6 +98,9 @@ class GoogleRawLocationsExpected(Base):
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
     data = Column(JSONB)
+
+    #__table_args__ = (UniqueConstraint('place_id', 'scraped_at'),)
+
 
 
 class GoogleLocations(Base):
@@ -116,6 +120,7 @@ if __name__ == '__main__':
     # resets everything
     log.warning('RECREATING DEFINED TABLES')
     engine = make_engine()
+    # recreate tables
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     # create tables

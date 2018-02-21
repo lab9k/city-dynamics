@@ -8,3 +8,7 @@ LIMIT = 1000
 AUTH_ROOT = os.path.abspath(os.path.join(BASE_DIR))
 config_auth = configparser.RawConfigParser()
 config_auth.read(AUTH_ROOT + '/auth.conf')
+
+TESTING = {
+    'running': False
+}

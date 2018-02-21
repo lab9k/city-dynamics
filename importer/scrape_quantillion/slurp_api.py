@@ -29,7 +29,7 @@ patch_psycopg()
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
-logging.getLogger('urllib3').setLevel(logging.ERROR)
+logging.getLogger('urllib3').setLevel(logging.DEBUG)
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'acceptance')
 
@@ -42,11 +42,18 @@ STATUS = {
 }
 
 ENDPOINTS = [
-        'realtime',
-        'expected',
-        'realtime/current',
-        'expected/current',
+    'realtime',
+    'expected',
+    'realtime/current',
+    'expected/current',
 ]
+
+ENDPOINT_MODEL = {
+    'realtime': models.GoogleRawLocationsRealtime,
+    'expected': models.GoogleRawLocationsExpected,
+    #'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
+    #'expected/current': models.GoogleRawLocationsExpectedCurrent,
+}
 
 PARAMS = {'limit': LIMIT}
 
@@ -139,6 +146,27 @@ def add_locations_to_db(endpoint, json: list):
     log.debug(f"Updated {len(json)} locations")
 
 
+def delete_duplicates(db_model):
+    """
+    Remove duplacates from table.
+    """
+    # make new session
+    session = models.Session()
+    tablename = db_model.__table__.name
+    session.execute(f"""
+
+DELETE FROM {tablename} a USING (
+     SELECT MIN(ctid) AS ctid, place_id, scraped_at
+        FROM {tablename}
+        GROUP BY (scraped_at, place_id) HAVING COUNT(*) > 1
+ ) dups
+ WHERE a.place_id = dups.place_id
+ AND a.scraped_at = dups.scraped_at
+ AND a.ctid <> dups.ctid
+    """)
+    session.commit()
+
+
 def get_params():
 
     yield PARAMS
@@ -180,6 +208,7 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     """
     jobs = []
 
+    # reset job status
     STATUS['done'] = False
 
     for i in range(workers):
@@ -191,6 +220,12 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
         # waint untill all search tasks are done
         # but no longer than an hour
         gevent.joinall(jobs)
+
+    for job in jobs:
+        if not job.successful():
+            raise job.exception
+
+    delete_duplicates(ENDPOINT_MODEL[endpoint])
 
 
 def main(endpoint):
