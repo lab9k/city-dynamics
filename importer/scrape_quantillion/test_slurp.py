@@ -50,7 +50,7 @@ class TestDBWriting(unittest.TestCase):
 
         get_json_mock.return_value = test_json
 
-        slurp_api.get_locations('test', 'expected')
+        slurp_api.run_workers('expected', workers=1)
         session = models.Session()
         count = session.query(models.GoogleRawLocationsExpected).count()
         self.assertEqual(count, 1)
@@ -66,7 +66,9 @@ class TestDBWriting(unittest.TestCase):
 
         get_json_mock.return_value = test_json
 
-        slurp_api.get_locations('test', 'realtime')
+
+        #slurp_api.get_locations('test', 'realtime')
+        slurp_api.run_workers('realtime', workers=1)
         session = models.Session()
         count = session.query(models.GoogleRawLocationsRealtime).count()
         self.assertEqual(count, 1)

@@ -147,18 +147,15 @@ def get_params():
         yield PARAMS
 
 
-def get_locations(work_id, endpoint, get_params=get_params()):
+def get_locations(work_id, endpoint):
     """
     Get locations with real-time data
     """
+    gen_params = get_params()
 
     while True:
-        # generate next step
-        if STATUS.get('done'):
-            break
-
         log.debug(f'Next for {work_id}')
-        params = next(get_params)
+        params = next(gen_params)
         log.debug(params)
         json_response = get_the_json(endpoint, params)
 
@@ -169,16 +166,22 @@ def get_locations(work_id, endpoint, get_params=get_params()):
             STATUS['done'] = True
             break
 
+        # generate next step
+        if STATUS.get('done'):
+            break
+
     log.debug(f'Done {work_id}')
 
 
-def run_workers(parralleltask, endpoint):
+def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     """
     Run X workers processing search tasks
     """
     jobs = []
 
-    for i in range(WORKERS):
+    STATUS['done'] = False
+
+    for i in range(workers):
         jobs.append(
             gevent.spawn(parralleltask, i, endpoint)
         )
@@ -196,7 +199,7 @@ def main():
 
     # run_workers(get_locations, 'expected')
     # load the data!
-    run_workers(get_locations, 'realtime')
+    run_workers('realtime')
     #  locations_realtime()
 
 

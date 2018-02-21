@@ -1,0 +1,76 @@
+[
+    {
+        "BatchTime": "2018-02-21T02:16:15.222000Z",
+        "Category": 2,
+        "Expected": [
+            {
+                "ExpectedValue": 0.19736842105263158,
+                "TimeInterval": "11am-12pm"
+            },
+            {
+                "ExpectedValue": 0.40789473684210525,
+                "TimeInterval": "12pm-1pm"
+            },
+            {
+                "ExpectedValue": 0.14473684210526316,
+                "TimeInterval": "1pm-2pm"
+            },
+            {
+                "ExpectedValue": 0.09210526315789473,
+                "TimeInterval": "2pm-3pm"
+            },
+            {
+                "ExpectedValue": 0.25,
+                "TimeInterval": "3pm-4pm"
+            },
+            {
+                "ExpectedValue": 0.35526315789473684,
+                "TimeInterval": "4pm-5pm"
+            },
+            {
+                "ExpectedValue": 0.5131578947368421,
+                "TimeInterval": "5pm-6pm"
+            },
+            {
+                "ExpectedValue": 0.5131578947368421,
+                "TimeInterval": "5pm-6pm"
+            },
+            {
+                "ExpectedValue": 0.4605263157894737,
+                "TimeInterval": "7pm-8pm"
+            },
+            {
+                "ExpectedValue": 0.3026315789473684,
+                "TimeInterval": "8pm-9pm"
+            },
+            {
+                "ExpectedValue": 0.19736842105263158,
+                "TimeInterval": "11am-12pm"
+            },
+            {
+                "ExpectedValue": 0.09210526315789473,
+                "TimeInterval": "2pm-3pm"
+            }
+        ],
+        "Real-time": 0,
+        "ScrapeTime": "2018-02-21T02:16:19Z",
+        "VisitDuration": "20 min",
+        "formatted_address": "Meeuwenlaan 185 B, 1021 JC Amsterdam, Netherlands",
+        "location": {
+            "coordinates": [
+                4.9184183,
+                52.385679100000004
+            ],
+            "type": "Point"
+        },
+        "name": "Het Smikkelhoekje",
+        "place_id": "ChIJ8_pkaKsJxkcRcGuerQQj5dU",
+        "types": [
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+        ],
+        "url": "https://www.google.com/search?q=Het Smikkelhoekje, Meeuwenlaan 185 B, 1021 JC Amsterdam, Netherlands"
+    }
+]
