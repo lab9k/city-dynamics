@@ -29,7 +29,7 @@ patch_psycopg()
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
-logging.getLogger('urllib3').setLevel(logging.DEBUG)
+logging.getLogger('urllib3').setLevel(logging.ERROR)
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'acceptance')
 
@@ -172,7 +172,7 @@ def get_params():
     yield PARAMS
 
     while True:
-        PARAMS['skip'] = PARAMS.get('skip', 0) + 1000
+        PARAMS['skip'] = PARAMS.get('skip', LIMIT)
         yield PARAMS
 
 
