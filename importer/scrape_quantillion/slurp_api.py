@@ -19,6 +19,7 @@ import os
 import models
 import logging
 import argparse
+import datetime
 
 from gevent.queue import JoinableQueue
 from dateutil import parser
@@ -174,6 +175,15 @@ def get_params():
     while True:
         PARAMS['skip'] = PARAMS.get('skip', LIMIT)
         yield PARAMS
+
+
+def get_dates():
+    """
+    Generate dates to pick up 4 months in the past
+    """
+    #now = datetime.now()
+    #
+    #
 
 
 def get_locations(work_id, endpoint):
