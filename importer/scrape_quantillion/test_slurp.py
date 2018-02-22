@@ -7,11 +7,10 @@ import unittest
 from unittest import mock
 import slurp_api
 import models
-import configparser
+from settings import BASE_DIR
 
-config_auth = configparser.RawConfigParser()
-config_auth.read('../auth.conf')
 
+FIX_DIR = BASE_DIR + '/scrape_quantillion'
 
 transaction = []
 connection = []
@@ -25,15 +24,17 @@ def setUpModule():
     engine = models.make_engine(section='test')
     connection = engine.connect()
     transaction = connection.begin()
+    models.Base.metadata.drop_all(bind=engine)
     models.Base.metadata.create_all(bind=engine)
     session = models.set_engine(engine)
 
 
 def tearDownModule():
-    global transaction, connection, engine
+    global transaction, connection, engine, session
     transaction.rollback()
-    connection.close()
+    session.close()
     engine.dispose()
+    connection.close()
     models.drop_db()
 
 
@@ -45,31 +46,33 @@ class TestDBWriting(unittest.TestCase):
     @mock.patch('slurp_api.get_the_json')
     def test_expected_locations(self, get_json_mock):
 
-        with open('fixtures/expected.json') as mockjson:
+        with open(FIX_DIR + '/fixtures/expected.json') as mockjson:
             test_json = json.loads(mockjson.read())
 
         get_json_mock.return_value = test_json
 
-        slurp_api.get_locations('test', 'expected')
-        session = models.Session()
+        slurp_api.run_workers('expected', workers=1)
         count = session.query(models.GoogleRawLocationsExpected).count()
-        self.assertEqual(count, 1)
+        self.assertEqual(count, 2)
         # make sure we do not make duplicates
-        slurp_api.get_locations('test', 'expected')
-        self.assertEqual(count, 1)
+        slurp_api.run_workers('expected', workers=1)
+        count = session.query(models.GoogleRawLocationsExpected).count()
+        self.assertEqual(count, 2)
 
     @mock.patch('slurp_api.get_the_json')
     def test_realtime_locations(self, get_json_mock):
 
-        with open('fixtures/realtime.json') as mockjson:
+        with open(FIX_DIR + '/fixtures/realtime.json') as mockjson:
             test_json = json.loads(mockjson.read())
 
         get_json_mock.return_value = test_json
 
-        slurp_api.get_locations('test', 'realtime')
-        session = models.Session()
+        # slurp_api.get_locations('test', 'realtime')
+        slurp_api.run_workers('realtime', workers=1)
         count = session.query(models.GoogleRawLocationsRealtime).count()
+
         self.assertEqual(count, 1)
         # make sure we do not make duplicates
-        slurp_api.get_locations('test', 'realtime')
+        slurp_api.run_workers('realtime', workers=1)
+        count = session.query(models.GoogleRawLocationsRealtime).count()
         self.assertEqual(count, 1)

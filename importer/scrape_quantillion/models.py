@@ -13,14 +13,10 @@ from sqlalchemy_utils.functions import database_exists
 from sqlalchemy_utils.functions import create_database
 from sqlalchemy_utils.functions import drop_database
 
-import configparser
+from settings import config_auth
 
-
-config_auth = configparser.RawConfigParser()
-config_auth.read('../auth.conf')
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
-
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
@@ -52,8 +48,8 @@ def make_conf(section):
 
 
 def create_db(section='test'):
-    log.info(f"Created database")
     CONF = make_conf(section)
+    log.info(f"Created database")
     if not database_exists(CONF):
         create_database(CONF)
 
@@ -89,6 +85,7 @@ class GoogleRawLocationsRealtime(Base):
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
     data = Column(JSONB)
+    # __table_args__ = (UniqueConstraint('place_id', 'scraped_at'), )
 
 
 class GoogleRawLocationsExpected(Base):
@@ -120,6 +117,7 @@ if __name__ == '__main__':
     # resets everything
     log.warning('RECREATING DEFINED TABLES')
     engine = make_engine()
+    # recreate tables
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     # create tables

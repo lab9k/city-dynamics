@@ -11,3 +11,5 @@ venv/
 /jupyter_notebook
 
 .DS_Store
+
+.pytest_cache

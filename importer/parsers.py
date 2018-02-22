@@ -317,6 +317,14 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
     return df
 
 
+def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1.csv'):
+    path = os.path.join(datadir, filename)
+    df = pd.read_csv(path)
+    df.rename(columns={'Latitude':'lat', 'Longitude':'lon'}, inplace=True)
+
+    return df
+
+
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
     path = os.path.join(datadir, filename)
     df = pd.read_excel(path, sheet_name=3)
