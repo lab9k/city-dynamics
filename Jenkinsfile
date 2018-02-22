@@ -27,7 +27,7 @@ node {
         tryStep "test", {
             sh "docker-compose -p testcitydynamics -f api/deploy/test/docker-compose.yml build && " +
                "docker-compose -p testcitydynamics -f api/deploy/test/docker-compose.yml run --rm tests &&" +
-               "docker-compose -p testcitydynamics -f importer/deploy/test/tests.sh"
+               "importer/deploy/test/tests.sh"
         }, {
             sh "docker-compose -p testcitydynamics -f api/deploy/test/docker-compose.yml down"
         }
