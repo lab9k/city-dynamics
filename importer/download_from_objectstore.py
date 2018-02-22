@@ -8,7 +8,6 @@ the layout there matches the layout expected by our data loading scripts.
 delivery of new data for this project.)
 """
 import os
-import argparse
 import logging
 import configparser
 import objectstore
@@ -103,28 +102,3 @@ def download_containers(conn, datasets, targetdir):
         if c['name'] in datasets:
             logger.debug(c['name'])
             download_container(conn, c, targetdir)
-
-
-def main(targetdir):
-
-    datasets = [config_src.get(x, 'FOLDER_FTP') for x in config_src.sections()]
-    conn = Connection(**OS_CONNECT)
-    download_containers(conn, datasets, targetdir)
-
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    desc = "Download data from object store."
-    parser = argparse.ArgumentParser(desc)
-    parser.add_argument(
-        'targetdir', type=str, help='Local data directory.', nargs=1)
-    args = parser.parse_args()
-
-    # Check whether local cached downloads should be used.
-    ENV_VAR = 'EXTERNAL_DATASERVICES_USE_LOCAL'
-    use_local = True if os.environ.get(ENV_VAR, '') == 'TRUE' else False
-
-    if not use_local:
-        main(args.targetdir[0])
-    else:
-        logger.info('No download from datastore requested, quitting.')

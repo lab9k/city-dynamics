@@ -1,5 +1,4 @@
 # import os
-import argparse
 import configparser
 # import datetime
 import logging
@@ -10,15 +9,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
 import parsers
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-config_src = configparser.RawConfigParser()
-config_src.read('sources.conf')
-
-config_auth = configparser.RawConfigParser()
-config_auth.read('auth.conf')
 
 
 class NonZeroReturnCode(Exception):
@@ -106,30 +96,3 @@ def main(datadir, dbConfig, datasets):
 
     logger.info('Loading and writing area codes to database')
     load_gebieden(pg_str)
-
-
-if __name__ == '__main__':
-    desc = 'Upload citydynamics datasets into PostgreSQL.'
-    parser = argparse.ArgumentParser(desc)
-    parser.add_argument(
-        'datadir', type=str, help='Local data directory', nargs=1)
-
-    parser.add_argument(
-        'dbConfig', type=str,
-        help='database config settings: dev or docker', nargs=1)
-
-    parser.add_argument('dataset', nargs='?', help="Upload specific dataset")
-    args = parser.parse_args()
-
-    p_datasets = config_src.sections()
-
-    datasets = []
-
-    for x in p_datasets:
-        if config_src.get(x, 'ENABLE') == 'YES':
-            datasets.append(x)
-
-    if args.dataset:
-        datasets = [args.dataset]
-
-    main(args.datadir[0], args.dbConfig[0], datasets)

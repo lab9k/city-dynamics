@@ -64,7 +64,7 @@ def add_bc_codes(table):
       st_intersects(
         "{1}".geom,
         bc.wkb_geometry
-      )
+      )     
   """.format(table + '_with_bc', table)
 
 
