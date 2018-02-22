@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, TIMESTAMP
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.schema import Sequence, UniqueConstraint
+from sqlalchemy.schema import Sequence
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
@@ -98,9 +98,6 @@ class GoogleRawLocationsExpected(Base):
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
     data = Column(JSONB)
-
-    #__table_args__ = (UniqueConstraint('place_id', 'scraped_at'),)
-
 
 
 class GoogleLocations(Base):

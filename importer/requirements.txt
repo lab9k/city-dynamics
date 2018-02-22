@@ -39,6 +39,7 @@ requests==2.18.4
 rfc3986==1.1.0
 six==1.11.0
 SQLAlchemy==1.1.15
+SQLAlchemy-Utils==0.32.21
 stevedore==1.28.0
 urllib3==1.22
 wrapt==1.10.11

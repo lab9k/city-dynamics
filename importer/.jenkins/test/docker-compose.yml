@@ -7,12 +7,9 @@ services:
       POSTGRES_PASSWORD: insecure
       POSTGRES_DB: citydynamics
       POSTGRES_USER: citydynamics
-    volumes:
-      - ./backups:/tmp/backups
 
   importer:
-    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_importer:${ENVIRONMENT}
-    # build: ../../
+    build: ../../
     links:
       - database
     environment:
@@ -23,17 +20,3 @@ services:
       DATABASE_PORT_OVERRIDE: 5432
       STADSWERKEN_OBJECTSTORE_PASSWORD:
       PYTHONPATH: /app/scrape_quantillion
-    command: >
-      bash -c "/app/.jenkins/docker-wait.sh \
-              && /app/run_import.sh \ "
-    volumes:
-      - data-volume:/data
-
-  analyzer:
-    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${ENVIRONMENT}
-    # build: ./analyzer
-    links:
-      - database:database
-
-volumes:
-  data-volume:

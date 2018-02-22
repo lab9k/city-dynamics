@@ -19,7 +19,6 @@ import os
 import models
 import logging
 import argparse
-import datetime
 
 from gevent.queue import JoinableQueue
 from dateutil import parser
