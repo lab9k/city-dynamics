@@ -8,7 +8,8 @@ services:
       POSTGRES_DB: citydynamics
       POSTGRES_USER: citydynamics
     volumes:
-      - ./backups:/tmp/backups
+      - ./backups:/backups
+      - ./backup-db-google.sh:/backup-db-google.sh
 
   importer:
     image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_importer:${ENVIRONMENT}
@@ -23,11 +24,15 @@ services:
       DATABASE_PORT_OVERRIDE: 5432
       STADSWERKEN_OBJECTSTORE_PASSWORD:
       PYTHONPATH: /app/scrape_quantillion
+      QUANTILLION_PASSWORD:
+      ENVIRONMENT:
+      GOOGLE_DAYS: 50
     command: >
       bash -c "/app/deploy/docker-wait.sh \
               && /app/run_import.sh \ "
     volumes:
       - data-volume:/data
+      - ./backups:/backups
 
   analyzer:
     image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${ENVIRONMENT}

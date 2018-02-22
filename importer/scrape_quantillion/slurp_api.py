@@ -20,6 +20,8 @@ import os
 import models
 import logging
 import argparse
+import settings
+import os.path
 
 from gevent.queue import JoinableQueue
 from dateutil import parser
@@ -183,7 +185,7 @@ def get_previous_days():
     yield (str(today), str(tomorrow))
 
     # lets go 50 days in the past
-    for i in range(90):
+    for i in range(1, settings.DAYS):
         past_time = now - i * day
         past_date1 = past_time.date()
         past_date2 = (past_time + day).date()
@@ -204,7 +206,8 @@ def get_locations(work_id, endpoint, gen_dates=get_previous_days()):
         while True:
             params['startDate'] = date1
             params['endDate'] = date2
-            log.debug(params)
+
+            log.debug('%d %s', work_id, params)
 
             json_response = get_the_json(endpoint, params)
             add_locations_to_db(endpoint, json_response)
@@ -244,11 +247,44 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     delete_duplicates(ENDPOINT_MODEL[endpoint])
 
 
+def rename_dump(filepath):
+    """
+    Give an indication of timeseries/environemnt of the database dump
+    """
+    filepath = filepath[0]
+
+    if not os.path.isfile(filepath):
+        raise(ValueError("File not found {filepath}"))
+
+    session = models.Session()
+    realtime_model = ENDPOINT_MODEL['realtime']
+    expected_model = ENDPOINT_MODEL['expected']
+    realtime_count = session.query(realtime_model).count()
+    expected_count = session.query(expected_model).count()
+
+    log.debug('Realtime Count %d', realtime_count)
+    log.debug('Expected Count %d', expected_count)
+
+    now = datetime.datetime.now()
+    # last - first date
+    prefix = filepath.split('.')[0]
+    new_name = f'{prefix}{now}expected{expected_count}-realtime{realtime_count}.dump'
+    log.debug(f'renameing to {new_name}')
+
+    os.rename(filepath, new_name)
+
+
 def main(args):
+
     endpoint = args.endpoint[0]
     engine = models.make_engine(section='docker')
     # models.Base.metadata.create_all(engine)
     models.set_engine(engine)
+
+    if args.rename_dump:
+        rename_dump(args.rename_dump)
+        return
+
     # scrape the data!
     if args.dedupe:
         delete_duplicates(ENDPOINT_MODEL[endpoint])
@@ -262,7 +298,7 @@ if __name__ == '__main__':
     inputparser = argparse.ArgumentParser(desc)
     inputparser.add_argument(
         'endpoint', type=str,
-        default='realtime/current',
+        default='realtime',
         choices=ENDPOINTS,
         help="Provide Endpoint to scrape",
         nargs=1)
@@ -272,6 +308,13 @@ if __name__ == '__main__':
         action='store_true',
         default=False,
         help="Remove duplicates")
+
+    inputparser.add_argument(
+        '--rename_dump',
+        type=str,
+        help="rename given database dump",
+        nargs=1
+    )
 
     args = inputparser.parse_args()
     main(args)

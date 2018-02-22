@@ -3,6 +3,7 @@ import configparser
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+DAYS = int(os.getenv('GOOGLE_DAYS', 20))
 LIMIT = 2000
 
 AUTH_ROOT = os.path.abspath(os.path.join(BASE_DIR))
