@@ -48,8 +48,8 @@ def make_conf(section):
 
 
 def create_db(section='test'):
-    log.info(f"Created database")
     CONF = make_conf(section)
+    log.info(f"Created database")
     if not database_exists(CONF):
         create_database(CONF)
 

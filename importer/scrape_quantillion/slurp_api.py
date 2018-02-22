@@ -52,8 +52,8 @@ ENDPOINTS = [
 ENDPOINT_MODEL = {
     'realtime': models.GoogleRawLocationsRealtime,
     'expected': models.GoogleRawLocationsExpected,
-    #'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
-    #'expected/current': models.GoogleRawLocationsExpectedCurrent,
+    # 'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
+    # 'expected/current': models.GoogleRawLocationsExpectedCurrent,
 }
 
 PARAMS = {'limit': LIMIT}
@@ -87,7 +87,6 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
     url = f'{host}:{port}/gemeenteamsterdam/{endpoint}'
 
     async_r = grequests.get(url, params=params, auth=AUTH)
-    gevent.sleep()
     gevent.spawn(async_r.send).join()
 
     response = async_r.response
@@ -97,6 +96,8 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
         return []
     elif response.status_code == 200:
         log.debug(f' OK  {response.status_code}:{url}')
+    elif response.status_code == 401:
+        log.error(f' AUTH {response.status_code}:{url}')
     elif response.status_code == 500:
         log.debug(f'FAIL {response.status_code}:{url}')
 
@@ -181,9 +182,8 @@ def get_dates():
     """
     Generate dates to pick up 4 months in the past
     """
-    #now = datetime.now()
-    #
-    #
+    # now = datetime.now()
+    pass
 
 
 def get_locations(work_id, endpoint):
