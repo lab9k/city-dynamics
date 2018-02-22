@@ -63,12 +63,12 @@ def main():
 
     concat_google(sql_query, conn)
 
-    hotspots_df = pd.read_csv('lookup_tables/Amsterdam Hotspots - Sheet1.csv')
-
-    log.debug('Writing hotspots to db..')
-    hotspots_df.to_sql(name='hotspots', con=conn, if_exists='replace')
-    conn.execute(set_primary_key('hotspots'))
-    log.debug('..done.')
+    # hotspots_df = pd.read_csv('lookup_tables/Amsterdam Hotspots - Sheet1.csv')
+    #
+    # log.debug('Writing hotspots to db..')
+    # hotspots_df.to_sql(name='hotspots', con=conn, if_exists='replace')
+    # conn.execute(set_primary_key('hotspots'))
+    # log.debug('..done.')
 
     hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)
 
@@ -77,7 +77,7 @@ def main():
     ALTER TABLE hotspots
     ADD COLUMN point_sm geometry;
 
-    UPDATE hotspots SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "Longitude", "Latitude"), 4326), 3857)
+    UPDATE hotspots SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
     """
 
     conn.execute(create_geom_hotspots)
@@ -106,8 +106,6 @@ def main():
             "hotspots"
         ) select
           hs."Hotspot",
-          hs."Latitude",
-          hs."Longitude",
           google_all.*
         from
           google_all join hs on
@@ -157,7 +155,7 @@ def main():
     "Latitude", 
     "Longitude"
     )
-    select index, "Hotspot", "Latitude", "Longitude" from hotspots;
+    select index, "Hotspot", "lat", "lon" from hotspots;
 
     """
 
