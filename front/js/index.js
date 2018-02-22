@@ -14,6 +14,7 @@ var hotspot_array = [];
 // states
 var vollcode;
 var mobile = false;
+var active_layer = 'hotspots';
 
 // global vars
 var marker; // used by search
@@ -71,8 +72,8 @@ $(document).ready(function(){
 	map = L.map('mapid', {zoomControl: false}).setView(map_center, zoom);
 
 	L.tileLayer(geomap2, {
-		minZoom: 12,
-		maxZoom: 16
+		minZoom: 10,
+		maxZoom: 18
 	}).addTo(map);
 
 	L.control.zoom({
@@ -227,6 +228,9 @@ $(document).ready(function(){
 		select: function(event, ui) {
 
 			event.preventDefault();
+
+			console.log(ui.item.value);
+
 			$('#loc_i').val(ui.item.label);
 
 			$.getJSON("https://api.data.amsterdam.nl/" + ui.item.value).done( function (data) {
@@ -308,6 +312,12 @@ $(document).ready(function(){
 		$(this).parent().fadeOut();
 	});
 
+	$( document).on('click', ".graphbar_title i",function () {
+		map.closePopup();
+		$('.graphbar_title h2').text(amsterdam.hotspot);
+		updateLineGraph('ams');
+	});
+
 	$( document).on('click', ".mapswitch a",function () {
 
 		if($(this).hasClass('active'))
@@ -317,7 +327,17 @@ $(document).ready(function(){
 			// show district
 			geojson.addTo(map);
 			// set latlong & zoom
-			map.setView([52.36, 4.95], 12);
+			if(mobile)
+			{
+				map.setView([52.368, 4.897], 11);
+			}
+			else
+			{
+				map.setView([52.36, 4.95], 12);
+			}
+
+			active_layer = 'buurten';
+
 
 			$('.mapswitch a span').html('Hotspots');
 
@@ -332,6 +352,8 @@ $(document).ready(function(){
 			// set latlong & zoom
 			map.setView([52.368, 4.897], 13.5);
 
+			active_layer = 'hotspots';
+
 			$('.mapswitch a span').html('Buurten');
 
 			$(this).addClass('active');
@@ -341,12 +363,15 @@ $(document).ready(function(){
 	$( document).on('click', ".fiets_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('Toont de beschikbaarheid van de OV fietsen over de verschillende locaties.', 6000);
 			showOvFiets();
 			$(this).addClass('active');
 		}
@@ -361,6 +386,7 @@ $(document).ready(function(){
 		else
 		{
 			resetTheme();
+			showInfo('Toont de verschillende webcams in en rond de stad.', 6000);
 			showFeeds();
 			$(this).addClass('active');
 		}
@@ -375,6 +401,7 @@ $(document).ready(function(){
 		else
 		{
 			resetTheme();
+			showInfo('Toont de geplande evenementen van vandaag..', 6000);
 			showEvents();
 			$(this).addClass('active');
 		}
@@ -455,12 +482,15 @@ $(document).ready(function(){
 	$( document).on('click', ".park_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('Toont de capaciteit en het aantal beschikbare plekken in de parkeergarages.', 6000);
 			addParkLayer();
 			$(this).addClass('active');
 		}
@@ -469,6 +499,7 @@ $(document).ready(function(){
 	$( document).on('click', ".water_b",function () {
 		if($(this).hasClass('active'))
 		{
+			closeThemaDetails();
 			hideMarkers();
 			$(this).removeClass('active');
 		}
@@ -564,7 +595,7 @@ function getLatLang(point) {
 function getColor(dindex)
 {
 	var a = '#50E6DB'; //50E6DB 63c6e6
-	var b = '#ff0000';
+	var b = '#DB322A';
 
 	var ah = parseInt(a.replace(/#/g, ''), 16),
 		ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
@@ -682,7 +713,18 @@ function updateLineGraph(hotspot)
 	// get proper data from json array
 	var data = [];
 
-	$.each(hotspot_array[hotspot].druktecijfers, function (key, value) {
+
+	if(hotspot=='ams')
+	{
+		var point_array = amsterdam.druktecijfers;
+	}
+	else
+	{
+		var point_array = hotspot_array[hotspot].druktecijfers;
+	}
+
+
+	$.each(point_array, function (key, value) {
 
 		var dataset = {};
 		dataset.y = Math.round(this.d * 100);
@@ -690,6 +732,8 @@ function updateLineGraph(hotspot)
 
 		data.push(dataset);
 	});
+
+	console.log(data);
 
 	areaGraph[0].update(data);
 }
@@ -756,6 +800,41 @@ function getCurrentDateOnly()
 
 	return date.replace('/','-').replace('/','-');
 }
+
+function showInfo(content,duration)
+{
+	$('.info').html(content);
+
+	$('.info').show();
+
+	setTimeout(function(){$('.info').fadeOut()},duration)
+}
+
+function hideActiveLayer()
+{
+	switch(active_layer)
+	{
+		case 'hotspots':
+			$('path[hotspot]').hide();
+			break;
+		case 'buurten':
+			map.removeLayer(geojson);
+			break;
+	}
+}
+function showActiveLayer()
+{
+	switch(active_layer)
+	{
+		case 'hotspots':
+			$('path[hotspot]').show();
+			break;
+		case 'buurten':
+			geojson.addTo(map);
+			break;
+	}
+}
+
 
 function openThemaDetails(show)
 {
@@ -909,26 +988,47 @@ function addParkLayer()
 
 function pointToLayerPark(feature, latlng) {
 
-	if(feature.properties.Name.includes("P+R"))
-	{
-		var parkIcon = L.icon({
-			iconUrl: 'images/park_marker_green.svg',
+	// if(feature.properties.Name.includes("P+R"))
+	// {
+	// 	var parkIcon = L.icon({
+	// 		iconUrl: 'images/park_marker_green.svg',
+	//
+	// 		iconSize:     [35, 40],
+	// 		iconAnchor:   [17.5, 40],
+	// 		popupAnchor:  [0, -50]
+	// 	});
+	// }
+	// else
+	// {
+	// 	var parkIcon = L.icon({
+	// 		iconUrl: 'images/park_marker.svg',
+	//
+	// 		iconSize:     [35, 40],
+	// 		iconAnchor:   [17.5, 40],
+	// 		popupAnchor:  [0, -50]
+	// 	});
+	// }
 
-			iconSize:     [35, 40],
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50]
-		});
-	}
-	else
+	var suffix = 'none';
+	var height = 64;
+	if(feature.properties.FreeSpaceShort<10)
 	{
-		var parkIcon = L.icon({
-			iconUrl: 'images/park_marker.svg',
-
-			iconSize:     [35, 40],
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50]
-		});
+		suffix = 'some';
+		height = 72;
 	}
+	if(feature.properties.FreeSpaceShort>10)
+	{
+		suffix = 'plenty';
+		height = 80;
+	}
+
+	var parkIcon = L.icon({
+		iconUrl: 'images/park_marker_'+suffix+'.svg',
+
+		iconSize:     [35, height],
+		iconAnchor:   [17.5, 40],
+		popupAnchor:  [0, -50]
+	});
 
 	var marker = L.marker(latlng, {icon: parkIcon});
 	var long ='';
@@ -974,13 +1074,7 @@ function showOvFiets()
 
 		var ams_locaties = ['ASB','RAI','ASA','ASDM','ASDZ','ASD','ASDL','ASS'];
 
-		var camIcon = L.icon({
-			iconUrl: 'images/fiets_marker.svg',
 
-			iconSize:     [35, 40],
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50]
-		});
 
 		$.each(fietsJson.locaties, function(key,value) {
 			if(ams_locaties.indexOf(this.stationCode)>=0)
@@ -988,11 +1082,39 @@ function showOvFiets()
 				//console.log(this.stationCode);
 				if(this.lat>0 && this.lng>0)
 				{
+					var suffix = 'none';
+					if(this.extra.rentalBikes<10)
+					{
+						suffix = 'some';
+					}
+					if(this.extra.rentalBikes>10)
+					{
+						suffix = 'plenty';
+					}
+
+					var fietsIcon = L.icon({
+						iconUrl: 'images/marker_'+suffix+'.svg',
+
+						iconSize:     [35, 40],
+						iconAnchor:   [17.5, 40],
+						popupAnchor:  [0, -50]
+					});
+
 					var marker_info = {};
 					marker_info.name = this.name;
 					marker_info.free = this.extra.rentalBikes;
-					var fiets_marker = L.marker([this.lat,this.lng], {icon: camIcon,title:this.description,alt:this.url}).addTo(map);
+					var fiets_marker = L.marker([this.lat,this.lng], {icon: fietsIcon,title:this.description,alt:this.url}).addTo(map);
 					fiets_marker.bindPopup("<h3>" + this.name + "</h3><br>Fietsen beschikbaar: " + this.extra.rentalBikes, {autoClose: false});
+					var classname = 'none';
+					if(this.extra.rentalBikes<10)
+					{
+						classname = 'some';
+					}
+					if(this.extra.rentalBikes>10)
+					{
+						classname = 'plenty';
+					}
+
 					markers.push(fiets_marker);
 				}
 			}

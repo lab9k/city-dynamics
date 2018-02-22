@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="35px" height="40px" viewBox="0 0 35 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>Evenementen Icon</title>
+    <title>Icon Evenementen - desktop</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Evenementen-Icon">
-            <g transform="translate(5.000000, 9.000000)" id="Calendar">
-                <g>
-                    <rect id="Rectangle-17" stroke="#FFFFFF" x="0.5" y="0.5" width="24" height="18.7916667" rx="1"></rect>
-                    <g id="Date-ovals" transform="translate(4.166667, 4.166667)" fill="#FFFFFF">
-                        <circle id="Oval-14" cx="1.5625" cy="1.5625" r="1.5625"></circle>
-                        <circle id="Oval-14" cx="7.8125" cy="1.5625" r="1.5625"></circle>
-                        <circle id="Oval-14" cx="14.0625" cy="1.5625" r="1.5625"></circle>
-                        <circle id="Oval-14" cx="1.5625" cy="5.72916667" r="1.5625"></circle>
-                        <circle id="Oval-14" cx="7.8125" cy="5.72916667" r="1.5625"></circle>
-                        <circle id="Oval-14" cx="1.5625" cy="9.89583333" r="1.5625"></circle>
-                        <circle id="Oval-14" cx="7.8125" cy="9.89583333" r="1.5625"></circle>
-                        <circle id="Oval-14" cx="14.0625" cy="5.72916667" r="1.5625"></circle>
+        <g id="Icon-Evenementen---desktop">
+            <g id="Evenementen-Icon">
+                <rect id="Rectangle-43" fill="#4A4A4A" x="0" y="0" width="40" height="40"></rect>
+                <g id="Calendar" transform="translate(6.000000, 6.000000)">
+                    <path d="M3.92,3.90384615 L22.96,3.90384615" id="Line" stroke="#FFFFFF" stroke-linecap="square"></path>
+                    <g id="Date-ovals" transform="translate(3.360000, 5.405325)" fill="#FFFFFF">
+                        <ellipse id="Oval-14" cx="2.92923077" cy="2.91715976" rx="2.06769231" ry="2.0591716"></ellipse>
+                        <ellipse id="Oval-14" cx="10.1661538" cy="2.91715976" rx="2.06769231" ry="2.0591716"></ellipse>
+                        <ellipse id="Oval-14" cx="17.4030769" cy="2.91715976" rx="2.06769231" ry="2.0591716"></ellipse>
+                        <ellipse id="Oval-14" cx="2.92923077" cy="9.09467456" rx="2.06769231" ry="2.0591716"></ellipse>
+                        <ellipse id="Oval-14" cx="10.1661538" cy="9.09467456" rx="2.06769231" ry="2.0591716"></ellipse>
+                        <ellipse id="Oval-14" cx="2.92923077" cy="15.2721893" rx="2.06769231" ry="2.0591716"></ellipse>
+                        <ellipse id="Oval-14" cx="10.1661538" cy="15.2721893" rx="2.06769231" ry="2.0591716"></ellipse>
+                        <ellipse id="Oval-14" cx="17.4030769" cy="9.09467456" rx="2.06769231" ry="2.0591716"></ellipse>
                     </g>
-                    <circle id="Oval-13" stroke="#a4a4a4" stroke-width="0.5" fill="#a4a4a4" cx="19.7916667" cy="17.7083333" r="5.20833333"></circle>
-                    <g id="Checkmark" transform="translate(18.750000, 15.625000)" stroke="#FFFFFF" stroke-linecap="square">
-                        <path d="M1.04166667,3.125 L3.125,1.04166667" id="Line-33"></path>
-                        <polyline id="Line-32" points="0 2.08333333 1.04166667 3.125 2.08333333 2.08333333"></polyline>
+                    <ellipse id="Oval-13" stroke="#F9F9F9" cx="22.0123077" cy="22.9511834" rx="5.38461538" ry="5.36242604"></ellipse>
+                    <g id="Checkmark" transform="translate(20.763077, 20.677515)" stroke="#F9F9F9" stroke-linecap="square">
+                        <path d="M1.07692308,3.21745562 L3.23076923,1.07248521" id="Line-33"></path>
+                        <polyline id="Line-32" points="0 2.14497041 1.07692308 3.21745562 2.15384615 2.14497041"></polyline>
+                    </g>
+                    <g id="Outerbox" stroke="#F9F9F9" stroke-linecap="square">
+                        <path d="M25.2,18.4038462 L25.2,1.67307692" id="Line-2"></path>
+                        <path d="M1.68,1.67307692 L25.2,1.67307692" id="Line-3"></path>
+                        <path d="M16.24,25.0961538 L1.68,25.0961538" id="Line-4"></path>
+                        <path d="M1.68,1.67307692 L1.68,25.0961538" id="Line-5"></path>
                     </g>
                 </g>
             </g>

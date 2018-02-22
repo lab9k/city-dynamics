@@ -21,15 +21,15 @@ div {box-sizing: border-box;}
 .searchclose {display:inline-block;vertical-align:top;cursor:pointer;}
 
 /*logo*/
-.logo {position :absolute;left :80px;top :12px; z-index :499;width:100px;height:76px;background:url(../images/logo.svg);}
+.logo {position :absolute;left :80px;top :11px; z-index :499;width:79px;height:60px;background:url(../images/logo.svg);background-size:100%;}
 
 /*info*/
-.info {display:none;position :absolute;left :50%;bottom :40px; z-index :500;width :600px;margin-left :-300px;min-height :100px;max-height :180px;overflow-y :auto;background : rgba(74, 74, 74, 0.7);color :#fff;border-radius :5px;border :0px solid #fff;box-shadow : 0 3px 14px rgba(0,0,0,0.4);padding :10px;}
+.info {position :absolute;left :50%;bottom :40px; z-index :500;width :600px;margin-left :-300px;min-height :40px;max-height :180px;overflow-y :auto;background : rgba(74, 74, 74, 0.7);color :#fff;border-radius :5px;border :0px solid #fff;box-shadow : 0 3px 14px rgba(0,0,0,0.4);padding :10px;}
 .info h2 {color:#fff;margin:0 0 10px 0;}
 
 /*mapswitch*/
-.mapswitch {position :absolute;left :10px;bottom :10px; z-index :500;background-color: #4a4a4a;color :#fff;border-radius :5px;border :0px solid #fff;padding :6px;}
-.mapswitch a {position :relative;display:block;height :100px;width:100px;background:url(../images/bubble.svg);}
+.mapswitch {position :absolute;left :10px;bottom :10px; z-index :500;background-color: #4a4a4a;color :#fff;border-radius :5px;border :0px solid #fff;padding :4px;}
+.mapswitch a {position :relative;display:block;height :80px;width:80px;background:url(../images/bubble.png);}
 .mapswitch a.active {background:url(../images/choro.png);}
 .mapswitch span {position :absolute;left :10px;bottom :10px;color:#444;}
 
@@ -46,21 +46,21 @@ div {box-sizing: border-box;}
 .themas.open .themas_content{width:calc(100% - 50px);min-height:296px;padding:10px;}
 .themas_content h3 {border-bottom:1px solid #ccc;margin:0 0 10px 0;line-height:30px;color:#014699;}
 .themas_buttons {float:left;list-style:none;margin:0;padding:0;}
-.themas_buttons li {margin:2px 0 2px 0;padding:0;background-color :unset;background-repeat:no-repeat;border-radius:5px;cursor:pointer;width:40px;height :40px;line-height :40px;}
+.themas_buttons li {margin:2px 0 2px 0;padding:0;background-color :unset;background-size: 40px 40px;background-repeat:no-repeat;border-radius:5px;cursor:pointer;width:40px;height :40px;line-height :40px;}
 .themas_buttons li.active,.themas_buttons li.active:hover {background-color :rgba(255,255,255,1);}
-.themas .fiets_b {background-image:url(../images/fiets_icon.svg);background-size: 35px 40px;background-position: 4px 0px;}
+.themas .fiets_b {background-image:url(../images/fiets_icon.svg);}
 .themas .fiets_b.active {background-image:url(../images/fiets_icon_active.svg);}
-.themas .cam_b {background-image:url(../images/cam_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
+.themas .cam_b {background-image:url(../images/cam_icon.svg);}
 .themas .cam_b.active {background-image:url(../images/cam_icon_active.svg);}
-.themas .hotspots_b {background-image:url(../images/hotspots_icon.svg);bacbackground-size: 35px 40px;background-position:  4px 0px;}
+.themas .hotspots_b {background-image:url(../images/hotspots_icon.svg);}
 .themas .hotspots_b.active {background-image:url(../images/hotspots_icon_active.svg);border-top-right-radius:0px;border-bottom-right-radius:0px;padding-right:10px;}
-.themas .google_b {background-image:url(../images/google_icon.svg);background-size: 25px 25px;background-position:  7.5px 7.5px;}
+.themas .google_b {background-image:url(../images/google_icon.svg);background-size: 25px 25px;}
 .themas .google_b.active {background-image:url(../images/google_icon_active.svg);}
-.themas .events_b {background-image:url(../images/event_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
+.themas .events_b {background-image:url(../images/event_icon.svg);}
 .themas .events_b.active {background-image:url(../images/event_icon_active.svg);}
-.themas .park_b {background-image:url(../images/park_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
+.themas .park_b {background-image:url(../images/park_icon.svg);}
 .themas .park_b.active {background-image:url(../images/park_icon_active.svg);}
-.themas .water_b {background-image:url(../images/water_icon.svg);background-size: 35px 40px;background-position:  4px 0px;}
+.themas .water_b {background-image:url(../images/water_icon.svg);}
 .themas .water_b.active {background-image:url(../images/water_icon_active.svg);border-top-right-radius:0px;border-bottom-right-radius:0px;padding-right:10px;}
 
 .hotspots_content,.water_content {display:none;}
@@ -96,8 +96,8 @@ div {box-sizing: border-box;}
 #overwrite .leaflet-interactive:hover:not(.active_path) {fill-opacity:0.9;}
 
 .leaflet-tile-container img {
-	-webkit-filter: brightness(80%);
-	filter: brightness(80%);;
+	/*-webkit-filter: brightness(80%);*/
+	/*filter: brightness(80%);;*/
 	/*blur()*/
 	/*brightness()*/
 	/*contrast()*/
@@ -119,6 +119,10 @@ div {box-sizing: border-box;}
 /*.leaflet-popup-close-button {display:none;}*/
 /*.leaflet-popup-tip-container {display:none;}*/
 
+/*markers*/
+.plenty {fill:#50E6DB;background-color:#50E6DB;}
+.some {fill: #db5f0c;background-color:#db5f0c;}
+.none {fill:#DB322A;background-color:#DB322A;}
 
 /*area graph*/
 .indexgraph {}
@@ -133,8 +137,9 @@ div {box-sizing: border-box;}
 .graphbar_center {float:left;height:160px;width:calc(100% - 800px);}
 .graphbar_right {float:left;height:160px;width:350px;padding:10px;border-left:2px dashed #555;padding:10px;}
 .graphbar_title {height:40px;}
-.graphbar_title h2 {line-height:40px;text-indent:10px;color:#fff;font-size:18px;margin:0;float:left;}
+.graphbar_title h2 {float:left;line-height:40px;text-indent:10px;color:#fff;font-size:18px;margin:0;float:left;font-weight:normal;}
 .graphbar_title span {display:block;float:right;line-height:40px;margin-right:10px;}
+.graphbar_title i {display:block;float:left;line-height:40px;margin-left:10px;cursor:pointer;}
 .graphbar_graph {float:left;width:100%;height:120px;}
 
 .indexgraph .axis line,.indexgraph .axis .domain{
@@ -148,7 +153,7 @@ div {box-sizing: border-box;}
 
 .meldlinks {float:left;margin-top:20px;margin-left:30px;}
 .meld_link1,.meld_link2{display:block;width:140px;line-height:20px;background:#F9F9F9;border-radius: 5px;font-size:12px;text-align:center;text-decoration:none;color:#444;margin-bottom:20px;}
-.graphbar_right img {float:right;margin-top:50px;}
+.weather_widget {float:right;margin-top:40px;background:#fff;border-radius: 5px;border-top:1px solid #ccc;border-left:1px solid #ccc;border-bottom:1px solid #333;border-right:1px solid #333;}
 
 /*desktop resets*/
 .m_more {display:none;}
@@ -194,6 +199,9 @@ div {box-sizing: border-box;}
 	.graphbar {height:120px;}
 	.graphbar_center {height:120px;width:100%;}
 	.graphbar_title {font-size:14px;line-height:30px;height:30px;}
+	.graphbar_title h2 {line-height:30px;font-size:14px;}
+	.graphbar_title span {line-height:30px;font-size:14px;}
+	.graphbar_title i {line-height:30px;margin-left:5px;font-size:14px;}
 	.graphbar_graph {float:left;width:100%;height:90px;}
 	.indexgraph .axis text {font-size:8px;}
 
