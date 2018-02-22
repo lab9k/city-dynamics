@@ -19,5 +19,5 @@ dc build
 
 dc up -d database
 
-dc run --rm importer /app/.jenkins/docker-wait.sh
+dc run --rm importer /app/deploy/docker-wait.sh
 dc run --rm importer pytest

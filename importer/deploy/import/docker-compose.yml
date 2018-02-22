@@ -24,7 +24,7 @@ services:
       STADSWERKEN_OBJECTSTORE_PASSWORD:
       PYTHONPATH: /app/scrape_quantillion
     command: >
-      bash -c "/app/.jenkins/docker-wait.sh \
+      bash -c "/app/deploy/docker-wait.sh \
               && /app/run_import.sh \ "
     volumes:
       - data-volume:/data
