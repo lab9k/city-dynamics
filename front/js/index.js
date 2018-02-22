@@ -41,6 +41,13 @@ var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
 var proj4RD = proj4('WGS84', def);
 
+var amsterdam = {
+	coordinates: [52.368, 4.897],
+	druktecijfers: [{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}],
+	hotspot: "Amsterdam",
+	index: -1
+}
+
 $(document).ready(function(){
 
 	// check device resolution
@@ -127,10 +134,22 @@ $(document).ready(function(){
 	$.getJSON(hotspotsJsonUrl).done(function(hotspotsJson) {
 		console.log(hotspotsJson);
 
+		var hotspot_count = 0;
 		$.each(hotspotsJson.results, function (key, value) {
 
 			this.druktecijfers.sort(function (a, b) {
 				return a.h - b.h;
+			});
+
+			hotspot_count++;
+
+			// used for ams average todo: calc average in backend
+			$.each(this.druktecijfers, function (key, value) {
+
+				// console.log(this.d);
+				amsterdam.druktecijfers[this.h].d += this.d
+
+				// console.log('cum: '+amsterdam.druktecijfers[this.h].d);
 			});
 
 			var dataset = this;
@@ -143,7 +162,15 @@ $(document).ready(function(){
 			return a.index - b.index;
 		});
 
-		console.log(hotspot_array);
+		console.log(hotspot_count);
+		console.log(amsterdam.druktecijfers);
+		// used for ams average todo: calc average in backend
+		$.each(amsterdam.druktecijfers, function (key, value) {
+			amsterdam.druktecijfers[this.h].d = amsterdam.druktecijfers[this.h].d / hotspot_count;
+		});
+
+		//console.log(hotspot_array);
+		console.log(amsterdam.druktecijfers);
 
 		circles_layer = L.layerGroup();
 		$.each(hotspot_array, function (key, value) {
@@ -154,14 +181,13 @@ $(document).ready(function(){
 			circles[key] = L.circleMarker(this.coordinates, {
 				color: getColor(dindex),
 				fillColor: getColor(dindex),
-				stroke: 6,
-				strokeOpacity: 0.6,
 				fillOpacity: 1,
 				radius: (12),
 				name: this.hotspot
 			});
 			circles[key].addTo(map);
-			// $(circles[key]._path).attr('stroke-opacity' , 0.6);
+			$(circles[key]._path).attr('stroke-opacity' , 0.6);
+			$(circles[key]._path).attr('stroke' , '#4a4a4a');
 			$(circles[key]._path).attr('hotspot' , this.index);
 			$(circles[key]._path).addClass('hotspot_'+ this.index);
 			circles[key].bindPopup("<b>" + this.hotspot + "</b>", {autoClose: false});
@@ -502,7 +528,7 @@ function startAnimation()
 
 				if(key==10)
 				{
-					console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
+					//console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
 				}
 
 				circles_d3[key]
@@ -636,7 +662,7 @@ function initLineGraph()
 {
 	var data = [];
 
-	$.each(hotspot_array[0].druktecijfers, function (key, value) {
+	$.each(amsterdam.druktecijfers, function (key, value) {
 
 		var dataset = {};
 		dataset.y = Math.round(this.d * 100);

@@ -18,7 +18,7 @@ config_src = configparser.RawConfigParser()
 config_src.read('sources.conf')
 
 tables_to_modify = [config_src.get(x, 'TABLE_NAME') for x in config_src.sections() if
-                    config_src.get(x, 'CREATE_POINT') == 'YES' ]
+                    config_src.get(x, 'CREATE_POINT') == 'YES']
 
 
 def create_geometry_query(tablename):

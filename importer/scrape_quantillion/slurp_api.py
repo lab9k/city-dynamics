@@ -14,10 +14,12 @@ username: gemeenteAmsterdam
 
 import gevent
 import grequests
-# import requests
+from settings import LIMIT
 import os
 import models
 import logging
+import argparse
+import datetime
 
 from gevent.queue import JoinableQueue
 from dateutil import parser
@@ -40,20 +42,27 @@ STATUS = {
     'done': False
 }
 
-LIMIT = 1000
+ENDPOINTS = [
+    'realtime',
+    'expected',
+    'realtime/current',
+    'expected/current',
+]
+
+ENDPOINT_MODEL = {
+    'realtime': models.GoogleRawLocationsRealtime,
+    'expected': models.GoogleRawLocationsExpected,
+    # 'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
+    # 'expected/current': models.GoogleRawLocationsExpectedCurrent,
+}
 
 PARAMS = {'limit': LIMIT}
 
 api_config = {
-    # 'password_dev': os.getenv('QUANTILLION_PASSWORD_DEV'),
     'password': os.getenv('QUANTILLION_PASSWORD'),
     'hosts': {
         'production': 'http://apis.quantillion.io',
         'acceptance': 'http://apis.development.quantillion.io',
-        # Production: 35.159.8.123
-        # 'http://35.159.8.123',
-        # Development: 18.196.227.0
-        # '18.196.227.0',
     },
     'port': 3001,
     'username': 'gemeenteAmsterdam',
@@ -139,23 +148,53 @@ def add_locations_to_db(endpoint, json: list):
     log.debug(f"Updated {len(json)} locations")
 
 
+def delete_duplicates(db_model):
+    """
+    Remove duplacates from table.
+    """
+    # make new session
+    session = models.Session()
+    tablename = db_model.__table__.name
+    session.execute(f"""
+
+DELETE FROM {tablename} a USING (
+     SELECT MIN(ctid) AS ctid, place_id, scraped_at
+        FROM {tablename}
+        GROUP BY (scraped_at, place_id) HAVING COUNT(*) > 1
+ ) dups
+ WHERE a.place_id = dups.place_id
+ AND a.scraped_at = dups.scraped_at
+ AND a.ctid <> dups.ctid
+    """)
+    session.commit()
+
+
 def get_params():
 
     yield PARAMS
 
     while True:
-        PARAMS['skip'] = PARAMS.get('skip', 0) + 1000
+        PARAMS['skip'] = PARAMS.get('skip', LIMIT)
         yield PARAMS
 
 
-def get_locations(work_id, endpoint, get_params=get_params()):
+def get_dates():
     """
-    Get locations with real-time data
+    Generate dates to pick up 4 months in the past
     """
+    # now = datetime.now()
+    pass
+
+
+def get_locations(work_id, endpoint):
+    """
+    Get google locations information with 'real-time' data
+    """
+    gen_params = get_params()
 
     while True:
         log.debug(f'Next for {work_id}')
-        params = next(get_params)
+        params = next(gen_params)
         log.debug(params)
         json_response = get_the_json(endpoint, params)
 
@@ -173,15 +212,16 @@ def get_locations(work_id, endpoint, get_params=get_params()):
     log.debug(f'Done {work_id}')
 
 
-def run_workers(parralleltask, endpoint):
+def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     """
     Run X workers processing search tasks
     """
     jobs = []
 
+    # reset job status
     STATUS['done'] = False
 
-    for i in range(WORKERS):
+    for i in range(workers):
         jobs.append(
             gevent.spawn(parralleltask, i, endpoint)
         )
@@ -191,17 +231,33 @@ def run_workers(parralleltask, endpoint):
         # but no longer than an hour
         gevent.joinall(jobs)
 
+    for job in jobs:
+        if not job.successful():
+            raise job.exception
 
-def main():
+    delete_duplicates(ENDPOINT_MODEL[endpoint])
+
+
+def main(endpoint):
     engine = models.make_engine(section='docker')
     # models.Base.metadata.create_all(engine)
     models.set_engine(engine)
 
-    run_workers(get_locations, 'expected')
-    # load the data!
-    run_workers(get_locations, 'realtime')
-    #  locations_realtime()
+    # scrape the data!
+    run_workers(endpoint)
 
 
 if __name__ == '__main__':
-    main()
+
+    desc = "Scrape goolge quantillion api."
+    inputparser = argparse.ArgumentParser(desc)
+    inputparser.add_argument(
+        'endpoint', type=str,
+        default='realtime/current',
+        choices=ENDPOINTS,
+        help="Provide Endpoint to scrape",
+        nargs=1)
+
+    args = inputparser.parse_args()
+    endpoint = args.endpoint[0]
+    main(endpoint)
