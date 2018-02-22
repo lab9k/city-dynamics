@@ -21,3 +21,8 @@ dc up -d database
 
 dc run --rm importer /app/deploy/docker-wait.sh
 dc run --rm importer pytest
+
+
+dc stop
+dc rm --force
+dc down
