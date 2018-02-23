@@ -8,7 +8,7 @@ services:
       POSTGRES_DB: citydynamics
       POSTGRES_USER: citydynamics
     volumes:
-      - ./backups:/backups
+      - ./backups:/tmp/backups
       - ./backup-google-current.sh:/backup-google-current.sh
 
   importer:
