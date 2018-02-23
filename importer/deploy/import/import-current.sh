@@ -26,4 +26,4 @@ dc run --rm importer /app/deploy/docker-wait.sh
 
 dc run --rm importer ./scrape_current_google.sh
 
-dc exec database ./backup-google-current.sh
+dc exec -T database ./backup-google-current.sh
