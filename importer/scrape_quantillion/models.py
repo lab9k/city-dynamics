@@ -85,7 +85,6 @@ class GoogleRawLocationsRealtime(Base):
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
     data = Column(JSONB)
-    # __table_args__ = (UniqueConstraint('place_id', 'scraped_at'), )
 
 
 class GoogleRawLocationsExpected(Base):
@@ -93,6 +92,18 @@ class GoogleRawLocationsExpected(Base):
     Raw json location information of expected data
     """
     __tablename__ = f'google_raw_locations_expected_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    name = Column(String)
+    data = Column(JSONB)
+
+
+class GoogleRawLocationsRealtimeCurrent(Base):
+    """
+    Raw json location information realtime
+    """
+    __tablename__ = f'google_raw_locations_realtime_current_{ENVIRONMENT}'
     id = Column(Integer, Sequence('grl_seq'), primary_key=True)
     place_id = Column(String, index=True)
     scraped_at = Column(TIMESTAMP, index=True)

@@ -3,6 +3,8 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from citydynamics.datasets.models import Drukteindex, Buurtcombinatie
 from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
+from citydynamics.datasets.models import RealtimeGoogle
+
 
 
 class DrukteIndexSerializer(ModelSerializer):
@@ -57,6 +59,18 @@ class HotspotIndexSerializer(ModelSerializer):
             'hotspot',
             'coordinates',
             'druktecijfers'
+        )
+
+
+class RealtimeGoogleSerializer(ModelSerializer):
+
+    class Meta:
+        model = RealtimeGoogle
+        fields = (
+            'scraped_at',
+            'name',
+            'place_id',
+            'data'
         )
 
 

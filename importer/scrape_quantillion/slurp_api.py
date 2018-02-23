@@ -54,8 +54,15 @@ ENDPOINTS = [
 ENDPOINT_MODEL = {
     'realtime': models.GoogleRawLocationsRealtime,
     'expected': models.GoogleRawLocationsExpected,
-    # 'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
+    'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
     # 'expected/current': models.GoogleRawLocationsExpectedCurrent,
+}
+
+ENDPOINT_URL = {
+    'realtime': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
+    'expected': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
+    'realtime/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
+    # 'expected/current':
 }
 
 
@@ -85,7 +92,8 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
 
     host = api_config['hosts'][ENVIRONMENT]
 
-    url = f'{host}:{port}/gemeenteamsterdam/{endpoint}/timerange'
+    url = ENDPOINT_URL[endpoint]
+    url = url.format(host=host, port=port, endpoint=endpoint)
 
     async_r = grequests.get(url, params=params, auth=AUTH)
     gevent.spawn(async_r.send).join()
@@ -189,7 +197,7 @@ def get_previous_days():
         yield (str(past_date1), str(past_date2))
 
 
-def get_locations(work_id, endpoint, gen_dates):
+def get_locations(work_id, endpoint, gen_dates, params={}):
     """
     Get google locations information with 'real-time' data
     """
@@ -198,24 +206,34 @@ def get_locations(work_id, endpoint, gen_dates):
     for date1, date2 in gen_dates:
         # generate limit parameters
 
-        params = {'limit': LIMIT, 'skip': 0}
+        params['startDate'] = date1
+        params['endDate'] = date2
 
-        while True:
-            params['startDate'] = date1
-            params['endDate'] = date2
-
-            log.debug('%d %s', work_id, params)
-
-            json_response = get_the_json(endpoint, params)
-            add_locations_to_db(endpoint, json_response)
-
-            if len(json_response) < LIMIT:
-                # We are done with date
-                break
-
-            params['skip'] = params.get('skip', 0) + LIMIT
+        do_limit_requests(work_id, endpoint, params)
 
     log.debug(f'Done {work_id}')
+
+
+def do_limit_requests(work_id, endpoint, _gen_dates, params={}):
+    """
+    Do batch request of LIMIT each
+    """
+
+    params.update({'limit': LIMIT, 'skip': 0})
+
+    while True:
+        log.debug('%d %s', work_id, params)
+
+        json_response = get_the_json(endpoint, params)
+        add_locations_to_db(endpoint, json_response)
+
+        if len(json_response) < LIMIT:
+            # We are done with date
+            break
+
+        params['skip'] = params.get('skip', 0) + LIMIT
+
+    log.debug(f'Done {params}')
 
 
 def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
@@ -228,6 +246,11 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     STATUS['done'] = False
 
     gen_dates = get_previous_days()
+
+    if 'current' in endpoint:
+        # get current data
+        parralleltask = do_limit_requests
+        workers = 1
 
     for i in range(workers):
         jobs.append(

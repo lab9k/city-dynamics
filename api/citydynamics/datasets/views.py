@@ -171,3 +171,13 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
         # timestamp_str = self.request.query_params.get('timestamp', None)
 
         return queryset
+
+
+class RealtimeGoogleViewset(rest.DatapuntViewSet):
+    """
+    Quantillion scraped data
+    """
+    serializer_class = serializers.RealtimeGoogleSerializer
+    serializer_detail_class = serializers.RealtimeGoogleSerializer
+
+    queryset = models.RealtimeGoogle.objects.all()
