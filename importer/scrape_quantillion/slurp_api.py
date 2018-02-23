@@ -117,10 +117,7 @@ def add_locations_to_db(endpoint, json: list):
         log.error('No data recieved')
         return
 
-    db_model = models.GoogleRawLocationsRealtime
-
-    if endpoint == 'expected':
-        db_model = models.GoogleRawLocationsExpected
+    db_model = ENDPOINT_MODEL[endpoint]
 
     # make new session
     session = models.Session()
@@ -192,7 +189,7 @@ def get_previous_days():
         yield (str(past_date1), str(past_date2))
 
 
-def get_locations(work_id, endpoint, gen_dates=get_previous_days()):
+def get_locations(work_id, endpoint, gen_dates):
     """
     Get google locations information with 'real-time' data
     """
@@ -230,9 +227,11 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     # reset job status
     STATUS['done'] = False
 
+    gen_dates = get_previous_days()
+
     for i in range(workers):
         jobs.append(
-            gevent.spawn(parralleltask, i, endpoint)
+            gevent.spawn(parralleltask, i, endpoint, gen_dates)
         )
 
     with gevent.Timeout(3600, False):
@@ -247,32 +246,6 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     delete_duplicates(ENDPOINT_MODEL[endpoint])
 
 
-def rename_dump(filepath):
-    """
-    Give an indication of timeseries/environemnt of the database dump
-    """
-    filepath = filepath[0]
-
-    if not os.path.isfile(filepath):
-        raise(ValueError("File not found {filepath}"))
-
-    session = models.Session()
-    realtime_model = ENDPOINT_MODEL['realtime']
-    expected_model = ENDPOINT_MODEL['expected']
-    realtime_count = session.query(realtime_model).count()
-    expected_count = session.query(expected_model).count()
-
-    log.debug('Realtime Count %d', realtime_count)
-    log.debug('Expected Count %d', expected_count)
-
-    now = datetime.datetime.now()
-    # last - first date
-    prefix = filepath.split('.')[0]
-    new_name = f'{prefix}{now}expected{expected_count}-realtime{realtime_count}.dump'
-    log.debug(f'renameing to {new_name}')
-
-    os.rename(filepath, new_name)
-
 
 def main(args):
 
@@ -281,14 +254,10 @@ def main(args):
     # models.Base.metadata.create_all(engine)
     models.set_engine(engine)
 
-    if args.rename_dump:
-        rename_dump(args.rename_dump)
-        return
-
-    # scrape the data!
     if args.dedupe:
         delete_duplicates(ENDPOINT_MODEL[endpoint])
     else:
+        # scrape the data!
         run_workers(endpoint)
 
 
@@ -308,13 +277,6 @@ if __name__ == '__main__':
         action='store_true',
         default=False,
         help="Remove duplicates")
-
-    inputparser.add_argument(
-        '--rename_dump',
-        type=str,
-        help="rename given database dump",
-        nargs=1
-    )
 
     args = inputparser.parse_args()
     main(args)
