@@ -70,7 +70,8 @@ api_config = {
     'password': os.getenv('QUANTILLION_PASSWORD'),
     'hosts': {
         'production': 'http://apis.quantillion.io',
-        'acceptance': 'http://apis.development.quantillion.io',
+        'acceptance': 'http://apis.quantillion.io',
+        #'acceptance': 'http://apis.development.quantillion.io',
     },
     'port': 3001,
     'username': 'gemeenteAmsterdam',
@@ -236,6 +237,17 @@ def do_limit_requests(work_id, endpoint, _gen_dates, params={}):
     log.debug(f'Done {params}')
 
 
+def clear_current_table(endpoint):
+    """
+    Current data only contains latest and greatest
+    """
+    # make new session
+    session = models.Session()
+    db_model = ENDPOINT_MODEL[endpoint]
+    session.query(db_model).delete()
+    session.commit()
+
+
 def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     """
     Run X workers processing search tasks
@@ -249,6 +261,7 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
 
     if 'current' in endpoint:
         # get current data
+        clear_current_table(endpoint)
         parralleltask = do_limit_requests
         workers = 1
 
