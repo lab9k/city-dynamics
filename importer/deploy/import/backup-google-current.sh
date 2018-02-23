@@ -13,5 +13,5 @@ pg_dump  -t google_raw_locations_realtime_current_* \
 	 -Fc \
 	 -U citydynamics \
 	 -h 0.0.0.0 -p 5432 \
-	 -f /backups/current.dump \
+	 -f /tmp/backups/current.dump \
 	 citydynamics
