@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'google_raw_locations_realtime_current_acceptance',
-                'managed': False,
+                'managed': True,
             },
         ),
     ]
