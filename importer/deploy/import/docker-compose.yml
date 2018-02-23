@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: citydynamics
     volumes:
       - ./backups:/backups
-      - ./backup-db-google.sh:/backup-db-google.sh
+      - ./backup-google-current.sh:/backup-google-current.sh
 
   importer:
     image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_importer:${ENVIRONMENT}
@@ -33,6 +33,7 @@ services:
     volumes:
       - data-volume:/data
       - ./backups:/backups
+      - ./backup-google-current.sh:/backup-google-current.sh
 
   analyzer:
     image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${ENVIRONMENT}
