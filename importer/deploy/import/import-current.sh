@@ -7,7 +7,7 @@ set -x
 DIR="$(dirname $0)"
 
 dc() {
-	docker-compose -p stadswerken_import -f ${DIR}/docker-compose.yml $*
+	docker-compose -p stadswerken_current -f ${DIR}/docker-compose.yml $*
 }
 
 # trap 'dc kill ; dc rm -f' EXIT
@@ -21,6 +21,8 @@ dc down
 dc pull
 dc build
 dc up -d database
+
+dc run --rm importer /app/deploy/docker-wait.sh
 
 dc run --rm importer ./scrape_current_google.sh
 
