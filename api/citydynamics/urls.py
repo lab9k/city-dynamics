@@ -27,8 +27,6 @@ from citydynamics.datasets.views import RecentIndexViewSet
 from citydynamics.datasets.views import RealtimeGoogleViewset
 
 
-
-
 router = DefaultRouter()
 router.register('drukteindex', DrukteindexViewSet, 'drukteindex')
 router.register('recentmeasures', RecentIndexViewSet, 'recentmeasures')

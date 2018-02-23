@@ -6,7 +6,6 @@ from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
 from citydynamics.datasets.models import RealtimeGoogle
 
 
-
 class DrukteIndexSerializer(ModelSerializer):
 
     class Meta:
