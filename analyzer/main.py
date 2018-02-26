@@ -59,7 +59,9 @@ def init_drukte_df(start_datetime, end_datetime, vollcodes):
     return drukte
 
 ##############################################################################
-def run_imports():
+
+## ALL FUNCTIONS WITH '_OLD' can be removed as soon as Tim is ready for the new API
+def run_imports_old():
 
     # Import datasets
     dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
@@ -106,6 +108,58 @@ def run_imports():
 
     # init drukte index
     drukte['drukte_index'] = np.nan
+
+    return drukte
+
+def run_imports():
+
+    # Import datasets
+    dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
+    brt = process.Process_buurtcombinatie(dbconfig)
+    vbi = process.Process_verblijversindex(dbconfig)
+    gvb_st = process.Process_gvb_stad(dbconfig)
+    gvb_bc = process.Process_gvb_buurt(dbconfig)
+    # tel = process.Process_tellus(dbconfig)
+    alp_hist = process.Process_alpha_historical(dbconfig)
+    alp_live = process.Process_alpha_live(dbconfig)
+
+    # initialize drukte dataframe
+    start = datetime.datetime(2018, 2, 12, 0, 0)  # Start of a week: Monday at midnight
+    end = datetime.datetime(2018, 2, 18, 23, 0)  # End of this week: Sunday 1 hour before midnight
+    drukte = init_drukte_df(start, end, vollcodes_list)
+
+    # merge datasets
+    cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
+    drukte = pd.merge(
+        drukte, alp_hist.data[cols],
+        on=['weekday', 'hour', 'vollcode'], how='left')
+
+    drukte = pd.merge(
+        drukte, gvb_bc.data,
+        on=['vollcode', 'weekday', 'hour'], how='left')
+
+    drukte = pd.merge(
+        drukte, gvb_st.data,
+        on=['weekday', 'hour'], how='left')
+
+    drukte = pd.merge(
+        drukte, vbi.data,
+        on='vollcode', how='left')
+
+    # # Middel alpha expected en alpha live
+    # drukte['alpha'] = drukte[['alpha_week', 'alpha_live']].mean(axis=1)
+
+    # HACK: alpha_live not available, so just take alpha_week
+    drukte['alpha'] = drukte[['alpha_week']].mean(axis=1)
+
+    # Middel gvb
+    drukte['gvb'] = drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1)
+
+    # init drukte index
+    drukte['drukte_index'] = 0
+
+    # Remove timestamps from weekpattern (only day and hour are relevant)
+    drukte.drop('timestamp', axis=1, inplace=True)
 
     return drukte
 
@@ -223,7 +277,7 @@ def pipeline_model(drukte):
     '''
 
 ##############################################################################
-def write_to_db(drukte):
+def write_to_db_old(drukte):
     """Write data to database."""
     log.debug('Writing data to database.')
     dbconfig = args.dbConfig[0]
@@ -233,7 +287,24 @@ def write_to_db(drukte):
     connection.execute('ALTER TABLE "drukteindex" ADD PRIMARY KEY ("index")')
     log.debug('done.')
 
+def write_to_db(drukte):
+    """Write data to database."""
+    log.debug('Writing data to database.')
+    dbconfig = args.dbConfig[0]
+    connection = process.connect_database(dbconfig)
+    drukte.to_sql(
+        name='drukteindex_hour_week', con=connection, index=True, if_exists='replace')
+    connection.execute('ALTER TABLE "drukteindex_hour_week" ADD PRIMARY KEY ("index")')
+    log.debug('done.')
+
 ##############################################################################
+def run_old():
+    """Run the main process of this file: loading and combining all datasets."""
+    drukte = run_imports_old()
+    drukte = linear_model(drukte)
+    # drukte = pipeline_model(drukte)
+    write_to_db(drukte)
+
 def run():
     """Run the main process of this file: loading and combining all datasets."""
     drukte = run_imports()
@@ -253,4 +324,5 @@ if __name__ == "__main__":
         help='database config settings: dev or docker',
         nargs=1)
     args = parser.parse_args()
+    run_old()
     run()
