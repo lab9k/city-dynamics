@@ -26,9 +26,10 @@ dc up -d database
 dc run --rm importer /app/deploy/docker-wait.sh
 
 dc run --rm importer python scrape_quantillion/models.py --drop
-#dc run --rm importer python scrape_quantillion/slurp_api.py realtime
+dc run --rm importer python scrape_quantillion/slurp_api.py realtime
 dc run --rm importer python scrape_quantillion/slurp_api.py expected
 dc run --rm importer python scrape_quantillion/slurp_api.py realtime/current
+dc run --rm importer python scrape_quantillion/slurp_api.py expected/current
 
 # dc run --rm analyzer
 
