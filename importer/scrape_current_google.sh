@@ -11,3 +11,4 @@ python models.py --drop
 
 # load data in database
 python slurp_api.py realtime/current
+python slurp_api.py expected/current
