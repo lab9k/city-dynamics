@@ -55,14 +55,14 @@ ENDPOINT_MODEL = {
     'realtime': models.GoogleRawLocationsRealtime,
     'expected': models.GoogleRawLocationsExpected,
     'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
-    # 'expected/current': models.GoogleRawLocationsExpectedCurrent,
+    'expected/current': models.GoogleRawLocationsExpectedCurrent,
 }
 
 ENDPOINT_URL = {
     'realtime': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
     'expected': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
     'realtime/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
-    # 'expected/current':
+    'expected/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
 }
 
 
@@ -198,10 +198,11 @@ def get_previous_days():
         yield (str(past_date1), str(past_date2))
 
 
-def get_locations(work_id, endpoint, gen_dates, params={}):
+def get_locations(work_id, endpoint, gen_dates):
     """
     Get google locations information with 'real-time' data
     """
+    params = {}
 
     # generate past dates (global)
     for date1, date2 in gen_dates:
@@ -210,7 +211,7 @@ def get_locations(work_id, endpoint, gen_dates, params={}):
         params['startDate'] = date1
         params['endDate'] = date2
 
-        do_limit_requests(work_id, endpoint, params)
+        do_limit_requests(work_id, endpoint, gen_dates, params=params)
 
     log.debug(f'Done {work_id}')
 

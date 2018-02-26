@@ -10,6 +10,7 @@ services:
     volumes:
       - ./backups:/tmp/backups
       - ./backup-google-current.sh:/backup-google-current.sh
+      - ./backup-db-google.sh:/backup-db-google.sh
 
   importer:
     image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_importer:${ENVIRONMENT}
