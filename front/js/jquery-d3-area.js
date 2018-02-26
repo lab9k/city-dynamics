@@ -98,6 +98,7 @@
 				.attr("font-size",'12px')
 				.text('Druk');
 
+
 			graph.update = function(newData){
 
 				graph.svg.selectAll('path.area')
@@ -185,6 +186,18 @@
 
 
 			}
+			graph.stop = function(){
+				// stop hotspots animation
+				stopAnimation();
+
+				console.log('pause');
+				graph.lineGroup
+					.attr('state','pause')
+					.transition()
+					.duration( 0 );
+
+
+			}
 
 
 
@@ -192,6 +205,8 @@
 			// export update function
 			graph.container[0].update = graph.update;
 			graph.container[0].startCount = graph.startCount;
+			graph.container[0].stopResumeCount = graph.stopResumeCount;
+			graph.container[0].stop = graph.stop;
 		});
 		// return
 		return this;
