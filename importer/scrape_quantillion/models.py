@@ -1,5 +1,6 @@
 import os
 import logging
+import argparse
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, TIMESTAMP
@@ -85,7 +86,6 @@ class GoogleRawLocationsRealtime(Base):
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
     data = Column(JSONB)
-    # __table_args__ = (UniqueConstraint('place_id', 'scraped_at'), )
 
 
 class GoogleRawLocationsExpected(Base):
@@ -98,6 +98,32 @@ class GoogleRawLocationsExpected(Base):
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
     data = Column(JSONB)
+
+
+class GoogleRawLocationsRealtimeCurrent(Base):
+    """
+    Raw json location information realtime
+    """
+    __tablename__ = f'google_raw_locations_realtime_current_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    name = Column(String)
+    data = Column(JSONB)
+
+
+class GoogleRawLocationsExpectedCurrent(Base):
+    """
+    Raw json location information expected
+    """
+    __tablename__ = f'google_raw_locations_expected_current_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    name = Column(String)
+    data = Column(JSONB)
+
+
 
 
 class GoogleLocations(Base):
@@ -114,10 +140,24 @@ class GoogleLocations(Base):
 
 
 if __name__ == '__main__':
-    # resets everything
-    log.warning('RECREATING DEFINED TABLES')
+    desc = "Manage google tables."
+    inputparser = argparse.ArgumentParser(desc)
+
+    inputparser.add_argument(
+        '--drop',
+        action='store_true',
+        default=False,
+        help="Drop existing")
+
+    args = inputparser.parse_args()
     engine = make_engine()
+
+    if args.drop:
+        # resets everything
+        log.warning('DROPPING DEFINED TABLES')
+        Base.metadata.drop_all(engine)
+
+    log.warning('CREATING DEFINED TABLES')
     # recreate tables
-    Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
     # create tables

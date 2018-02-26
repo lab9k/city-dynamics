@@ -54,8 +54,15 @@ ENDPOINTS = [
 ENDPOINT_MODEL = {
     'realtime': models.GoogleRawLocationsRealtime,
     'expected': models.GoogleRawLocationsExpected,
-    # 'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
-    # 'expected/current': models.GoogleRawLocationsExpectedCurrent,
+    'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
+    'expected/current': models.GoogleRawLocationsExpectedCurrent,
+}
+
+ENDPOINT_URL = {
+    'realtime': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
+    'expected': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
+    'realtime/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
+    'expected/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
 }
 
 
@@ -63,7 +70,8 @@ api_config = {
     'password': os.getenv('QUANTILLION_PASSWORD'),
     'hosts': {
         'production': 'http://apis.quantillion.io',
-        'acceptance': 'http://apis.development.quantillion.io',
+        'acceptance': 'http://apis.quantillion.io',
+        #'acceptance': 'http://apis.development.quantillion.io',
     },
     'port': 3001,
     'username': 'gemeenteAmsterdam',
@@ -85,7 +93,8 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
 
     host = api_config['hosts'][ENVIRONMENT]
 
-    url = f'{host}:{port}/gemeenteamsterdam/{endpoint}/timerange'
+    url = ENDPOINT_URL[endpoint]
+    url = url.format(host=host, port=port, endpoint=endpoint)
 
     async_r = grequests.get(url, params=params, auth=AUTH)
     gevent.spawn(async_r.send).join()
@@ -117,10 +126,7 @@ def add_locations_to_db(endpoint, json: list):
         log.error('No data recieved')
         return
 
-    db_model = models.GoogleRawLocationsRealtime
-
-    if endpoint == 'expected':
-        db_model = models.GoogleRawLocationsExpected
+    db_model = ENDPOINT_MODEL[endpoint]
 
     # make new session
     session = models.Session()
@@ -192,33 +198,55 @@ def get_previous_days():
         yield (str(past_date1), str(past_date2))
 
 
-def get_locations(work_id, endpoint, gen_dates=get_previous_days()):
+def get_locations(work_id, endpoint, gen_dates):
     """
     Get google locations information with 'real-time' data
     """
+    params = {}
 
     # generate past dates (global)
     for date1, date2 in gen_dates:
         # generate limit parameters
 
-        params = {'limit': LIMIT, 'skip': 0}
+        params['startDate'] = date1
+        params['endDate'] = date2
 
-        while True:
-            params['startDate'] = date1
-            params['endDate'] = date2
-
-            log.debug('%d %s', work_id, params)
-
-            json_response = get_the_json(endpoint, params)
-            add_locations_to_db(endpoint, json_response)
-
-            if len(json_response) < LIMIT:
-                # We are done with date
-                break
-
-            params['skip'] = params.get('skip', 0) + LIMIT
+        do_limit_requests(work_id, endpoint, gen_dates, params=params)
 
     log.debug(f'Done {work_id}')
+
+
+def do_limit_requests(work_id, endpoint, _gen_dates, params={}):
+    """
+    Do batch request of LIMIT each
+    """
+
+    params.update({'limit': LIMIT, 'skip': 0})
+
+    while True:
+        log.debug('%d %s', work_id, params)
+
+        json_response = get_the_json(endpoint, params)
+        add_locations_to_db(endpoint, json_response)
+
+        if len(json_response) < LIMIT:
+            # We are done with date
+            break
+
+        params['skip'] = params.get('skip', 0) + LIMIT
+
+    log.debug(f'Done {params}')
+
+
+def clear_current_table(endpoint):
+    """
+    Current data only contains latest and greatest
+    """
+    # make new session
+    session = models.Session()
+    db_model = ENDPOINT_MODEL[endpoint]
+    session.query(db_model).delete()
+    session.commit()
 
 
 def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
@@ -230,9 +258,17 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     # reset job status
     STATUS['done'] = False
 
+    gen_dates = get_previous_days()
+
+    if 'current' in endpoint:
+        # get current data
+        clear_current_table(endpoint)
+        parralleltask = do_limit_requests
+        workers = 1
+
     for i in range(workers):
         jobs.append(
-            gevent.spawn(parralleltask, i, endpoint)
+            gevent.spawn(parralleltask, i, endpoint, gen_dates)
         )
 
     with gevent.Timeout(3600, False):
@@ -247,32 +283,6 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     delete_duplicates(ENDPOINT_MODEL[endpoint])
 
 
-def rename_dump(filepath):
-    """
-    Give an indication of timeseries/environemnt of the database dump
-    """
-    filepath = filepath[0]
-
-    if not os.path.isfile(filepath):
-        raise(ValueError("File not found {filepath}"))
-
-    session = models.Session()
-    realtime_model = ENDPOINT_MODEL['realtime']
-    expected_model = ENDPOINT_MODEL['expected']
-    realtime_count = session.query(realtime_model).count()
-    expected_count = session.query(expected_model).count()
-
-    log.debug('Realtime Count %d', realtime_count)
-    log.debug('Expected Count %d', expected_count)
-
-    now = datetime.datetime.now()
-    # last - first date
-    prefix = filepath.split('.')[0]
-    new_name = f'{prefix}{now}expected{expected_count}-realtime{realtime_count}.dump'
-    log.debug(f'renameing to {new_name}')
-
-    os.rename(filepath, new_name)
-
 
 def main(args):
 
@@ -281,14 +291,10 @@ def main(args):
     # models.Base.metadata.create_all(engine)
     models.set_engine(engine)
 
-    if args.rename_dump:
-        rename_dump(args.rename_dump)
-        return
-
-    # scrape the data!
     if args.dedupe:
         delete_duplicates(ENDPOINT_MODEL[endpoint])
     else:
+        # scrape the data!
         run_workers(endpoint)
 
 
@@ -308,13 +314,6 @@ if __name__ == '__main__':
         action='store_true',
         default=False,
         help="Remove duplicates")
-
-    inputparser.add_argument(
-        '--rename_dump',
-        type=str,
-        help="rename given database dump",
-        nargs=1
-    )
 
     args = inputparser.parse_args()
     main(args)

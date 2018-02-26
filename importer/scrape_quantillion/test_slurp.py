@@ -69,6 +69,7 @@ class TestDBWriting(unittest.TestCase):
 
         # slurp_api.get_locations('test', 'realtime')
         slurp_api.run_workers('realtime', workers=1)
+
         count = session.query(models.GoogleRawLocationsRealtime).count()
 
         self.assertEqual(count, 1)

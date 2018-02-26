@@ -7,7 +7,7 @@ set -x
 DIR="$(dirname $0)"
 
 dc() {
-	docker-compose -p cityd -f ${DIR}/docker-compose.yml $*
+	docker-compose -p citydtest -f ${DIR}/docker-compose.yml $*
 }
 
 

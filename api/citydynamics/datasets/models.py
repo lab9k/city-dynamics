@@ -1,5 +1,7 @@
 from django.contrib.gis.db import models
+from django.contrib.postgres.fields import JSONField
 
+from django.conf import settings
 
 class Buurtcombinatie(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
@@ -59,3 +61,15 @@ class HotspotsDrukteIndex(models.Model):
     hour = models.IntegerField()
     # weekday = models.IntegerField()
     drukteindex = models.FloatField()
+
+
+class RealtimeGoogle(models.Model):
+
+    place_id = models.TextField(db_index=True)
+    scraped_at = models.DateTimeField(blank=True, null=True)
+    name = models.TextField()
+    data = JSONField()
+
+    class Meta:
+        managed = False
+        db_table = f'google_raw_locations_realtime_current_{settings.ENVIRONMENT}'
