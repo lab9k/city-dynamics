@@ -13,7 +13,7 @@ split and given their own columns.
 """
 
 ##############################################################################
-def run()
+def run():
     # TODO: parse input table.
     # TODO: write new table to DB.
     pass
