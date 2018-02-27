@@ -32,32 +32,6 @@ def set_primary_key(table):
   ALTER TABLE "{}" ADD PRIMARY KEY (index)
   """.format(table)
 
-# COPIED from main.py
-def linear_model(drukte):
-    # Normalise verblijversindex en gvb
-    # drukte['verblijvers_ha_2016'] = process.norm(drukte.verblijvers_ha_2016)
-    # drukte['gvb'] = process.norm(drukte.gvb)
-
-    drukte['drukte_index'] = 0
-
-    # make sure the sum of the weights != 0
-    linear_weigths = {'verblijvers_ha_2016': 1,
-                      'gvb': 8,
-                      'alpha_week': 2}
-
-    lw_normalize = sum(linear_weigths.values())
-
-    for col, weight in linear_weigths.items():
-        if col in drukte.columns:
-            drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col] * weight, fill_value=0)
-
-    drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
-
-    # Sort values
-    drukte = drukte.sort_values(['vollcode', 'weekday', 'hour'])
-
-    return drukte
-
 
 def concat_google(sql_query, conn):
     """Function to read google data."""
@@ -86,9 +60,15 @@ def main():
     conn = get_conn(dbconfig=args.dbConfig[0])
 
     sql_query = """ SELECT * FROM "{}" """
-    sql_query = """ SELECT * FROM "{}" """
 
     concat_google(sql_query, conn)
+
+    # hotspots_df = pd.read_csv('lookup_tables/Amsterdam Hotspots - Sheet1.csv')
+    #
+    # log.debug('Writing hotspots to db..')
+    # hotspots_df.to_sql(name='hotspots', con=conn, if_exists='replace')
+    # conn.execute(set_primary_key('hotspots'))
+    # log.debug('..done.')
 
     hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)
 
@@ -96,19 +76,17 @@ def main():
     create_geom_hotspots = """
     ALTER TABLE hotspots
     ADD COLUMN point_sm geometry;
-
-    UPDATE hotspots SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
+    UPDATE hotspots SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857);
     """
 
-    # conn.execute(create_geom_hotspots)
+    conn.execute(create_geom_hotspots)
     log.debug('..done.')
 
     log.debug('Creating geometries on Google locations..')
     create_geom_google = """
     ALTER TABLE google_all
     ADD COLUMN point_sm geometry;
-
-    UPDATE google_all SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
+    UPDATE google_all SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857);
     """
 
     conn.execute(create_geom_google)
@@ -149,34 +127,16 @@ def main():
     google_week_hotspots = google_week_location.groupby([
         'Hotspot', 'hour'])['historical'].mean().reset_index()
 
-    google_week_hotspots.rename(columns={'historical': 'alpha_week'}, inplace=True)
+    google_week_hotspots.rename(columns={'historical': 'drukteindex'}, inplace=True)
 
     # fill the dataframe with all missing hotspot-hour combinations
-    x = {"weekday": np.arange(7), "hour": np.arange(24), "Hotspot": hotspots_df['Hotspot'].unique().tolist()}
+    x = {"hour": np.arange(24), "Hotspot": hotspots_df['Hotspot'].unique().tolist()}
     hs_hour_combinations = pd.DataFrame(list(itertools.product(*x.values())), columns=x.keys())
     google_week_hotspots = google_week_hotspots.merge(hs_hour_combinations, on=['hour', 'Hotspot'], how='outer')
-    google_week_hotspots['alpha_week'].fillna(value=0, inplace=True)
-
-    google_week_hotspots = google_week_hotspots.merge(google_hotspots[['Hotspot', 'vollcode']]
-                                                      .drop_duplicates('Hotspot'), on='Hotspot')
-
-    di = pd.read_sql(sql="SELECT * FROM drukteindex_hour_week", con=conn)
-
-    drukteindex_hotspots = google_week_hotspots.merge(di[['index',
-                                                          'vollcode',
-                                                          'weekday',
-                                                          'hour',
-                                                          'verblijvers_ha_2016',
-                                                          'gvb']], on=['vollcode', 'weekday', 'hour'], how='left')
-
-    drukteindex_hotspots = linear_model(drukteindex_hotspots)
-
-    drukteindex_hotspots = drukteindex_hotspots[['Hotspot', 'hour', 'weekday', 'drukte_index']]
-
-    drukteindex_hotspots.rename(columns={'drukte_index': 'drukteindex'}, inplace=True)
+    google_week_hotspots['drukteindex'].fillna(value=0, inplace=True)
 
     log.debug('Writing to db..')
-    drukteindex_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
+    google_week_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
 
     insert_into_models_hotspots = """
     insert into datasets_hotspotsdrukteindex (
