@@ -182,9 +182,10 @@ def main():
     insert into datasets_hotspotsdrukteindex (
     index,
     hour,
+    weekday,
     drukteindex,
     hotspot_id
-    ) select c.index, hour, drukteindex, h.index from hotspots h, drukteindex_hotspots c
+    ) select c.index, hour, weekday, drukteindex, h.index from hotspots h, drukteindex_hotspots c
     where  h."Hotspot" = c."Hotspot";
 
     insert into datasets_hotspots (
