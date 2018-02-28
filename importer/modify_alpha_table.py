@@ -17,10 +17,8 @@ import argparse
 import logging
 from sqlalchemy.engine.url import URL
 from sqlalchemy import create_engine
-
 import pandas as pd
 import re
-import q
 
 ##############################################################################
 config_auth = configparser.RawConfigParser()
