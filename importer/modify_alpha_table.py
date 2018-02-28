@@ -27,6 +27,7 @@ from sqlalchemy import Integer, String
 
 import json
 import pandas as pd
+import re
 import q
 
 ##############################################################################
@@ -76,14 +77,14 @@ CREATE TABLE  public.alpha_locations_expected(
 
 
 ##############################################################################
-def create_row_sql(id, place_id, name, timestamp, expected, lat, lon, address,
+def create_row_sql(id, place_id, name, hour, expected, lat, lon, address,
             location_type, visit_duration, types, category):
 
     row_sql = '''INSERT INTO public.alpha_locations_expected(id, \
     place_id, name, timestamp, expected, lat, lon, address, location_type, \
     visit_duration, types, category)
     VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
-    ''' % (id, place_id, name, timestamp, expected, lat, lon, address,
+    ''' % (id, place_id, name, hour, expected, lat, lon, address,
             location_type, visit_duration, types, category)
 
     return row_sql
@@ -103,38 +104,45 @@ def run():
 
     # Create table for modified Alpha data
     conn.execute(create_alpha_table)
-    # '''
+
     # Iterate over raw entries to fill new table
     id_counter = 0
     for i in range(0, len(raw)):
         id = id_counter
         place_id = raw.place_id[i]
         name = raw.name[i]
+        lat = raw.data[i]['location']['coordinates'][1]
+        lon = raw.data[i]['location']['coordinates'][0]
+        address = raw.data[i]['formatted_address']
+        location_type = raw.data[i]['location']['type']
+        visit_duration = raw.data[i]['VisitDuration']
+        types = str(raw.data[i]['types'])
+        category = raw.data[i]['Category']
 
+        # Loop over all expected values for the given hour
         for interval in raw.data[i]['Expected']:
 
             # Process timestamp (truncate to first hour)
-            hour = int(interval['TimeInterval'][0:2])
+            hour = interval['TimeInterval'][0:2]
+            hour = int(re.sub("[^0-9]", "", hour))
             if interval['TimeInterval'][2:4] == 'pm':
                 hour += 12
             if hour == 24:
                 hour = 0
 
+            # Get expected value for this hour
             expected = interval['ExpectedValue']
 
-            q.d()
             # Create sql query to write data to database
-            row_sql = create_row_sql(id, place_id, name, timestamp, expected, lat, lon, address,
-                location_type, visit_duration, types, category, conn)
+            row_sql = create_row_sql(id, place_id, name, hour, expected, lat, lon, address,
+                location_type, visit_duration, types, category)
 
             # Write data to database
             conn.execute(row_sql)
 
             # Update id counter so all rows have a unique id.
             id_counter += 1
-    # '''
 
-    q.d()
 
     log.debug("..done")
 
