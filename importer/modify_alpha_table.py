@@ -17,15 +17,7 @@ import argparse
 import logging
 from sqlalchemy.engine.url import URL
 from sqlalchemy import create_engine
-from sqlalchemy import select
 
-from sqlalchemy import inspect
-from sqlalchemy import MetaData
-from sqlalchemy import Table
-from sqlalchemy import Column
-from sqlalchemy import Integer, String
-
-import json
 import pandas as pd
 import re
 import q
@@ -50,7 +42,6 @@ def get_conn(dbconfig):
     )
     conn = create_engine(postgres_url)
     return conn
-
 
 ##############################################################################
 
@@ -81,7 +72,7 @@ def create_row_sql(id, place_id, name, hour, expected, lat, lon, address,
             location_type, visit_duration, types, category):
 
     row_sql = '''INSERT INTO public.alpha_locations_expected(id, \
-    place_id, name, timestamp, expected, lat, lon, address, location_type, \
+    place_id, name, hour, expected, lat, lon, address, location_type, \
     visit_duration, types, category)
     VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
     ''' % (id, place_id, name, hour, expected, lat, lon, address,
@@ -105,10 +96,12 @@ def run():
     # Create table for modified Alpha data
     conn.execute(create_alpha_table)
 
+    # Lambda function to double up quotation marks for sql writing.
+    fix_quotes = lambda x: re.sub("'", "''", x)
+
     # Iterate over raw entries to fill new table
     id_counter = 0
     for i in range(0, len(raw)):
-        id = id_counter
         place_id = raw.place_id[i]
         name = raw.name[i]
         lat = raw.data[i]['location']['coordinates'][1]
@@ -118,6 +111,13 @@ def run():
         visit_duration = raw.data[i]['VisitDuration']
         types = str(raw.data[i]['types'])
         category = raw.data[i]['Category']
+
+        # fix quotes for sql writing
+        name = fix_quotes(name)
+        address = fix_quotes(address)
+        location_type = fix_quotes(location_type)
+        visit_duration = fix_quotes(visit_duration)
+        types = fix_quotes(types)
 
         # Loop over all expected values for the given hour
         for interval in raw.data[i]['Expected']:
@@ -134,7 +134,7 @@ def run():
             expected = interval['ExpectedValue']
 
             # Create sql query to write data to database
-            row_sql = create_row_sql(id, place_id, name, hour, expected, lat, lon, address,
+            row_sql = create_row_sql(id_counter, place_id, name, hour, expected, lat, lon, address,
                 location_type, visit_duration, types, category)
 
             # Write data to database
@@ -142,7 +142,6 @@ def run():
 
             # Update id counter so all rows have a unique id.
             id_counter += 1
-
 
     log.debug("..done")
 
@@ -156,18 +155,3 @@ if __name__ == '__main__':
         nargs=1)
     args = parser.parse_args()
     run()
-
-
-##############################################################################
-# temp = {"url": "https://www.google.com/search?q=Il Cavallino, Maasstraat 67HS, 1078 HE Amsterdam, Netherlands",
-#         "name": "Il Cavallino", "types": ["restaurant", "food", "point_of_interest", "establishment"], "Category": 2,
-#         "Expected": [{"TimeInterval": "5pm-6pm", "ExpectedValue": 0.19736842105263158},
-#                      {"TimeInterval": "6pm-7pm", "ExpectedValue": 0.4342105263157895},
-#                      {"TimeInterval": "7pm-8pm", "ExpectedValue": 0.5921052631578947},
-#                      {"TimeInterval": "8pm-9pm", "ExpectedValue": 0.5526315789473685},
-#                      {"TimeInterval": "9pm-10pm", "ExpectedValue": 0.3815789473684211}],
-#         "location": {"type": "Point", "coordinates": [4.8955886, 52.3452768]},
-#         "place_id": "ChIJFU6QdYoJxkcRiiY_jGApA3k", "BatchTime": "2018-02-24T02:16:17.131000Z", "Real-time": 0.0,
-#         "ScrapeTime": "2018-02-24T02:16:21Z", "VisitDuration": "1,5 bis 3,5 uur",
-#         "formatted_address": "Maasstraat 67HS, 1078 HE Amsterdam, Netherlands"}
-##############################################################################
