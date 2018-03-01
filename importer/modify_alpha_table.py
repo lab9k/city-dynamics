@@ -110,7 +110,7 @@ def run():
         types = str(raw.data[i]['types'])
         category = raw.data[i]['Category']
 
-        # fix quotes for sql writing
+        # Fix quotes for sql writing
         name = fix_quotes(name)
         address = fix_quotes(address)
         location_type = fix_quotes(location_type)
@@ -123,17 +123,20 @@ def run():
             # Process timestamp (truncate to first hour)
             hour = interval['TimeInterval'][0:2]
             hour = int(re.sub("[^0-9]", "", hour))
-            if interval['TimeInterval'][2:4] == 'pm':
-                hour += 12
-            if hour == 24:
-                hour = 0
+            ampm = interval['TimeInterval'][1:4]
+            ampm = re.sub('[^a-zA-Z]+', '', ampm)
+            if ampm == 'pm':
+                if hour == 12:
+                    pass
+                else:
+                    hour += 12
 
             # Get expected value for this hour
             expected = interval['ExpectedValue']
 
             # Create sql query to write data to database
-            row_sql = create_row_sql(id_counter, place_id, name, hour, expected, lat, lon, address,
-                location_type, visit_duration, types, category)
+            row_sql = create_row_sql(id_counter, place_id, name, hour, expected, lat, lon,
+                                     address, location_type, visit_duration, types, category)
 
             # Write data to database
             conn.execute(row_sql)
