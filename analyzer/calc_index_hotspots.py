@@ -95,18 +95,16 @@ def main():
     create_geom_hotspots = """
     ALTER TABLE hotspots
     ADD COLUMN point_sm geometry;
-
     UPDATE hotspots SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
     """
 
-    # conn.execute(create_geom_hotspots)
+    conn.execute(create_geom_hotspots)
     log.debug('..done.')
 
     log.debug('Creating geometries on Google locations..')
     create_geom_google = """
     ALTER TABLE google_all
     ADD COLUMN point_sm geometry;
-
     UPDATE google_all SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
     """
 
