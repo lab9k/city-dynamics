@@ -46,7 +46,7 @@ class CijferSerializer(ModelSerializer):
 
 class HotspotIndexSerializer(ModelSerializer):
 
-    #druktecijfers = CijferSerializer(many=True, read_only=True)
+    # druktecijfers = CijferSerializer(many=True, read_only=True)
 
     coordinates = SerializerMethodField()
     current_day = SerializerMethodField()
@@ -68,7 +68,6 @@ class HotspotIndexSerializer(ModelSerializer):
         cijfers = obj.druktecijfers.filter(weekday=1)
 
         return CijferSerializer(cijfers, many=True).data
-
 
 
 class RealtimeGoogleSerializer(ModelSerializer):
