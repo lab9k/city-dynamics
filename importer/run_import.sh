@@ -8,8 +8,8 @@ set -e
 #python download_from_objectstore.py /data
 
 # Import dump of Alpha data table (originally served by Quantillion API)
-export PGPASSWORD=insecure
-pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump
+#export PGPASSWORD=insecure
+#pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump
 
 # TODO: Make use of pgpass.conf password file instead of exporting a PGPASSWORD environment variable.
 # TODO: For some reason, the password file is not used or correctly interpreted atm since no db connection can be made.
