@@ -119,10 +119,10 @@ def run():
         visit_duration = fix_quotes(visit_duration)
         types = fix_quotes(types)
 
-        # Loop over all expected values for the given hour
+        # Loop over all expected hour intervals for each location and scrape day
         for interval in raw.data[i]['Expected']:
 
-            # Process timestamp (truncate to first hour)
+            # Truncate time interval to first hour of the interval
             hour = interval['TimeInterval'][0:2]
             hour = int(re.sub("[^0-9]", "", hour))
             ampm = interval['TimeInterval'][1:4]
@@ -133,7 +133,7 @@ def run():
                 else:
                     hour += 12
 
-            # Get expected value for this hour
+            # Get the expected crowdedness value for this hour (relative value)
             expected = interval['ExpectedValue']
 
             # Create sql query to write data to database
@@ -143,7 +143,7 @@ def run():
             # Write data to database
             conn.execute(row_sql)
 
-            # Update id counter so all rows have a unique id.
+            # Update id counter so all rows have a unique id
             id_counter += 1
 
     log.debug("..done")
