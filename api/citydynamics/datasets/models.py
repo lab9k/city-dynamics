@@ -59,7 +59,7 @@ class HotspotsDrukteIndex(models.Model):
     hotspot = models.ForeignKey(
         'Hotspots', related_name='druktecijfers', on_delete=models.DO_NOTHING)
     hour = models.IntegerField()
-    # weekday = models.IntegerField()
+    weekday = models.IntegerField()
     drukteindex = models.FloatField()
 
 

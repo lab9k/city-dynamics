@@ -155,6 +155,10 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
 
     serializer_class = serializers.HotspotIndexSerializer
     serializer_detail_class = serializers.HotspotIndexSerializer
+    #filter_class = HotspotF
+    filter_fields = (
+        'druktecijfers__weekday',
+    )
 
     def get_queryset(self):
 
@@ -164,11 +168,10 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
             .order_by("hotspot")
         )
 
+
         hotspot = self.request.query_params.get('hotspot', None)
         if hotspot is not None:
             queryset = queryset.filter(hotspot=hotspot)
-
-        # timestamp_str = self.request.query_params.get('timestamp', None)
 
         return queryset
 

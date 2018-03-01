@@ -50,10 +50,11 @@ CREATE INDEX datasets_hotspots_point_sm_id
   USING gist
   (point_sm);"""
 
-create_hotpots_drukteindex = """CREATE TABLE public.datasets_hotspotsdrukteindex
+create_hotpots_drukteindex = """CREATE TABLE public.datasets_hotspotsdrukteindex    
 (
   index bigint NOT NULL,
   hour integer NOT NULL,
+  weekday integer NOT NULL,
   drukteindex double precision NOT NULL,
   hotspot_id bigint NOT NULL,
   CONSTRAINT datasets_hotspotsdrukteindex_pkey PRIMARY KEY (index),
