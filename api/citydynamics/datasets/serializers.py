@@ -48,7 +48,7 @@ class HotspotIndexSerializer(ModelSerializer):
     #druktecijfers = CijferSerializer(many=True, read_only=True)
 
     coordinates = SerializerMethodField()
-    current_day = SerializerMethodField()
+    druktecijfers = SerializerMethodField()
 
     def get_coordinates(self, obj):
         return [obj.latitude, obj.longitude]
@@ -59,10 +59,10 @@ class HotspotIndexSerializer(ModelSerializer):
             'index',
             'hotspot',
             'coordinates',
-            'current_day',
+            'druktecijfers',
         )
 
-    def get_current_day(self, obj):
+    def get_druktecijfers(self, obj):
         weekday = datetime.datetime.today().weekday()
         cijfers = obj.druktecijfers.filter(weekday=weekday)
 
