@@ -283,7 +283,6 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     delete_duplicates(ENDPOINT_MODEL[endpoint])
 
 
-
 def main(args):
 
     endpoint = args.endpoint[0]
