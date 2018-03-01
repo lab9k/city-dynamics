@@ -52,6 +52,7 @@ CREATE TABLE  public.alpha_locations_expected(
     id              INTEGER,
     place_id        VARCHAR,
     name            TEXT,
+    url             TEXT,
     weekday         INT4,
     hour            INT4,
     expected        FLOAT8,
@@ -67,14 +68,14 @@ CREATE TABLE  public.alpha_locations_expected(
 
 
 ##############################################################################
-def create_row_sql(id, place_id, name, weekday, hour, expected, lat, lon,
+def create_row_sql(id, place_id, name, url, weekday, hour, expected, lat, lon,
                    address, location_type, visit_duration, types, category):
 
     row_sql = '''INSERT INTO public.alpha_locations_expected(id, \
-    place_id, name, weekday, hour, expected, lat, lon, address, location_type, \
-    visit_duration, types, category)
-    VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
-    ''' % (id, place_id, name, weekday, hour, expected, lat, lon, address,
+    place_id, name, url, weekday, hour, expected, lat, lon, address, \
+    location_type, visit_duration, types, category)
+    VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
+    ''' % (id, place_id, name, url, weekday, hour, expected, lat, lon, address,
             location_type, visit_duration, types, category)
 
     return row_sql
@@ -103,6 +104,7 @@ def run():
     for i in range(0, len(raw)):
         place_id = raw.place_id[i]
         name = raw.name[i]
+        url = raw.data[i]['url']
         weekday = raw.scraped_at[i].weekday()
         lat = raw.data[i]['location']['coordinates'][1]
         lon = raw.data[i]['location']['coordinates'][0]
@@ -114,6 +116,7 @@ def run():
 
         # Fix quotes for sql writing
         name = fix_quotes(name)
+        url = fix_quotes(url)
         address = fix_quotes(address)
         location_type = fix_quotes(location_type)
         visit_duration = fix_quotes(visit_duration)
@@ -137,8 +140,8 @@ def run():
             expected = interval['ExpectedValue']
 
             # Create sql query to write data to database
-            row_sql = create_row_sql(id_counter, place_id, name, weekday, hour, expected, lat, lon,
-                                     address, location_type, visit_duration, types, category)
+            row_sql = create_row_sql(id_counter, place_id, name, url, weekday, hour, expected,
+                            lat, lon, address, location_type, visit_duration, types, category)
 
             # Write data to database
             conn.execute(row_sql)
