@@ -104,8 +104,8 @@ def main(datadir, dbConfig, datasets):
             config_src.get(dataset, 'TABLE_NAME')))
         logger.info('... done')
 
-    logger.info('Loading and writing area codes to database')
-    load_gebieden(pg_str)
+    #logger.info('Loading and writing area codes to database')
+    #load_gebieden(pg_str)
 
 
 if __name__ == '__main__':
