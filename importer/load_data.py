@@ -60,15 +60,15 @@ def get_pg_str(host, port, user, dbname, password):
     )
 
 
-# def load_gebieden(pg_str):
-#     areaNames = [
-#         'stadsdeel', 'buurt',
-#         'buurtcombinatie', 'gebiedsgerichtwerken']
-#     srsName = 'EPSG:4326'
-#     for areaName in areaNames:
-#         WFS = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME=" + srsName + "&typename=" + areaName   # noqa
-#         wfs2psql(WFS, pg_str, areaName)
-#         logger.info(areaName + ' loaded into PG.')
+def load_gebieden(pg_str):
+    areaNames = [
+        'stadsdeel', 'buurt',
+        'buurtcombinatie', 'gebiedsgerichtwerken']
+    srsName = 'EPSG:4326'
+    for areaName in areaNames:
+        WFS = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME=" + srsName + "&typename=" + areaName   # noqa
+        wfs2psql(WFS, pg_str, areaName)
+        logger.info(areaName + ' loaded into PG.')
 
 
 def main(datadir, dbConfig, datasets):
@@ -104,8 +104,8 @@ def main(datadir, dbConfig, datasets):
             config_src.get(dataset, 'TABLE_NAME')))
         logger.info('... done')
 
-    # logger.info('Loading and writing area codes to database')
-    # load_gebieden(pg_str)
+    logger.info('Loading and writing area codes to database')
+    load_gebieden(pg_str)
 
 
 if __name__ == '__main__':
