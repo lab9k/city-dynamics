@@ -4,6 +4,7 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from citydynamics.datasets.models import Drukteindex, Buurtcombinatie
 from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
 from citydynamics.datasets.models import RealtimeGoogle
+import datetime
 
 
 class DrukteIndexSerializer(ModelSerializer):
@@ -33,14 +34,12 @@ class CijferSerializer(ModelSerializer):
 
     h = serializers.IntegerField(source='hour')
     d = serializers.FloatField(source='drukteindex')
-    w = serializers.FloatField(source='weekday')
 
     class Meta:
         model = HotspotsDrukteIndex
         fields = (
             'h',
             'd',
-            'w'
         )
 
 
@@ -64,11 +63,10 @@ class HotspotIndexSerializer(ModelSerializer):
         )
 
     def get_current_day(self, obj):
-
-        cijfers = obj.druktecijfers.filter(weekday=1)
+        weekday = datetime.datetime.today().weekday()
+        cijfers = obj.druktecijfers.filter(weekday=weekday)
 
         return CijferSerializer(cijfers, many=True).data
-
 
 
 class RealtimeGoogleSerializer(ModelSerializer):
