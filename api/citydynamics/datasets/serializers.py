@@ -33,20 +33,23 @@ class CijferSerializer(ModelSerializer):
 
     h = serializers.IntegerField(source='hour')
     d = serializers.FloatField(source='drukteindex')
+    w = serializers.FloatField(source='weekday')
 
     class Meta:
         model = HotspotsDrukteIndex
         fields = (
             'h',
-            'd'
+            'd',
+            'w'
         )
 
 
 class HotspotIndexSerializer(ModelSerializer):
 
-    druktecijfers = CijferSerializer(many=True, read_only=True)
+    #druktecijfers = CijferSerializer(many=True, read_only=True)
 
     coordinates = SerializerMethodField()
+    current_day = SerializerMethodField()
 
     def get_coordinates(self, obj):
         return [obj.latitude, obj.longitude]
@@ -57,8 +60,15 @@ class HotspotIndexSerializer(ModelSerializer):
             'index',
             'hotspot',
             'coordinates',
-            'druktecijfers'
+            'current_day',
         )
+
+    def get_current_day(self, obj):
+
+        cijfers = obj.druktecijfers.filter(weekday=1)
+
+        return CijferSerializer(cijfers, many=True).data
+
 
 
 class RealtimeGoogleSerializer(ModelSerializer):
