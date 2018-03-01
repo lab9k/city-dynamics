@@ -42,5 +42,3 @@ class HotspotsFactory(factory.DjangoModelFactory):
     latitude = fuzzy.FuzzyFloat(low=0)
     longitude = fuzzy.FuzzyFloat(low=0)
     # point_sm = fuzzy.GeometryField()
-
-

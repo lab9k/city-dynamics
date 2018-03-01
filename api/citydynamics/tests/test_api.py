@@ -83,3 +83,6 @@ class BrowseDatasetsTestCase(APITestCase):
             # self.assertNotEqual(
             #    response.data['count'],
             #    0, 'Wrong result count for {}'.format(url))
+
+    def test_hotsports_inhotspots(self):
+        pass
