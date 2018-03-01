@@ -19,7 +19,7 @@ pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydyna
 
 
 # Modify new Alpha data table
-python modify_alpha_table.py docker
+# python modify_alpha_table.py docker
 
 # load data in database
 python load_data.py /data docker
