@@ -10,7 +10,6 @@ from citydynamics.datasets import models
 
 
 class DrukteindexFactory(factory.DjangoModelFactory):
-
     class Meta:
         model = models.Drukteindex
 
@@ -33,7 +32,6 @@ class DrukteindexFactory(factory.DjangoModelFactory):
 
 
 class HotspotsFactory(factory.DjangoModelFactory):
-
     class Meta:
         model = models.Hotspots
 
@@ -42,3 +40,4 @@ class HotspotsFactory(factory.DjangoModelFactory):
     latitude = fuzzy.FuzzyFloat(low=0)
     longitude = fuzzy.FuzzyFloat(low=0)
     # point_sm = fuzzy.GeometryField()
+   
