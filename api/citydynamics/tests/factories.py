@@ -30,3 +30,17 @@ class DrukteindexFactory(factory.DjangoModelFactory):
     # google = fuzzy.FuzzyFloat(0, 1)
     gvb = fuzzy.FuzzyFloat(0, 1)
     drukte_index = fuzzy.FuzzyFloat(0, 1)
+
+
+class HotspotsFactory(factory.DjangoModelFactory):
+
+    class Meta:
+        model = models.Hotspots
+
+    index = fuzzy.FuzzyInteger(low=0)
+    hotspot = fuzzy.FuzzyText()
+    latitude = fuzzy.FuzzyFloat(low=0)
+    longitude = fuzzy.FuzzyFloat(low=0)
+    # point_sm = fuzzy.GeometryField()
+
+

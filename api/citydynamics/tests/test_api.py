@@ -12,6 +12,10 @@ class BrowseDatasetsTestCase(APITestCase):
 
     datasets = [
         'citydynamics/drukteindex',
+        'citydynamics/recentmeasures',
+        'citydynamics/buurtcombinatie',
+        'citydynamics/realtime',
+        'citydynamics/hotspots',
     ]
 
     def setUp(self):
@@ -23,6 +27,8 @@ class BrowseDatasetsTestCase(APITestCase):
                 timestamp=stamp,
             )
             stamp = stamp + one_hour
+
+        factories.HotspotsFactory()
 
     def valid_html_response(self, url, response):
         """
