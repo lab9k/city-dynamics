@@ -45,7 +45,7 @@ class CijferSerializer(ModelSerializer):
 
 class HotspotIndexSerializer(ModelSerializer):
 
-    #druktecijfers = CijferSerializer(many=True, read_only=True)
+    # druktecijfers = CijferSerializer(many=True, read_only=True)
 
     coordinates = SerializerMethodField()
     druktecijfers = SerializerMethodField()
