@@ -13,6 +13,7 @@ config_auth.read('auth.conf')
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
+
 def get_conn(dbconfig):
     """Create a connection to the database."""
     postgres_url = URL(
@@ -55,6 +56,7 @@ def concat_google(sql_query, conn):
     google['hour'] = [ts.hour for ts in google.timestamp]
 
     google.to_sql(name="google_all", con=conn, if_exists='replace')
+
 
 def main():
     conn = get_conn(dbconfig=args.dbConfig[0])
@@ -130,7 +132,7 @@ def main():
     google_week_hotspots.rename(columns={'historical': 'drukteindex'}, inplace=True)
 
     # fill the dataframe with all missing hotspot-hour combinations
-    x = {"hour": np.arange(24), "Hotspot": hotspots_df['Hotspot'].unique().tolist()}
+    x = {"hour": np.arange(24), "weekday": np.arange(7), "Hotspot": hotspots_df['Hotspot'].unique().tolist()}
     hs_hour_combinations = pd.DataFrame(list(itertools.product(*x.values())), columns=x.keys())
     google_week_hotspots = google_week_hotspots.merge(hs_hour_combinations, on=['hour', 'Hotspot'], how='outer')
     google_week_hotspots['drukteindex'].fillna(value=0, inplace=True)
