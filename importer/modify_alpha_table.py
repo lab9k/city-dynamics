@@ -41,6 +41,7 @@ def get_conn(dbconfig):
     conn = create_engine(postgres_url)
     return conn
 
+
 ##############################################################################
 
 
@@ -64,21 +65,23 @@ CREATE TABLE  public.alpha_locations_expected(
     types           TEXT,
     category        INT4);
 '''
+
+
 ##############################################################################
 
 
 ##############################################################################
 def create_row_sql(id, place_id, name, url, weekday, hour, expected, lat, lon,
                    address, location_type, visit_duration, types, category):
-
     row_sql = '''INSERT INTO public.alpha_locations_expected(id, \
     place_id, name, url, weekday, hour, expected, lat, lon, address, \
     location_type, visit_duration, types, category)
     VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
     ''' % (id, place_id, name, url, weekday, hour, expected, lat, lon, address,
-            location_type, visit_duration, types, category)
+           location_type, visit_duration, types, category)
 
     return row_sql
+
 
 ##############################################################################
 
@@ -141,7 +144,7 @@ def run():
 
             # Create sql query to write data to database
             row_sql = create_row_sql(id_counter, place_id, name, url, weekday, hour, expected,
-                            lat, lon, address, location_type, visit_duration, types, category)
+                                     lat, lon, address, location_type, visit_duration, types, category)
 
             # Write data to database
             conn.execute(row_sql)
@@ -149,8 +152,10 @@ def run():
             # Update id counter so all rows have a unique id
             id_counter += 1
 
-    # add vollcode and stadsdeelcode
-    """
+    # add vollcode and stadsdeel_code
+
+    add_vollcode_stadsdeel_code = """
+    
     ALTER TABLE alpha_locations_expected
     DROP COLUMN IF EXISTS geom;
     ALTER TABLE alpha_locations_expected
@@ -166,14 +171,17 @@ def run():
     WHERE st_intersects(alpha_locations_expected.geom, buurtcombinatie.wkb_geometry);
 
     alter table alpha_locations_expected
-    add column stadsdeelcode varchar;
+    add column stadsdeel_code varchar;
     UPDATE alpha_locations_expected
-    SET stadsdeelcode = stadsdeel.code
+    SET stadsdeel_code = stadsdeel.code
     FROM stadsdeel
     WHERE st_intersects(alpha_locations_expected.geom, stadsdeel.wkb_geometry);
-      """
+    """
+
+    conn.execute(add_vollcode_stadsdeel_code)
 
     log.debug("..done")
+    
 
 ##############################################################################
 if __name__ == '__main__':
