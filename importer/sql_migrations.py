@@ -26,9 +26,13 @@ def get_conn(dbconfig):
     return conn
 
 
-create_hotpots = """
+delete_hotspot_tables_when_existing = """
+DROP TABLE IF EXISTS public.datasets_hotspotsdrukteindex;
 DROP TABLE IF EXISTS public.datasets_hotspots;
+"""
 
+
+create_hotpots = """
 CREATE TABLE public.datasets_hotspots(
     index           BIGINT NOT NULL,
     hotspot         TEXT,
@@ -51,9 +55,8 @@ CREATE INDEX
     (point_sm);
 """
 
-create_hotpots_drukteindex = """
-DROP TABLE IF EXISTS public.datasets_hotspotsdrukteindex;
 
+create_hotpots_drukteindex = """
 CREATE TABLE public.datasets_hotspotsdrukteindex(
     index           BIGINT              NOT NULL,
     hour            INTEGER             NOT NULL,
@@ -84,6 +87,7 @@ def main():
     log.debug("Creating empty tables for API..")
 
     conn = get_conn(dbconfig=args.dbConfig[0])
+    conn.execute(delete_hotspot_tables_when_existing)
     conn.execute(create_hotpots)
     conn.execute(create_hotpots_drukteindex)
 
