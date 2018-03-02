@@ -249,6 +249,56 @@ class Process_gvb_buurt(Process):
         self.data = gvb_buurt.groupby(['vollcode', 'weekday', 'hour'])['incoming'].mean().reset_index()
 
 ##############################################################################
+class Process_alpha_locations_expected(Process):
+    """
+    This class implements all data importing and pre-processing steps for the
+    Alpha datasource. This class only looks at the Alpha data dump file in the
+    objectstore (which is imported on a daily basis from Quantillion).
+    """
+
+    def __init__(self, dbconfig):
+        super().__init__(dbconfig)
+        self.name = 'alpha_locations_expected'
+        self.import_data(['alpha_locations_expected'],
+                         ['name', 'vollcode', 'timestamp', 'historical', 'stadsdeel_code'])
+        self.dataset_specific()
+        self.rename({'expected': 'alpha_week'})
+
+
+    def dataset_specific(self):
+        area_mapping = self.data[['vollcode', 'stadsdeel_code']].drop_duplicates()
+
+        # historical weekpatroon
+        # first calculate the average weekpatroon per location
+        google_week_location = self.data.groupby([
+            'weekday', 'hour', 'vollcode', 'name'])['historical'].mean().reset_index()
+        google_week_location = google_week_location.merge(area_mapping, on='vollcode')
+
+        # and then calculate the average weekpatroon per vollcode
+        google_week_vollcode = google_week_location.groupby([
+            'vollcode', 'weekday', 'hour'])['historical'].mean().reset_index()
+
+        # also calculate the average weekpatroon per stadsdeel
+        google_week_stadsdeel = google_week_location.groupby([
+            'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
+
+        # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
+        # in case of sparse data, take the stadsdeelcode aggregation
+        minimal_hours = 98
+        cnt = google_week_vollcode.vollcode.value_counts()
+        sparse_vollcodes = cnt[cnt < minimal_hours].index.tolist()
+
+        # first take the vollcode aggregation for vollcodes that have enough data
+        google_week_vollcode = google_week_vollcode[~google_week_vollcode.vollcode.isin(sparse_vollcodes)]
+
+        # then take the staddeelcode aggregation for vollcodes for which data is sparse
+        google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeel_code')
+        google_week_stadsdeel.drop('stadsdeel_code', axis=1, inplace=True)
+        google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_vollcodes)]
+
+        self.data = pd.concat([google_week_vollcode, google_week_stadsdeel])
+
+##############################################################################
 class Process_alpha_historical(Process):
     """This class implements all data importing and pre-processing steps for the alpha datasource."""
 
