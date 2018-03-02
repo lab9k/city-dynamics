@@ -199,9 +199,9 @@ def main():
 
     insert into datasets_hotspots (
     index, 
-    "Hotspot", 
-    "Latitude", 
-    "Longitude"
+    hotspot, 
+    lat, 
+    lon
     )
     select index, "Hotspot", "lat", "lon" from hotspots;
 
