@@ -22,7 +22,7 @@ class BrowseDatasetsTestCase(APITestCase):
         stamp = datetime(2017, 1, 1, 1, 1, tzinfo=timezone.utc)
         one_hour = timedelta(seconds=3600)
 
-        for i in range(1001):
+        for _i in range(1001):
             factories.DrukteindexFactory(
                 timestamp=stamp,
             )
@@ -79,12 +79,11 @@ class BrowseDatasetsTestCase(APITestCase):
     def test_druktecijfers_in_hotspots(self):
         url = f"citydynamics/hotspots/{self.h.index}"
         response = self.client.get('/{}/'.format(url))
-        
+
         self.assertIn(
             'druktecijfers', response.data, 'Missing druktecijfers attribute in {}'.format(url))
 
         url = "/citydynamics/hotspots/"
         response = self.client.get(url)
-        
         self.assertIn(
             'druktecijfers', response.data['results'][0], 'Missing druktecijfers attribute in {}'.format(url))
