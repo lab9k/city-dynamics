@@ -125,6 +125,51 @@ def run():
         visit_duration = fix_quotes(visit_duration)
         types = fix_quotes(types)
 
+        # HOTFIX TO REMOVE DATA DUPLICATES
+        # TODO: Remove hotfix when Quantillion API scraper is debugged.
+        intervals = {}
+
+        # Loop over all expected hour intervals for each location and scrape day
+        for interval in raw.data[i]['Expected']:
+
+            # Truncate time interval to first hour of the interval
+            time_interval = interval['TimeInterval']
+            # hour = interval['TimeInterval'][0:2]
+            hour = time_interval[0:2]
+            hour = int(re.sub("[^0-9]", "", hour))
+            # ampm = interval['TimeInterval'][1:4]
+            ampm = time_interval[1:4]
+            ampm = re.sub('[^a-zA-Z]+', '', ampm)
+            if ampm == 'pm':
+                if hour == 12:
+                    pass
+                else:
+                    hour += 12
+
+            # Ignore duplicate time intervals (they have the identical expected values)
+            if time_interval in intervals.keys():
+                pass
+            else:
+                # Get the expected crowdedness value for this hour (relative value)
+                intervals[hour] = interval['ExpectedValue']
+
+        # Write deduped data to database
+        for hour, expected in intervals.items():
+
+            # Create sql query to write data to database
+            row_sql = create_row_sql(id_counter, place_id, name, url, weekday, hour, expected,
+                                     lat, lon, address, location_type, visit_duration, types, category)
+
+            # Write data to database
+            conn.execute(row_sql)
+
+            # Update id counter so all rows have a unique id
+            id_counter += 1
+
+
+        '''
+        # TODO: REINSTATE THE CODE SEGMENT BELOW WHEN HOTFIX ABOVE IS NOT NEEDED ANYMORE.
+        
         # Loop over all expected hour intervals for each location and scrape day
         for interval in raw.data[i]['Expected']:
 
@@ -141,7 +186,7 @@ def run():
 
             # Get the expected crowdedness value for this hour (relative value)
             expected = interval['ExpectedValue']
-
+        
             # Create sql query to write data to database
             row_sql = create_row_sql(id_counter, place_id, name, url, weekday, hour, expected,
                                      lat, lon, address, location_type, visit_duration, types, category)
@@ -151,6 +196,7 @@ def run():
 
             # Update id counter so all rows have a unique id
             id_counter += 1
+        '''
 
     # TODO: Create generieke module "importer/add_areas.py", and use this
     # TODO: to replace the code below (as well as code in "importer/load_data.py").
