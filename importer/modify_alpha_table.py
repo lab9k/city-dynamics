@@ -149,29 +149,29 @@ def run():
             # Update id counter so all rows have a unique id
             id_counter += 1
 
-    # add vollcode and stadsdeelcode
-    """
+    # TODO: Create generieke module "importer/add_areas.py", and use this
+    # TODO: to replace the code below (as well as code in "importer/load_data.py").
+    # add vollcode and stadsdeel_code
+    add_vollcode_stadsdeel_code = """
     ALTER TABLE alpha_locations_expected
     DROP COLUMN IF EXISTS geom;
     ALTER TABLE alpha_locations_expected
     ADD COLUMN geom geometry;
     UPDATE alpha_locations_expected
     SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
-
     alter table alpha_locations_expected
     add column vollcode varchar;
     UPDATE alpha_locations_expected
     SET vollcode = buurtcombinatie.vollcode
     FROM buurtcombinatie
     WHERE st_intersects(alpha_locations_expected.geom, buurtcombinatie.wkb_geometry);
-
     alter table alpha_locations_expected
-    add column stadsdeelcode varchar;
+    add column stadsdeel_code varchar;
     UPDATE alpha_locations_expected
-    SET stadsdeelcode = stadsdeel.code
+    SET stadsdeel_code = stadsdeel.code
     FROM stadsdeel
     WHERE st_intersects(alpha_locations_expected.geom, stadsdeel.wkb_geometry);
-      """
+    """
 
     log.debug("..done")
 
