@@ -128,7 +128,7 @@ def linear_model(drukte):
     drukte.normalize_acreage('gvb_buurt')
 
     # Normalize Alpha data to range 0-1 (not sure this is a good choice)
-    drukte.normalize('alpha_week')
+    drukte.normalize('alpha')
 
     # Mean gvb
     drukte.data['gvb'] = drukte.data[['gvb_buurt', 'gvb_stad']].mean(axis=1)
@@ -140,7 +140,7 @@ def linear_model(drukte):
     # Make sure the sum of the weights != 0
     linear_weigths = {'verblijvers_ha_2016': 1,
                       'gvb': 8,
-                      'alpha_week': 2}
+                      'alpha': 2}
 
     lw_normalize = sum(linear_weigths.values())
 
@@ -175,7 +175,7 @@ def pipeline_model(drukte):
     # base_list = {'verblijvers_ha_2016': 2, 'gvb_buurt': 8, 'gvb_stad': 1}
 
     # Modification mappings defining what flex is used for each dataset
-    mod_list = {'verblijvers_ha_2016': 'alpha_week'}
+    mod_list = {'verblijvers_ha_2016': 'alpha'}
 
     # We assume a value of 1 in the Alpha dataset (the maximum value) implies that
     # the base value should be multiplied/flexed with the factor given below.
