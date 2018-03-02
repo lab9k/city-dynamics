@@ -260,9 +260,9 @@ class Process_alpha_locations_expected(Process):
         super().__init__(dbconfig)
         self.name = 'alpha_locations_expected'
         self.import_data(['alpha_locations_expected'],
-                         ['name', 'vollcode', 'timestamp', 'historical', 'stadsdeel_code'])
+                         ['name', 'weekday', 'hour', 'expected', 'vollcode', 'stadsdeel_code'])
         self.dataset_specific()
-        self.rename({'expected': 'alpha_week'})
+        self.rename({'expected': 'alpha'})
 
 
     def dataset_specific(self):
@@ -271,16 +271,16 @@ class Process_alpha_locations_expected(Process):
         # historical weekpatroon
         # first calculate the average weekpatroon per location
         google_week_location = self.data.groupby([
-            'weekday', 'hour', 'vollcode', 'name'])['historical'].mean().reset_index()
+            'weekday', 'hour', 'vollcode', 'name'])['expected'].mean().reset_index()
         google_week_location = google_week_location.merge(area_mapping, on='vollcode')
 
         # and then calculate the average weekpatroon per vollcode
         google_week_vollcode = google_week_location.groupby([
-            'vollcode', 'weekday', 'hour'])['historical'].mean().reset_index()
+            'vollcode', 'weekday', 'hour'])['expected'].mean().reset_index()
 
         # also calculate the average weekpatroon per stadsdeel
         google_week_stadsdeel = google_week_location.groupby([
-            'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
+            'stadsdeel_code', 'weekday', 'hour'])['expected'].mean().reset_index()
 
         # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
         # in case of sparse data, take the stadsdeelcode aggregation
@@ -414,6 +414,7 @@ class Process_drukte(Process):
         gvb_bc = Process_gvb_buurt(dbconfig)
         alp_hist = Process_alpha_historical(dbconfig)
         alp_live = Process_alpha_live(dbconfig)
+        alp = Process_alpha_locations_expected(dbconfig)
 
         # initialize drukte dataframe
         start = datetime.datetime(2018, 2, 12, 0, 0)  # Start of a week: Monday at midnight
@@ -424,6 +425,11 @@ class Process_drukte(Process):
         cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
         self.data = pd.merge(
             self.data, alp_hist.data[cols],
+            on=['weekday', 'hour', 'vollcode'], how='left')
+
+        cols = ['vollcode', 'weekday', 'hour', 'alpha']
+        self.data = pd.merge(
+            self.data, alp.data[cols],
             on=['weekday', 'hour', 'vollcode'], how='left')
 
         self.data = pd.merge(
