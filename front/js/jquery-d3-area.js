@@ -10,6 +10,10 @@
 			// set the dimensions and margins of the graph
 			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
 			graph.width = graph.container.width() - graph.margin.left - graph.margin.right;
+			if(graph.width > 360)
+			{
+				graph.width = graph.width - 16;
+			}
 			graph.height = graph.container.height() - graph.margin.top - graph.margin.bottom;
 
 			// set the ranges
@@ -46,6 +50,7 @@
 			}));
 			y.domain([0, 100]);
 
+
 			// Add the valueline path.
 			graph.svg.append("path")
 				.datum(graph.data)
@@ -80,26 +85,29 @@
 				.attr("y2",graph.height)
 				.attr("style",'stroke:rgb(255,255,255);stroke-width:2');
 
-			graph.svg.append("text")
-				.attr("x", '10px')
-				.attr('y','100%')
-				.attr("dy", "-30px")
-				.attr("text-anchor", "start")
-				.attr("fill",'#fff')
-				.attr("font-size",'12px')
-				.text('Rustig');
+			// graph.svg.append("text")
+			// 	.attr("x", '10px')
+			// 	.attr('y','100%')
+			// 	.attr("dy", "-30px")
+			// 	.attr("text-anchor", "start")
+			// 	.attr("fill",'#fff')
+			// 	.attr("font-size",'12px')
+			// 	.text('Rustig');
+			//
+			// graph.svg.append("text")
+			// 	.attr("x", '10px')
+			// 	.attr('y','0')
+			// 	.attr("dy", "20px")
+			// 	.attr("text-anchor", "start")
+			// 	.attr("fill",'#fff')
+			// 	.attr("font-size",'12px')
+			// 	.text('Druk');
 
-			graph.svg.append("text")
-				.attr("x", '10px')
-				.attr('y','0')
-				.attr("dy", "20px")
-				.attr("text-anchor", "start")
-				.attr("fill",'#fff')
-				.attr("font-size",'12px')
-				.text('Druk');
+			//add r altime
+			graph.realtime_bar = graph.svg.append("rect");
 
 
-			graph.update = function(newData){
+			graph.update = function(newData,realtime){
 
 				graph.svg.selectAll('path.area')
 					.datum(graph.data)
@@ -124,6 +132,25 @@
 							return graph.topline( interpolator( t ) );
 						}
 					});
+
+				graph.realtime_bar.attr("height",0);
+
+				if(realtime>0)
+				{
+
+					var hours = getHourDigit();
+
+					graph.realtime_bar
+						.attr("height", (realtime * graph.height))
+						.attr('width', (100/18)+'%')
+						.attr('y', graph.height - (realtime*100))
+						.attr('x', (100/23*hours)+'%')
+						.attr('rx', 5)
+						.attr('ry', 5)
+						.attr("fill", "#dddddd")
+						.attr("class", "realtime_bar");
+				}
+
 			}
 
 			graph.startCount = function(){
