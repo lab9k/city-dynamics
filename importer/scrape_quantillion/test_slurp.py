@@ -2,13 +2,11 @@
 Some tests.
 """
 
-import os
 import json
 import unittest
 from unittest import mock
 import slurp_api
 import models
-import settings
 from settings import BASE_DIR
 
 
@@ -18,7 +16,6 @@ transaction = []
 connection = []
 engine = []
 session = []
-
 
 
 def setUpModule():
@@ -72,6 +69,7 @@ class TestDBWriting(unittest.TestCase):
 
         # slurp_api.get_locations('test', 'realtime')
         slurp_api.run_workers('realtime', workers=1)
+
         count = session.query(models.GoogleRawLocationsRealtime).count()
 
         self.assertEqual(count, 1)
@@ -79,20 +77,3 @@ class TestDBWriting(unittest.TestCase):
         slurp_api.run_workers('realtime', workers=1)
         count = session.query(models.GoogleRawLocationsRealtime).count()
         self.assertEqual(count, 1)
-
-    #@mock.patch('slurp_api.get_the_json')
-    #def test_realtime_locations_current(self, get_json_mock):
-
-    #    with open(FIX_DIR + '/fixtures/realtime.json') as mockjson:
-    #        test_json = json.loads(mockjson.read())
-
-    #    get_json_mock.return_value = test_json
-
-    #    # slurp_api.get_locations('test', 'realtime')
-    #    slurp_api.run_workers('realtime/current', workers=1)
-    #    count = session.query(models.GoogleRawLocationsRealtime).count()
-    #    self.assertEqual(count, 1)
-    #    # make sure we do not make duplicates
-    #    slurp_api.run_workers('realtime/current', workers=1)
-    #    count = session.query(models.GoogleRawLocationsRealtime).count()
-    #    self.assertEqual(count, 1)

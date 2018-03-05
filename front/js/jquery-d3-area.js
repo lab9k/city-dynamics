@@ -80,6 +80,24 @@
 				.attr("y2",graph.height)
 				.attr("style",'stroke:rgb(255,255,255);stroke-width:2');
 
+			graph.svg.append("text")
+				.attr("x", '10px')
+				.attr('y','100%')
+				.attr("dy", "-30px")
+				.attr("text-anchor", "start")
+				.attr("fill",'#fff')
+				.attr("font-size",'12px')
+				.text('Rustig');
+
+			graph.svg.append("text")
+				.attr("x", '10px')
+				.attr('y','0')
+				.attr("dy", "20px")
+				.attr("text-anchor", "start")
+				.attr("fill",'#fff')
+				.attr("font-size",'12px')
+				.text('Druk');
+
 
 			graph.update = function(newData){
 
@@ -168,6 +186,18 @@
 
 
 			}
+			graph.stop = function(){
+				// stop hotspots animation
+				stopAnimation();
+
+				console.log('pause');
+				graph.lineGroup
+					.attr('state','pause')
+					.transition()
+					.duration( 0 );
+
+
+			}
 
 
 
@@ -175,6 +205,8 @@
 			// export update function
 			graph.container[0].update = graph.update;
 			graph.container[0].startCount = graph.startCount;
+			graph.container[0].stopResumeCount = graph.stopResumeCount;
+			graph.container[0].stop = graph.stop;
 		});
 		// return
 		return this;

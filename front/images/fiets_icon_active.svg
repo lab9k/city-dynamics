@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="35px" height="40px" viewBox="0 0 35 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>OV fiets Icon</title>
+    <title>Icon OV fiets - selected - desktop</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="OV-fiets-Icon">
-            <g transform="translate(5.000000, 11.000000)">
-                <g id="Fiets" transform="translate(1.000000, 0.000000)" stroke="#4a4a4a" stroke-width="0.5">
-                    <path d="M15,4 L18,4" id="Line-4" stroke-linecap="square"></path>
-                    <path d="M16.5,4.5 L16,6" id="Line-3" stroke-linecap="square"></path>
-                    <polygon id="Triangle-2" transform="translate(10.750000, 10.000000) scale(1, -1) translate(-10.750000, -10.000000) " points="12.1818182 6 16 14 5.5 14"></polygon>
-                    <path d="M4,14 L7,3" id="Line" stroke-linecap="square"></path>
-                    <path d="M7,3 L9,3" id="Line-2" stroke-linecap="square"></path>
-                    <polygon id="Triangle" points="16 6 20 14 12 14"></polygon>
-                    <circle id="Oval-3" cx="4" cy="14" r="4"></circle>
-                    <circle id="Oval-3" cx="20" cy="14" r="4"></circle>
+        <g id="Icon-OV-fiets---selected---desktop">
+            <rect id="Rectangle-45" fill="#F9F9F9" x="0" y="0" width="40" height="40"></rect>
+            <g id="OV-fiets-Icon" transform="translate(2.000000, 4.000000)">
+                <g id="Fiets" transform="translate(5.141975, 11.956790)" stroke="#4A4A4A">
+                    <path d="M17.099767,3.93697066 L20.6376499,3.93697066" id="Line-4" stroke-linecap="square"></path>
+                    <path d="M19.0313697,4.09766334 L18.8687085,5.6242438" id="Line-3" stroke-linecap="square"></path>
+                    <path d="M7.31975759,5.91884705 L7.80774143,5.91884705" id="Line-5" stroke-linecap="square"></path>
+                    <path d="M14.8102179,5.65381454 L17.5476466,11.6219231 L18.9562627,14.3562901 L18.9562627,14.3562901 C18.981555,14.4053867 18.9622577,14.4656909 18.913161,14.4909832 C18.8989981,14.4982793 18.883297,14.5020858 18.8673653,14.5020858 L7.80774143,14.5020858 L14.6401089,5.63447226 L14.6401089,5.63447226 C14.6738167,5.59072339 14.7366078,5.58258355 14.7803567,5.61629142 C14.7932065,5.62619202 14.8034549,5.63906999 14.8102179,5.65381454 Z" id="Triangle-2" transform="translate(13.377591, 10.063165) scale(1, -1) translate(-13.377591, -10.063165) "></path>
+                    <path d="M4.71717711,14.6230339 L7.66541281,1.68727314" id="Line" stroke-linecap="square"></path>
+                    <path d="M7.80774143,1.68727314 L11.2032956,1.68727314" id="Line-2" stroke-linecap="square"></path>
+                    <path d="M18.9632636,5.80462332 L23.5858856,14.6230339 L15.9204728,14.6230339 L14.8970635,14.6230339 L14.8970635,14.6230339 C14.8418351,14.6230339 14.7970635,14.5782624 14.7970635,14.5230339 C14.7970635,14.5086435 14.8001693,14.4944227 14.8061689,14.4813427 L18.7838001,5.80936003 L18.7838001,5.80936003 C18.8068255,5.75916029 18.8661862,5.73713115 18.916386,5.76015657 C18.9365018,5.76938323 18.9529887,5.78502219 18.9632636,5.80462332 Z" id="Triangle"></path>
+                    <ellipse id="Oval-3" cx="4.71717711" cy="14.6230339" rx="4.71717711" ry="4.49939504"></ellipse>
+                    <ellipse id="Oval-3" cx="23.5858856" cy="14.6230339" rx="4.71717711" ry="4.49939504"></ellipse>
                 </g>
-                <text id="OV" font-family="AvenirNext-Medium, Avenir Next" font-size="4" font-weight="400" fill="#EC0000">
-                    <tspan x="0.542" y="6">OV</tspan>
+                <text id="OV" font-family="AvenirNext-DemiBold, Avenir Next" font-size="10" font-weight="500" fill="#4A4A4A">
+                    <tspan x="2.59166667" y="10">OV</tspan>
                 </text>
             </g>
         </g>

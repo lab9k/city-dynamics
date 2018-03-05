@@ -13,13 +13,15 @@ username: gemeenteAmsterdam
 """
 
 import gevent
+import datetime
 import grequests
 from settings import LIMIT
 import os
 import models
 import logging
 import argparse
-import datetime
+import settings
+import os.path
 
 from gevent.queue import JoinableQueue
 from dateutil import parser
@@ -52,17 +54,24 @@ ENDPOINTS = [
 ENDPOINT_MODEL = {
     'realtime': models.GoogleRawLocationsRealtime,
     'expected': models.GoogleRawLocationsExpected,
-    # 'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
-    # 'expected/current': models.GoogleRawLocationsExpectedCurrent,
+    'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
+    'expected/current': models.GoogleRawLocationsExpectedCurrent,
 }
 
-PARAMS = {'limit': LIMIT}
+ENDPOINT_URL = {
+    'realtime': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
+    'expected': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
+    'realtime/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
+    'expected/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
+}
+
 
 api_config = {
     'password': os.getenv('QUANTILLION_PASSWORD'),
     'hosts': {
         'production': 'http://apis.quantillion.io',
-        'acceptance': 'http://apis.development.quantillion.io',
+        'acceptance': 'http://apis.quantillion.io',
+        #'acceptance': 'http://apis.development.quantillion.io',
     },
     'port': 3001,
     'username': 'gemeenteAmsterdam',
@@ -84,7 +93,8 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
 
     host = api_config['hosts'][ENVIRONMENT]
 
-    url = f'{host}:{port}/gemeenteamsterdam/{endpoint}'
+    url = ENDPOINT_URL[endpoint]
+    url = url.format(host=host, port=port, endpoint=endpoint)
 
     async_r = grequests.get(url, params=params, auth=AUTH)
     gevent.spawn(async_r.send).join()
@@ -116,10 +126,7 @@ def add_locations_to_db(endpoint, json: list):
         log.error('No data recieved')
         return
 
-    db_model = models.GoogleRawLocationsRealtime
-
-    if endpoint == 'expected':
-        db_model = models.GoogleRawLocationsExpected
+    db_model = ENDPOINT_MODEL[endpoint]
 
     # make new session
     session = models.Session()
@@ -154,9 +161,10 @@ def delete_duplicates(db_model):
     """
     # make new session
     session = models.Session()
+    log.debug('Count before %d', session.query(db_model).count())
+
     tablename = db_model.__table__.name
     session.execute(f"""
-
 DELETE FROM {tablename} a USING (
      SELECT MIN(ctid) AS ctid, place_id, scraped_at
         FROM {tablename}
@@ -168,48 +176,77 @@ DELETE FROM {tablename} a USING (
     """)
     session.commit()
 
-
-def get_params():
-
-    yield PARAMS
-
-    while True:
-        PARAMS['skip'] = PARAMS.get('skip', LIMIT)
-        yield PARAMS
+    log.debug('Count after %d', session.query(db_model).count())
 
 
-def get_dates():
-    """
-    Generate dates to pick up 4 months in the past
-    """
-    # now = datetime.now()
-    pass
+def get_previous_days():
+
+    now = datetime.datetime.now()
+
+    day = datetime.timedelta(days=1)
+
+    today = now.date()
+    tomorrow = (now + day).date()
+
+    yield (str(today), str(tomorrow))
+
+    # lets go 50 days in the past
+    for i in range(1, settings.DAYS):
+        past_time = now - i * day
+        past_date1 = past_time.date()
+        past_date2 = (past_time + day).date()
+        yield (str(past_date1), str(past_date2))
 
 
-def get_locations(work_id, endpoint):
+def get_locations(work_id, endpoint, gen_dates):
     """
     Get google locations information with 'real-time' data
     """
-    gen_params = get_params()
+    params = {}
+
+    # generate past dates (global)
+    for date1, date2 in gen_dates:
+        # generate limit parameters
+
+        params['startDate'] = date1
+        params['endDate'] = date2
+
+        do_limit_requests(work_id, endpoint, gen_dates, params=params)
+
+    log.debug(f'Done {work_id}')
+
+
+def do_limit_requests(work_id, endpoint, _gen_dates, params={}):
+    """
+    Do batch request of LIMIT each
+    """
+
+    params.update({'limit': LIMIT, 'skip': 0})
 
     while True:
-        log.debug(f'Next for {work_id}')
-        params = next(gen_params)
-        log.debug(params)
-        json_response = get_the_json(endpoint, params)
+        log.debug('%d %s', work_id, params)
 
+        json_response = get_the_json(endpoint, params)
         add_locations_to_db(endpoint, json_response)
 
         if len(json_response) < LIMIT:
-            # We are done
-            STATUS['done'] = True
+            # We are done with date
             break
 
-        # generate next step
-        if STATUS.get('done'):
-            break
+        params['skip'] = params.get('skip', 0) + LIMIT
 
-    log.debug(f'Done {work_id}')
+    log.debug(f'Done {params}')
+
+
+def clear_current_table(endpoint):
+    """
+    Current data only contains latest and greatest
+    """
+    # make new session
+    session = models.Session()
+    db_model = ENDPOINT_MODEL[endpoint]
+    session.query(db_model).delete()
+    session.commit()
 
 
 def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
@@ -221,13 +258,21 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     # reset job status
     STATUS['done'] = False
 
+    gen_dates = get_previous_days()
+
+    if 'current' in endpoint:
+        # get current data
+        clear_current_table(endpoint)
+        parralleltask = do_limit_requests
+        workers = 1
+
     for i in range(workers):
         jobs.append(
-            gevent.spawn(parralleltask, i, endpoint)
+            gevent.spawn(parralleltask, i, endpoint, gen_dates)
         )
 
     with gevent.Timeout(3600, False):
-        # waint untill all search tasks are done
+        # wait untill all tasks are done
         # but no longer than an hour
         gevent.joinall(jobs)
 
@@ -238,13 +283,18 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
     delete_duplicates(ENDPOINT_MODEL[endpoint])
 
 
-def main(endpoint):
+def main(args):
+
+    endpoint = args.endpoint[0]
     engine = models.make_engine(section='docker')
     # models.Base.metadata.create_all(engine)
     models.set_engine(engine)
 
-    # scrape the data!
-    run_workers(endpoint)
+    if args.dedupe:
+        delete_duplicates(ENDPOINT_MODEL[endpoint])
+    else:
+        # scrape the data!
+        run_workers(endpoint)
 
 
 if __name__ == '__main__':
@@ -253,11 +303,16 @@ if __name__ == '__main__':
     inputparser = argparse.ArgumentParser(desc)
     inputparser.add_argument(
         'endpoint', type=str,
-        default='realtime/current',
+        default='realtime',
         choices=ENDPOINTS,
         help="Provide Endpoint to scrape",
         nargs=1)
 
+    inputparser.add_argument(
+        '--dedupe',
+        action='store_true',
+        default=False,
+        help="Remove duplicates")
+
     args = inputparser.parse_args()
-    endpoint = args.endpoint[0]
-    main(endpoint)
+    main(args)

@@ -12,6 +12,10 @@ class BrowseDatasetsTestCase(APITestCase):
 
     datasets = [
         'citydynamics/drukteindex',
+        'citydynamics/recentmeasures',
+        'citydynamics/buurtcombinatie',
+        'citydynamics/realtime',
+        'citydynamics/hotspots',
     ]
 
     def setUp(self):
@@ -23,6 +27,8 @@ class BrowseDatasetsTestCase(APITestCase):
                 timestamp=stamp,
             )
             stamp = stamp + one_hour
+
+        self.h = factories.HotspotsFactory()
 
     def valid_html_response(self, url, response):
         """
@@ -61,10 +67,6 @@ class BrowseDatasetsTestCase(APITestCase):
             self.assertIn(
                 'count', response.data, 'No count attribute in {}'.format(url))
 
-            # self.assertNotEqual(
-            #    response.data['count'],
-            #    0, 'Wrong result count for {}'.format(url))
-
     def test_lists_html(self):
         for url in self.datasets:
             response = self.client.get('/{}/?format=api'.format(url))
@@ -74,6 +76,15 @@ class BrowseDatasetsTestCase(APITestCase):
             self.assertIn(
                 'count', response.data, 'No count attribute in {}'.format(url))
 
-            # self.assertNotEqual(
-            #    response.data['count'],
-            #    0, 'Wrong result count for {}'.format(url))
+    def test_druktecijfers_in_hotspots(self):
+        url = f"citydynamics/hotspots/{self.h.index}"
+        response = self.client.get('/{}/'.format(url))
+        
+        self.assertIn(
+            'druktecijfers', response.data, 'Missing druktecijfers attribute in {}'.format(url))
+
+        url = "/citydynamics/hotspots/"
+        response = self.client.get(url)
+        
+        self.assertIn(
+            'druktecijfers', response.data['results'][0], 'Missing druktecijfers attribute in {}'.format(url))

@@ -3,6 +3,8 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from citydynamics.datasets.models import Drukteindex, Buurtcombinatie
 from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
+from citydynamics.datasets.models import RealtimeGoogle
+import datetime
 
 
 class DrukteIndexSerializer(ModelSerializer):
@@ -37,15 +39,16 @@ class CijferSerializer(ModelSerializer):
         model = HotspotsDrukteIndex
         fields = (
             'h',
-            'd'
+            'd',
         )
 
 
 class HotspotIndexSerializer(ModelSerializer):
 
-    druktecijfers = CijferSerializer(many=True, read_only=True)
+    # druktecijfers = CijferSerializer(many=True, read_only=True)
 
     coordinates = SerializerMethodField()
+    druktecijfers = SerializerMethodField()
 
     def get_coordinates(self, obj):
         return [obj.latitude, obj.longitude]
@@ -56,7 +59,25 @@ class HotspotIndexSerializer(ModelSerializer):
             'index',
             'hotspot',
             'coordinates',
-            'druktecijfers'
+            'druktecijfers',
+        )
+
+    def get_druktecijfers(self, obj):
+        weekday = datetime.datetime.today().weekday()
+        cijfers = obj.druktecijfers.filter(weekday=weekday)
+
+        return CijferSerializer(cijfers, many=True).data
+
+
+class RealtimeGoogleSerializer(ModelSerializer):
+
+    class Meta:
+        model = RealtimeGoogle
+        fields = (
+            'scraped_at',
+            'name',
+            'place_id',
+            'data'
         )
 
 

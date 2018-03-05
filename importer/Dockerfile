@@ -13,6 +13,8 @@ RUN pip install -r /requirements.txt
 # Copy all from current directory to /app directory in container
 COPY . /app/
 
+COPY ./deploy /deploy/
+
 
 WORKDIR /app/
 

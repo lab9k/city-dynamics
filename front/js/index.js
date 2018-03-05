@@ -14,6 +14,7 @@ var hotspot_array = [];
 // states
 var vollcode;
 var mobile = false;
+var active_layer = 'hotspots';
 
 // global vars
 var marker; // used by search
@@ -71,8 +72,8 @@ $(document).ready(function(){
 	map = L.map('mapid', {zoomControl: false}).setView(map_center, zoom);
 
 	L.tileLayer(geomap2, {
-		minZoom: 12,
-		maxZoom: 16
+		minZoom: 10,
+		maxZoom: 18
 	}).addTo(map);
 
 	L.control.zoom({
@@ -80,11 +81,11 @@ $(document).ready(function(){
 	}).addTo(map);
 
 	var dindexJsonUrl = dindex_api + getNowDate();
-	console.log(dindexJsonUrl);
+	//console.log(dindexJsonUrl);
 
 	// district map init
 	$.getJSON(dindexJsonUrl).done(function (dindexJson) {
-		console.log(dindexJson);
+		//console.log(dindexJson);
 
 		var calc_index = 0;
 		var count_index = 0;
@@ -129,10 +130,10 @@ $(document).ready(function(){
 
 	// hotspots map init
 	var hotspotsJsonUrl = dindex_hotspots_api+'&timestamp='+ getNowDate();
-	console.log(hotspotsJsonUrl);
+	//console.log(hotspotsJsonUrl);
 
 	$.getJSON(hotspotsJsonUrl).done(function(hotspotsJson) {
-		console.log(hotspotsJson);
+		//console.log(hotspotsJson);
 
 		var hotspot_count = 0;
 		$.each(hotspotsJson.results, function (key, value) {
@@ -162,15 +163,10 @@ $(document).ready(function(){
 			return a.index - b.index;
 		});
 
-		console.log(hotspot_count);
-		console.log(amsterdam.druktecijfers);
 		// used for ams average todo: calc average in backend
 		$.each(amsterdam.druktecijfers, function (key, value) {
 			amsterdam.druktecijfers[this.h].d = amsterdam.druktecijfers[this.h].d / hotspot_count;
 		});
-
-		//console.log(hotspot_array);
-		console.log(amsterdam.druktecijfers);
 
 		circles_layer = L.layerGroup();
 		$.each(hotspot_array, function (key, value) {
@@ -190,7 +186,7 @@ $(document).ready(function(){
 			$(circles[key]._path).attr('stroke' , '#4a4a4a');
 			$(circles[key]._path).attr('hotspot' , this.index);
 			$(circles[key]._path).addClass('hotspot_'+ this.index);
-			circles[key].bindPopup("<b>" + this.hotspot + "</b>", {autoClose: false});
+			circles[key].bindPopup("<h3>" + this.hotspot + "</h3>", {autoClose: false});
 			circles[key].on("click", function(e){
 				var clickedCircle = e.target;
 
@@ -213,6 +209,7 @@ $(document).ready(function(){
 	// init auto complete
 	$('#loc_i').autocomplete({
 		source: function (request, response) {
+			// console.log(request.term);
 			$.getJSON("https://api.data.amsterdam.nl/atlas/typeahead/bag/?q=" + request.term).done( function (data) {
 				response($.map(data[0].content, function (value, key) {
 					return {
@@ -227,6 +224,9 @@ $(document).ready(function(){
 		select: function(event, ui) {
 
 			event.preventDefault();
+
+			console.log(ui.item.value);
+
 			$('#loc_i').val(ui.item.label);
 
 			$.getJSON("https://api.data.amsterdam.nl/" + ui.item.value).done( function (data) {
@@ -308,6 +308,12 @@ $(document).ready(function(){
 		$(this).parent().fadeOut();
 	});
 
+	$( document).on('click', ".graphbar_title i",function () {
+		map.closePopup();
+		$('.graphbar_title h2').text(amsterdam.hotspot);
+		updateLineGraph('ams');
+	});
+
 	$( document).on('click', ".mapswitch a",function () {
 
 		if($(this).hasClass('active'))
@@ -317,7 +323,17 @@ $(document).ready(function(){
 			// show district
 			geojson.addTo(map);
 			// set latlong & zoom
-			map.setView([52.36, 4.95], 12);
+			if(mobile)
+			{
+				map.setView([52.368, 4.897], 11);
+			}
+			else
+			{
+				map.setView([52.36, 4.95], 12);
+			}
+
+			active_layer = 'buurten';
+
 
 			$('.mapswitch a span').html('Hotspots');
 
@@ -332,6 +348,8 @@ $(document).ready(function(){
 			// set latlong & zoom
 			map.setView([52.368, 4.897], 13.5);
 
+			active_layer = 'hotspots';
+
 			$('.mapswitch a span').html('Buurten');
 
 			$(this).addClass('active');
@@ -341,12 +359,15 @@ $(document).ready(function(){
 	$( document).on('click', ".fiets_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('Toont de beschikbaarheid van de OV fietsen over de verschillende locaties.', 6000);
 			showOvFiets();
 			$(this).addClass('active');
 		}
@@ -355,12 +376,15 @@ $(document).ready(function(){
 	$( document).on('click', ".cam_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('Toont de verschillende webcams in en rond de stad.', 6000);
 			showFeeds();
 			$(this).addClass('active');
 		}
@@ -369,12 +393,15 @@ $(document).ready(function(){
 	$( document).on('click', ".events_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('Toont de geplande evenementen van vandaag..', 6000);
 			showEvents();
 			$(this).addClass('active');
 		}
@@ -455,12 +482,15 @@ $(document).ready(function(){
 	$( document).on('click', ".park_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('Toont de capaciteit en het aantal beschikbare plekken in de parkeergarages.', 6000);
 			addParkLayer();
 			$(this).addClass('active');
 		}
@@ -469,6 +499,7 @@ $(document).ready(function(){
 	$( document).on('click', ".water_b",function () {
 		if($(this).hasClass('active'))
 		{
+			closeThemaDetails();
 			hideMarkers();
 			$(this).removeClass('active');
 		}
@@ -483,6 +514,11 @@ $(document).ready(function(){
 	$('.controls').on('click',function(){
 		map.setView([52.36, 4.95], 12);
 	});
+
+	// chrome control button style
+	if (navigator.appVersion.indexOf("Chrome/") != -1) {
+		$('.controls').addClass('chrome');
+	}
 
 });
 
@@ -564,7 +600,7 @@ function getLatLang(point) {
 function getColor(dindex)
 {
 	var a = '#50E6DB'; //50E6DB 63c6e6
-	var b = '#ff0000';
+	var b = '#DB322A';
 
 	var ah = parseInt(a.replace(/#/g, ''), 16),
 		ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
@@ -682,7 +718,18 @@ function updateLineGraph(hotspot)
 	// get proper data from json array
 	var data = [];
 
-	$.each(hotspot_array[hotspot].druktecijfers, function (key, value) {
+
+	if(hotspot=='ams')
+	{
+		var point_array = amsterdam.druktecijfers;
+	}
+	else
+	{
+		var point_array = hotspot_array[hotspot].druktecijfers;
+	}
+
+
+	$.each(point_array, function (key, value) {
 
 		var dataset = {};
 		dataset.y = Math.round(this.d * 100);
@@ -691,7 +738,21 @@ function updateLineGraph(hotspot)
 		data.push(dataset);
 	});
 
+	console.log(data);
+
 	areaGraph[0].update(data);
+}
+
+function setView()
+{
+	if(mobile)
+	{
+		map.setView([52.368, 4.897], 11);
+	}
+	else
+	{
+		map.setView([52.36, 4.95], 12);
+	}
 }
 
 
@@ -757,6 +818,45 @@ function getCurrentDateOnly()
 	return date.replace('/','-').replace('/','-');
 }
 
+function showInfo(content,duration)
+{
+	$('.info').html(content);
+
+	$('.info').show();
+
+	setTimeout(function(){$('.info').fadeOut()},duration)
+}
+
+function hideActiveLayer()
+{
+	areaGraph[0].stop();
+
+	switch(active_layer)
+	{
+		case 'hotspots':
+			$('path[hotspot]').hide();
+			break;
+		case 'buurten':
+			map.removeLayer(geojson);
+			break;
+	}
+}
+function showActiveLayer()
+{
+	areaGraph[0].stopResumeCount();
+
+	switch(active_layer)
+	{
+		case 'hotspots':
+			$('path[hotspot]').show();
+			break;
+		case 'buurten':
+			geojson.addTo(map);
+			break;
+	}
+}
+
+
 function openThemaDetails(show)
 {
 	// open detail
@@ -821,8 +921,12 @@ function resetThemeDetail()
 	}
 }
 
+
+
 function showFeeds()
 {
+	setView();
+
 	var feeds = new Array();
 
 	feeds[0] = {name:"Dam",url:"https://www.youtube.com/embed/6Pc-59pPXpY?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3732104", lon:"4.8914401"};
@@ -839,14 +943,14 @@ function showFeeds()
 	var camIcon = L.icon({
 		iconUrl: 'images/cam_marker.svg',
 
-		iconSize:     [35, 40],
-		iconAnchor:   [17.5, 40],
+		iconSize:     [35, 72],
+		iconAnchor:   [17.5, 72],
 		popupAnchor:  [0, -50]
 	});
 
 	$.each(feeds, function(key,value) {
 		var cam_marker = L.marker([this.lat,this.lon], {icon: camIcon,title:this.name,alt:this.url}).addTo(map).on('click', function(){showFeed(this.options.title,this.options.alt);});
-		cam_marker.bindPopup("<b>" + this.name + "</b>", {autoClose: false});
+		cam_marker.bindPopup("<h3>" + this.name + "</h3>", {autoClose: false});
 		markers.push(cam_marker);
 	});
 
@@ -896,7 +1000,7 @@ function removeThemeLayer()
 
 function addParkLayer()
 {
-
+	setView();
 	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
 	var parkJsonUrl = 'data/parkjson.json';
 
@@ -909,26 +1013,47 @@ function addParkLayer()
 
 function pointToLayerPark(feature, latlng) {
 
-	if(feature.properties.Name.includes("P+R"))
-	{
-		var parkIcon = L.icon({
-			iconUrl: 'images/park_marker_green.svg',
+	// if(feature.properties.Name.includes("P+R"))
+	// {
+	// 	var parkIcon = L.icon({
+	// 		iconUrl: 'images/park_marker_green.svg',
+	//
+	// 		iconSize:     [35, 40],
+	// 		iconAnchor:   [17.5, 40],
+	// 		popupAnchor:  [0, -50]
+	// 	});
+	// }
+	// else
+	// {
+	// 	var parkIcon = L.icon({
+	// 		iconUrl: 'images/park_marker.svg',
+	//
+	// 		iconSize:     [35, 40],
+	// 		iconAnchor:   [17.5, 40],
+	// 		popupAnchor:  [0, -50]
+	// 	});
+	// }
 
-			iconSize:     [35, 40],
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50]
-		});
-	}
-	else
+	var suffix = 'none';
+	var height = 64;
+	if(feature.properties.FreeSpaceShort<10)
 	{
-		var parkIcon = L.icon({
-			iconUrl: 'images/park_marker.svg',
-
-			iconSize:     [35, 40],
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50]
-		});
+		suffix = 'some';
+		height = 72;
 	}
+	if(feature.properties.FreeSpaceShort>10)
+	{
+		suffix = 'plenty';
+		height = 80;
+	}
+
+	var parkIcon = L.icon({
+		iconUrl: 'images/park_marker_'+suffix+'.svg',
+
+		iconSize:     [35, height],
+		iconAnchor:   [17.5, 40],
+		popupAnchor:  [0, -50]
+	});
 
 	var marker = L.marker(latlng, {icon: parkIcon});
 	var long ='';
@@ -967,6 +1092,8 @@ function onEachFeaturePark(feature, layer) {
 
 function showOvFiets()
 {
+	setView();
+
 	var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
 
 	$.getJSON(fietsJsonUrl).done(function(fietsJson){
@@ -974,13 +1101,7 @@ function showOvFiets()
 
 		var ams_locaties = ['ASB','RAI','ASA','ASDM','ASDZ','ASD','ASDL','ASS'];
 
-		var camIcon = L.icon({
-			iconUrl: 'images/fiets_marker.svg',
 
-			iconSize:     [35, 40],
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50]
-		});
 
 		$.each(fietsJson.locaties, function(key,value) {
 			if(ams_locaties.indexOf(this.stationCode)>=0)
@@ -988,11 +1109,39 @@ function showOvFiets()
 				//console.log(this.stationCode);
 				if(this.lat>0 && this.lng>0)
 				{
+					var suffix = 'none';
+					if(this.extra.rentalBikes<10)
+					{
+						suffix = 'some';
+					}
+					if(this.extra.rentalBikes>10)
+					{
+						suffix = 'plenty';
+					}
+
+					var fietsIcon = L.icon({
+						iconUrl: 'images/fiets_marker_'+suffix+'.svg',
+
+						iconSize:     [35, 72],
+						iconAnchor:   [17.5, 72],
+						popupAnchor:  [0, -50]
+					});
+
 					var marker_info = {};
 					marker_info.name = this.name;
 					marker_info.free = this.extra.rentalBikes;
-					var fiets_marker = L.marker([this.lat,this.lng], {icon: camIcon,title:this.description,alt:this.url}).addTo(map);
+					var fiets_marker = L.marker([this.lat,this.lng], {icon: fietsIcon,title:this.description,alt:this.url}).addTo(map);
 					fiets_marker.bindPopup("<h3>" + this.name + "</h3><br>Fietsen beschikbaar: " + this.extra.rentalBikes, {autoClose: false});
+					var classname = 'none';
+					if(this.extra.rentalBikes<10)
+					{
+						classname = 'some';
+					}
+					if(this.extra.rentalBikes>10)
+					{
+						classname = 'plenty';
+					}
+
 					markers.push(fiets_marker);
 				}
 			}
@@ -1001,7 +1150,7 @@ function showOvFiets()
 	});
 }
 
-function showEvents()
+function showEventsOld()
 {
 	var eventsJsonUrl = 'data/Evenementen.json';
 
@@ -1033,6 +1182,61 @@ function showEvents()
 					event_marker.bindPopup("<h3>" + this.title + "</h3><br>" + this.details.nl.shortdescription + '<br><a target="blank" href="' +  this.urls[0] + '">Website >></a>' , {autoClose: false});
 					markers.push(event_marker);
 				}
+			}
+
+		});
+
+	});
+}
+
+function showEvents()
+{
+	setView();
+	// var eventsJsonUrl = 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today';
+	var eventsJsonUrl = 'data/events.js';
+	console.log(eventsJsonUrl);
+	$.getJSON(eventsJsonUrl).done(function(eventsJson){
+
+		$.each(eventsJson, function(key,value) {
+
+			if(this.attending>100)
+			{
+				var radius = 10;
+				var dindex = 0;
+				var color = '#50E6DB';
+			}
+			if(this.attending>500)
+			{
+				var radius = 15;
+				var dindex = 0.6;
+				var color = '#F5A623';
+			}
+			if(this.attending>1000)
+			{
+				var radius = 20;
+				var dindex = 1;
+				var color = '#DB322A';
+			}
+
+			if(this.attending>100)
+			{
+				console.log(this);
+				markers[key] = L.circleMarker([this.lat,this.long], {
+					color: color,
+					fillColor: color,
+					fillOpacity: 1,
+					radius: (12),
+					name: this.location
+				});
+				markers[key].addTo(map);
+				$(markers[key]._path).attr('stroke-width' , 8);
+				$(markers[key]._path).attr('stroke-opacity' , 0.4);
+				$(markers[key]._path).attr('stroke' , color);
+				markers[key].bindPopup("<h3>" + this.location + ' - ' + this.date +'</h3><br><img src="'+this.img+'"><br><p>'+this.title+'</p><p>Bezoekers: '+this.attending+'</p>', {autoClose: false});
+				markers[key].on("click", function(e){
+					var clickedCircle = e.target;
+
+				});
 			}
 
 		});
@@ -1205,7 +1409,7 @@ function showGoogle()
 
 			});
 
-			event_marker.bindPopup("<b>" + this.name + "</b>", {autoClose: false});
+			event_marker.bindPopup("<h3>" + this.name + "</h3>", {autoClose: false});
 			markers.push(event_marker);
 		});
 
@@ -1226,7 +1430,7 @@ function showWater()
 	var latitude = '52.375389';
 	var longitude = '4.883740';
 	var event_marker = L.marker([latitude,longitude], {icon: waterIcon,title:title}).addTo(map);
-	event_marker.bindPopup("<b>"+title+"</b>", {autoClose: false});
+	event_marker.bindPopup("<h3>"+title+"</h3>", {autoClose: false});
 	markers.push(event_marker);
 
 	openThemaDetails('water_content');
