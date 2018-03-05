@@ -63,6 +63,8 @@ div {box-sizing: border-box;}
 .themas .google_b.active {background-image:url(../images/google_icon_active.svg);}
 .themas .events_b {background-image:url(../images/event_icon.svg);}
 .themas .events_b.active {background-image:url(../images/event_icon_active.svg);}
+.themas .traffic_b {background-image:url(../images/traffic_icon.svg);}
+.themas .traffic_b.active {background-image:url(../images/traffic_icon_active.svg);}
 .themas .park_b {background-image:url(../images/park_icon.svg);}
 .themas .park_b.active {background-image:url(../images/park_icon_active.svg);}
 .themas .water_b {background-image:url(../images/water_icon.svg);}
@@ -210,8 +212,8 @@ div {box-sizing: border-box;}
 	.themas {left:5px;width:40px;padding:5px;top:55px}
 	.themas_buttons li {width:30px;height :30px;line-height :30px;background-size: 30px 30px;}
 	.mapswitch {left:5px;bottom:5px;padding:5px;}
-	.mapswitch a {height :60px;width:60px;background:url(../images/choro_m.png);}
-	.mapswitch a.active {background:url(../images/bubble_m.png);}
+	.mapswitch a {height :60px;width:60px;background:url(../images/bubble_m.png);}
+	.mapswitch a.active {background:url(../images/choro_m.png);}
 	.m_more {right:5px;top:5px;display:block;position:absolute;width:40px;height :40px;z-index:500;background: #4a4a4a;border-radius:5px;padding:5px;}
 	.m_more a {display:block;width:30px;height :30px;line-height: 30px;text-align:center;color:#fff;}
 	.m_more.open {border-top-left-radius :0px; border-bottom-left-radius :0px;}

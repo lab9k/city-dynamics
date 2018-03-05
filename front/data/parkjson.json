@@ -3,6 +3,27 @@
   "features": [
     {
       "type": "Feature",
+      "Id": "02900c40-0e95-4369-b9c4-22b2233a3440",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          4.915205,
+          52.377864
+        ]
+      },
+      "properties": {
+        "Name": "CE-P28 PTA Touringcars",
+        "PubDate": "2018-03-05T10:47:42.342Z",
+        "Type": "parkinglocation",
+        "State": "warning",
+        "FreeSpaceShort": "512",
+        "FreeSpaceLong": "",
+        "ShortCapacity": "512",
+        "LongCapacity": ""
+      }
+    },
+    {
+      "type": "Feature",
       "Id": "900000118_parkinglocation",
       "geometry": {
         "type": "Point",
@@ -13,10 +34,10 @@
       },
       "properties": {
         "Name": "CE-P20 Oostpoort",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "120",
+        "FreeSpaceShort": "153",
         "FreeSpaceLong": "0",
         "ShortCapacity": "373",
         "LongCapacity": "0"
@@ -34,13 +55,13 @@
       },
       "properties": {
         "Name": "CE-P02 P Olympisch stadion",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "59",
-        "FreeSpaceLong": "58",
-        "ShortCapacity": "372",
-        "LongCapacity": "132"
+        "FreeSpaceShort": "195",
+        "FreeSpaceLong": "105",
+        "ShortCapacity": "374",
+        "LongCapacity": "180"
       }
     },
     {
@@ -55,10 +76,10 @@
       },
       "properties": {
         "Name": "CE-P16 P+R Zeeburg 1",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "0",
+        "FreeSpaceShort": "6",
         "FreeSpaceLong": "0",
         "ShortCapacity": "210",
         "LongCapacity": "0"
@@ -76,10 +97,10 @@
       },
       "properties": {
         "Name": "ZD-P3 VU campus",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "warning",
-        "FreeSpaceShort": "50",
+        "FreeSpaceShort": "45",
         "FreeSpaceLong": "",
         "ShortCapacity": "83",
         "LongCapacity": ""
@@ -97,11 +118,11 @@
       },
       "properties": {
         "Name": "ZO-P04 Villa ArenA",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "314",
-        "FreeSpaceLong": "307",
+        "FreeSpaceShort": "329",
+        "FreeSpaceLong": "302",
         "ShortCapacity": "347",
         "LongCapacity": "500"
       }
@@ -118,10 +139,10 @@
       },
       "properties": {
         "Name": "ZD-P1 VUmc (westflank)",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "7",
+        "FreeSpaceShort": "33",
         "FreeSpaceLong": "",
         "ShortCapacity": "423",
         "LongCapacity": ""
@@ -139,11 +160,11 @@
       },
       "properties": {
         "Name": "CE-P05 Euro Parking",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "181",
-        "FreeSpaceLong": "29",
+        "FreeSpaceShort": "178",
+        "FreeSpaceLong": "46",
         "ShortCapacity": "268",
         "LongCapacity": "179"
       }
@@ -160,11 +181,11 @@
       },
       "properties": {
         "Name": "CE-P15 Oosterdok",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "377",
-        "FreeSpaceLong": "45",
+        "FreeSpaceShort": "137",
+        "FreeSpaceLong": "62",
         "ShortCapacity": "962",
         "LongCapacity": "150"
       }
@@ -181,12 +202,12 @@
       },
       "properties": {
         "Name": "CE-P09 Bijenkorf",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "error",
-        "FreeSpaceShort": "",
+        "FreeSpaceShort": "462",
         "FreeSpaceLong": "",
-        "ShortCapacity": "",
+        "ShortCapacity": "453",
         "LongCapacity": ""
       }
     },
@@ -202,11 +223,11 @@
       },
       "properties": {
         "Name": "ZO-P24 Bijlmerdreef",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
-        "State": "error",
-        "FreeSpaceShort": "261",
-        "FreeSpaceLong": "9",
+        "State": "ok",
+        "FreeSpaceShort": "376",
+        "FreeSpaceLong": "0",
         "ShortCapacity": "515",
         "LongCapacity": "75"
       }
@@ -223,11 +244,11 @@
       },
       "properties": {
         "Name": "CE-P27 Kalverstraat",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "6",
-        "FreeSpaceLong": "40",
+        "FreeSpaceShort": "21",
+        "FreeSpaceLong": "37",
         "ShortCapacity": "79",
         "LongCapacity": "49"
       }
@@ -244,10 +265,10 @@
       },
       "properties": {
         "Name": "CE-P16 P+R Zeeburg Touringcars",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "13",
+        "FreeSpaceShort": "14",
         "FreeSpaceLong": "0",
         "ShortCapacity": "20",
         "LongCapacity": "0"
@@ -265,11 +286,11 @@
       },
       "properties": {
         "Name": "ZO-P22 Bijlmerdreef",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
-        "State": "error",
-        "FreeSpaceShort": "24",
-        "FreeSpaceLong": "6",
+        "State": "ok",
+        "FreeSpaceShort": "17",
+        "FreeSpaceLong": "11",
         "ShortCapacity": "200",
         "LongCapacity": "25"
       }
@@ -286,10 +307,10 @@
       },
       "properties": {
         "Name": "CE-P13 Artis",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "298",
+        "FreeSpaceShort": "232",
         "FreeSpaceLong": "",
         "ShortCapacity": "450",
         "LongCapacity": ""
@@ -307,7 +328,7 @@
       },
       "properties": {
         "Name": "CE-P04 Amsterdam Centraal",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "error",
         "FreeSpaceShort": "307",
@@ -328,12 +349,12 @@
       },
       "properties": {
         "Name": "ZD-P02 VUmc (ACTA)",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "0",
+        "FreeSpaceShort": "33",
         "FreeSpaceLong": "",
-        "ShortCapacity": "427",
+        "ShortCapacity": "453",
         "LongCapacity": ""
       }
     },
@@ -349,12 +370,12 @@
       },
       "properties": {
         "Name": "IJDok",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "150",
-        "FreeSpaceLong": "33",
-        "ShortCapacity": "261",
+        "FreeSpaceShort": "136",
+        "FreeSpaceLong": "19",
+        "ShortCapacity": "254",
         "LongCapacity": "100"
       }
     },
@@ -370,11 +391,11 @@
       },
       "properties": {
         "Name": "CE-P26 The Bank",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "126",
-        "FreeSpaceLong": "46",
+        "FreeSpaceShort": "75",
+        "FreeSpaceLong": "41",
         "ShortCapacity": "220",
         "LongCapacity": "110"
       }
@@ -391,13 +412,13 @@
       },
       "properties": {
         "Name": "CE-P02 P+R Olympisch Stadion",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "29",
+        "FreeSpaceShort": "0",
         "FreeSpaceLong": "0",
         "ShortCapacity": "250",
-        "LongCapacity": "0"
+        "LongCapacity": "65314"
       }
     },
     {
@@ -412,10 +433,10 @@
       },
       "properties": {
         "Name": "ZO-P03 Mikado",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "96",
+        "FreeSpaceShort": "81",
         "FreeSpaceLong": "0",
         "ShortCapacity": "306",
         "LongCapacity": "28"
@@ -433,11 +454,11 @@
       },
       "properties": {
         "Name": "CE-P17 Willemspoort",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "72",
-        "FreeSpaceLong": "16",
+        "FreeSpaceShort": "57",
+        "FreeSpaceLong": "12",
         "ShortCapacity": "79",
         "LongCapacity": "34"
       }
@@ -454,10 +475,10 @@
       },
       "properties": {
         "Name": "ZO-P01 P+R Arena",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "1371",
+        "FreeSpaceShort": "1365",
         "FreeSpaceLong": "0",
         "ShortCapacity": "1500",
         "LongCapacity": "0"
@@ -475,12 +496,12 @@
       },
       "properties": {
         "Name": "CE-P12 Markenhoven",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
-        "State": "error",
-        "FreeSpaceShort": "68",
-        "FreeSpaceLong": "15",
-        "ShortCapacity": "125",
+        "State": "ok",
+        "FreeSpaceShort": "34",
+        "FreeSpaceLong": "10",
+        "ShortCapacity": "100",
         "LongCapacity": "49"
       }
     },
@@ -496,11 +517,11 @@
       },
       "properties": {
         "Name": "CE-P07 Museumplein Touringcars",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "19",
-        "FreeSpaceLong": "1",
+        "FreeSpaceShort": "24",
+        "FreeSpaceLong": "3",
         "ShortCapacity": "24",
         "LongCapacity": "4"
       }
@@ -517,10 +538,10 @@
       },
       "properties": {
         "Name": "ZO-P01 ArenA",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "282",
+        "FreeSpaceShort": "44",
         "FreeSpaceLong": "0",
         "ShortCapacity": "285",
         "LongCapacity": "0"
@@ -538,10 +559,10 @@
       },
       "properties": {
         "Name": "ZO-P02 Arena terrein",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "1999",
+        "FreeSpaceShort": "2000",
         "FreeSpaceLong": "0",
         "ShortCapacity": "2000",
         "LongCapacity": "0"
@@ -559,11 +580,11 @@
       },
       "properties": {
         "Name": "ZO-P21 Bijlmerdreef",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
-        "State": "error",
-        "FreeSpaceShort": "1",
-        "FreeSpaceLong": "42",
+        "State": "ok",
+        "FreeSpaceShort": "8",
+        "FreeSpaceLong": "31",
         "ShortCapacity": "103",
         "LongCapacity": "140"
       }
@@ -580,11 +601,11 @@
       },
       "properties": {
         "Name": "ZO-P18 HES/ROC",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "22",
-        "FreeSpaceLong": "32",
+        "FreeSpaceShort": "27",
+        "FreeSpaceLong": "25",
         "ShortCapacity": "95",
         "LongCapacity": "75"
       }
@@ -601,10 +622,10 @@
       },
       "properties": {
         "Name": "CE-P03 Piet Hein",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "143",
+        "FreeSpaceShort": "168",
         "FreeSpaceLong": "0",
         "ShortCapacity": "200",
         "LongCapacity": "60"
@@ -622,12 +643,12 @@
       },
       "properties": {
         "Name": "CE-P07 Museumplein",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "290",
-        "FreeSpaceLong": "37",
-        "ShortCapacity": "420",
+        "FreeSpaceShort": "309",
+        "FreeSpaceLong": "33",
+        "ShortCapacity": "416",
         "LongCapacity": "150"
       }
     },
@@ -643,11 +664,11 @@
       },
       "properties": {
         "Name": "CE-P06 Byzantium",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "261",
-        "FreeSpaceLong": "129",
+        "FreeSpaceShort": "277",
+        "FreeSpaceLong": "151",
         "ShortCapacity": "362",
         "LongCapacity": "202"
       }
@@ -664,11 +685,11 @@
       },
       "properties": {
         "Name": "ZO-P05 Villa ArenA",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "28",
-        "FreeSpaceLong": "82",
+        "FreeSpaceShort": "39",
+        "FreeSpaceLong": "115",
         "ShortCapacity": "251",
         "LongCapacity": "424"
       }
@@ -685,12 +706,12 @@
       },
       "properties": {
         "Name": "CE-P11 Waterlooplein",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "78",
-        "FreeSpaceLong": "16",
-        "ShortCapacity": "145",
+        "FreeSpaceShort": "74",
+        "FreeSpaceLong": "18",
+        "ShortCapacity": "150",
         "LongCapacity": "45"
       }
     },
@@ -706,11 +727,11 @@
       },
       "properties": {
         "Name": "ZO-P10 Plaza ArenA",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "75",
-        "FreeSpaceLong": "159",
+        "FreeSpaceShort": "52",
+        "FreeSpaceLong": "94",
         "ShortCapacity": "344",
         "LongCapacity": "683"
       }
@@ -727,7 +748,7 @@
       },
       "properties": {
         "Name": "CE-P10 Stadhuis Muziektheater",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "error",
         "FreeSpaceShort": "66",
@@ -748,10 +769,10 @@
       },
       "properties": {
         "Name": "CE-P16 P+R Zeeburg 2",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "283",
+        "FreeSpaceShort": "307",
         "FreeSpaceLong": "0",
         "ShortCapacity": "400",
         "LongCapacity": "0"
@@ -769,11 +790,11 @@
       },
       "properties": {
         "Name": "ZO-P23 Bijlmerdreef",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
-        "State": "error",
-        "FreeSpaceShort": "213",
-        "FreeSpaceLong": "127",
+        "State": "ok",
+        "FreeSpaceShort": "128",
+        "FreeSpaceLong": "150",
         "ShortCapacity": "250",
         "LongCapacity": "150"
       }
@@ -790,10 +811,10 @@
       },
       "properties": {
         "Name": "CE-P01 Sloterdijk",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "32",
+        "FreeSpaceShort": "0",
         "FreeSpaceLong": "0",
         "ShortCapacity": "196",
         "LongCapacity": "0"
@@ -811,10 +832,10 @@
       },
       "properties": {
         "Name": "CE-P14 Westerpark",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
-        "State": "error",
-        "FreeSpaceShort": "285",
+        "State": "ok",
+        "FreeSpaceShort": "266",
         "FreeSpaceLong": "186",
         "ShortCapacity": "320",
         "LongCapacity": "280"
@@ -832,10 +853,10 @@
       },
       "properties": {
         "Name": "CE-P18 P+R Bos en Lommer",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "144",
+        "FreeSpaceShort": "54",
         "FreeSpaceLong": "0",
         "ShortCapacity": "250",
         "LongCapacity": "0"
@@ -853,11 +874,11 @@
       },
       "properties": {
         "Name": "CE-P08 De Kolk",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "82",
-        "FreeSpaceLong": "61",
+        "FreeSpaceShort": "94",
+        "FreeSpaceLong": "13",
         "ShortCapacity": "300",
         "LongCapacity": "75"
       }
@@ -874,11 +895,11 @@
       },
       "properties": {
         "Name": "ZO-P06 Pathe/HMH",
-        "PubDate": "2017-12-18T11:41:42.366Z",
+        "PubDate": "2018-03-05T10:47:42.342Z",
         "Type": "parkinglocation",
         "State": "ok",
-        "FreeSpaceShort": "213",
-        "FreeSpaceLong": "5",
+        "FreeSpaceShort": "242",
+        "FreeSpaceLong": "4",
         "ShortCapacity": "390",
         "LongCapacity": "5"
       }

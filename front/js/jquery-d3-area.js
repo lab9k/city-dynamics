@@ -134,7 +134,7 @@
 					});
 
 				graph.realtime_bar.attr("height",0);
-
+				console.log(realtime);
 				if(realtime>0)
 				{
 
@@ -142,12 +142,13 @@
 
 					graph.realtime_bar
 						.attr("height", (realtime * graph.height))
-						.attr('width', (100/18)+'%')
+						.attr('width', '20px')
 						.attr('y', graph.height - (realtime*100))
 						.attr('x', (100/23*hours)+'%')
 						.attr('rx', 5)
 						.attr('ry', 5)
-						.attr("fill", "#dddddd")
+						.attr("stroke", "#4a4a4a")
+						.attr("fill", "#ffffff")
 						.attr("class", "realtime_bar");
 				}
 

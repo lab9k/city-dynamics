@@ -6,6 +6,7 @@ var circles_d3 = [];
 var circles_layer;
 var markers = [];
 var geojson;
+var traffic_layer;
 
 // global arrays
 var buurtcode_prop_array = [];
@@ -31,7 +32,7 @@ var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 var origin = 'https://acc.api.data.amsterdam.nl';
 if(window.location.href.indexOf('localhost') !== -1 )
 {
-	var origin = 'http://127.0.0.1:8117';
+	//var origin = 'http://127.0.0.1:8117';
 }
 
 var base_api = origin + '/citydynamics/';
@@ -82,11 +83,12 @@ $(document).ready(function(){
 	}).addTo(map);
 
 	var dindexJsonUrl = dindex_api + getNowDate();
-	//console.log(dindexJsonUrl);
+	var dindexJsonUrl = dindex_api + '07-12-2017-16-00-00';
+	console.log(dindexJsonUrl);
 
 	// district map init
 	$.getJSON(dindexJsonUrl).done(function (dindexJson) {
-		//console.log(dindexJson);
+		console.log(dindexJson);
 
 		var calc_index = 0;
 		var count_index = 0;
@@ -129,6 +131,9 @@ $(document).ready(function(){
 		});
 	});
 
+
+
+
 	// hotspots map init
 	var hotspotsJsonUrl = dindex_hotspots_api+'&timestamp='+ getNowDate();
 	console.log(hotspotsJsonUrl);
@@ -143,8 +148,6 @@ $(document).ready(function(){
 				return a.h - b.h;
 			});
 
-			hotspot_count++;
-
 			// used for ams average todo: calc average in backend
 			$.each(this.druktecijfers, function (key, value) {
 
@@ -155,7 +158,12 @@ $(document).ready(function(){
 			});
 
 			var dataset = this;
+			if(this.druktecijfers.length<1)
+			{
+				this.druktecijfers = '[{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}];'
+			}
 
+			hotspot_count++;
 			hotspot_array.push(dataset);
 
 		});
@@ -163,6 +171,7 @@ $(document).ready(function(){
 		hotspot_array.sort(function (a, b) {
 			return a.index - b.index;
 		});
+
 
 		// used for ams average todo: calc average in backend
 		$.each(amsterdam.druktecijfers, function (key, value) {
@@ -276,16 +285,20 @@ $(document).ready(function(){
 	});
 
 	// realtime check
+	console.log(realtimeUrl);
 	$.getJSON(realtimeUrl).done(function (realtimeJson) {
 
 		var hotspots_match_array = [];
 		hotspots_match_array[18] = 'ARTIS';
-		hotspots_match_array[36] = 'Museumplein';
+		hotspots_match_array[34] = 'Museumplein';
 		hotspots_match_array[0] = 'Amsterdam Centraal';
 		hotspots_match_array[3] = 'Madame Tussauds Amsterdam'; //dam
 		hotspots_match_array[33] = 'Dappermarkt';
 		hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
 		hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
+		hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
+
+		console.log(hotspots_match_array);
 
 		$.each(realtimeJson.results, function (key, value) {
 
@@ -300,6 +313,8 @@ $(document).ready(function(){
 		});
 
 	});
+	console.log(realtime_array);
+
 
 
 	$('.detail_top i').on('click',function () {
@@ -477,6 +492,23 @@ $(document).ready(function(){
 		{
 			resetThemeDetail();
 			addMarketLayer();
+			$(this).addClass('active');
+		}
+	});
+
+	$( document).on('click', ".traffic_b",function () {
+		if($(this).hasClass('active'))
+		{
+			showActiveLayer();
+			hideMarkers();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			hideActiveLayer();
+			resetTheme();
+			showInfo('Toont de verkeersdrukte.', 6000);
+			addTrafficLayer();
 			$(this).addClass('active');
 		}
 	});
@@ -810,7 +842,6 @@ function getDate()
 		mm='0'+mm;
 	}
 	var today = dd+'/'+mm+'/'+yyyy;
-	var today = "07/12/2017";
 
 	return today;
 }
@@ -1393,6 +1424,50 @@ function styleMarket(feature) {
 function onEachFeatureMarket(feature, layer) {
 
 }
+
+
+function addTrafficLayer()
+{
+	map.setView([52.36, 4.95], 12);
+
+	var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
+	var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+
+	$.getJSON(trafficJsonUrl).done(function(trafficJson){
+		console.log(trafficJson);
+
+
+		$.each(trafficJson.features, function(key,value) {
+
+			var coordinates = [];
+			$.each(this.geometry.coordinates, function(key,value) {
+				coordinates.push([this[1],this[0]]);
+			});
+
+			var event_marker = L.polyline(coordinates, {color: speedToColor(this.properties.Type, this.properties.Velocity)}).addTo(map);
+			markers.push(event_marker);
+		});
+
+	});
+
+
+}
+
+function speedToColor(type, speed){
+	if(type == "H"){
+		//Snelweg
+		var speedColors = {0: "#D0D0D0", 1: "#BE0000", 30: "#FF0000", 50: "#FF9E00", 70: "#FFFF00", 90: "#AAFF00",120: "#00B22D"};
+	} else {
+		//Overige wegen
+		var speedColors = {0: "#D0D0D0", 1: "#BE0000", 10: "#FF0000", 20: "#FF9E00", 30: "#FFFF00", 40: "#AAFF00", 70: "#00B22D"};
+	}
+	var currentColor = "#D0D0D0";
+	for(var i in speedColors){
+		if(speed >= i) currentColor = speedColors[i];
+	}
+	return currentColor;
+}
+
 
 function showGoogle()
 {
