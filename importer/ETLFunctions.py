@@ -66,6 +66,7 @@ class ModifyTables(DatabaseInteractions):
         ALTER TABLE "{}" ADD PRIMARY KEY (index)
         """.format(tableName)
 
+
     def table_has_point(self, tableName):
         sql = """
         SELECT EXISTS (SELECT 1 
@@ -78,8 +79,9 @@ class ModifyTables(DatabaseInteractions):
         r = super().execute_sql()
         return r
 
+
     def tabel_create_geometry(self, tableName):
-        sql = """
+        return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   geom;
         ALTER TABLE             "{0}"
@@ -88,21 +90,21 @@ class ModifyTables(DatabaseInteractions):
         SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
         CREATE INDEX {1} ON     "{0}" USING GIST(geom);
         """.format(tableName, 'geom_' + tableName)
-        super().execute_sql()
 
-    def simplify_polygon(self, tableName):
-        sql = """
+
+    def simplify_polygon(self, tableName, original_column, simplified_column):
+        return """
         ALTER TABLE             "{0}"
-        DROP COLUMN IF EXISTS   wkb_geometry_simplified;
+        DROP COLUMN IF EXISTS   "{2}";
         ALTER TABLE             "{0}"
-        ADD COLUMN              wkb_geometry_simplified geometry;
+        ADD COLUMN              "{2}" geometry;
         UPDATE                  "{0}"
-        SET wkb_geometry_simplified = ST_SimplifyPreserveTopology(wkb_geometry, 0.0001);
-        """.format(tableName, 'geom_' + tableName)
-        super().execute_sql()
+        SET wkb_geometry_simplified = ST_SimplifyPreserveTopology("{1}", 0.0001);
+        """.format(tableName, original_column, simplified_column)
 
-    def add_bc_codes(tableName):
-        sql = """
+
+    def add_bc_codes(self, tableName):
+        return """
         DROP TABLE IF EXISTS    "{0}";
         CREATE TABLE            public."{0}" as with bc as(
         SELECT * FROM           buurtcombinatie )
