@@ -356,6 +356,10 @@ $(document).ready(function(){
 		}
 	});
 
+	$( document).on('click', ".beta",function () {
+		showInfo('<h2 style="color:red;">Beta</h2><p>De Drukte Radar is in de beta fase, wat inhoudt dat er continue verbeteringen aan gemaakt worden en dat we feedback aan het verzamelen zijn. <br><a href="mailto:@">Heb je feedback dan horen we graag van je.</a></p>')
+	});
+
 	$( document).on('click', ".searchclose",function () {
 		$(this).parent().removeClass('open');
 	});
@@ -1103,8 +1107,8 @@ function removeThemeLayer()
 function addParkLayer()
 {
 	setView();
-	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
-	var parkJsonUrl = 'data/parkjson.json';
+	var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
+	// var parkJsonUrl = 'data/parkjson.json';
 
 	$.getJSON(parkJsonUrl).done(function(parkJson){
 		//console.log(parkJson);
@@ -1461,8 +1465,8 @@ function addTrafficLayer()
 {
 	map.setView([52.36, 4.95], 12);
 
-	var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
-	//var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+	// var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
+	var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 
 	$.getJSON(trafficJsonUrl).done(function(trafficJson){
 		console.log(trafficJson);
