@@ -368,8 +368,12 @@ $(document).ready(function(){
 		$(this).parent().fadeOut();
 	});
 4
-	$( document).on('click', ".graphbar_title i",function () {
+	$( document).on('click', ".graphbar_title .reset_icon",function () {
 		resetMap();
+	});
+
+	$( document).on('click', ".graphbar_title .info_icon",function () {
+		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont een index waarde tussen 0 en 100%. Het indexcijfer staat voor de relatieve drukte van de locatie ten op zichte van zichzelf op basis van historische data.</p>');
 	});
 
 	$( document).on('click', ".mapswitch a",function () {
@@ -1107,8 +1111,8 @@ function removeThemeLayer()
 function addParkLayer()
 {
 	setView();
-	var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
-	// var parkJsonUrl = 'data/parkjson.json';
+	// var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
+	var parkJsonUrl = 'data/parkjson.json';
 
 	$.getJSON(parkJsonUrl).done(function(parkJson){
 		//console.log(parkJson);
