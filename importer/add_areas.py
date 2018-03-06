@@ -74,16 +74,7 @@ def set_primary_key(table):
   """.format(table)
 
 
-def execute_sql(pg_str, sql):
-    with psycopg2.connect(pg_str) as conn:
-        with conn.cursor() as cursor:
-            cursor.execute(sql)
 
-
-def get_pg_str(host, port, user, dbname, password):
-    return 'host={} port={} user={} dbname={} password={}'.format(
-        host, port, user, dbname, password
-    )
 
 
 def main(dbConfig, datasets):

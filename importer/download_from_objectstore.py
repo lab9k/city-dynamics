@@ -1,13 +1,12 @@
 """
 Access the druktemonitor project data on the data store.
-
 For now the convention is that only relevant files are in the datastore and
 the layout there matches the layout expected by our data loading scripts.
-
 (We may have to complicate this in the future if we get to automatic
 delivery of new data for this project.)
 """
 import os
+import argparse
 import logging
 import configparser
 import objectstore
@@ -83,13 +82,13 @@ def download_container(conn, container, targetdir):
 def download_containers(conn, datasets, targetdir):
     """
     Download the citydynamics datasets from object store.
-
     Simplifying assumptions:
     * layout on data store matches intended layout of local data directory
     * datasets do not contain nested directories
-    * assumes we are running in a clean container (i.e. local data dir)
+    * assumes we are running in a clean container (i.e. empty local data dir)
     * do not overwrite / delete old data
     """
+    logger.debug('Checking local data directory exists and is empty')
     if not os.path.exists(targetdir):
         raise Exception('Local data directory does not exist.')
 
@@ -101,3 +100,9 @@ def download_containers(conn, datasets, targetdir):
         if c['name'] in datasets:
             logger.debug(c['name'])
             download_container(conn, c, targetdir)
+
+
+def main(targetdir, os_folders):
+
+    conn = Connection(**OS_CONNECT)
+    download_containers(conn, os_folders, targetdir)

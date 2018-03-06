@@ -19,19 +19,6 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
-def get_conn(dbconfig):
-    """Create a connection to the database."""
-    postgres_url = URL(
-        drivername='postgresql',
-        username=config_auth.get(dbconfig, 'user'),
-        password=config_auth.get(dbconfig, 'password'),
-        host=config_auth.get(dbconfig, 'host'),
-        port=config_auth.get(dbconfig, 'port'),
-        database=config_auth.get(dbconfig, 'dbname')
-    )
-    conn = create_engine(postgres_url)
-    return conn
-
 
 delete_hotspot_tables_when_existing = """
 DROP TABLE IF EXISTS public.datasets_hotspotsdrukteindex;
