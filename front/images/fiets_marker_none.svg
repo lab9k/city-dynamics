@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="35px" height="63px" viewBox="0 0 35 63" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg onload="init()" width="35px" height="63px" viewBox="0 0 35 63" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <script type="text/javascript"><![CDATA[
+    function init()
+    {
+        // get param elements from referencing object element
+        //var params = document.defaultView.location.href.split("?")[1].split("&");
+        // split name/value pairs
+        //console.log(params);
+        // find elements that need to be changed, then set values to to parameter value
+        alert('alert!');
+        console.log('init loaded');
+    }
+
+    ]]></script>
     <title>fiets_marker_none</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>

@@ -63,6 +63,8 @@ div {box-sizing: border-box;}
 .themas .google_b.active {background-image:url(../images/google_icon_active.svg);}
 .themas .events_b {background-image:url(../images/event_icon.svg);}
 .themas .events_b.active {background-image:url(../images/event_icon_active.svg);}
+.themas .traffic_b {background-image:url(../images/traffic_icon.svg);}
+.themas .traffic_b.active {background-image:url(../images/traffic_icon_active.svg);}
 .themas .park_b {background-image:url(../images/park_icon.svg);}
 .themas .park_b.active {background-image:url(../images/park_icon_active.svg);}
 .themas .water_b {background-image:url(../images/water_icon.svg);}
@@ -93,6 +95,7 @@ div {box-sizing: border-box;}
 .controls.chrome  a ,.controls.chrome  i {color:#FFF;line-height:30px;font-size:26px;}
 
 /*jquery ui overwrites*/
+.ui-autocomplete {z-index:501;}
 
 /*leaflet styles*/
 .active_path {filter: url(#shadow); }
@@ -142,9 +145,9 @@ div {box-sizing: border-box;}
 .area-line {fill :none;stroke : #616161;stroke-width :1;}
 
 .graphbar {display:block;position:absolute;left:0px;bottom:0px; width:100%;height:160px;background-color: #4a4a4a;}
-.graphbar_left {float:left;height:160px;width:400px;border-right:2px dashed #555;padding:10px;text-align:center;padding-top:30px;}
+.graphbar_left {float:left;height:160px;width:400px;border-right:2px dashed #555;padding:10px;}
 .graphbar_center {float:left;height:160px;width:calc(100% - 800px);}
-.graphbar_right {float:left;height:160px;width:350px;padding:10px;border-left:2px dashed #555;padding:10px;}
+.graphbar_right {float:left;height:160px;width:400px;padding:10px;border-left:2px dashed #555;}
 .graphbar_title {height:40px;}
 .graphbar_title h2 {float:left;line-height:40px;text-indent:10px;color:#fff;font-size:18px;margin:0;float:left;font-weight:normal;}
 .graphbar_title span {display:block;float:right;line-height:40px;margin-right:10px;}
@@ -158,6 +161,24 @@ div {box-sizing: border-box;}
 
 .indexgraph .axis text {font-size:12px;fill:#fff;}
 
+
+/*legend*/
+.legend {
+	margin-right:20px;
+	float:right;
+	text-align:center;
+}
+.legend span {font-size:12px;line-height:12px;}
+.legend .linear{
+	width:60px;
+	height:100px;
+	border-radius:5px;
+	background: #db322a; /* Old browsers */
+	background: -moz-linear-gradient(top, #db322a 2%, #50e6db 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, #db322a 2%,#50e6db 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, #db322a 2%,#50e6db 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#db322a', endColorstr='#50e6db',GradientType=0 ); /* IE6-9 */
+}
 
 
 .meldlinks {float:left;margin-top:20px;margin-left:30px;}
@@ -191,8 +212,8 @@ div {box-sizing: border-box;}
 	.themas {left:5px;width:40px;padding:5px;top:55px}
 	.themas_buttons li {width:30px;height :30px;line-height :30px;background-size: 30px 30px;}
 	.mapswitch {left:5px;bottom:5px;padding:5px;}
-	.mapswitch a {height :60px;width:60px;background:url(../images/choro_m.png);}
-	.mapswitch a.active {background:url(../images/bubble_m.png);}
+	.mapswitch a {height :60px;width:60px;background:url(../images/bubble_m.png);}
+	.mapswitch a.active {background:url(../images/choro_m.png);}
 	.m_more {right:5px;top:5px;display:block;position:absolute;width:40px;height :40px;z-index:500;background: #4a4a4a;border-radius:5px;padding:5px;}
 	.m_more a {display:block;width:30px;height :30px;line-height: 30px;text-align:center;color:#fff;}
 	.m_more.open {border-top-left-radius :0px; border-bottom-left-radius :0px;}

@@ -42,8 +42,8 @@ def linear_model(drukte):
 
     # make sure the sum of the weights != 0
     linear_weigths = {'verblijvers_ha_2016': 1,
-                      'gvb': 8,
-                      'alpha_week': 2}
+                      'gvb': 2,
+                      'alpha_week': 7}
 
     lw_normalize = sum(linear_weigths.values())
 

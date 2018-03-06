@@ -325,7 +325,8 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
     return df
 
 
-def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1.csv'):
+def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1_37.csv'):
+    #HACK _37 should be removed from above filename as soon as the fallback option is not needed anymore
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path)
     df.rename(columns={'Latitude':'lat', 'Longitude':'lon'}, inplace=True)

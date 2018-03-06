@@ -6,10 +6,12 @@ var circles_d3 = [];
 var circles_layer;
 var markers = [];
 var geojson;
+var traffic_layer;
 
 // global arrays
 var buurtcode_prop_array = [];
 var hotspot_array = [];
+var realtime_array = [];
 
 // states
 var vollcode;
@@ -27,21 +29,32 @@ var geomap1 = 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png';
 var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
-var origin = 'https://acc.api.data.amsterdam.nl';
-if(window.location.href.indexOf('localhost') !== -1 )
+
+// Initially assume we have the API running locally.
+var origin = 'http://127.0.0.1:8117'
+
+// When using the production server, get the API from there.
+// TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
+if(window.location.href.indexOf('api.data.amsterdam') > -1)
 {
-	var origin = 'http://127.0.0.1:8117';
+	var origin = 'https://api.data.amsterdam.nl';
+}
+
+// However, when using the acceptation server, get the API from there.
+if(window.location.href.indexOf('acc.api.data.amsterdam') > -1)
+{
+	var origin = 'https://acc.api.data.amsterdam.nl';
 }
 
 var base_api = origin + '/citydynamics/';
 var dindex_api = base_api + 'drukteindex/?format=json&op=';
 var dindex_hotspots_api = base_api + 'hotspots/?format=json';
+var realtimeUrl = base_api + 'realtime/?format=json';
 var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
 var proj4RD = proj4('WGS84', def);
-
 var amsterdam = {
 	coordinates: [52.368, 4.897],
 	druktecijfers: [{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}],
@@ -81,11 +94,12 @@ $(document).ready(function(){
 	}).addTo(map);
 
 	var dindexJsonUrl = dindex_api + getNowDate();
-	//console.log(dindexJsonUrl);
+	var dindexJsonUrl = dindex_api + '07-12-2017-16-00-00';
+	console.log(dindexJsonUrl);
 
 	// district map init
 	$.getJSON(dindexJsonUrl).done(function (dindexJson) {
-		//console.log(dindexJson);
+		console.log(dindexJson);
 
 		var calc_index = 0;
 		var count_index = 0;
@@ -128,9 +142,12 @@ $(document).ready(function(){
 		});
 	});
 
+
+
+
 	// hotspots map init
 	var hotspotsJsonUrl = dindex_hotspots_api+'&timestamp='+ getNowDate();
-	//console.log(hotspotsJsonUrl);
+	console.log(hotspotsJsonUrl);
 
 	$.getJSON(hotspotsJsonUrl).done(function(hotspotsJson) {
 		//console.log(hotspotsJson);
@@ -142,8 +159,6 @@ $(document).ready(function(){
 				return a.h - b.h;
 			});
 
-			hotspot_count++;
-
 			// used for ams average todo: calc average in backend
 			$.each(this.druktecijfers, function (key, value) {
 
@@ -154,7 +169,12 @@ $(document).ready(function(){
 			});
 
 			var dataset = this;
+			if(this.druktecijfers.length<1)
+			{
+				this.druktecijfers = '[{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}];'
+			}
 
+			hotspot_count++;
 			hotspot_array.push(dataset);
 
 		});
@@ -162,6 +182,7 @@ $(document).ready(function(){
 		hotspot_array.sort(function (a, b) {
 			return a.index - b.index;
 		});
+
 
 		// used for ams average todo: calc average in backend
 		$.each(amsterdam.druktecijfers, function (key, value) {
@@ -209,9 +230,11 @@ $(document).ready(function(){
 	// init auto complete
 	$('#loc_i').autocomplete({
 		source: function (request, response) {
-			// console.log(request.term);
+			console.log(request.term);
 			$.getJSON("https://api.data.amsterdam.nl/atlas/typeahead/bag/?q=" + request.term).done( function (data) {
+				//console.log(data[0].content);
 				response($.map(data[0].content, function (value, key) {
+					console.log(value);
 					return {
 						label: value._display,
 						value: value.uri
@@ -225,7 +248,7 @@ $(document).ready(function(){
 
 			event.preventDefault();
 
-			console.log(ui.item.value);
+			console.log(ui.item);
 
 			$('#loc_i').val(ui.item.label);
 
@@ -272,6 +295,39 @@ $(document).ready(function(){
 		}
 	});
 
+	// realtime check
+	console.log(realtimeUrl);
+	$.getJSON(realtimeUrl).done(function (realtimeJson) {
+
+		var hotspots_match_array = [];
+		hotspots_match_array[18] = 'ARTIS';
+		hotspots_match_array[34] = 'Museumplein';
+		hotspots_match_array[0] = 'Amsterdam Centraal';
+		hotspots_match_array[3] = 'Madame Tussauds Amsterdam'; //dam
+		hotspots_match_array[33] = 'Dappermarkt';
+		hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
+		hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
+		hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
+
+		console.log(hotspots_match_array);
+
+		$.each(realtimeJson.results, function (key, value) {
+
+			var name = this.name;
+			var exists = $.inArray(name, hotspots_match_array );
+			if(exists > -1)
+			{
+				// console.log(name + ' - ' + this.data.place_id + ' - ' + this.data['Real-time']);
+				realtime_array[exists] = this.data['Real-time'];
+			}
+
+		});
+
+	});
+	console.log(realtime_array);
+
+
+
 	$('.detail_top i').on('click',function () {
 		closeDetails();
 	});
@@ -307,17 +363,17 @@ $(document).ready(function(){
 	$( document).on('click', ".close",function () {
 		$(this).parent().fadeOut();
 	});
-
+4
 	$( document).on('click', ".graphbar_title i",function () {
-		map.closePopup();
-		$('.graphbar_title h2').text(amsterdam.hotspot);
-		updateLineGraph('ams');
+		resetMap();
 	});
 
 	$( document).on('click', ".mapswitch a",function () {
 
 		if($(this).hasClass('active'))
 		{
+			// reset map
+			resetMap();
 			// hide hotspots
 			$('path[hotspot]').hide();
 			// show district
@@ -341,6 +397,8 @@ $(document).ready(function(){
 		}
 		else
 		{
+			// reset map
+			resetMap();
 			// hide district
 			map.removeLayer(geojson);
 			// show hotspots
@@ -449,6 +507,23 @@ $(document).ready(function(){
 		}
 	});
 
+	$( document).on('click', ".traffic_b",function () {
+		if($(this).hasClass('active'))
+		{
+			showActiveLayer();
+			hideMarkers();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			hideActiveLayer();
+			resetTheme();
+			showInfo('Toont de verkeersdrukte.', 6000);
+			addTrafficLayer();
+			$(this).addClass('active');
+		}
+	});
+
 	$( document).on('click', ".hotspots_b",function () {
 		if($(this).hasClass('active'))
 		{
@@ -521,6 +596,12 @@ $(document).ready(function(){
 	}
 
 });
+
+function resetMap() {
+	map.closePopup();
+	$('.graphbar_title h2').text(amsterdam.hotspot);
+	updateLineGraph('ams');
+}
 
 function stopAnimation()
 {
@@ -738,9 +819,11 @@ function updateLineGraph(hotspot)
 		data.push(dataset);
 	});
 
-	console.log(data);
+	// console.log(data);
 
-	areaGraph[0].update(data);
+	var realtime = realtime_array[hotspot];
+
+	areaGraph[0].update(data,realtime);
 }
 
 function setView()
@@ -770,7 +853,6 @@ function getDate()
 		mm='0'+mm;
 	}
 	var today = dd+'/'+mm+'/'+yyyy;
-	var today = "07/12/2017";
 
 	return today;
 }
@@ -1102,7 +1184,6 @@ function showOvFiets()
 		var ams_locaties = ['ASB','RAI','ASA','ASDM','ASDZ','ASD','ASDL','ASS'];
 
 
-
 		$.each(fietsJson.locaties, function(key,value) {
 			if(ams_locaties.indexOf(this.stationCode)>=0)
 			{
@@ -1110,7 +1191,7 @@ function showOvFiets()
 				if(this.lat>0 && this.lng>0)
 				{
 					var suffix = 'none';
-					if(this.extra.rentalBikes<10)
+					if(this.extra.rentalBikes>0)
 					{
 						suffix = 'some';
 					}
@@ -1120,7 +1201,7 @@ function showOvFiets()
 					}
 
 					var fietsIcon = L.icon({
-						iconUrl: 'images/fiets_marker_'+suffix+'.svg',
+						iconUrl: 'images/fiets_marker_'+suffix+'.svg?available=' + this.extra.rentalBikes,
 
 						iconSize:     [35, 72],
 						iconAnchor:   [17.5, 72],
@@ -1132,17 +1213,16 @@ function showOvFiets()
 					marker_info.free = this.extra.rentalBikes;
 					var fiets_marker = L.marker([this.lat,this.lng], {icon: fietsIcon,title:this.description,alt:this.url}).addTo(map);
 					fiets_marker.bindPopup("<h3>" + this.name + "</h3><br>Fietsen beschikbaar: " + this.extra.rentalBikes, {autoClose: false});
-					var classname = 'none';
-					if(this.extra.rentalBikes<10)
-					{
-						classname = 'some';
-					}
-					if(this.extra.rentalBikes>10)
-					{
-						classname = 'plenty';
-					}
-
 					markers.push(fiets_marker);
+
+					// var popup = new L.Popup();
+					// var popupLocation = new L.LatLng(this.lat, this.lng);
+					// var popupContent = "<h3>" + this.name + "</h3><br>Fietsen beschikbaar: " + this.extra.rentalBikes;
+					// popup.setLatLng(popupLocation);
+					// popup.setContent(popupContent);
+					//
+					// map.addLayer(popup);
+					// markers.push(popup);
 				}
 			}
 		});
@@ -1356,16 +1436,63 @@ function onEachFeatureMarket(feature, layer) {
 
 }
 
+
+function addTrafficLayer()
+{
+	map.setView([52.36, 4.95], 12);
+
+	var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
+	var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+
+	$.getJSON(trafficJsonUrl).done(function(trafficJson){
+		console.log(trafficJson);
+
+
+		$.each(trafficJson.features, function(key,value) {
+
+			var coordinates = [];
+			$.each(this.geometry.coordinates, function(key,value) {
+				coordinates.push([this[1],this[0]]);
+			});
+
+			var event_marker = L.polyline(coordinates, {color: speedToColor(this.properties.Type, this.properties.Velocity)}).addTo(map);
+			markers.push(event_marker);
+		});
+
+	});
+
+
+}
+
+function speedToColor(type, speed){
+	if(type == "H"){
+		//Snelweg
+		var speedColors = {0: "#D0D0D0", 1: "#BE0000", 30: "#FF0000", 50: "#FF9E00", 70: "#FFFF00", 90: "#AAFF00",120: "#00B22D"};
+	} else {
+		//Overige wegen
+		var speedColors = {0: "#D0D0D0", 1: "#BE0000", 10: "#FF0000", 20: "#FF9E00", 30: "#FFFF00", 40: "#AAFF00", 70: "#00B22D"};
+	}
+	var currentColor = "#D0D0D0";
+	for(var i in speedColors){
+		if(speed >= i) currentColor = speedColors[i];
+	}
+	return currentColor;
+}
+
+
 function showGoogle()
 {
-	var googleJsonUrl = 'http://apis.quantillion.io:3001/gemeenteamsterdam/locations/realtime/current';
+	// var googleJsonUrl = 'http://apis.quantillion.io:3001/gemeenteamsterdam/locations/realtime/current';
+	var googleJsonUrl =  realtimeUrl;
 
 	$.getJSON(googleJsonUrl).done(function(googleJson){
-		//console.log(googleJsonUrl);
+		console.log(googleJsonUrl);
 
-		$.each(googleJson, function(key,value) {
 
-			var ratio =  this['Real-time'] / this['Expected'] * 100;
+		$.each(googleJson.results, function(key,value) {
+
+
+			var ratio =  this.data['Real-time'] / this.data['Expected'] * 100;
 
 			var marker_icon = 'images/google_marker_2.svg';
 
@@ -1395,21 +1522,18 @@ function showGoogle()
 			});
 
 			var header = this.name;
-			var content = '<p>Expected' + this.Expected +  '</p>'  + '<p>Realtime' + this['Real-time'] +  '</p>'  + '<p>' + this.formatted_address +  '</p>' + '<br /><a target="blank" href="' + this.url +  '">Website</a>';
+			var content = '<p>Expected' + this.data['Expected'] +  '</p>'  + '<p>Realtime' + this.data['Real-time'] +  '</p>'  + '<p>' + this.data.formatted_address +  '</p>' + '<br /><a target="blank" href="' + this.data.url +  '">Website</a>';
 
-			var latitude = this.lat;
-			var longitude = this.lng;
-			var event_marker = L.marker([latitude,longitude], {icon: googleIcon,title:this.name, alt:this['Real-time']}).addTo(map).on('click', function(){
+			var latitude = this.data.location.coordinates[0];
+			var longitude =  this.data.location.coordinates[1];
+			var event_marker = L.marker([latitude,longitude], {icon: googleIcon,title: this.data.name, alt: this.data['Real-time']}).addTo(map).on('click', function(){
 				closeDetails();
 
-				gauge[0].set(Math.round(this.options.alt * 100));
 				$('.detail h2').html(this.options.title);
-
-				showLeftBox(content,header);
 
 			});
 
-			event_marker.bindPopup("<h3>" + this.name + "</h3>", {autoClose: false});
+			event_marker.bindPopup("<h3>" + this.name + "</h3>" + content, {autoClose: false});
 			markers.push(event_marker);
 		});
 
