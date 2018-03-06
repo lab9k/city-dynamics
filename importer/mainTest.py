@@ -30,10 +30,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
     parser = argparse.ArgumentParser(description='Entering ETL pipeline..')
     parser.add_argument(
-        'targetdir', type=str, help='Local data directory.', nargs=1)
-    parser.add_argument(
-        'dbConfig', type=str,
-        help='database config settings: dev or docker', nargs=1)
+        'targetdir', type=str, help='Local data directory.', nargs=1, default='data')
 
     parser.add_argument('dataset', nargs='?', help="Upload specific dataset")
     args = parser.parse_args()
@@ -41,7 +38,7 @@ if __name__ == "__main__":
 
     # 1 --- Load data from objectstore
 
-    # Check whether local cached downloads should be used.
+    # Check whether locally cached downloads should be used.
     ENV_VAR = 'EXTERNAL_DATASERVICES_USE_LOCAL'
     use_local = True if os.environ.get(ENV_VAR, '') == 'TRUE' else False
 

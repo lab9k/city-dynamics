@@ -87,10 +87,9 @@ def download_containers(conn, datasets, targetdir):
     Simplifying assumptions:
     * layout on data store matches intended layout of local data directory
     * datasets do not contain nested directories
-    * assumes we are running in a clean container (i.e. empty local data dir)
+    * assumes we are running in a clean container (i.e. local data dir)
     * do not overwrite / delete old data
     """
-    logger.debug('Checking local data directory exists and is empty')
     if not os.path.exists(targetdir):
         raise Exception('Local data directory does not exist.')
 
