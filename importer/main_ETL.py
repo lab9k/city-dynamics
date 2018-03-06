@@ -63,14 +63,11 @@ def modify_tables():
     # simplify the polygon of the buurtcombinaties: limits data traffic to the front end.
     conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
 
-    datasets_to_modify = []
-
     for dataset in datasets:
         if config_src.get(dataset, 'CREATE_POINT') == 'YES':
-            datasets_to_modify.append(x)
-    conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
-    execute_sql(pg_str, create_geometry_query(table_name))
-    execute_sql(pg_str, add_bc_codes(table_name))
+            conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
+            execute_sql(pg_str, create_geometry_query(table_name))
+            execute_sql(pg_str, add_bc_codes(table_name))
 
 
 if __name__ == "__main__":
