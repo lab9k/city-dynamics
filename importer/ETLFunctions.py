@@ -61,6 +61,7 @@ class ModifyTables(DatabaseInteractions):
         GEOMETRY_POINT_NAME = "geom"  # name of our point geometry on table
         GEOMETRY_POLY_NAME = "polygon"  # name of our poly geometry on table
 
+    @staticmethod
     def set_primary_key(tableName):
         return """
         ALTER TABLE "{}" ADD PRIMARY KEY (index)
@@ -79,8 +80,8 @@ class ModifyTables(DatabaseInteractions):
         r = super().execute_sql()
         return r
 
-
-    def tabel_create_geometry(self, tableName):
+    @staticmethod
+    def create_geometry_column(tableName):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   geom;
@@ -91,8 +92,8 @@ class ModifyTables(DatabaseInteractions):
         CREATE INDEX {1} ON     "{0}" USING GIST(geom);
         """.format(tableName, 'geom_' + tableName)
 
-
-    def simplify_polygon(self, tableName, original_column, simplified_column):
+    @staticmethod
+    def simplify_polygon(tableName, original_column, simplified_column):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   "{2}";
@@ -102,8 +103,8 @@ class ModifyTables(DatabaseInteractions):
         SET wkb_geometry_simplified = ST_SimplifyPreserveTopology("{1}", 0.0001);
         """.format(tableName, original_column, simplified_column)
 
-
-    def add_bc_codes(self, tableName):
+    @staticmethod
+    def add_bc_codes(tableName):
         return """
         DROP TABLE IF EXISTS    "{0}";
         CREATE TABLE            public."{0}" as with bc as(
@@ -115,6 +116,28 @@ class ModifyTables(DatabaseInteractions):
         FROM                    public."{1}" join bc on
         st_intersects("{1}".geom,   bc.wkb_geometry)     
         """.format(tableName + '_with_bc', tableName)
+
+    @staticmethod
+    def create_alpha_table():
+        return """
+        DROP TABLE IF EXISTS  public.alpha_locations_expected;
+
+        CREATE TABLE  public.alpha_locations_expected(
+            id              INTEGER,
+            place_id        VARCHAR,
+            name            TEXT,
+            url             TEXT,
+            weekday         INT4,
+            hour            INT4,
+            expected        FLOAT8,
+            lat             FLOAT8,
+            lon             FLOAT8,
+            address         TEXT,
+            location_type   TEXT,
+            visit_duration  TEXT,
+            types           TEXT,
+            category        INT4);
+        """
 
 
 class LoadGebieden:

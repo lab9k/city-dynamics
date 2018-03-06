@@ -15,6 +15,7 @@ import parsers
 from ETLFunctions import DatabaseInteractions
 from ETLFunctions import ModifyTables
 from ETLFunctions import LoadGebieden
+import modify_alpha_table
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -59,8 +60,17 @@ def parse_and_write():
     logger.info('... done')
 
 def modify_tables():
-    conn.execute('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified')
+    # simplify the polygon of the buurtcombinaties: limits data traffic to the front end.
+    conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
 
+    datasets_to_modify = []
+
+    for dataset in datasets:
+        if config_src.get(dataset, 'CREATE_POINT') == 'YES':
+            datasets_to_modify.append(x)
+    conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
+    execute_sql(pg_str, create_geometry_query(table_name))
+    execute_sql(pg_str, add_bc_codes(table_name))
 
 
 if __name__ == "__main__":
@@ -100,8 +110,8 @@ if __name__ == "__main__":
 
     parse_and_write()
 
-    # 4. Create new tables and migrations
-
+    # 4. Modify alpha table
+    modify_alpha_table.run()
 
     # 4. Modify tables
 

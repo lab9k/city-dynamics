@@ -20,4 +20,4 @@ pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydyna
 python modify_alpha_table.py docker
 
 # create empty tables
-python sql_migrations.py docker
+#python sql_migrations.py docker
