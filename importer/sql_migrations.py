@@ -25,6 +25,34 @@ def get_conn(dbconfig):
     conn = create_engine(postgres_url)
     return conn
 
+create_bc_drukteindex = """CREATE TABLE public.datasets_buurtcombinatiedrukteindex
+(
+  index bigint                  NOT NULL,
+  hour integer                  NOT NULL,
+  weekday integer               NOT NULL,
+  drukteindex double precision  NOT NULL,
+  vollcode_id integer           NOT NULL,
+  CONSTRAINT datasets_buurtcombinatiedrukteindex_pkey PRIMARY KEY (index),
+  CONSTRAINT datasets_buurtcombin_vollcode_id_cb161b02_fk_buurtcomb FOREIGN KEY (vollcode_id)
+      REFERENCES public.buurtcombinatie (ogc_fid) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.datasets_buurtcombinatiedrukteindex
+  OWNER TO citydynamics;
+
+-- Index: public.datasets_buurtcombinatiedrukteindex_vollcode_id_cb161b02
+
+-- DROP INDEX public.datasets_buurtcombinatiedrukteindex_vollcode_id_cb161b02;
+
+CREATE INDEX datasets_buurtcombinatiedrukteindex_vollcode_id_cb161b02
+  ON public.datasets_buurtcombinatiedrukteindex
+  USING btree
+  (vollcode_id);
+"""
+
 
 create_hotpots = """CREATE TABLE public.datasets_hotspots
 (
@@ -84,6 +112,7 @@ def main():
     conn = get_conn(dbconfig=args.dbConfig[0])
     conn.execute(create_hotpots)
     conn.execute(create_hotpots_drukteindex)
+    conn.execute(create_bc_drukteindex)
 
     log.debug("..done")
 

@@ -237,6 +237,23 @@ def write_to_db(drukte):
     drukte.data.to_sql(
         name='drukteindex_hour_week', con=connection, index=True, if_exists='replace')
     connection.execute('ALTER TABLE "drukteindex_hour_week" ADD PRIMARY KEY ("index")')
+
+    # # write relevant columns to a table which is served by an API
+    # # first, create a primary key on the buurtcombinatie table. TODO: find a better place (in the importer) for this
+    # connection.execute('ALTER TABLE test1 ADD COLUMN id SERIAL PRIMARY KEY;')
+
+    insert_into_api_table = """
+    insert into datasets_buurtcombinatiedrukteindex (
+    index,
+    hour,
+    weekday,
+    drukteindex,
+    vollcode_id
+    ) select c.index, hour, weekday, drukte_index, b.ogc_fid from buurtcombinatie b, drukteindex_hour_week c
+    where  b."vollcode" = c."vollcode";
+
+    """
+    connection.execute(insert_into_api_table)
     log.debug('done.')
 
 
