@@ -110,6 +110,6 @@ if __name__ == "__main__":
     # 4. Modify alpha table
     modify_alpha_table.run()
 
-    # 4. Modify tables
+    # 5. Modify tables
 
     modify_tables()
