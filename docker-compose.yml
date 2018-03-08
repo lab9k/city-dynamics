@@ -43,7 +43,7 @@ services:
       # export STADSWERKEN_OBJECTSTORE_PASSWORD="mypassword"
       STADSWERKEN_OBJECTSTORE_PASSWORD:
     volumes:
-      - /private/data:/data
+      - /app/data:/data
 
   analyzer:
     build: ./analyzer
