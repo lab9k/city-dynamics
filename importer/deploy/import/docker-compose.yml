@@ -37,9 +37,7 @@ services:
       - ./backup-google-current.sh:/backup-google-current.sh
 
   api:
-    build: .
-    ports:
-      - "8117:8001"
+    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_api:${ENVIRONMENT}
     links:
       - database:database
     environment:
