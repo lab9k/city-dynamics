@@ -423,7 +423,7 @@ class Process_drukte(Process):
         self.data = self.init_drukte_df(start, end, list(vollcodes_m2_land.keys()))
 
         # merge datasets
-        cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
+        cols = ['vollcode', 'weekday', 'hour', 'alpha_week', 'hotspot']
         self.data = pd.merge(
             self.data, alp_hist.data[cols],
             on=['weekday', 'hour', 'vollcode'], how='left')
@@ -446,7 +446,7 @@ class Process_drukte(Process):
             on='vollcode', how='left')
 
         # init drukte index
-        self.data['drukte_index'] = 0
+        self.data['drukteindex'] = 0
 
         # Remove timestamps from weekpattern (only day and hour are relevant)
         self.data.drop('timestamp', axis=1, inplace=True)
