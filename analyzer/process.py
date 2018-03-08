@@ -147,6 +147,7 @@ class Process():
                 temp = self.data.merge(m2)
                 temp[col] = temp[col] / temp.oppervlakte_land_m2  # Normalize based on surface area
                 self.data = temp
+            # TODO: Remove column if it did not exist before calling this function
             # temp.drop('oppervlakte_land_m2', axis=1, inplace=True)
 
 
