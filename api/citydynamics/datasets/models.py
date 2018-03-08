@@ -18,6 +18,7 @@ class Buurtcombinatie(models.Model):
 
     class Meta:
         db_table = 'buurtcombinatie'
+        managed = False
 
 
 class Drukteindex(models.Model):
