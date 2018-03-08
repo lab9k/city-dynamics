@@ -59,15 +59,15 @@ def parse_and_write():
     LoadGebieden.load_gebieden(pg_str)
     logger.info('... done')
 
+
 def modify_tables():
     # simplify the polygon of the buurtcombinaties: limits data traffic to the front end.
     conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
 
     for dataset in datasets:
         if config_src.get(dataset, 'CREATE_POINT') == 'YES':
-            conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
-            execute_sql(pg_str, create_geometry_query(table_name))
-            execute_sql(pg_str, add_bc_codes(table_name))
+            conn.execute(ModifyTables.create_geometry_column(table_name))
+            conn.execute(ModifyTables.add_vollcodes())
 
 
 if __name__ == "__main__":

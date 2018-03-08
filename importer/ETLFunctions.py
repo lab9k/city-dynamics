@@ -103,19 +103,17 @@ class ModifyTables(DatabaseInteractions):
         SET wkb_geometry_simplified = ST_SimplifyPreserveTopology("{1}", 0.0001);
         """.format(tableName, original_column, simplified_column)
 
+
     @staticmethod
-    def add_bc_codes(tableName):
+    def add_vollcodes(tableName):
         return """
-        DROP TABLE IF EXISTS    "{0}";
-        CREATE TABLE            public."{0}" as with bc as(
-        SELECT * FROM           buurtcombinatie )
-        SELECT                  "{1}".*,
-                                bc."vollcode",
-                                bc."naam",
-        LEFT(bc."vollcode", 1) as "stadsdeel_code"
-        FROM                    public."{1}" join bc on
-        st_intersects("{1}".geom,   bc.wkb_geometry)     
-        """.format(tableName + '_with_bc', tableName)
+        ALTER TABLE "{0}" add vollcode varchar
+        
+        UPDATE "{0}" SET vollcode = buurtcombinatie.vollcode
+        FROM buurtcombinatie 
+        WHERE st_intersects("{0}".geom, buurtcombinatie.wkb_geometry)
+        """.format(tableName)
+
 
     @staticmethod
     def create_alpha_table():
