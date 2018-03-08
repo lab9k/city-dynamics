@@ -7,5 +7,5 @@ set -x   # print what we are doing
 cd /app/
 
 source deploy/docker-wait.sh
-python manage.py test --noinput
+python manage.py test --noinput --nomigrations
 flake8 .
