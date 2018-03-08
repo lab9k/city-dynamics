@@ -6,7 +6,7 @@ Collaborators: Jerome Cremers, Rene Luijk, Swaan Dekkers, Thomas Jongstra, Steph
 
 ---
 
-Create a local environment named `venv` inside the city-dynamics project directory, and activate it. 
+Create a local environment named `venv` inside the city-dynamics project directory, and activate it.
 Exiting a virtual environment can be done using `deactivate`.
 
 ```
@@ -22,10 +22,17 @@ pip install -r analyzer/requirements.txt
 pip install -r api/requirements.txt
 ```
 
+If you get errors in one of the steps above about the version of `setuptools` you should update it.
+
+```
+pip install setuptools --upgrade
+```
+
+
 Create database
 
 ```
-docker-compose build database
+docker-compose pull database
 ```
 
 In a new window, run the database, and keep it running.
@@ -37,7 +44,7 @@ docker-compose up database
 In order to connect to the object store, you need to store the password in an environment variable.
 
 ```
-export EXTERN_DATASERVICES_PASSWORD="password"
+export STADSWERKEN_OBJECTSTORE_PASSWORD="password"
 ```
 
 Build the importer. This does not yet download any data from the objectstore.

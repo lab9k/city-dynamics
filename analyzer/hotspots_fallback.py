@@ -91,6 +91,11 @@ def main():
 
     hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)
 
+    drop_point_sm_hotspots = """
+    ALTER TABLE "hotspots"
+    DROP COLUMN IF EXISTS point_sm;
+    """
+
     log.debug('Creating geometries on hotspots..')
     create_geom_hotspots = """
     ALTER TABLE hotspots
@@ -98,8 +103,14 @@ def main():
     UPDATE hotspots SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
     """
 
+    conn.execute(drop_point_sm_hotspots)
     conn.execute(create_geom_hotspots)
     log.debug('..done.')
+
+    drop_point_sm_google = """
+    ALTER TABLE "google_all"
+    DROP COLUMN IF EXISTS point_sm;
+    """
 
     log.debug('Creating geometries on Google locations..')
     create_geom_google = """
@@ -108,6 +119,7 @@ def main():
     UPDATE google_all SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
     """
 
+    conn.execute(drop_point_sm_google)
     conn.execute(create_geom_google)
     log.debug('..done.')
 
@@ -187,9 +199,9 @@ def main():
 
     insert into datasets_hotspots (
     index, 
-    "Hotspot", 
-    "Latitude", 
-    "Longitude"
+    hotspot, 
+    lat, 
+    lon
     )
     select index, "Hotspot", "lat", "lon" from hotspots;
 

@@ -41,7 +41,7 @@ class Drukteindex(models.Model):
     verblijvers_ha_2016 = models.FloatField(blank=True, null=True)
     alpha = models.FloatField(blank=True, null=True)
     gvb = models.FloatField(blank=True, null=True)
-    drukte_index = models.FloatField(blank=True, null=True)
+    drukteindex = models.FloatField(blank=True, null=True)
 
     class Meta:
         db_table = 'drukteindex'
