@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
-from citydynamics.datasets.models import Drukteindex, Buurtcombinatie, BuurtCombinatieDrukteindex
+from citydynamics.datasets.models import Drukteindex, Buurtcombinatie
+from citydynamics.datasets.models import BuurtCombinatieDrukteindex
 from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
 from citydynamics.datasets.models import RealtimeGoogle
 import datetime
@@ -46,7 +47,6 @@ class BCCijferSerializer(ModelSerializer):
 class BCIndexSerializer(ModelSerializer):
 
     druktecijfers_bc = SerializerMethodField()
-
 
     class Meta:
         model = Buurtcombinatie

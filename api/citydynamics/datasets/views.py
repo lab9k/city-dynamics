@@ -41,7 +41,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')  # noqa
         queryset = queryset.filter(timestamp__gte=date)
 
         return queryset
@@ -50,7 +50,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')  # noqa
         queryset = queryset.filter(timestamp__lte=date)
 
         return queryset
@@ -59,7 +59,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')   # noqa
         queryset = queryset.filter(timestamp=date)
 
         return queryset
@@ -166,7 +166,7 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
         queryset = (
             models.Buurtcombinatie.objects
             .prefetch_related('druktecijfers_bc')
-            #.order_by("naam")
+            # .order_by("naam")
         )
 
         vollcode = self.request.query_params.get('vollcode', None)

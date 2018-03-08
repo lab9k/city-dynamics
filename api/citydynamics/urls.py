@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 
 from citydynamics.datasets.views import DrukteindexViewSet
-from citydynamics.datasets.views import BuurtcombinatieViewset
+# from citydynamics.datasets.views import BuurtcombinatieViewset
 from citydynamics.datasets.views import DrukteindexHotspotViewset
 from citydynamics.datasets.views import RecentIndexViewSet
 from citydynamics.datasets.views import RealtimeGoogleViewset
@@ -31,7 +31,8 @@ router = DefaultRouter()
 router.register('drukteindex', DrukteindexViewSet, 'drukteindex')
 router.register('recentmeasures', RecentIndexViewSet, 'recentmeasures')
 # router.register('buurtcombinatie', BuurtcombinatieViewset, 'buurtcombinatie')
-router.register('buurtcombinatie', DrukteindexBuurtcombinatieViewset, 'buurtcombinatie')
+router.register(
+    'buurtcombinatie', DrukteindexBuurtcombinatieViewset, 'buurtcombinatie')
 router.register('hotspots', DrukteindexHotspotViewset, 'hotspots')
 router.register('realtime', RealtimeGoogleViewset, 'realtime')
 
@@ -46,4 +47,5 @@ urlpatterns = [
 
 # To open Files on development server add this:
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(
+        settings.STATIC_URL, document_root=settings.STATIC_ROOT)
