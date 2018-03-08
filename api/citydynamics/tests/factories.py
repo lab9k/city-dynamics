@@ -28,7 +28,7 @@ class DrukteindexFactory(factory.DjangoModelFactory):
     verblijvers = fuzzy.FuzzyFloat(0, 1)
     # google = fuzzy.FuzzyFloat(0, 1)
     gvb = fuzzy.FuzzyFloat(0, 1)
-    drukte_index = fuzzy.FuzzyFloat(0, 1)
+    drukteindex = fuzzy.FuzzyFloat(0, 1)
 
 
 class HotspotsFactory(factory.DjangoModelFactory):
