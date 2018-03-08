@@ -7,7 +7,6 @@ set -e
 pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump
 python main_ETL.py data
 
-
 # below = old. to be removed
 # download data from the object store
 #python download_from_objectstore.py /data
