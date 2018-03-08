@@ -1,3 +1,10 @@
+""" SQL migrations
+
+This this script creates the database tables that are going to be served by the API.
+
+"""
+
+
 import configparser
 import argparse
 import logging
