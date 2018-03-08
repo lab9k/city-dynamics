@@ -2,6 +2,7 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from citydynamics.datasets.models import Drukteindex, Buurtcombinatie
+from citydynamics.datasets.models import BuurtCombinatieDrukteindex
 from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
 from citydynamics.datasets.models import RealtimeGoogle
 import datetime
@@ -30,7 +31,40 @@ class BuurtcombinatieSerializer(GeoFeatureModelSerializer):
         fields = ('vollcode', 'naam')
 
 
-class CijferSerializer(ModelSerializer):
+class BCCijferSerializer(ModelSerializer):
+
+    h = serializers.IntegerField(source='hour')
+    d = serializers.FloatField(source='drukteindex')
+
+    class Meta:
+        model = BuurtCombinatieDrukteindex
+        fields = (
+            'h',
+            'd',
+        )
+
+
+class BCIndexSerializer(ModelSerializer):
+
+    druktecijfers_bc = SerializerMethodField()
+
+    class Meta:
+        model = Buurtcombinatie
+        fields = (
+            'ogc_fid',
+            'naam',
+            'vollcode',
+            'druktecijfers_bc',
+        )
+
+    def get_druktecijfers_bc(self, obj):
+        weekday = datetime.datetime.today().weekday()
+        cijfers = obj.druktecijfers_bc.filter(weekday=weekday)
+
+        return BCCijferSerializer(cijfers, many=True).data
+
+
+class HotspotCijferSerializer(ModelSerializer):
 
     h = serializers.IntegerField(source='hour')
     d = serializers.FloatField(source='drukteindex')
@@ -44,8 +78,6 @@ class CijferSerializer(ModelSerializer):
 
 
 class HotspotIndexSerializer(ModelSerializer):
-
-    # druktecijfers = CijferSerializer(many=True, read_only=True)
 
     coordinates = SerializerMethodField()
     druktecijfers = SerializerMethodField()
@@ -66,7 +98,7 @@ class HotspotIndexSerializer(ModelSerializer):
         weekday = datetime.datetime.today().weekday()
         cijfers = obj.druktecijfers.filter(weekday=weekday)
 
-        return CijferSerializer(cijfers, many=True).data
+        return HotspotCijferSerializer(cijfers, many=True).data
 
 
 class RealtimeGoogleSerializer(ModelSerializer):
@@ -79,15 +111,3 @@ class RealtimeGoogleSerializer(ModelSerializer):
             'place_id',
             'data'
         )
-
-
-# class HotspotIndexSerializer(ModelSerializer):
-#     coordinates = SerializerMethodField()
-#
-#     def get_coordinates(self, obj):
-#         return [obj.latitude, obj.longitude]
-#
-#
-#     class Meta:
-#         model = Hotspots
-#         fields = ('index', 'hotspot', 'coordinates', 'drukte')

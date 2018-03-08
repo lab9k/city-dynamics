@@ -134,7 +134,6 @@
 					});
 
 				graph.realtime_bar.attr("height",0);
-				console.log(realtime);
 				if(realtime>0)
 				{
 

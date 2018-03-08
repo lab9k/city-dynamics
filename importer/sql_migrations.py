@@ -1,7 +1,6 @@
+
 """ SQL migrations
-
 This this script creates the database tables that are going to be served by the API.
-
 """
 
 
@@ -35,14 +34,10 @@ CREATE TABLE public.datasets_hotspots(
     point_sm        GEOMETRY,
     CONSTRAINT datasets_hotspots_pkey PRIMARY KEY (index))
     WITH (OIDS=FALSE);
-
 ALTER TABLE public.datasets_hotspots
     OWNER TO citydynamics;
-
 -- Index: public.datasets_hotspots_point_sm_id
-
 -- DROP INDEX public.datasets_hotspots_point_sm_id;
-
 CREATE INDEX    
     ON public.datasets_hotspots
     USING gist
@@ -62,14 +57,10 @@ CREATE TABLE public.datasets_hotspotsdrukteindex(
     REFERENCES public.datasets_hotspots (index)                             MATCH SIMPLE
     ON UPDATE NO ACTION ON DELETE NO ACTION DEFERRABLE INITIALLY DEFERRED)
     WITH(OIDS=FALSE);
-
 ALTER TABLE public.datasets_hotspotsdrukteindex
     OWNER TO citydynamics;
-
 -- Index: public.datasets_hotspotsdrukteindex_hotspot_id_fd4451d0
-
 -- DROP INDEX public.datasets_hotspotsdrukteindex_hotspot_id_fd4451d0;
-
 CREATE INDEX datasets_hotspotsdrukteindex_hotspot_id_fd4451d0
     ON public.datasets_hotspotsdrukteindex
     USING btree

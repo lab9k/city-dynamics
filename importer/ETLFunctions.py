@@ -80,17 +80,30 @@ class ModifyTables(DatabaseInteractions):
         r = super().execute_sql()
         return r
 
+    # @staticmethod
+    # def create_geometry_column(tableName):
+    #     return """
+    #     ALTER TABLE             "{0}"
+    #     DROP COLUMN IF EXISTS   geom;
+    #     ALTER TABLE             "{0}"
+    #     ADD COLUMN              geom        geometry;
+    #     UPDATE "{0}" SET geom = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
+    #     """.format(tableName, 'geom_' + tableName)
+
+    # Alternative method to create a geometry point from lat, long coordinates. Not used for now
+
     @staticmethod
     def create_geometry_column(tableName):
         return """
-        ALTER TABLE             "{0}"
-        DROP COLUMN IF EXISTS   geom;
-        ALTER TABLE             "{0}"
-        ADD COLUMN geom         geometry;
-        UPDATE                  "{0}"
-        SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
-        CREATE INDEX {1} ON     "{0}" USING GIST(geom);
-        """.format(tableName, 'geom_' + tableName)
+      ALTER TABLE "{0}"
+        DROP COLUMN IF EXISTS geom;
+      ALTER TABLE "{0}"
+        ADD COLUMN geom geometry;
+      UPDATE "{0}"
+          SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
+      CREATE INDEX {1} ON "{0}" USING GIST(geom);
+      """.format(tableName, 'geom_' + tableName)
+
 
     @staticmethod
     def simplify_polygon(tableName, original_column, simplified_column):
@@ -107,11 +120,28 @@ class ModifyTables(DatabaseInteractions):
     @staticmethod
     def add_vollcodes(tableName):
         return """
-        ALTER TABLE "{0}" add vollcode varchar
+        ALTER TABLE             "{0}"
+        DROP COLUMN IF EXISTS   vollcode;
+        
+        ALTER TABLE "{0}" add vollcode varchar;
         
         UPDATE "{0}" SET vollcode = buurtcombinatie.vollcode
         FROM buurtcombinatie 
         WHERE st_intersects("{0}".geom, buurtcombinatie.wkb_geometry)
+        """.format(tableName)
+
+    @staticmethod
+    def add_hotspot_names(tableName):
+        return """
+        ALTER table	"{0}"
+        DROP COLUMN IF EXISTS hotspot;
+        
+        ALTER TABLE "{0}" add hotspot varchar;
+        
+        UPDATE "{0}" SET hotspot = hotspots."Hotspot"
+        FROM hotspots 
+        WHERE st_intersects("{0}".geom,
+            ST_BUFFER(hotspots.geom, 100));
         """.format(tableName)
 
 

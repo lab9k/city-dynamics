@@ -20,6 +20,7 @@ class Buurtcombinatie(models.Model):
         db_table = 'buurtcombinatie'
         managed = False
 
+
 class Drukteindex(models.Model):
     index = models.BigIntegerField(primary_key=True)
     timestamp = models.DateTimeField(blank=True, null=True)
@@ -44,6 +45,15 @@ class Drukteindex(models.Model):
 
     class Meta:
         db_table = 'drukteindex'
+
+
+class BuurtCombinatieDrukteindex(models.Model):
+    index = models.BigIntegerField(primary_key=True)
+    vollcode = models.ForeignKey(
+        'Buurtcombinatie', related_name='druktecijfers_bc', on_delete=models.DO_NOTHING)
+    hour = models.IntegerField()
+    weekday = models.IntegerField()
+    drukteindex = models.FloatField()
 
 
 class Hotspots(models.Model):
