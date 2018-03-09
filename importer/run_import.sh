@@ -4,6 +4,7 @@ set -x
 set -u
 set -e
 
+# TODO currently, running pg_resture locally an error since the dump file was created by a different version of pg
 pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump
 python main_ETL.py data
 
