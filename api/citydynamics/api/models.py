@@ -90,7 +90,7 @@ class Drukteindex(models.Model):
     verblijversindex = models.FloatField(blank=True, null=True)
     alpha = models.FloatField(blank=True, null=True)
     gvb = models.FloatField(blank=True, null=True)
-    drukte_index = models.FloatField(blank=True, null=True)
+    drukteindex = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False

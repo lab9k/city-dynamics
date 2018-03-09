@@ -37,7 +37,7 @@ var origin = 'http://127.0.0.1:8117'
 // TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
 if(window.location.href.indexOf('api.data.amsterdam') > -1)
 {
-	var origin = 'https://api.data.amsterdam.nl';
+	//var origin = 'https://api.data.amsterdam.nl';
 }
 
 // However, when using the acceptation server, get the API from there.
@@ -356,6 +356,10 @@ $(document).ready(function(){
 		}
 	});
 
+	$( document).on('click', ".beta",function () {
+		showInfo('<h2 style="color:red;">Beta</h2><p>De Drukte Radar is in de beta fase, wat inhoudt dat er continue verbeteringen aan gemaakt worden en dat we feedback aan het verzamelen zijn. <br><a href="mailto:@">Heb je feedback dan horen we graag van je.</a></p>')
+	});
+
 	$( document).on('click', ".searchclose",function () {
 		$(this).parent().removeClass('open');
 	});
@@ -364,8 +368,12 @@ $(document).ready(function(){
 		$(this).parent().fadeOut();
 	});
 4
-	$( document).on('click', ".graphbar_title i",function () {
+	$( document).on('click', ".graphbar_title .reset_icon",function () {
 		resetMap();
+	});
+
+	$( document).on('click', ".graphbar_title .info_icon",function () {
+		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont een index waarde tussen 0 en 100%. Het indexcijfer staat voor de relatieve drukte van de locatie ten op zichte van zichzelf op basis van historische data.</p>');
 	});
 
 	$( document).on('click', ".mapswitch a",function () {
@@ -419,13 +427,14 @@ $(document).ready(function(){
 		{
 			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('Toont de beschikbaarheid van de OV fietsen over de verschillende locaties.', 6000);
+			showInfo('De beschikbaarheid van de OV fietsen over de verschillende locaties.', 0);
 			showOvFiets();
 			$(this).addClass('active');
 		}
@@ -436,13 +445,14 @@ $(document).ready(function(){
 		{
 			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('Toont de verschillende webcams in en rond de stad.', 6000);
+			showInfo('Verschillende webcams in en rond de stad.', 0);
 			showFeeds();
 			$(this).addClass('active');
 		}
@@ -453,13 +463,14 @@ $(document).ready(function(){
 		{
 			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('Toont de geplande evenementen van vandaag..', 6000);
+			showInfo('Geplande evenementen van vandaag.', 0);
 			showEvents();
 			$(this).addClass('active');
 		}
@@ -469,6 +480,7 @@ $(document).ready(function(){
 		if($(this).hasClass('active'))
 		{
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -483,6 +495,7 @@ $(document).ready(function(){
 		if($(this).hasClass('active'))
 		{
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -497,6 +510,7 @@ $(document).ready(function(){
 		if($(this).hasClass('active'))
 		{
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -512,13 +526,14 @@ $(document).ready(function(){
 		{
 			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('Toont de verkeersdrukte.', 6000);
+			showInfo('Verkeersdrukte in en rond de stad.', 0);
 			addTrafficLayer();
 			$(this).addClass('active');
 		}
@@ -529,6 +544,7 @@ $(document).ready(function(){
 		{
 
 			closeThemaDetails();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -544,6 +560,7 @@ $(document).ready(function(){
 		{
 
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -559,13 +576,14 @@ $(document).ready(function(){
 		{
 			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('Toont de capaciteit en het aantal beschikbare plekken in de parkeergarages.', 6000);
+			showInfo('De capaciteit en het aantal beschikbare plekken in de parkeergarages.', 0);
 			addParkLayer();
 			$(this).addClass('active');
 		}
@@ -576,12 +594,14 @@ $(document).ready(function(){
 		{
 			closeThemaDetails();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
 			resetTheme();
 			showWater();
+			showInfo('De waterdrukte binnen de stad.', 0);
 			$(this).addClass('active');
 		}
 	});
@@ -902,40 +922,48 @@ function getCurrentDateOnly()
 
 function showInfo(content,duration)
 {
-	$('.info').html(content);
+	$('.info_content').html(content);
 
 	$('.info').show();
 
-	setTimeout(function(){$('.info').fadeOut()},duration)
+	if(duration>0)
+	{
+		setTimeout(function(){$('.info').fadeOut()},duration);
+	}
+}
+
+function hideInfo()
+{
+	$('.info').fadeOut();
 }
 
 function hideActiveLayer()
 {
 	areaGraph[0].stop();
-
-	switch(active_layer)
-	{
-		case 'hotspots':
-			$('path[hotspot]').hide();
-			break;
-		case 'buurten':
-			map.removeLayer(geojson);
-			break;
-	}
+	//
+	// switch(active_layer)
+	// {
+	// 	case 'hotspots':
+	// 		$('path[hotspot]').hide();
+	// 		break;
+	// 	case 'buurten':
+	// 		map.removeLayer(geojson);
+	// 		break;
+	// }
 }
 function showActiveLayer()
 {
 	areaGraph[0].stopResumeCount();
 
-	switch(active_layer)
-	{
-		case 'hotspots':
-			$('path[hotspot]').show();
-			break;
-		case 'buurten':
-			geojson.addTo(map);
-			break;
-	}
+	// switch(active_layer)
+	// {
+	// 	case 'hotspots':
+	// 		$('path[hotspot]').show();
+	// 		break;
+	// 	case 'buurten':
+	// 		geojson.addTo(map);
+	// 		break;
+	// }
 }
 
 
@@ -1083,7 +1111,7 @@ function removeThemeLayer()
 function addParkLayer()
 {
 	setView();
-	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
+	// var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
 	var parkJsonUrl = 'data/parkjson.json';
 
 	$.getJSON(parkJsonUrl).done(function(parkJson){
@@ -1441,7 +1469,7 @@ function addTrafficLayer()
 {
 	map.setView([52.36, 4.95], 12);
 
-	var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
+	// var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
 	var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 
 	$.getJSON(trafficJsonUrl).done(function(trafficJson){

@@ -18,6 +18,7 @@ class Buurtcombinatie(models.Model):
 
     class Meta:
         db_table = 'buurtcombinatie'
+        managed = False
 
 
 class Drukteindex(models.Model):
@@ -40,10 +41,19 @@ class Drukteindex(models.Model):
     verblijvers_ha_2016 = models.FloatField(blank=True, null=True)
     alpha = models.FloatField(blank=True, null=True)
     gvb = models.FloatField(blank=True, null=True)
-    drukte_index = models.FloatField(blank=True, null=True)
+    drukteindex = models.FloatField(blank=True, null=True)
 
     class Meta:
         db_table = 'drukteindex'
+
+
+class BuurtCombinatieDrukteindex(models.Model):
+    index = models.BigIntegerField(primary_key=True)
+    vollcode = models.ForeignKey(
+        'Buurtcombinatie', related_name='druktecijfers_bc', on_delete=models.DO_NOTHING)
+    hour = models.IntegerField()
+    weekday = models.IntegerField()
+    drukteindex = models.FloatField()
 
 
 class Hotspots(models.Model):

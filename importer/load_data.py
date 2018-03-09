@@ -42,7 +42,7 @@ def run_command_sync(cmd, allow_fail=False):
     p.wait()
 
     if p.returncode != 0 and not allow_fail:
-        raise NonZeroReturnCode
+            raise NonZeroReturnCode
 
     return p.returncode
 

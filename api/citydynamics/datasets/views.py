@@ -41,7 +41,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')  # noqa
         queryset = queryset.filter(timestamp__gte=date)
 
         return queryset
@@ -50,7 +50,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')  # noqa
         queryset = queryset.filter(timestamp__lte=date)
 
         return queryset
@@ -59,7 +59,7 @@ class DateFilter(FilterSet):
         date = convert_to_date(value)
         if not date:
             raise ValidationError(
-                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')
+                'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')   # noqa
         queryset = queryset.filter(timestamp=date)
 
         return queryset
@@ -146,6 +146,34 @@ class BuurtcombinatieViewset(viewsets.ModelViewSet):
 
     queryset = models.Buurtcombinatie.objects.all()
     serializer_class = serializers.BuurtcombinatieSerializer
+
+
+class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
+    """
+    Buurtcombinatie drukteindex API
+    """
+
+    serializer_class = serializers.BCIndexSerializer
+    serializer_detail_class = serializers.BCIndexSerializer
+    # filter_class = HotspotF
+
+    filter_fields = (
+        'druktecijfers_bc__weekday',
+    )
+
+    def get_queryset(self):
+
+        queryset = (
+            models.Buurtcombinatie.objects
+            .prefetch_related('druktecijfers_bc')
+            # .order_by("naam")
+        )
+
+        vollcode = self.request.query_params.get('vollcode', None)
+        if vollcode is not None:
+            queryset = queryset.filter(hotspot=vollcode)
+
+        return queryset
 
 
 class DrukteindexHotspotViewset(rest.DatapuntViewSet):
