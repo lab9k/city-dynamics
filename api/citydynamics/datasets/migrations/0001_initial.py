@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 'buurtcombinatie',
-                'man    aged': False,
+                'managed': False,
             },
         ),
         migrations.CreateModel(
