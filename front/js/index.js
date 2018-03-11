@@ -230,11 +230,11 @@ $(document).ready(function(){
 	// init auto complete
 	$('#loc_i').autocomplete({
 		source: function (request, response) {
-			console.log(request.term);
+			//console.log(request.term);
 			$.getJSON("https://api.data.amsterdam.nl/atlas/typeahead/bag/?q=" + request.term).done( function (data) {
 				//console.log(data[0].content);
 				response($.map(data[0].content, function (value, key) {
-					console.log(value);
+					//console.log(value);
 					return {
 						label: value._display,
 						value: value.uri
@@ -265,7 +265,9 @@ $(document).ready(function(){
 					point.x = data.geometrie.coordinates[0];
 					point.y =  data.geometrie.coordinates[1];
 
+
 					var latLang = getLatLang(point);
+					//console.log(latLang);
 
 					var blackIcon = L.icon({
 						iconUrl: 'images/loc.svg',
@@ -695,13 +697,23 @@ function getLatLangArray(point) {
 
 function getLatLang(point) {
 	var lnglat = proj4RD.inverse([point.x, point.y]);
-	return L.latLng(lnglat[1], lnglat[0]);
+	return L.latLng(lnglat[1]-0.0006, lnglat[0]-0.002);
 }
 
 function getColor(dindex)
 {
-	var a = '#50E6DB'; //50E6DB 63c6e6
-	var b = '#DB322A';
+	if(dindex<0.5)
+	{
+		var a = '#50E6DB'; //50E6DB 63c6e6
+		var b = '#F5A623';
+	}
+	else {
+		var a = '#F5A623';
+		var b = '#DB322A';
+	}
+
+	// var a = '#50E6DB'; //50E6DB 63c6e6
+	// var b = '#DB322A';
 
 	var ah = parseInt(a.replace(/#/g, ''), 16),
 		ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
@@ -848,14 +860,14 @@ function updateLineGraph(hotspot)
 
 function setView()
 {
-	if(mobile)
-	{
-		map.setView([52.368, 4.897], 11);
-	}
-	else
-	{
-		map.setView([52.36, 4.95], 12);
-	}
+	// if(mobile)
+	// {
+	// 	map.setView([52.368, 4.897], 11);
+	// }
+	// else
+	// {
+	// 	map.setView([52.36, 4.95], 12);
+	// }
 }
 
 
@@ -1053,8 +1065,8 @@ function showFeeds()
 	var camIcon = L.icon({
 		iconUrl: 'images/cam_marker.svg',
 
-		iconSize:     [35, 72],
-		iconAnchor:   [17.5, 72],
+		iconSize:     [35, 58],
+		iconAnchor:   [17.5, 58],
 		popupAnchor:  [0, -50]
 	});
 
@@ -1072,7 +1084,6 @@ function showLeftBox(content,header)
 	$( ".leftbox .content" ).html('');
 	$( ".leftbox h2" ).html('');
 
-	$( ".legend" ).fadeOut( "slow" );
 	$( ".leftbox" ).fadeIn( "slow" );
 
 	$( ".leftbox h2" ).append(header);
@@ -1082,7 +1093,6 @@ function showLeftBox(content,header)
 function hideLeftBox()
 {
 	$( ".leftbox" ).fadeOut( "slow" );
-	$( ".legend" ).fadeIn( "slow" );
 
 	$( ".leftbox .content" ).html('');
 	$( ".leftbox h2" ).html('');
@@ -1160,8 +1170,8 @@ function pointToLayerPark(feature, latlng) {
 	var parkIcon = L.icon({
 		iconUrl: 'images/park_marker_'+suffix+'.svg',
 
-		iconSize:     [35, height],
-		iconAnchor:   [17.5, 40],
+		iconSize:     [35, 58],
+		iconAnchor:   [17.5, 58],
 		popupAnchor:  [0, -50]
 	});
 
@@ -1177,7 +1187,7 @@ function pointToLayerPark(feature, latlng) {
 	{
 		long = "<br>Parkeren lang: " + feature.properties.FreeSpaceLong + " / " + feature.properties.LongCapacity;
 	}
-	marker.bindPopup("<h3>" + feature.properties.Name + "</h3>"+ short + long , {autoClose: false});
+	marker.bindPopup("<h3>" + feature.properties.Name + '</h3><div class="pop_inner_content">'+ short + long +'</div><br>', {autoClose: false});
 
 	markers.push(marker);
 
@@ -1229,10 +1239,10 @@ function showOvFiets()
 					}
 
 					var fietsIcon = L.icon({
-						iconUrl: 'images/fiets_marker_'+suffix+'.svg?available=' + this.extra.rentalBikes,
+						iconUrl: 'images/fiets_marker_'+suffix+'.svg',
 
-						iconSize:     [35, 72],
-						iconAnchor:   [17.5, 72],
+						iconSize:     [50, 58],
+						iconAnchor:   [25, 58],
 						popupAnchor:  [0, -50]
 					});
 
@@ -1240,7 +1250,7 @@ function showOvFiets()
 					marker_info.name = this.name;
 					marker_info.free = this.extra.rentalBikes;
 					var fiets_marker = L.marker([this.lat,this.lng], {icon: fietsIcon,title:this.description,alt:this.url}).addTo(map);
-					fiets_marker.bindPopup("<h3>" + this.name + "</h3><br>Fietsen beschikbaar: " + this.extra.rentalBikes, {autoClose: false});
+					fiets_marker.bindPopup("<h3>" + this.name + '</h3><div class="pop_inner_content"><h4>Fietsen beschikbaar: <span class="nr_'+ suffix+'">' + this.extra.rentalBikes + '</span></h4></div><br>', {autoClose: false});
 					markers.push(fiets_marker);
 
 					// var popup = new L.Popup();
@@ -1307,45 +1317,41 @@ function showEvents()
 
 		$.each(eventsJson, function(key,value) {
 
-			if(this.attending>100)
+			if(this.attending<100)
 			{
-				var radius = 10;
-				var dindex = 0;
-				var color = '#50E6DB';
+				suffix = 'plenty';
+			}
+			if(this.attending<500)
+			{
+				suffix = 'some';
 			}
 			if(this.attending>500)
 			{
-				var radius = 15;
-				var dindex = 0.6;
-				var color = '#F5A623';
-			}
-			if(this.attending>1000)
-			{
-				var radius = 20;
-				var dindex = 1;
-				var color = '#DB322A';
+				var suffix = 'none';
 			}
 
-			if(this.attending>100)
-			{
-				console.log(this);
-				markers[key] = L.circleMarker([this.lat,this.long], {
-					color: color,
-					fillColor: color,
-					fillOpacity: 1,
-					radius: (12),
-					name: this.location
-				});
-				markers[key].addTo(map);
-				$(markers[key]._path).attr('stroke-width' , 8);
-				$(markers[key]._path).attr('stroke-opacity' , 0.4);
-				$(markers[key]._path).attr('stroke' , color);
-				markers[key].bindPopup("<h3>" + this.location + ' - ' + this.date +'</h3><br><img src="'+this.img+'"><br><p>'+this.title+'</p><p>Bezoekers: '+this.attending+'</p>', {autoClose: false});
-				markers[key].on("click", function(e){
-					var clickedCircle = e.target;
+			var eventIcon = L.icon({
+				iconUrl: 'images/events_marker_'+suffix+'.svg',
 
-				});
-			}
+				iconSize:     [35, 58],
+				iconAnchor:   [17.5, 58],
+				popupAnchor:  [0, -50]
+			});
+
+
+
+			// console.log(this);
+			markers[key] = L.marker([this.lat,this.long], {
+				icon: eventIcon,
+				name: this.location
+			});
+			markers[key].addTo(map);
+			markers[key].bindPopup("<h3>" + this.location +'</h3><img src="'+this.img+'"><div class="pop_inner_content"><p>'+ this.date+'</p><p>'+this.title+'</p><p>Aanmeldingen: '+this.attending+'</p></div><br>', {autoClose: false});
+			markers[key].on("click", function(e){
+				var clickedCircle = e.target;
+
+			});
+
 
 		});
 
@@ -1467,8 +1473,6 @@ function onEachFeatureMarket(feature, layer) {
 
 function addTrafficLayer()
 {
-	map.setView([52.36, 4.95], 12);
-
 	// var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
 	var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 
@@ -1488,7 +1492,6 @@ function addTrafficLayer()
 		});
 
 	});
-
 
 }
 
@@ -1573,12 +1576,12 @@ function showWater()
 	var waterIcon = L.icon({
 		iconUrl: 'images/water_marker.svg',
 
-		iconSize:     [35, 40],
-		iconAnchor:   [17.5, 40],
+		iconSize:     [35, 58],
+		iconAnchor:   [17.5, 58],
 		popupAnchor:  [0, -50]
 	});
 
-	var title = 'Watermeetpunt Prinsegracht';
+	var title = 'Watermeetpunt Prinsengracht';
 	var latitude = '52.375389';
 	var longitude = '4.883740';
 	var event_marker = L.marker([latitude,longitude], {icon: waterIcon,title:title}).addTo(map);

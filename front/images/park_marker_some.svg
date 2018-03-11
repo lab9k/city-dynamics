@@ -8,9 +8,9 @@
         <g id="park_marker_some">
             <g id="Polygon" fill-rule="nonzero">
                 <path d="M19.2888544,24.6060101 L21,28.0283014 L34.5690577,58.5586813 C34.8531888,59.1979763 35,59.8897819 35,60.5893736 L35,63.0283014 L0,63.0283014 L0,60.5893736 C7.01975208e-15,59.8897819 0.146811151,59.1979763 0.430942257,58.5586813 L14,28.0283014 L15.7111456,24.6060101 C16.2051241,23.6180531 17.4064702,23.2176045 18.3944272,23.7115829 C18.781482,23.9051104 19.095327,24.2189553 19.2888544,24.6060101 Z" id="Triangle-3" fill="#4A4A4A" transform="translate(17.500000, 43.264150) scale(-1, 1) rotate(-180.000000) translate(-17.500000, -43.264150) "></path>
-                <circle id="Oval-8" fill="#F5A623" cx="17.5" cy="23.5" r="17.5"></circle>
-                <circle id="Oval-8" fill="#F5A623" cx="17.5" cy="10" r="10"></circle>
+                <circle id="Oval-8" fill="#4a4a4a" cx="17.5" cy="23.5" r="17.5"></circle>
                 <circle id="Oval-9" fill="#FFFFFF" cx="17.5" cy="23.5" r="15.75"></circle>
+                <circle id="Oval-81" fill="#F5A623" cx="17.5" cy="46" r="4"></circle>
             </g>
             <g id="Park-&amp;-Ride-icon" transform="translate(8.000000, 9.000000)">
                 <g id="Car" transform="translate(0.500000, 11.000000)">
