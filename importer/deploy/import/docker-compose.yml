@@ -36,6 +36,11 @@ services:
       - ./backups:/backups
       - ./backup-google-current.sh:/backup-google-current.sh
 
+  api:
+    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics:${ENVIRONMENT}
+    links:
+      - database:database
+
   analyzer:
     image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${ENVIRONMENT}
     # build: ./analyzer

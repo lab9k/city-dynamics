@@ -1,70 +1,22 @@
 """
 This module pre-processes the Alpha table (daily dump from objectstore).
-
 Input table: google_raw_locations_expected_acceptance
 Output table: alpha_locations_expected
-
 The dumped table originally contains multiple time intervals per line. This
 should be split up into multiple single lines: one per single hour (the first
 hour of the time range). In the original table, the latitude and longitude
 values are combined in a tuple in a single column. These two values should be
 split and given their own columns.
-
 """
 
-import configparser
-import argparse
 import logging
-from sqlalchemy.engine.url import URL
-from sqlalchemy import create_engine
 import pandas as pd
 import re
 
-##############################################################################
-config_auth = configparser.RawConfigParser()
-config_auth.read('auth.conf')
+from ETLFunctions import DatabaseInteractions
+from ETLFunctions import ModifyTables
 
-logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
-
-
-def get_conn(dbconfig):
-    """Create a connection to the database."""
-    postgres_url = URL(
-        drivername='postgresql',
-        username=config_auth.get(dbconfig, 'user'),
-        password=config_auth.get(dbconfig, 'password'),
-        host=config_auth.get(dbconfig, 'host'),
-        port=config_auth.get(dbconfig, 'port'),
-        database=config_auth.get(dbconfig, 'dbname')
-    )
-    conn = create_engine(postgres_url)
-    return conn
-
-##############################################################################
-
-
-##############################################################################
-create_alpha_table = '''
-DROP TABLE IF EXISTS  public.alpha_locations_expected;
-
-CREATE TABLE  public.alpha_locations_expected(
-    id              INTEGER,
-    place_id        VARCHAR,
-    name            TEXT,
-    url             TEXT,
-    weekday         INT4,
-    hour            INT4,
-    expected        FLOAT8,
-    lat             FLOAT8,
-    lon             FLOAT8,
-    address         TEXT,
-    location_type   TEXT,
-    visit_duration  TEXT,
-    types           TEXT,
-    category        INT4);
-'''
-##############################################################################
 
 
 ##############################################################################
@@ -88,13 +40,14 @@ def run():
     log.debug("Creating modified version of Alpha dump data table..")
 
     # Create database connection
-    conn = get_conn(dbconfig=args.dbConfig[0])
+    db_int = DatabaseInteractions()
+    conn = db_int.get_sqlalchemy_connection()
 
     # Load raw Alpha data dump from table
     raw = pd.read_sql_table('google_raw_locations_expected_acceptance', conn)
 
     # Create table for modified Alpha data
-    conn.execute(create_alpha_table)
+    conn.execute(ModifyTables.create_alpha_table())
 
     # Lambda function to double up quotation marks for sql writing.
     fix_quotes = lambda x: re.sub("'", "''", x)
@@ -153,11 +106,4 @@ def run():
 
 ##############################################################################
 if __name__ == '__main__':
-    desc = 'Run extra sql'
-    parser = argparse.ArgumentParser(desc)
-    parser.add_argument(
-        'dbConfig', type=str,
-        help='database config settings: dev or docker',
-        nargs=1)
-    args = parser.parse_args()
     run()

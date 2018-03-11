@@ -22,7 +22,7 @@ dc pull
 dc build
 
 dc up -d database
-
+dc run --rm api run python manage.py migrate
 dc run --rm importer
 
 dc run --rm analyzer

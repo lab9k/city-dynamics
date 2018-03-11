@@ -41,6 +41,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'test_without_migrations',
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     'corsheaders',

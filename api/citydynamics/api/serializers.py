@@ -10,14 +10,14 @@ class DrukteIndexSerializer(ModelSerializer):
 
     class Meta:
         model = Drukteindex
-        fields = ('vollcode', 'drukte_index')
+        fields = ('vollcode', 'drukteindex')
 
 
 class RecentIndexSerializer(ModelSerializer):
 
     class Meta:
         model = Drukteindex
-        fields = ('drukte_index', 'timestamp', 'weekday')
+        fields = ('drukteindex', 'timestamp', 'weekday')
 
 
 class BuurtcombinatieSerializer(GeoFeatureModelSerializer):

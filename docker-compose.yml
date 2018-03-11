@@ -38,12 +38,13 @@ services:
     links:
       - database:database
     environment:
+      PGPASSWORD: insecure
       # Following are secret, should be provided as environment variables.
       # E.g. by running in terminal
       # export STADSWERKEN_OBJECTSTORE_PASSWORD="mypassword"
       STADSWERKEN_OBJECTSTORE_PASSWORD:
     volumes:
-      - /private/data:/data
+      - /app/data:/data
 
   analyzer:
     build: ./analyzer

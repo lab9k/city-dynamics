@@ -4,28 +4,25 @@ set -x
 set -u
 set -e
 
+# TODO currently, running pg_resture locally an error since the dump file was created by a different version of pg
+pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump
+python main_ETL.py data
+
+# below = old. to be removed
 # download data from the object store
-python download_from_objectstore.py /data
-
-# Import dump of Alpha data table (originally served by Quantillion API)
-# export PGPASSWORD=insecure
-# pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump
-
-# TODO: Make use of pgpass.conf password file instead of exporting a PGPASSWORD environment variable.
-# TODO: For some reason, the password file is not used or correctly interpreted atm since no db connection can be made.
-# export PGPASSFILE=./pgpass.conf
-# cat $PGPASSFILE
-# pg_restore --dbname=citydynamics data/google_raw.dump
-
-
-# Modify new Alpha data table
-# python modify_alpha_table.py docker
+#python download_from_objectstore.py /data
 
 # load data in database
-python load_data.py /data docker
+#python load_data.py /data docker
 
 # add geometry
-python add_areas.py docker
+#python add_areas.py docker
+
+# Import dump of Alpha data table (originally served by Quantillion API)
+#pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump
+
+# Modify new Alpha data table
+#python modify_alpha_table.py docker
 
 # create empty tables
-python sql_migrations.py docker
+#python sql_migrations.py docker

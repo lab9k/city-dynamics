@@ -1,9 +1,7 @@
 """
 Access the druktemonitor project data on the data store.
-
 For now the convention is that only relevant files are in the datastore and
 the layout there matches the layout expected by our data loading scripts.
-
 (We may have to complicate this in the future if we get to automatic
 delivery of new data for this project.)
 """
@@ -84,7 +82,6 @@ def download_container(conn, container, targetdir):
 def download_containers(conn, datasets, targetdir):
     """
     Download the citydynamics datasets from object store.
-
     Simplifying assumptions:
     * layout on data store matches intended layout of local data directory
     * datasets do not contain nested directories
@@ -105,26 +102,7 @@ def download_containers(conn, datasets, targetdir):
             download_container(conn, c, targetdir)
 
 
-def main(targetdir):
+def main(targetdir, os_folders):
 
-    datasets = [config_src.get(x, 'FOLDER_FTP') for x in config_src.sections()]
     conn = Connection(**OS_CONNECT)
-    download_containers(conn, datasets, targetdir)
-
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    desc = "Download data from object store."
-    parser = argparse.ArgumentParser(desc)
-    parser.add_argument(
-        'targetdir', type=str, help='Local data directory.', nargs=1)
-    args = parser.parse_args()
-
-    # Check whether local cached downloads should be used.
-    ENV_VAR = 'EXTERNAL_DATASERVICES_USE_LOCAL'
-    use_local = True if os.environ.get(ENV_VAR, '') == 'TRUE' else False
-
-    if not use_local:
-        main(args.targetdir[0])
-    else:
-        logger.info('No download from datastore requested, quitting.')
+    download_containers(conn, os_folders, targetdir)
