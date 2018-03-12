@@ -93,7 +93,7 @@ def import_google(sql_query, conn):
     def read_table(sql_query, conn):
         df = pd.read_sql(sql=sql_query, con=conn)
         df['timestamp'] = df.timestamp.dt.round('60min')
-        df = df[['name', 'vollcode', 'timestamp', 'live', 'historical', 'stadsdeel_code']]
+        df = df[['name', 'vollcode', 'timestamp', 'live', 'historical', 'stadsdeelcode']]
         return df
 
     # read raw data
@@ -108,7 +108,7 @@ def import_google(sql_query, conn):
     google['weekday'] = [ts.weekday() for ts in google.timestamp]
     google['hour'] = [ts.hour for ts in google.timestamp]
 
-    area_mapping = google[['vollcode', 'stadsdeel_code']].drop_duplicates()
+    area_mapping = google[['vollcode', 'stadsdeelcode']].drop_duplicates()
 
     # historical weekpatroon
     # first calculate the average weekpatroon per location
@@ -122,7 +122,7 @@ def import_google(sql_query, conn):
 
     # also calculate the average weekpatroon per stadsdeel
     google_week_stadsdeel = google_week_location.groupby([
-        'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
+        'stadsdeelcode', 'weekday', 'hour'])['historical'].mean().reset_index()
 
     # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
     # in case of sparse data, take the stadsdeelcode aggregation
@@ -134,8 +134,8 @@ def import_google(sql_query, conn):
     google_week_vollcode = google_week_vollcode[~google_week_vollcode.vollcode.isin(sparse_vollcodes)]
 
     # then take the staddeelcode aggregation for vollcodes for which data is sparse
-    google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeel_code')
-    google_week_stadsdeel.drop('stadsdeel_code', axis=1, inplace=True)
+    google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeelcode')
+    google_week_stadsdeel.drop('stadsdeelcode', axis=1, inplace=True)
     google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_vollcodes)]
 
     google_week = pd.concat([google_week_vollcode, google_week_stadsdeel])

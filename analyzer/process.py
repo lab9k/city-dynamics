@@ -182,13 +182,13 @@ class Process():
         # TODO: Implement pattern creation method
         Keyword arguments:
         time_period - the period for which we create the pattern (e.g. 'day', 'week', 'year')
-        area_precision - the "area" precision of the pattern (e.g. 'lat/long', 'vollcode', 'stadsdeel_code', 'stad')
+        area_precision - the "area" precision of the pattern (e.g. 'lat/long', 'vollcode', 'stadsdeelcode', 'stad')
         """
         pass
 
 
     # def create_pattern_week_lat_long(self):
-    #     area_mapping = self.data[['vollcode', 'stadsdeel_code']].drop_duplicates()
+    #     area_mapping = self.data[['vollcode', 'stadsdeelcode']].drop_duplicates()
     #     # first calculate the average weekpatroon per location
     #     google_week_location = self.data.groupby([
     #         'weekday', 'hour', 'vollcode', 'name'])['historical'].mean().reset_index()
@@ -202,7 +202,7 @@ class Process():
     #
     #     # also calculate the average weekpatroon per stadsdeel
     #     google_week_stadsdeel = google_week_location.groupby([
-    #         'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
+    #         'stadsdeelcode', 'weekday', 'hour'])['historical'].mean().reset_index()
 
 ##############################################################################
 class Process_gvb_stad(Process):
@@ -261,13 +261,13 @@ class Process_alpha_locations_expected(Process):
         super().__init__(dbconfig)
         self.name = 'alpha_locations_expected'
         self.import_data(['alpha_locations_expected'],
-                         ['name', 'weekday', 'hour', 'expected', 'vollcode', 'stadsdeel_code'])
+                         ['name', 'weekday', 'hour', 'expected', 'vollcode', 'stadsdeelcode'])
         self.dataset_specific()
         self.rename({'expected': 'alpha'})
 
 
     def dataset_specific(self):
-        area_mapping = self.data[['vollcode', 'stadsdeel_code']].drop_duplicates()
+        area_mapping = self.data[['vollcode', 'stadsdeelcode']].drop_duplicates()
 
         # historical weekpatroon
         # first calculate the average weekpatroon per location
@@ -281,7 +281,7 @@ class Process_alpha_locations_expected(Process):
 
         # also calculate the average weekpatroon per stadsdeel
         google_week_stadsdeel = google_week_location.groupby([
-            'stadsdeel_code', 'weekday', 'hour'])['expected'].mean().reset_index()
+            'stadsdeelcode', 'weekday', 'hour'])['expected'].mean().reset_index()
 
         # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
         # in case of sparse data, take the stadsdeelcode aggregation
@@ -293,8 +293,8 @@ class Process_alpha_locations_expected(Process):
         google_week_vollcode = google_week_vollcode[~google_week_vollcode.vollcode.isin(sparse_vollcodes)]
 
         # then take the staddeelcode aggregation for vollcodes for which data is sparse
-        google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeel_code')
-        google_week_stadsdeel.drop('stadsdeel_code', axis=1, inplace=True)
+        google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeelcode')
+        google_week_stadsdeel.drop('stadsdeelcode', axis=1, inplace=True)
         google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_vollcodes)]
 
         self.data = pd.concat([google_week_vollcode, google_week_stadsdeel])
@@ -307,14 +307,14 @@ class Process_alpha_historical(Process):
         super().__init__(dbconfig)
         self.name = 'alpha_historical_week'
         self.import_data(['google_with_bc', 'google_dec_with_bc'],
-                         ['name', 'vollcode', 'timestamp', 'historical', 'stadsdeel_code'])
+                         ['name', 'vollcode', 'timestamp', 'historical', 'stadsdeelcode'])
         self.dataset_specific()
         self.rename({'historical': 'alpha_week'})
         # self.normalize('alpha_week')
 
 
     def dataset_specific(self):
-        area_mapping = self.data[['vollcode', 'stadsdeel_code']].drop_duplicates()
+        area_mapping = self.data[['vollcode', 'stadsdeelcode']].drop_duplicates()
 
         # historical weekpatroon
         # first calculate the average weekpatroon per location
@@ -328,7 +328,7 @@ class Process_alpha_historical(Process):
 
         # also calculate the average weekpatroon per stadsdeel
         google_week_stadsdeel = google_week_location.groupby([
-            'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
+            'stadsdeelcode', 'weekday', 'hour'])['historical'].mean().reset_index()
 
         # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
         # in case of sparse data, take the stadsdeelcode aggregation
@@ -340,8 +340,8 @@ class Process_alpha_historical(Process):
         google_week_vollcode = google_week_vollcode[~google_week_vollcode.vollcode.isin(sparse_vollcodes)]
 
         # then take the staddeelcode aggregation for vollcodes for which data is sparse
-        google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeel_code')
-        google_week_stadsdeel.drop('stadsdeel_code', axis=1, inplace=True)
+        google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeelcode')
+        google_week_stadsdeel.drop('stadsdeelcode', axis=1, inplace=True)
         google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_vollcodes)]
 
         self.data = pd.concat([google_week_vollcode, google_week_stadsdeel])
@@ -354,7 +354,7 @@ class Process_alpha_live(Process):
         super().__init__(dbconfig)
         self.name = 'alpha_live'
         self.import_data(['google_with_bc', 'google_dec_with_bc'],
-                         ['name', 'vollcode', 'timestamp', 'live', 'stadsdeel_code'])
+                         ['name', 'vollcode', 'timestamp', 'live', 'stadsdeelcode'])
         self.dataset_specific()
         self.rename({'live': 'alpha_live'})
         # self.normalize('alpha_live')

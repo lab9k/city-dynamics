@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="35px" height="63px" viewBox="0 0 35 63" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="35px" height="57px" viewBox="0 0 35 57" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
     <title>park_marker_plenty</title>
     <desc>Created with Sketch.</desc>
@@ -7,12 +7,11 @@
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="park_marker_plenty">
             <g id="Polygon" fill-rule="nonzero">
-                <path d="M19.2888544,24.6060101 L21,28.0283014 L34.5690577,58.5586813 C34.8531888,59.1979763 35,59.8897819 35,60.5893736 L35,63.0283014 L0,63.0283014 L0,60.5893736 C7.01975208e-15,59.8897819 0.146811151,59.1979763 0.430942257,58.5586813 L14,28.0283014 L15.7111456,24.6060101 C16.2051241,23.6180531 17.4064702,23.2176045 18.3944272,23.7115829 C18.781482,23.9051104 19.095327,24.2189553 19.2888544,24.6060101 Z" id="Triangle-3" fill="#4A4A4A" transform="translate(17.500000, 43.264150) scale(-1, 1) rotate(-180.000000) translate(-17.500000, -43.264150) "></path>
-                <circle id="Oval-8" fill="#50E6DB" cx="17.5" cy="23.5" r="17.5"></circle>
-                <circle id="Oval-81" fill="#50E6DB" cx="17.5" cy="10" r="10"></circle>
-                <circle id="Oval-9" fill="#FFFFFF" cx="17.5" cy="23.5" r="15.75"></circle>
+                <path d="M19.2888544,18.6060095 L21,22.0283008 L34.5690577,52.5586807 C34.8531888,53.1979757 35,53.8897813 35,54.589373 L35,57.0283008 L0,57.0283008 L0,54.589373 C7.01975208e-15,53.8897813 0.146811151,53.1979757 0.430942257,52.5586807 L14,22.0283008 L15.7111456,18.6060095 C16.2051241,17.6180525 17.4064702,17.2176039 18.3944272,17.7115823 C18.781482,17.9051098 19.095327,18.2189547 19.2888544,18.6060095 Z" id="Triangle-3" fill="#4A4A4A" transform="translate(17.500000, 37.264150) scale(-1, 1) rotate(-180.000000) translate(-17.500000, -37.264150) "></path>
+                <circle id="Oval-8" fill="#50E6DB" cx="17.5" cy="17.5" r="17.5"></circle>
+                <circle id="Oval-9" fill="#FFFFFF" cx="17.5" cy="17.5" r="15"></circle>
             </g>
-            <g id="Park-&amp;-Ride-icon" transform="translate(8.000000, 9.000000)">
+            <g id="Park-&amp;-Ride-icon" transform="translate(8.000000, 3.000000)">
                 <g id="Car" transform="translate(0.500000, 11.000000)">
                     <rect id="Body" stroke="#4A4A4A" x="0.07692308" y="6.19230769" width="17.75" height="6.5" rx="1"></rect>
                     <path d="M1.36790624,5.94230769 L16.7090168,5.94230769 L15.352335,1.27372615 C15.1661461,0.63301714 14.5791359,0.19230769 13.9119221,0.19230769 L4.16500101,0.19230769 C3.49778713,0.19230769 2.91077699,0.63301714 2.72458805,1.27372615 L1.36790624,5.94230769 Z" id="Roof" stroke="#4A4A4A"></path>
@@ -25,10 +24,12 @@
                         <path d="M13.7307692,0.317307692 C14.1248319,0.189816832 14.5476346,0.405915972 14.6751254,0.79997863 C14.6992516,0.874550556 14.7115385,0.952443666 14.7115385,1.03082125 L14.7115385,1.96153846 C14.7115385,2.50320235 14.2724331,2.94230769 13.7307692,2.94230769 C13.1891053,2.94230769 12.75,2.50320235 12.75,1.96153846 L12.75,1.03082125 C12.75,0.616648224 13.0857536,0.280894645 13.4999266,0.280894645 C13.5783042,0.280894645 13.6561973,0.293181481 13.7307692,0.317307692 Z" id="Rectangle"></path>
                     </g>
                 </g>
-                <g id="P&amp;R" transform="translate(1.000000, 0.000000)" fill="#4A4A4A" font-family="AvenirNext-Medium, Avenir Next" font-size="8" font-weight="400">
-                    <text>
-                        <tspan x="0.29153846" y="8">P&amp;R</tspan>
-                    </text>
+                <g id="P&amp;R" transform="translate(1.000000, 0.000000)" fill="#4A4A4A" font-family="AvenirNext-Regular, Avenir Next" font-size="8" font-weight="normal">
+                    <g id="Group">
+                        <text id="P&amp;R">
+                            <tspan x="0.29153846" y="8">P&amp;R</tspan>
+                        </text>
+                    </g>
                 </g>
             </g>
         </g>
