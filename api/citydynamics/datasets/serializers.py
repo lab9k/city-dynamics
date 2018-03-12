@@ -83,7 +83,7 @@ class HotspotIndexSerializer(ModelSerializer):
     druktecijfers = SerializerMethodField()
 
     def get_coordinates(self, obj):
-        return [obj.latitude, obj.longitude]
+        return [obj.lat, obj.lon]
 
     class Meta:
         model = Hotspots

@@ -12,6 +12,7 @@ import logging
 import numpy as np
 import pandas as pd
 import datetime
+import copy
 import q
 
 import process
@@ -114,7 +115,7 @@ def init_drukte_df(start_datetime, end_datetime, vollcodes):
 #     drukte['gvb'] = drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1)
 #
 #     # init drukte index
-#     drukte['drukte_index'] = 0
+#     drukte['drukteindex'] = 0
 #
 #     # Remove timestamps from weekpattern (only day and hour are relevant)
 #     drukte.drop('timestamp', axis=1, inplace=True)
@@ -137,21 +138,53 @@ def linear_model(drukte):
     drukte.data['verblijvers_ha_2016'] = process.norm(drukte.data.verblijvers_ha_2016)
     drukte.data['gvb'] = process.norm(drukte.data.gvb)
 
+    ####################################
+    #### Computations on vollcode level
+
     # Make sure the sum of the weights != 0
-    linear_weigths = {'verblijvers_ha_2016': 1,
-                      'gvb': 8,
-                      'alpha': 2}
+    linear_weigths_vollcode = {'verblijvers_ha_2016': 15, 'gvb': 70, 'alpha': 15}
+    lw_vollcode_normalize = sum(linear_weigths_vollcode.values())
 
-    lw_normalize = sum(linear_weigths.values())
-
-    for col, weight in linear_weigths.items():
+    for col, weight in linear_weigths_vollcode.items():
         if col in drukte.data.columns:
-            drukte.data['drukte_index'] = drukte.data['drukte_index'].add(drukte.data[col] * weight, fill_value=0)
+            drukte.data['drukteindex'] = drukte.data['drukteindex'].add(drukte.data[col] * weight, fill_value=0)
 
-    drukte.data['drukte_index'] = drukte.data['drukte_index'] / lw_normalize
+    drukte.data['drukteindex'] = drukte.data['drukteindex'] / lw_vollcode_normalize
 
     # Sort values
     drukte.data = drukte.data.sort_values(['vollcode', 'weekday', 'hour'])
+    ####################################
+
+    '''
+    ####################################
+    #### Computations on hotspot level
+
+    # Create hotspot data computation dataframe
+    hotspot_data = copy.deepcopy(drukte.data)
+    hotspot_data['drukteindex'] = 0
+
+    # Hotspot weights
+    linear_weights_hotspots = {'verblijvers_ha_2016': 15, 'gvb': 15, 'alpha': 70}
+    lw_hotspots_normalize = sum(linear_weights_hotspots.values())
+
+    # Select unique hotspots
+    hotspot_data.drop_duplicates(subset=['hotspot', 'weekday', 'hour'])
+
+    # Compute drukteindex value
+    for col, weights in linear_weights_hotspots.items():
+        if col in drukte.data.columns:
+            hotspot_data['drukteindex'] = hotspot_data['drukteindex'].add(drukte.data[col] * weight, fill_value=0)
+
+    # Normalize drukteindex value
+    hotspot_data['drukteindex'] = hotspot_data['drukteindex'] / lw_hotspots_normalize
+
+    # Only keep necessary columns
+    hotspot_data = hotspot_data[['index', 'hotspot', 'hour', 'weekday', 'drukteindex']]
+
+    # Add to dataframe
+    drukte.hotspot_data = hotspot_data[['hotspot', 'weekday', 'hour', 'drukteindex']]
+    ####################################
+    '''
 
     return drukte
 
@@ -205,41 +238,82 @@ def pipeline_model(drukte):
     for base in base_list:
         if base in mod_list.keys():
             mod_name = 'base_' + base + '_mod_' + mod_list[base]
-            drukte.data['drukte_index'] += drukte.data[mod_name]
+            drukte.data['drukteindex'] += drukte.data[mod_name]
         else:
             base_name = 'base_' + base
-            drukte.data['drukte_index'] += drukte.data[base_name].fillna(0)
+            drukte.data['drukteindex'] += drukte.data[base_name].fillna(0)
 
-    # Compute the drukte_index using the base and modified values (commented out because done in previous step now.)
+    # Compute the drukteindex using the base and modified values (commented out because done in previous step now.)
     # for base in base_list:
     #     base_name = 'base_' + base
     #     mod_name = 'base_' + base + '_mod_' + mod
     #     if base_name + base in drukte.data.columns:
-    #         drukte.data['drukte_index'] += drukte.data[mod_name]
+    #         drukte.data['drukteindex'] += drukte.data[mod_name]
 
     #### (3) Normalize on acreage
-    drukte.normalize_acreage('drukte_index')
+    drukte.normalize_acreage('drukteindex')
 
     #### (4) Scale data for specific group of viewers
     if view == 'toerist':
-        drukte.normalize('drukte_index')
+        drukte.normalize('drukteindex')
 
     return drukte
 
 
 ##############################################################################
-def write_to_db(drukte):
-    """Write data to database."""
-    log.debug('Writing data to database.')
+def write_table_to_db(dataframe, table_name):
+    """Write dataframe to table with given name. If table already exists, replace it."""
+    log.debug('Writing data to database: creating or replacing table \"%s\".' % table_name)
     dbconfig = args.dbConfig[0]
     connection = process.connect_database(dbconfig)
-    drukte.data.to_sql(
-        name='drukteindex_hour_week', con=connection, index=True, if_exists='replace')
-    connection.execute('ALTER TABLE "drukteindex_hour_week" ADD PRIMARY KEY ("index")')
 
-    # # write relevant columns to a table which is served by an API
-    # # first, create a primary key on the buurtcombinatie table. TODO: find a better place (in the importer) for this
-    # connection.execute('ALTER TABLE test1 ADD COLUMN id SERIAL PRIMARY KEY;')
+    # Write dataframe data to table
+    dataframe.to_sql(
+        name=table_name, con=connection, index=True, if_exists='replace')
+    connection.execute('ALTER TABLE "%s" ADD PRIMARY KEY ("index")' % table_name)
+
+    log.debug('done.')
+
+
+##############################################################################
+def fill_table_in_db(org_table_name, fill_table_name, columns):
+    """Insert data from selected columns into an existing table."""
+
+    #TODO: First test this via DBeaver. column names between org_table and fill_table will be different due to the foreign key constraint #noqa
+    #
+    # """
+    # log.debug('Inserting data from table \"{0}\" into in table \"{1}\"'.format(org_table_name, fill_table_name))
+    # dbconfig = args.dbConfig[0]
+    # connection = process.connect_database(dbconfig)
+    #
+    # # Truncate data from the table that has to be filled
+    # connection.execute("TRUNCATE TABLE %s" % fill_table_name)
+    #
+    # # Create data insertion statement
+    # insert = "INSERT INTO {0}(".format(fill_table_name)
+    # for i in range(0, len(columns)):
+    #     insert += str(columns[i])
+    #     if i < len(columns)-1:
+    #         insert += ", "
+    # insert += ") SELECT "
+    # for i in range(0, len(columns)):
+    #     insert += str(columns[i])
+    #     if i < len(columns)-1:
+    #         insert += ", "
+    # insert += ' FROM {0};'.format(org_table_name)
+    #
+    # log.debug(insert)
+    # q.d()
+    #
+    # # Insert data into table
+    # connection.execute(insert)
+    #
+    # log.debug('done.')"""
+    #
+    # """
+
+    dbconfig = args.dbConfig[0]
+    connection = process.connect_database(dbconfig)
 
     insert_into_api_table = """
     insert into datasets_buurtcombinatiedrukteindex (
@@ -248,26 +322,57 @@ def write_to_db(drukte):
     weekday,
     drukteindex,
     vollcode_id
-    ) select c.index, hour, weekday, drukte_index, b.ogc_fid from buurtcombinatie b, drukteindex_hour_week c
+    ) select c.index, hour, weekday, drukteindex, b.ogc_fid from buurtcombinatie b, drukteindex_buurtcombinaties c
     where  b."vollcode" = c."vollcode";
 
     """
     connection.execute(insert_into_api_table)
-    log.debug('done.')
 
+    log.debug('done.')
 
 ##############################################################################
 def run():
     """Run the main process of this file: loading and combining all datasets."""
     dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
     drukte = process.Process_drukte(dbconfig)
-    drukte = linear_model(drukte)
-    # drukte = pipeline_model(drukte)
-    write_to_db(drukte)
+
+    # Still use older linear model for now
+    pipeline_on = False
+
+    if pipeline_on == True:
+        drukte = pipeline_model(drukte)
+
+    if pipeline_on == False:
+        drukte = linear_model(drukte)
+
+    '''
+    if pipeline_on == False:
+        drukte = linear_model(drukte)
+
+        # Write complete hotspot data (all columns) to table.
+        write_table_to_db(drukte.hotspot_data, 'drukteindex_hotspots')
+
+        # Fill specific hotspot table for API (selection of columns).
+        fill_table_in_db('drukteindex_hotspots', 'datasets_hotspotsdrukteindex',
+            ['index', 'hotspot', 'hotspot_id', 'hour', 'weekday', 'drukteindex'])
+    '''
+
+    # Write complete buurtcombinatie data (all columns) to table.
+    write_table_to_db(drukte.data, 'drukteindex_buurtcombinaties')
+
+    # # TODO: find a way in Django to enhance a model with columns from another table. Currently only foreign key
+    # # Fill specific buurtcombinatie table for API (selection of columns).
+    # fill_table_in_db('drukteindex_buurtcombinaties', 'datasets_buurtcombinatiedrukteindex',
+    #     ['index', 'vollcode', 'vollcode_id', 'hour', 'weekday', 'drukteindex'])
+
+    fill_table_in_db('drukteindex_buurtcombinaties', 'datasets_buurtcombinatiedrukteindex',
+         ['index', 'ogc_fid', 'hour', 'weekday', 'drukteindex'])
+
 
 
 ##############################################################################
 if __name__ == "__main__":
+
     """Run the analyzer."""
     desc = "Calculate index."
     log.debug(desc)
