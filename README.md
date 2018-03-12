@@ -56,7 +56,7 @@ docker-compose build importer
 Download the data from the objectstore, store it in a folder `/data` within the container, and write it to the (locally running) database.
 
 ```
-docker-compose up importer
+docker-compose run importer /app/run_import.sh
 ```
 
 The database is now filled with data and can be queried.
