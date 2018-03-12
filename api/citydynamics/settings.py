@@ -51,7 +51,6 @@ INSTALLED_APPS = [
 
     'datapunt_api',
     'citydynamics',
-    'citydynamics.api',
     'citydynamics.datasets',
 
     'rest_framework',

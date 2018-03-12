@@ -144,7 +144,7 @@ class BuurtcombinatieViewset(viewsets.ModelViewSet):
     ViewSet for retrieving buurtcombinatie polygons
     """
 
-    queryset = models.Buurtcombinatie.objects.all()
+    queryset = models.Buurtcombinatie.objects.order_by('naam')
     serializer_class = serializers.BuurtcombinatieSerializer
 
 
@@ -166,7 +166,7 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
         queryset = (
             models.Buurtcombinatie.objects
             .prefetch_related('druktecijfers_bc')
-            # .order_by("naam")
+            .order_by("naam")
         )
 
         vollcode = self.request.query_params.get('vollcode', None)
@@ -210,4 +210,4 @@ class RealtimeGoogleViewset(rest.DatapuntViewSet):
     serializer_class = serializers.RealtimeGoogleSerializer
     serializer_detail_class = serializers.RealtimeGoogleSerializer
 
-    queryset = models.RealtimeGoogle.objects.all()
+    queryset = models.RealtimeGoogle.objects.order_by('name')
