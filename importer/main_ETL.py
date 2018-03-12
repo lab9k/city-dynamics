@@ -70,11 +70,13 @@ def modify_tables():
             table_name = config_src.get(dataset, 'TABLE_NAME')
             conn.execute(ModifyTables.create_geometry_column(table_name))
             conn.execute(ModifyTables.add_vollcodes(table_name))
+            conn.execute(ModifyTables.add_stadsdeelcodes(table_name))
 
     # do the same for alpha table TODO: refactor configuration so it is not needed to do this separately
     table_name = 'alpha_locations_expected'
     conn.execute(ModifyTables.create_geometry_column(table_name))
     conn.execute(ModifyTables.add_vollcodes(table_name))
+    conn.execute(ModifyTables.add_stadsdeelcodes(table_name))
     conn.execute(ModifyTables.add_hotspot_names(table_name))
 
 
