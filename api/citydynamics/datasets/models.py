@@ -19,6 +19,7 @@ class Buurtcombinatie(models.Model):
 
     class Meta:
         db_table = 'buurtcombinatie'
+        managed = False
 
 
 class Drukteindex(models.Model):
@@ -83,3 +84,4 @@ class RealtimeGoogle(models.Model):
 
     class Meta:
         db_table = f'google_raw_locations_realtime_current_{settings.ENVIRONMENT}'  # noqa
+        managed=False
