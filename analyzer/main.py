@@ -278,28 +278,55 @@ def write_table_to_db(dataframe, table_name):
 ##############################################################################
 def fill_table_in_db(org_table_name, fill_table_name, columns):
     """Insert data from selected columns into an existing table."""
-    log.debug('Inserting data from table \"{0}\" into in table \"{1}\"'.format(org_table_name, fill_table_name))
+
+    #TODO: First test this via DBeaver. column names between org_table and fill_table will be different due to the foreign key constraint #noqa
+    #
+    # """
+    # log.debug('Inserting data from table \"{0}\" into in table \"{1}\"'.format(org_table_name, fill_table_name))
+    # dbconfig = args.dbConfig[0]
+    # connection = process.connect_database(dbconfig)
+    #
+    # # Truncate data from the table that has to be filled
+    # connection.execute("TRUNCATE TABLE %s" % fill_table_name)
+    #
+    # # Create data insertion statement
+    # insert = "INSERT INTO {0}(".format(fill_table_name)
+    # for i in range(0, len(columns)):
+    #     insert += str(columns[i])
+    #     if i < len(columns)-1:
+    #         insert += ", "
+    # insert += ") SELECT "
+    # for i in range(0, len(columns)):
+    #     insert += str(columns[i])
+    #     if i < len(columns)-1:
+    #         insert += ", "
+    # insert += ' FROM {0};'.format(org_table_name)
+    #
+    # log.debug(insert)
+    # q.d()
+    #
+    # # Insert data into table
+    # connection.execute(insert)
+    #
+    # log.debug('done.')"""
+    #
+    # """
+
     dbconfig = args.dbConfig[0]
     connection = process.connect_database(dbconfig)
 
-    # Truncate data from the table that has to be filled
-    connection.execute("TRUNCATE TABLE %s" % fill_table_name)
+    insert_into_api_table = """
+    insert into datasets_buurtcombinatiedrukteindex (
+    index,
+    hour,
+    weekday,
+    drukteindex,
+    vollcode_id
+    ) select c.index, hour, weekday, drukteindex, b.ogc_fid from buurtcombinatie b, drukteindex_buurtcombinaties c
+    where  b."vollcode" = c."vollcode";
 
-    # Create data insertion statement
-    insert = "INSERT INTO {0}(".format(fill_table_name)
-    for i in range(0, len(columns)):
-        insert += str(columns[i])
-        if i < len(columns)-1:
-            insert += ", "
-    insert += ") SELECT "
-    for i in range(0, len(columns)):
-        insert += str(columns[i])
-        if i < len(columns)-1:
-            insert += ", "
-    insert += ' FROM {0};'.format(org_table_name)
-
-    # Insert data into table
-    connection.execute(insert)
+    """
+    connection.execute(insert_into_api_table)
 
     log.debug('done.')
 
@@ -315,6 +342,9 @@ def run():
     if pipeline_on == True:
         drukte = pipeline_model(drukte)
 
+    if pipeline_on == False:
+        drukte = linear_model(drukte)
+
     '''
     if pipeline_on == False:
         drukte = linear_model(drukte)
@@ -323,16 +353,21 @@ def run():
         write_table_to_db(drukte.hotspot_data, 'drukteindex_hotspots')
 
         # Fill specific hotspot table for API (selection of columns).
-        fill_table_in_db('drukteindex_hotspots', 'drukteindex_hotspots_api',
+        fill_table_in_db('drukteindex_hotspots', 'datasets_hotspotsdrukteindex',
             ['index', 'hotspot', 'hotspot_id', 'hour', 'weekday', 'drukteindex'])
     '''
 
     # Write complete buurtcombinatie data (all columns) to table.
     write_table_to_db(drukte.data, 'drukteindex_buurtcombinaties')
 
-    # Fill specific buurtcombinatie table for API (selection of columns).
-    fill_table_in_db('drukteindex_buurtcombinaties', 'drukteindex_buurtcombinaties_api',
-        ['index', 'vollcode', 'vollcode_id', 'hour', 'weekday', 'drukteindex'])
+    # # TODO: find a way in Django to enhance a model with columns from another table. Currently only foreign key
+    # # Fill specific buurtcombinatie table for API (selection of columns).
+    # fill_table_in_db('drukteindex_buurtcombinaties', 'datasets_buurtcombinatiedrukteindex',
+    #     ['index', 'vollcode', 'vollcode_id', 'hour', 'weekday', 'drukteindex'])
+
+    fill_table_in_db('drukteindex_buurtcombinaties', 'datasets_buurtcombinatiedrukteindex',
+         ['index', 'ogc_fid', 'hour', 'weekday', 'drukteindex'])
+
 
 
 ##############################################################################

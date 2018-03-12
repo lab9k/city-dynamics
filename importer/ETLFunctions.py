@@ -151,7 +151,7 @@ class ModifyTables(DatabaseInteractions):
         
         ALTER TABLE "{0}" add hotspot varchar;
         
-        UPDATE "{0}" SET hotspot = hotspots."Hotspot"
+        UPDATE "{0}" SET hotspot = hotspots."hotspot"
         FROM hotspots 
         WHERE st_intersects("{0}".geom,
             ST_BUFFER(hotspots.geom, 100));

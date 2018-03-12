@@ -58,12 +58,27 @@ class BuurtCombinatieDrukteindex(models.Model):
     drukteindex = models.FloatField()
 
 
+# class Hotspots(models.Model):
+#     index = models.BigIntegerField(primary_key=True)
+#     hotspot = models.TextField(db_column='Hotspot', blank=True, null=True)
+#     latitude = models.FloatField(db_column='Latitude', blank=True, null=True)
+#     longitude = models.FloatField(db_column='Longitude', blank=True, null=True)
+#     point_sm = models.GeometryField(srid=0, blank=True, null=True)
+
+
 class Hotspots(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    hotspot = models.TextField(db_column='Hotspot', blank=True, null=True)
-    latitude = models.FloatField(db_column='Latitude', blank=True, null=True)
-    longitude = models.FloatField(db_column='Longitude', blank=True, null=True)
-    point_sm = models.GeometryField(srid=0, blank=True, null=True)
+    hotspot = models.TextField(blank=True, null=True)
+    lat = models.FloatField(blank=True, null=True)
+    lon = models.FloatField(blank=True, null=True)
+    geom = models.GeometryField(srid=0, blank=True, null=True)
+    vollcode = models.CharField(max_length=255, blank=True, null=True)
+    stadsdeelcode = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'hotspots'
+
 
 
 class HotspotsDrukteIndex(models.Model):
