@@ -259,41 +259,47 @@ def pipeline_model(drukte):
 
 
 ##############################################################################
-def write_to_db(dataframe, table_name, columns=None):
+def write_table_to_db(dataframe, table_name):
     """Write dataframe to table with given name. If table already exists, replace it."""
-    log.debug('Writing data to database.')
+    log.debug('Writing data to database: creating or replacing table \"%s\".' % table_name)
     dbconfig = args.dbConfig[0]
     connection = process.connect_database(dbconfig)
 
-    # If a list of columns is provided, only write these columns to the database table.
-    if columns != None:
-        dataframe = dataframe[columns]
-
+    # Write dataframe data to table
     dataframe.data.to_sql(
         name=table_name, con=connection, index=True, if_exists='replace')
     connection.execute('ALTER TABLE "%s" ADD PRIMARY KEY ("index")' % table_name)
 
-    # TODO: Nieuwe insert into DB functie schrijven
-    '''
-    # # write relevant columns to a table which is served by an API
-    # # first, create a primary key on the buurtcombinatie table. TODO: find a better place (in the importer) for this
-    # connection.execute('ALTER TABLE test1 ADD COLUMN id SERIAL PRIMARY KEY;')
-
-    insert_into_api_table = """
-    insert into datasets_buurtcombinatiedrukteindex (
-    index,
-    hour,
-    weekday,
-    drukteindex,
-    vollcode_id
-    ) select c.index, hour, weekday, drukte_index, b.ogc_fid from buurtcombinatie b, drukteindex_hour_week c
-    where  b."vollcode" = c."vollcode";
-
-    """
-    connection.execute(insert_into_api_table)
-    '''
     log.debug('done.')
 
+
+##############################################################################
+def fill_table_in_db(org_table_name, fill_table_name, columns):
+    """Insert data from selected columns into an existing table."""
+    log.debug('Inserting data from table \"{0}\" into in table \"{1}\"'.format(org_table_name, fill_table_name))
+    dbconfig = args.dbConfig[0]
+    connection = process.connect_database(dbconfig)
+
+    # Truncate data from the table that has to be filled
+    connection.execute("TRUNCATE TABLE %s" % fill_table_name)
+
+    # Create data insertion statement
+    insert = "INSERT INTO {0}(".format(fill_table_name)
+    for i in range(0, len(columns)):
+        insert += str(columns[i])
+        if i < len(columns)-1:
+            insert += ", "
+    insert += ") SELECT "
+    for i in range(0, len(columns)):
+        insert += str(columns[i])
+        if i < len(columns)-1:
+            insert += ", "
+    insert += ' FROM {0};'.format(org_table_name)
+
+    # Insert data into table
+    connection.execute(insert)
+
+    log.debug('done.')
 
 ##############################################################################
 def run():
@@ -309,16 +315,25 @@ def run():
 
     if pipeline_on == False:
         drukte = linear_model(drukte)
-        write_to_db(drukte.hotspot_data, 'drukteindex_hotspots',
-                    ['index', 'hotspot', 'hotspot_id', 'hour', 'weekday', 'drukteindex'])
 
-    # write_to_db(drukte)
-    write_to_db(drukte.data, 'drukteindex_buurtcombinaties',
-                ['index', 'vollcode', 'vollcode_id', 'hour', 'weekday', 'drukteindex'])
+        # Write complete hotspot data (all columns) to table.
+        write_table_to_db(drukte.hotspot_data, 'drukteindex_hotspots')
+
+        # Fill specific hotspot table for API (selection of columns).
+        fill_table_in_db('drukteindex_hotspots', 'drukteindex_hotspots_api',
+            ['index', 'hotspot', 'hotspot_id', 'hour', 'weekday', 'drukteindex'])
+
+    # Write complete buurtcombinatie data (all columns) to table.
+    write_table_to_db(drukte.data, 'drukteindex_buurtcombinaties')
+
+    # Fill specific buurtcombinatie table for API (selection of columns).
+    fill_table_in_db('drukteindex_buurtcombinaties', 'drukteindex_buurtcombinaties_api',
+        ['index', 'vollcode', 'vollcode_id', 'hour', 'weekday', 'drukteindex'])
 
 
 ##############################################################################
 if __name__ == "__main__":
+
     """Run the analyzer."""
     desc = "Calculate index."
     log.debug(desc)
