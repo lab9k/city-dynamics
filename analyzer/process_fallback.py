@@ -169,13 +169,13 @@ class Process():
         # TODO: Implement pattern creation method
         Keyword arguments:
         time_period - the period for which we create the pattern (e.g. 'day', 'week', 'year')
-        area_precision - the "area" precision of the pattern (e.g. 'lat/long', 'vollcode', 'stadsdeel_code', 'stad')
+        area_precision - the "area" precision of the pattern (e.g. 'lat/long', 'vollcode', 'stadsdeelcode', 'stad')
         """
         pass
 
 
     # def create_pattern_week_lat_long(self):
-    #     area_mapping = self.data[['vollcode', 'stadsdeel_code']].drop_duplicates()
+    #     area_mapping = self.data[['vollcode', 'stadsdeelcode']].drop_duplicates()
     #     # first calculate the average weekpatroon per location
     #     google_week_location = self.data.groupby([
     #         'weekday', 'hour', 'vollcode', 'name'])['historical'].mean().reset_index()
@@ -189,7 +189,7 @@ class Process():
     #
     #     # also calculate the average weekpatroon per stadsdeel
     #     google_week_stadsdeel = google_week_location.groupby([
-    #         'stadsdeel_code', 'weekday', 'hour'])['historical'].mean().reset_index()
+    #         'stadsdeelcode', 'weekday', 'hour'])['historical'].mean().reset_index()
 
 ##############################################################################
 class Process_gvb_stad(Process):

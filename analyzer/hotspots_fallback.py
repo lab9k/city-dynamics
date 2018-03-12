@@ -65,7 +65,7 @@ def concat_google(sql_query, conn):
     def read_table(sql_query, conn):
         df = pd.read_sql(sql=sql_query, con=conn)
         df['timestamp'] = df.timestamp.dt.round('60min')
-        df = df[['name', 'vollcode', 'timestamp', 'live', 'historical', 'stadsdeel_code', 'lat', 'lon']]
+        df = df[['name', 'vollcode', 'timestamp', 'live', 'historical', 'stadsdeelcode', 'lat', 'lon']]
         return df
 
     # read raw data
