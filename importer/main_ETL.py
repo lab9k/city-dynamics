@@ -67,7 +67,6 @@ def parse_and_write():
 
 
 def modify_tables():
-
     # simplify the polygon of the buurtcombinaties: limits data traffic to the front end.
     conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
 
