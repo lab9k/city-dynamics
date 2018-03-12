@@ -37,7 +37,7 @@ var origin = 'http://127.0.0.1:8117'
 // TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
 if(window.location.href.indexOf('api.data.amsterdam') > -1)
 {
-	//var origin = 'https://api.data.amsterdam.nl';
+	var origin = 'https://api.data.amsterdam.nl';
 }
 
 // However, when using the acceptation server, get the API from there.
@@ -1181,13 +1181,13 @@ function pointToLayerPark(feature, latlng) {
 
 	if(feature.properties.ShortCapacity>0)
 	{
-		short = "<br>Parkeren kort: " + feature.properties.FreeSpaceShort + " / " + feature.properties.ShortCapacity;
+		short = "<p>Parkeren kort: " + feature.properties.FreeSpaceShort + " / " + feature.properties.ShortCapacity + '</p>';
 	}
 	if(feature.properties.LongCapacity>0)
 	{
-		long = "<br>Parkeren lang: " + feature.properties.FreeSpaceLong + " / " + feature.properties.LongCapacity;
+		long = "<p>Parkeren lang: " + feature.properties.FreeSpaceLong + " / " + feature.properties.LongCapacity + '</p>';
 	}
-	marker.bindPopup("<h3>" + feature.properties.Name + '</h3><div class="pop_inner_content">'+ short + long +'</div><br>', {autoClose: false});
+	marker.bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + feature.properties.Name + '</h3><div class="pop_inner_content">'+ short + long +'<span class="ammount">' +  feature.properties.FreeSpaceShort + '</span></div></div>', {autoClose: false});
 
 	markers.push(marker);
 
@@ -1250,7 +1250,7 @@ function showOvFiets()
 					marker_info.name = this.name;
 					marker_info.free = this.extra.rentalBikes;
 					var fiets_marker = L.marker([this.lat,this.lng], {icon: fietsIcon,title:this.description,alt:this.url}).addTo(map);
-					fiets_marker.bindPopup("<h3>" + this.name + '</h3><div class="pop_inner_content"><h4>Fietsen beschikbaar: <span class="nr_'+ suffix+'">' + this.extra.rentalBikes + '</span></h4></div><br>', {autoClose: false});
+					fiets_marker.bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + this.name + '</h3><div class="pop_inner_content"><h4>Fietsen beschikbaar : '+ this.extra.rentalBikes + '</h4><span class="ammount">' + this.extra.rentalBikes + '</span></div></div>', {autoClose: false});
 					markers.push(fiets_marker);
 
 					// var popup = new L.Popup();
@@ -1321,11 +1321,11 @@ function showEvents()
 			{
 				suffix = 'plenty';
 			}
-			if(this.attending<500)
+			else if(this.attending<500)
 			{
 				suffix = 'some';
 			}
-			if(this.attending>500)
+			else if(this.attending>500)
 			{
 				var suffix = 'none';
 			}
@@ -1346,7 +1346,7 @@ function showEvents()
 				name: this.location
 			});
 			markers[key].addTo(map);
-			markers[key].bindPopup("<h3>" + this.location +'</h3><img src="'+this.img+'"><div class="pop_inner_content"><p>'+ this.date+'</p><p>'+this.title+'</p><p>Aanmeldingen: '+this.attending+'</p></div><br>', {autoClose: false});
+			markers[key].bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + this.location +'</h3><img src="'+this.img+'"><div class="pop_inner_content"><p>'+ this.date+'</p><h4>'+this.title+'</h4><p>Aanmeldingen: '+this.attending+'</p><span class="ammount">' +  this.attending + '</span></div></div>', {autoClose: false});
 			markers[key].on("click", function(e){
 				var clickedCircle = e.target;
 
