@@ -88,3 +88,17 @@ The front end of the application can now be visualized locally by opening `front
 
 To add a new data source, make sure it is present in the root directory of the objectstore and configure `sources.conf`.
 Create a parser function in `parsers.py` and call this function 'parser_x', where 'x' needs to be replaced with the name of the data source, stated between square brackets in `sources.conf`.
+
+## RUN TESTS ##
+
+To run the entire test test. run 
+```
+api/deploy/test/the_tests.sh
+importer/deploy/test/tests.sh
+```
+
+The api test are run manualy in your local development environment by
+```
+python manage.py test --nomigrations
+```
+
