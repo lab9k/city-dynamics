@@ -71,7 +71,7 @@ api_config = {
     'hosts': {
         'production': 'http://apis.quantillion.io',
         'acceptance': 'http://apis.quantillion.io',
-        #'acceptance': 'http://apis.development.quantillion.io',
+        # 'acceptance': 'http://apis.development.quantillion.io',
     },
     'port': 3001,
     'username': 'gemeenteAmsterdam',

@@ -27,4 +27,3 @@ RUN export DJANGO_SETTINGS_MODULE=citydynamics.settings
 RUN python manage.py collectstatic --no-input
 
 CMD uwsgi
-
