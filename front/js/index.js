@@ -207,7 +207,7 @@ $(document).ready(function(){
 			$(circles[key]._path).attr('stroke' , '#4a4a4a');
 			$(circles[key]._path).attr('hotspot' , this.index);
 			$(circles[key]._path).addClass('hotspot_'+ this.index);
-			circles[key].bindPopup("<h3>" + this.hotspot + "</h3>", {autoClose: false});
+			circles[key].bindPopup('<div class="popup_hotspot"><i class="material-icons">fiber_manual_record</i><h3>' + this.hotspot + '</h3></div>', {autoClose: false});
 			circles[key].on("click", function(e){
 				var clickedCircle = e.target;
 
@@ -358,6 +358,10 @@ $(document).ready(function(){
 		}
 	});
 
+	$( document).on('click', ".dlogo",function () {
+		showInfo('	<h2>De Amsterdam DrukteRadar</h2> <p>De Amsterdam Drukte Radar toont drukte in de openbare ruimte van Amsterdam over tijd met een drukte-score. De drukte-score geeft de relatieve drukte in een bepaald gebied weer ten opzichte van historische ‘normaalwaarden’ van dit gebied.</p> <p>De drukte-score is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Momenteel bevat de drukte-score data van wegverkeer, openbaar vervoer, parkeren, en bezoeken aan openbare plekken.  Sommigen van deze bronnen geven de data ‘realtime’ weer, terwijl anderen gemiddelden over een bepaalde periode weergeven.</p>')
+	});
+
 	$( document).on('click', ".beta",function () {
 		showInfo('<h2 style="color:red;">Beta</h2><p>De Drukte Radar is in de beta fase, wat inhoudt dat er continue verbeteringen aan gemaakt worden en dat we feedback aan het verzamelen zijn. <br><a href="mailto:@">Heb je feedback dan horen we graag van je.</a></p>')
 	});
@@ -375,7 +379,7 @@ $(document).ready(function(){
 	});
 
 	$( document).on('click', ".graphbar_title .info_icon",function () {
-		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont een index waarde tussen 0 en 100%. Het indexcijfer staat voor de relatieve drukte van de locatie ten op zichte van zichzelf op basis van historische data.</p>');
+		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont de verwachte drukte in een gebied ten op zichte van de normale drukte op dat tijdstip. De balk op het actuele tijdstip toont de actuele drukte voor het gebied.</p>');
 	});
 
 	$( document).on('click', ".mapswitch a",function () {

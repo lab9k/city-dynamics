@@ -13,11 +13,11 @@ h1 {cursor:pointer;}
 div {box-sizing: border-box;}
 
 /*search*/
-.search {position:relative;transition: width 0.5s;color:#fff;overflow:hidden; white-space: nowrap;position:absolute;left:10px;top:10px; z-index:500;width:60px;height:60px;background-color: #4a4a4a;border-radius:5px;padding:10px;}
-.search.open {width:460px;}
-.loc_i {display:inline-block;height :40px;line-height :40px;margin :0px 0px 0px 20px ;text-indent :10px;font-size :18px;color :#666;border-radius:5px;width:356px;border:0;}
-.search a {display:inline-block;float:left;width: 40px;height: 40px;line-height: 40px;color:#fff;text-align:center; }
-.search a i{line-height: 40px;}
+.search {position:relative;transition: width 0.5s;color:#fff;overflow:hidden; white-space: nowrap;position:absolute;left:10px;top:10px; z-index:500;width:70px;height:70px;background-color: #4a4a4a;border-radius:5px;padding:10px;}
+.search.open {width:470px;}
+.loc_i {display:inline-block;height :50px;line-height :50px;margin :0px 0px 0px 20px ;text-indent :10px;font-size :18px;color :#666;border-radius:5px;width:356px;border:0;}
+.search a {display:inline-block;float:left;width: 50px;height: 50px;line-height: 50px;color:#fff;text-align:center; }
+.search a i{line-height: 50px;font-size:34px}
 .searchclose {display:inline-block;vertical-align:top;cursor:pointer;}
 
 /*logo*/
@@ -25,11 +25,11 @@ div {box-sizing: border-box;}
 
 /*druktelogo*/
 .dlogo {position :absolute;left :104px;bottom : 10px; z-index :499;}
-.dlogo h2{color:#4a4a4a;font-size:40px;margin:0;line-height:40px}
+.dlogo h2{color:#4a4a4a;font-size:40px;margin:0;line-height:40px;cursor:pointer;}
 
 /*beta*/
-.beta {position :absolute;right :10px;bottom : 10px; z-index :499;}
-.beta span{color:red;font-size:16px;margin:0;line-height:16px;cursor:pointer;}
+.beta {position :absolute;left :354px;bottom : 10px; z-index :499;}
+.beta span{color:red;font-size:20px;font-weight:bold;margin:0;line-height:20px;cursor:pointer;}
 
 
 /*info*/
@@ -43,7 +43,7 @@ div {box-sizing: border-box;}
 .mapswitch {position :absolute;left :10px;bottom :10px; z-index :500;background-color: #4a4a4a;color :#fff;border-radius :5px;border :0px solid #fff;padding :4px;}
 .mapswitch a {position :relative;display:block;height :80px;width:80px;background:url(../images/bubble.png);}
 .mapswitch a.active {background:url(../images/choro.png);}
-.mapswitch span {position :absolute;display:block;left :6px;bottom :6px;color:#fff;background:#4a4a4a;border-radius: 5px;font-size:12px;padding:0 10px;}
+.mapswitch span {position :absolute;display:block;width:100%;left :0px;bottom :0px;color:#fff;background:rgba(74, 74, 74, 0.5);font-size:12px;text-indent:2px;}
 
 /*leftbox*/
 .leftbox {display:none;position:absolute;right:10px;bottom:10px; z-index:500;min-width:500px;height:380px;background-color: #4a4a4a;border-radius:5px;padding:10px;}
@@ -52,13 +52,13 @@ div {box-sizing: border-box;}
 .leftbox  h2{text-indent:10px;margin:0 0 10px 0;}
 
 /*themas*/
-.themas {transition: width 0.5s;position:absolute;overflow:hidden; white-space: nowrap;left:10px;top:80px; z-index:500;width:60px;background-color: #4a4a4a;border-radius:5px;padding:10px;}
+.themas {transition: width 0.5s;position:absolute;overflow:hidden; white-space: nowrap;left:10px;top:90px; z-index:500;width:70px;background-color: #4a4a4a;border-radius:5px;padding:10px;}
 .themas.open {width:460px;}
 .themas_content {display:inline-block;background-color :rgba(255,255,255,1);border-radius:5px;}
-.themas.open .themas_content{width:calc(100% - 50px);min-height:296px;padding:10px;}
+.themas.open .themas_content{width:calc(100% - 60px);min-height:296px;padding:10px;}
 .themas_content h3 {border-bottom:1px solid #ccc;margin:0 0 10px 0;line-height:30px;color:#014699;}
 .themas_buttons {float:left;list-style:none;margin:0;padding:0;}
-.themas_buttons li {margin:2px 0 2px 0;padding:0;background-color :unset;background-size: 40px 40px;background-repeat:no-repeat;border-radius:5px;cursor:pointer;width:40px;height :40px;line-height :40px;}
+.themas_buttons li {margin:2px 0 2px 0;padding:0;background-color :unset;background-size: 50px 50px;background-repeat:no-repeat;border-radius:5px;cursor:pointer;width:50px;height :50px;line-height :50px;}
 .themas_buttons li.active,.themas_buttons li.active:hover {background-color :rgba(255,255,255,1);}
 .themas .fiets_b {background-image:url(../images/fiets_icon.svg);}
 .themas .fiets_b.active {background-image:url(../images/fiets_icon_active.svg);}
@@ -131,12 +131,12 @@ div {box-sizing: border-box;}
 
 /*popup*/
 .leaflet-popup-content-wrapper {background-color : rgba(74, 74, 74, 0.85);border-radius :5px;padding :0px;min-width:260px;}
-.leaflet-popup-content {margin:0px;color:#fff;}
-.leaflet-popup-content .pop_inner_content{margin:10px;padding-bottom:10px;}
+.leaflet-popup-content {margin:0px;color:#fff;font-size:14px;}
+.leaflet-popup-content .pop_inner_content{padding:10px;min-height:50px;}
 .leaflet-popup-content img{max-width:100%;max-height:200px;}
 .leaflet-popup-content p{margin:0;}
-.leaflet-popup-content h4{font-weight:bold;font-size:14px;}
-.leaflet-popup-content .ammount{display:block;position:absolute;right:10px;bottom:20px;min-width:30px;height:30px;border:2px solid #fff;font-size:20px;line-height:30px;text-align:center;border-radius:18px;background:#fff;padding:0 5px;}
+.leaflet-popup-content h4{font-weight:bold;font-size:14px;margin:5px 0;}
+.leaflet-popup-content .ammount{display:block;position:absolute;right:10px;bottom:10px;min-width:30px;height:30px;border:2px solid #fff;font-size:20px;line-height:30px;text-align:center;border-radius:18px;background:#fff;padding:0 5px;}
 .leaflet-popup-content-wrapper h3 {color:#fff;margin:0;background:#4a4a4a;padding:5px 30px 5px 30px;border-top-left-radius :5px;border-top-right-radius :5px;font-size:14px;line-height:22px;}
 .leaflet-popup-content-wrapper .material-icons {position:absolute;top:5px;left:5px;font-size:22px;line-height:22px;}
 .popup_none .material-icons {color:#DB322A;}
@@ -145,6 +145,7 @@ div {box-sizing: border-box;}
 .popup_none .pop_inner_content .ammount{color:#DB322A;border-color:#DB322A;}
 .popup_some .pop_inner_content .ammount{color:#F5A623;border-color:#F5A623;}
 .popup_plenty .pop_inner_content .ammount{color:#50E6DB;border-color:#50E6DB;}
+.leaflet-popup-content-wrapper .popup_hotspot  h3 {border-radius:5px;}
 .leaflet-popup-close-button {color:#fff;}
 .leaflet-popup-tip{background-color : rgba(74, 74, 74, 0.85);}
 
@@ -205,7 +206,7 @@ div {box-sizing: border-box;}
 
 .meldlinks {float:left;margin-top:20px;margin-left:30px;}
 .meld_link1,.meld_link2{display:block;width:140px;line-height:20px;background:#F9F9F9;border-radius: 5px;font-size:12px;text-align:center;text-decoration:none;color:#444;margin-bottom:20px;}
-.weather_widget {float:right;margin-right:20px;width:140px;height:140px;background:#fff;border-radius: 70px;}
+.weather_widget {float:right;margin-right:20px;width:140px;height:140px;background:#fff;border-radius: 30px;}
 .weather_widget iframe {margin:40px 0 0 15px;}
 
 /*desktop resets*/
@@ -235,6 +236,8 @@ div {box-sizing: border-box;}
 	.logo {display:none;width:50px;height:38px;background-size:100%;left:50px;}
 	.dlogo {left :80px;bottom : 5px; }
 	.dlogo h2{font-size:30px;line-height:30px}
+	.beta {left:266px;bottom:5px;}
+	.beta span{font-size:14px;line-height:14px;}
 	.themas {left:5px;width:40px;padding:5px;top:55px}
 	.themas_buttons li {width:30px;height :30px;line-height :30px;background-size: 30px 30px;}
 	.mapswitch {left:5px;bottom:5px;padding:5px;}
