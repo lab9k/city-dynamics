@@ -24,6 +24,9 @@ var lastClickedLayer;
 var total_index;
 var areaGraph;
 
+// interval
+var popup_interval;
+
 // links
 var geomap1 = 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png';
 var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
@@ -94,7 +97,7 @@ $(document).ready(function(){
 	}).addTo(map);
 
 	var dindexJsonUrl = dindex_api + getNowDate();
-	var dindexJsonUrl = dindex_api + '07-12-2017-16-00-00';
+	//var dindexJsonUrl = dindex_api + '07-12-2017-16-00-00';
 	console.log(dindexJsonUrl);
 
 	// district map init
@@ -211,7 +214,16 @@ $(document).ready(function(){
 			circles[key].on("click", function(e){
 				var clickedCircle = e.target;
 
-				updateLineGraph($(clickedCircle._path).attr('hotspot'));
+				var hotspot_id = $(clickedCircle._path).attr('hotspot');
+
+				updateLineGraph(hotspot_id);
+
+				clearInterval(popup_interval);
+
+				popup_interval = setInterval(function(){
+					var current_fill = $('[hotspot='+hotspot_id+']').css('fill');
+					$('.popup_hotspot .material-icons').css('color', current_fill);
+				}, 100);
 
 				// do something, like:
 				$('.graphbar_title h2').text(clickedCircle.options.name);
@@ -337,24 +349,22 @@ $(document).ready(function(){
 	$( document).on('click', ".search a",function () {
 		if($(this).parent().hasClass('open'))
 		{
-			$(this).parent().removeClass('open');
+			closeSearch();
 		}
 		else
 		{
-			$(this).parent().addClass('open');
+			openSearch();
 		}
 	});
 
 	$( document).on('click', ".m_more a",function () {
 		if($(this).parent().hasClass('open'))
 		{
-			$(this).parent().removeClass('open');
-			$('.m_menu').hide();
+			closeMobileMenu();
 		}
 		else
 		{
-			$(this).parent().addClass('open');
-			$('.m_menu').show();
+			openMobileMenu()
 		}
 	});
 
@@ -942,6 +952,8 @@ function showInfo(content,duration)
 
 	$('.info').show();
 
+	closeMobileMenu();
+
 	if(duration>0)
 	{
 		setTimeout(function(){$('.info').fadeOut()},duration);
@@ -951,6 +963,36 @@ function showInfo(content,duration)
 function hideInfo()
 {
 	$('.info').fadeOut();
+}
+
+function openMobileMenu()
+{
+	closeSearch();
+	hideInfo();
+
+	// hide mobile menu
+	$('.m_menu').show();
+	$('.m_more').addClass('open');
+}
+
+function closeMobileMenu()
+{
+	// hide mobile menu
+	$('.m_menu').hide();
+	$('.m_more').removeClass('open');
+}
+
+function openSearch()
+{
+	closeMobileMenu();
+	hideInfo();
+
+	$('.search').addClass('open');
+}
+
+function closeSearch()
+{
+	$('.search').removeClass('open');
 }
 
 function hideActiveLayer()
