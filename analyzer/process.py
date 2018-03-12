@@ -211,7 +211,7 @@ class Process_gvb_stad(Process):
     def __init__(self, dbconfig):
         super().__init__(dbconfig)
         self.name = 'gvb_stad'
-        self.import_data(['gvb_with_bc'],
+        self.import_data(['gvb'],
                          ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
         self.dataset_specific()
         self.rename({'incoming': 'gvb_stad'})
@@ -234,7 +234,7 @@ class Process_gvb_buurt(Process):
     def __init__(self, dbconfig):
         super().__init__(dbconfig)
         self.name = 'gvb_buurt'
-        self.import_data(['gvb_with_bc'],
+        self.import_data(['gvb'],
                          ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
         self.dataset_specific()
         self.rename({'incoming': 'gvb_buurt'})
@@ -413,8 +413,8 @@ class Process_drukte(Process):
         vbi = Process_verblijversindex(dbconfig)
         gvb_st = Process_gvb_stad(dbconfig)
         gvb_bc = Process_gvb_buurt(dbconfig)
-        alp_hist = Process_alpha_historical(dbconfig)
-        alp_live = Process_alpha_live(dbconfig)
+        # alp_hist = Process_alpha_historical(dbconfig)
+        # alp_live = Process_alpha_live(dbconfig)
         alp = Process_alpha_locations_expected(dbconfig)
 
         # initialize drukte dataframe
@@ -423,12 +423,12 @@ class Process_drukte(Process):
         self.data = self.init_drukte_df(start, end, list(vollcodes_m2_land.keys()))
 
         # merge datasets
-        cols = ['vollcode', 'weekday', 'hour', 'alpha_week', 'hotspot']
-        self.data = pd.merge(
-            self.data, alp_hist.data[cols],
-            on=['weekday', 'hour', 'vollcode'], how='left')
+        # cols = ['vollcode', 'weekday', 'hour', 'alpha_week', 'hotspot']
+        # self.data = pd.merge(
+        #     self.data, alp_hist.data[cols],
+        #     on=['weekday', 'hour', 'vollcode'], how='left')
 
-        cols = ['vollcode', 'weekday', 'hour', 'alpha']
+        cols = ['vollcode', 'weekday', 'hour', 'alpha', 'hotspot']
         self.data = pd.merge(
             self.data, alp.data[cols],
             on=['weekday', 'hour', 'vollcode'], how='left')

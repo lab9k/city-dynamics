@@ -258,7 +258,7 @@ def write_to_db(dataframe, table_name):
     dbconfig = args.dbConfig[0]
     connection = process.connect_database(dbconfig)
 
-    drukte.data.to_sql(
+    dataframe.data.to_sql(
         name=table_name, con=connection, index=True, if_exists='replace')
     connection.execute('ALTER TABLE "%s" ADD PRIMARY KEY ("index")' % table_name)
 
