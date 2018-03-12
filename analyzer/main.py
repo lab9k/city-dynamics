@@ -155,6 +155,7 @@ def linear_model(drukte):
     drukte.data = drukte.data.sort_values(['vollcode', 'weekday', 'hour'])
     ####################################
 
+    '''
     ####################################
     #### Computations on hotspot level
 
@@ -183,6 +184,7 @@ def linear_model(drukte):
     # Add to dataframe
     drukte.hotspot_data = hotspot_data[['hotspot', 'weekday', 'hour', 'drukteindex']]
     ####################################
+    '''
 
     return drukte
 
@@ -266,7 +268,7 @@ def write_table_to_db(dataframe, table_name):
     connection = process.connect_database(dbconfig)
 
     # Write dataframe data to table
-    dataframe.data.to_sql(
+    dataframe.to_sql(
         name=table_name, con=connection, index=True, if_exists='replace')
     connection.execute('ALTER TABLE "%s" ADD PRIMARY KEY ("index")' % table_name)
 
@@ -313,6 +315,7 @@ def run():
     if pipeline_on == True:
         drukte = pipeline_model(drukte)
 
+    '''
     if pipeline_on == False:
         drukte = linear_model(drukte)
 
@@ -322,6 +325,7 @@ def run():
         # Fill specific hotspot table for API (selection of columns).
         fill_table_in_db('drukteindex_hotspots', 'drukteindex_hotspots_api',
             ['index', 'hotspot', 'hotspot_id', 'hour', 'weekday', 'drukteindex'])
+    '''
 
     # Write complete buurtcombinatie data (all columns) to table.
     write_table_to_db(drukte.data, 'drukteindex_buurtcombinaties')
