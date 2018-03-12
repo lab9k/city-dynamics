@@ -44,7 +44,7 @@ class Drukteindex(models.Model):
     drukteindex = models.FloatField(blank=True, null=True)
 
     class Meta:
-        db_table = 'drukteindex'
+        db_table = 'drukteindex_DUPLICAAT'
 
 
 class BuurtCombinatieDrukteindex(models.Model):

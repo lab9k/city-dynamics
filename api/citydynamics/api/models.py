@@ -29,7 +29,6 @@ class Functiekaart(models.Model):
     unnamed_19 = models.FloatField(db_column='Unnamed: 19', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 
     class Meta:
-        managed = False
         db_table = 'FUNCTIEKAART'
 
 
@@ -40,7 +39,6 @@ class Verblijversindex(models.Model):
     verblijversindex = models.IntegerField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'VERBLIJVERSINDEX'
 
 
@@ -56,7 +54,6 @@ class Buurt(models.Model):
     wkb_geometry = models.GeometryField(blank=True, null=True)
 
     class Meta:
-        managed = True
         db_table = 'buurt'
 
 
@@ -73,7 +70,6 @@ class Buurtcombinatie(models.Model):
     wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
-        managed = True
         db_table = 'buurtcombinatie'
 
 
@@ -93,7 +89,6 @@ class Drukteindex(models.Model):
     drukteindex = models.FloatField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'drukteindex'
 
 
@@ -106,7 +101,6 @@ class DrukteindexHotspots(models.Model):
     longitude = models.FloatField(db_column='Longitude', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
         db_table = 'drukteindex_hotspots'
 
 
@@ -123,7 +117,6 @@ class Gebiedsgerichtwerken(models.Model):
     wkb_geometry = models.GeometryField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'gebiedsgerichtwerken'
 
 
@@ -143,7 +136,6 @@ class Google(models.Model):
     geom = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'google'
 
 
@@ -160,7 +152,6 @@ class GoogleDec(models.Model):
     geom = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'google_dec'
 
 
@@ -180,7 +171,6 @@ class GoogleDecWithBc(models.Model):
     stadsdeel_code = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'google_dec_with_bc'
 
 
@@ -203,7 +193,6 @@ class GoogleWithBc(models.Model):
     stadsdeel_code = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'google_with_bc'
 
 
@@ -219,7 +208,6 @@ class Gvb(models.Model):
     geom = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'gvb'
 
 
@@ -238,7 +226,6 @@ class GvbWithBc(models.Model):
     stadsdeel_code = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'gvb_with_bc'
 
 
@@ -254,7 +241,6 @@ class Stadsdeel(models.Model):
     wkb_geometry = models.GeometryField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'stadsdeel'
 
 
@@ -268,7 +254,6 @@ class Tellus(models.Model):
     geom = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'tellus'
 
 
@@ -285,5 +270,4 @@ class TellusWithBc(models.Model):
     stadsdeel_code = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'tellus_with_bc'
