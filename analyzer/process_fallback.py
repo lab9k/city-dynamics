@@ -243,7 +243,7 @@ class Process_alpha_historical(Process):
     def __init__(self, dbconfig):
         super().__init__(dbconfig)
         self.name = 'alpha_historical_week'
-        self.import_data(['google_with_bc', 'google_dec_with_bc'],
+        self.import_data(['google_with_b', 'google_dec_with_bc'],
                          ['name', 'vollcode', 'timestamp', 'historical', 'stadsdeel_code'])
         self.dataset_specific()
         self.rename({'historical': 'alpha_week'})

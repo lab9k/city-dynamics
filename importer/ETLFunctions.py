@@ -131,6 +131,19 @@ class ModifyTables(DatabaseInteractions):
         """.format(tableName)
 
     @staticmethod
+    def add_stadsdeelcodes(tableName):
+        return """
+        ALTER TABLE             "{0}"
+        DROP COLUMN IF EXISTS   stadsdeelcode;
+
+        ALTER TABLE "{0}" add stadsdeelcode varchar;
+
+        UPDATE "{0}" SET stadsdeelcode = stadsdeel.code
+        FROM stadsdeel 
+        WHERE st_intersects("{0}".geom, stadsdeel.wkb_geometry)
+        """.format(tableName)
+
+    @staticmethod
     def add_hotspot_names(tableName):
         return """
         ALTER table	"{0}"

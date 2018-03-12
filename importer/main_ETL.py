@@ -15,7 +15,6 @@ import parsers
 from ETLFunctions import DatabaseInteractions
 from ETLFunctions import ModifyTables
 from ETLFunctions import LoadGebieden
-import modify_alpha_table
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -26,9 +25,9 @@ config_src.read('sources.conf')
 db_int = DatabaseInteractions()
 conn = db_int.get_sqlalchemy_connection()
 
+
 # TODO Use this structure to refactor the main function
 def download_from_os():
-
     os_folders = [config_src.get(x, 'OBJSTORE_FOLDER') for x in datasets]
 
     # Check whether locally cached downloads should be used.
@@ -40,18 +39,25 @@ def download_from_os():
     else:
         logger.info('No download from datastore requested, quitting.')
 
-def parse_and_write():
 
+def parse_and_write():
     for dataset in datasets:
         logger.info('Parsing and writing {} data...'.format(dataset))
-        df = getattr(parsers, 'parse_' + dataset)(datadir=local_data_directory)
-        df.to_sql(
-            name=config_src.get(dataset, 'TABLE_NAME'),
-            con=conn, index=True, if_exists='replace')
 
-        conn.execute(ModifyTables.set_primary_key(config_src.get(dataset, 'TABLE_NAME')))
+        # if statement below is needed because alpha's parser writes directly to database, whereas other parsers
+        # return a dataframe. #TODO refactor?
+        if dataset == 'alpha':
+            getattr(parsers, 'parse_' + dataset)(datadir=local_data_directory)
 
-        logger.info('... done')
+        else:
+            df = getattr(parsers, 'parse_' + dataset)(datadir=local_data_directory)
+            df.to_sql(
+                name=config_src.get(dataset, 'TABLE_NAME'),
+                con=conn, index=True, if_exists='replace')
+
+            conn.execute(ModifyTables.set_primary_key(config_src.get(dataset, 'TABLE_NAME')))
+
+            logger.info('... done')
 
     logger.info('Loading and writing area codes to database')
 
@@ -107,17 +113,17 @@ if __name__ == "__main__":
     if args.dataset:
         datasets = [args.dataset]
 
-
     # 2. Download data from objectstore
 
     download_from_os()
 
-    # 3. Parse the data and write to postgresql database
+    # 3. Restore alpha dump to database
+    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump'
+    os.system(cmd)
+
+    # 4. Parse the data and write to postgresql database
 
     parse_and_write()
-
-    # 4. Modify alpha table
-    modify_alpha_table.run()
 
     # 5. Modify tables
 
