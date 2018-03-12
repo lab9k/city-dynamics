@@ -3,6 +3,7 @@ from django.contrib.postgres.fields import JSONField
 
 from django.conf import settings
 
+
 class Buurtcombinatie(models.Model):
     ogc_fid = models.AutoField(primary_key=True)
     gml_id = models.CharField(max_length=255)
@@ -18,7 +19,6 @@ class Buurtcombinatie(models.Model):
 
     class Meta:
         db_table = 'buurtcombinatie'
-        managed = False
 
 
 class Drukteindex(models.Model):
@@ -44,13 +44,14 @@ class Drukteindex(models.Model):
     drukteindex = models.FloatField(blank=True, null=True)
 
     class Meta:
-        db_table = 'drukteindex'
+        db_table = 'drukteindex_DUPLICAAT'
 
 
 class BuurtCombinatieDrukteindex(models.Model):
     index = models.BigIntegerField(primary_key=True)
     vollcode = models.ForeignKey(
-        'Buurtcombinatie', related_name='druktecijfers_bc', on_delete=models.DO_NOTHING)
+        'Buurtcombinatie',
+        related_name='druktecijfers_bc', on_delete=models.DO_NOTHING)
     hour = models.IntegerField()
     weekday = models.IntegerField()
     drukteindex = models.FloatField()
@@ -81,5 +82,4 @@ class RealtimeGoogle(models.Model):
     data = JSONField()
 
     class Meta:
-        managed = False
-        db_table = f'google_raw_locations_realtime_current_{settings.ENVIRONMENT}'
+        db_table = f'google_raw_locations_realtime_current_{settings.ENVIRONMENT}'  # noqa

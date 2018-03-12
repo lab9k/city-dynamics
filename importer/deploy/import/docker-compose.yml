@@ -28,9 +28,7 @@ services:
       QUANTILLION_PASSWORD:
       ENVIRONMENT:
       GOOGLE_DAYS: 50
-    command: >
-      bash -c "/app/deploy/docker-wait.sh \
-              && /app/run_import.sh \ "
+
     volumes:
       - data-volume:/data
       - ./backups:/backups
