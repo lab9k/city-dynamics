@@ -166,15 +166,22 @@ def linear_model(drukte):
     linear_weights_hotspots = {'verblijvers_ha_2016': 15, 'gvb': 15, 'alpha': 70}
     lw_hotspots_normalize = sum(linear_weights_hotspots.values())
 
+    # Select unique hotspots
+    hotspot_data.drop_duplicates(subset=['hotspot', 'weekday', 'hour'])
+
+    # Compute drukteindex value
     for col, weights in linear_weights_hotspots.items():
         if col in drukte.data.columns:
             hotspot_data['drukteindex'] = hotspot_data['drukteindex'].add(drukte.data[col] * weight, fill_value=0)
 
-    # Only keep single entries for hotspots and add them to drukte process object
-    hotspot_data.drop_duplicates(subset=['hotspot', 'weekday', 'hour'])      # Select unique hotspots
-    hotspot_data = hotspot_data.sort_values(['hotspot', 'weekday', 'hour'])  # Select needed columns
-    hotspot_data['drukteindex'] = hotspot_data['drukteindex'] / lw_hotspots_normalize  # Normalize
-    drukte.hotspot_data = hotspot_data[['hotspot', 'weekday', 'hour', 'drukteindex']]  # Add to df
+    # Normalize drukteindex value
+    hotspot_data['drukteindex'] = hotspot_data['drukteindex'] / lw_hotspots_normalize
+
+    # Only keep necessary columns
+    hotspot_data = hotspot_data[['index', 'hotspot', 'hour', 'weekday', 'drukteindex']]
+
+    # Add to dataframe
+    drukte.hotspot_data = hotspot_data[['hotspot', 'weekday', 'hour', 'drukteindex']]
     ####################################
 
     return drukte
@@ -252,16 +259,22 @@ def pipeline_model(drukte):
 
 
 ##############################################################################
-def write_to_db(dataframe, table_name):
+def write_to_db(dataframe, table_name, columns=None):
     """Write dataframe to table with given name. If table already exists, replace it."""
     log.debug('Writing data to database.')
     dbconfig = args.dbConfig[0]
     connection = process.connect_database(dbconfig)
 
+    # If a list of columns is provided, only write these columns to the database table.
+    if columns != None:
+        dataframe = dataframe[columns]
+
     dataframe.data.to_sql(
         name=table_name, con=connection, index=True, if_exists='replace')
     connection.execute('ALTER TABLE "%s" ADD PRIMARY KEY ("index")' % table_name)
 
+    # TODO: Nieuwe insert into DB functie schrijven
+    '''
     # # write relevant columns to a table which is served by an API
     # # first, create a primary key on the buurtcombinatie table. TODO: find a better place (in the importer) for this
     # connection.execute('ALTER TABLE test1 ADD COLUMN id SERIAL PRIMARY KEY;')
@@ -278,20 +291,8 @@ def write_to_db(dataframe, table_name):
 
     """
     connection.execute(insert_into_api_table)
-    
+    '''
     log.debug('done.')
-
-
-##############################################################################
-# def write_hotspots_to_db(drukte):
-#     """Write hotspots data to database."""
-#     log.debug('Writing hotspots data to database.')
-#     dbconfig = args.dbConfig[0]
-#     connection = process.connect_database(dbconfig)
-#     drukte.hotspot_data.to_sql(
-#         name='drukteindex_hotspots', con=connection, index=True, if_exists='replace')
-#     connection.execute('ALTER TABLE "drukteindex_hotspots" ADD PRIMARY KEY ("index")')
-#     log.debug('done.')
 
 
 ##############################################################################
@@ -308,11 +309,13 @@ def run():
 
     if pipeline_on == False:
         drukte = linear_model(drukte)
-        write_to_db(drukte.hotspot_data, 'drukteindex_hotspots')
-        # write_hotspots_to_db(drukte)
+        write_to_db(drukte.hotspot_data, 'drukteindex_hotspots',
+                    ['index', 'hotspot', 'hotspot_id', 'hour', 'weekday', 'drukteindex'])
 
     # write_to_db(drukte)
-    write_to_db(drukte.data, 'drukteindex_hour_week')
+    write_to_db(drukte.data, 'drukteindex_buurtcombinaties',
+                ['index', 'vollcode', 'vollcode_id', 'hour', 'weekday', 'drukteindex'])
+
 
 ##############################################################################
 if __name__ == "__main__":
