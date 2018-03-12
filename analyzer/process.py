@@ -257,27 +257,29 @@ class Process_alpha_locations_expected(Process):
     objectstore (which is imported on a daily basis from Quantillion).
     """
 
-    def __init__(self, dbconfig):
+    def __init__(self, dbconfig, aggregation_level):
         super().__init__(dbconfig)
         self.name = 'alpha_locations_expected'
         self.import_data(['alpha_locations_expected'],
-                         ['name', 'weekday', 'hour', 'expected', 'vollcode', 'stadsdeelcode'])
-        self.dataset_specific()
+                         ['name', 'weekday', 'hour', 'expected', 'vollcode', 'hotspot', 'stadsdeelcode'])
+        self.dataset_specific(aggregation_level)
         self.rename({'expected': 'alpha'})
 
 
-    def dataset_specific(self):
-        area_mapping = self.data[['vollcode', 'stadsdeelcode']].drop_duplicates()
+    # TODO: Create fallbacks based on an aggregation-level list (now we default to stadsdeel level)
+    # TODO: e.g. levels = ['hotspot', 'vollcode', 'stadsdeelcode', 'stad']
+    def dataset_specific(self, aggregation_level):
+        area_mapping = self.data[[aggregation_level, 'stadsdeelcode']].drop_duplicates()
 
         # historical weekpatroon
         # first calculate the average weekpatroon per location
         google_week_location = self.data.groupby([
-            'weekday', 'hour', 'vollcode', 'name'])['expected'].mean().reset_index()
-        google_week_location = google_week_location.merge(area_mapping, on='vollcode')
+            'weekday', 'hour', aggregation_level, 'name'])['expected'].mean().reset_index()
+        google_week_location = google_week_location.merge(area_mapping, on=aggregation_level)
 
-        # and then calculate the average weekpatroon per vollcode
-        google_week_vollcode = google_week_location.groupby([
-            'vollcode', 'weekday', 'hour'])['expected'].mean().reset_index()
+        # and then calculate the average weekpatroon per hotspot/vollcode/other aggregation level
+        google_week = google_week_location.groupby([
+            aggregation_level, 'weekday', 'hour'])['expected'].mean().reset_index()
 
         # also calculate the average weekpatroon per stadsdeel
         google_week_stadsdeel = google_week_location.groupby([
@@ -286,20 +288,21 @@ class Process_alpha_locations_expected(Process):
         # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
         # in case of sparse data, take the stadsdeelcode aggregation
         minimal_hours = 98
-        cnt = google_week_vollcode.vollcode.value_counts()
-        sparse_vollcodes = cnt[cnt < minimal_hours].index.tolist()
+        cnt = google_week[aggregation_level].value_counts()
+        sparse_agglevels = cnt[cnt < minimal_hours].index.tolist()
 
         # first take the vollcode aggregation for vollcodes that have enough data
-        google_week_vollcode = google_week_vollcode[~google_week_vollcode.vollcode.isin(sparse_vollcodes)]
+        google_week = google_week[~google_week.vollcode.isin(sparse_agglevels)]
 
         # then take the staddeelcode aggregation for vollcodes for which data is sparse
         google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeelcode')
         google_week_stadsdeel.drop('stadsdeelcode', axis=1, inplace=True)
-        google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_vollcodes)]
+        google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_agglevels)]
 
-        self.data = pd.concat([google_week_vollcode, google_week_stadsdeel])
+        self.data = pd.concat([google_week, google_week_stadsdeel])
 
 ##############################################################################
+'''
 class Process_alpha_historical(Process):
     """This class implements all data importing and pre-processing steps for the alpha datasource."""
 
@@ -366,6 +369,7 @@ class Process_alpha_live(Process):
         self.data = self.data.reset_index()
         self.data['weekday'] = [ts.weekday() for ts in self.data.timestamp]
         self.data['hour'] = [ts.hour for ts in self.data.timestamp]
+'''
 
 ##############################################################################
 class Process_verblijversindex(Process):
@@ -415,7 +419,8 @@ class Process_drukte(Process):
         gvb_bc = Process_gvb_buurt(dbconfig)
         # alp_hist = Process_alpha_historical(dbconfig)
         # alp_live = Process_alpha_live(dbconfig)
-        alp = Process_alpha_locations_expected(dbconfig)
+        alp_vollcode = Process_alpha_locations_expected(dbconfig, 'vollcode')
+        # alp_hotspots = Process_alpha_locations_expected(dbconfig, 'hotspot')
 
         # initialize drukte dataframe
         start = datetime.datetime(2018, 2, 12, 0, 0)  # Start of a week: Monday at midnight
@@ -428,9 +433,9 @@ class Process_drukte(Process):
         #     self.data, alp_hist.data[cols],
         #     on=['weekday', 'hour', 'vollcode'], how='left')
 
-        cols = ['vollcode', 'weekday', 'hour', 'alpha', 'hotspot']
+        cols = ['vollcode', 'weekday', 'hour', 'alpha']
         self.data = pd.merge(
-            self.data, alp.data[cols],
+            self.data, alp_vollcode.data[cols],
             on=['weekday', 'hour', 'vollcode'], how='left')
 
         self.data = pd.merge(
@@ -445,8 +450,11 @@ class Process_drukte(Process):
             self.data, vbi.data,
             on='vollcode', how='left')
 
-        # init drukte index
+        # Init drukte index
         self.data['drukteindex'] = 0
+
+        # Init hotspot dataframe
+        # self.hotspots = alp_hotspots
 
         # Remove timestamps from weekpattern (only day and hour are relevant)
         self.data.drop('timestamp', axis=1, inplace=True)
