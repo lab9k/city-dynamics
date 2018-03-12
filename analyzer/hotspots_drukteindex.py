@@ -127,8 +127,7 @@ def main():
     alpha_week_hotspots = alpha_week_hotspots.merge(hs_hour_combinations, on=['hour', 'hotspot'], how='outer')
     alpha_week_hotspots['alpha_week'].fillna(value=0, inplace=True)
 
-    alpha_week_hotspots = alpha_week_hotspots.merge(alpha_hotspots[['hotspot', 'vollcode']]
-                                                      .drop_duplicates('hotspot'), on='hotspot')
+    alpha_week_hotspots = alpha_week_hotspots.merge(hotspots_df[['hotspot', 'vollcode']], on='hotspot')
 
     di = pd.read_sql(sql="SELECT * FROM drukteindex_buurtcombinaties", con=conn)
 
