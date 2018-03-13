@@ -32,19 +32,19 @@ node {
 
     stage("Build dockers") {
         tryStep "build", {
-            def importer = docker.build("build.app.amsterdam.nl:5000/stadswerken/citydynamics_importer:${env.BUILD_NUMBER}", "importer")
+            def importer = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_importer:${env.BUILD_NUMBER}", "importer")
                 importer.push()
                 importer.push("acceptance")
 
-            def analyzer = docker.build("build.app.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${env.BUILD_NUMBER}", "analyzer")
+            def analyzer = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${env.BUILD_NUMBER}", "analyzer")
                 analyzer.push()
                 analyzer.push("acceptance")
 
-            def api = docker.build("build.app.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}", ".")
+            def api = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}", ".")
                 api.push()
                 api.push("acceptance")
 
-            def front = docker.build("build.app.amsterdam.nl:5000/stadswerken/citydynamics_front:${env.BUILD_NUMBER}", "front")
+            def front = docker.build("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_front:${env.BUILD_NUMBER}", "front")
                 front.push()
                 front.push("acceptance")
         }
@@ -58,7 +58,7 @@ if (BRANCH == "master") {
     node {
         stage('Push acceptance image') {
             tryStep "image tagging", {
-                def image = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}")
+                def image = docker.image("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}")
                 image.pull()
                 image.push("acceptance")
             }
@@ -85,7 +85,7 @@ if (BRANCH == "master") {
     //node {
     //    stage('Push production image') {
     //        tryStep "image tagging", {
-    //            def kibana = docker.image("build.app.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
+    //            def kibana = docker.image("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
     //            kibana.pull()
     //            kibana.push("production")
     //            kibana.push("latest")
