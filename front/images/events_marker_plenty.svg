@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="35px" height="56px" viewBox="0 0 35 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
+    <title>Evenementen poly</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Evenementen-poly">
+            <g id="Evenementen-Icon">
+                <g id="Polygon">
+                    <path d="M19.2888544,16.7522375 L21,20.1745288 L34.5690577,50.7049087 L34.5690577,50.7049087 C34.8531888,51.3442037 35,52.0360093 35,52.735601 L35,55.1745288 L0,55.1745288 L0,52.735601 L7.10542736e-15,52.735601 C7.01975208e-15,52.0360093 0.146811151,51.3442037 0.430942257,50.7049087 L14,20.1745288 L15.7111456,16.7522375 L15.7111456,16.7522375 C16.2051241,15.7642805 17.4064702,15.3638319 18.3944272,15.8578103 C18.781482,16.0513378 19.095327,16.3651827 19.2888544,16.7522375 Z" id="Triangle-3" fill="#4a4a4a" transform="translate(17.500000, 36.337264) scale(1, -1) translate(-17.500000, -36.337264) "></path>
+                    <circle id="Oval-8" fill="#50E6DB" cx="17.5" cy="17.5" r="17.5"></circle>
+                    <circle id="Oval-9" fill="#FFFFFF" cx="17.5" cy="17.5" r="15"></circle>
+                </g>
+                <g id="Calendar" transform="translate(7.000000, 8.750000)">
+                    <rect id="Rectangle-17" stroke="#4a4a4a" x="0.5" y="0.5" width="20" height="15.625" rx="1"></rect>
+                    <g id="Date-ovals" transform="translate(3.500000, 3.500000)" fill="#4a4a4a">
+                        <circle id="Oval-14" cx="1.3125" cy="1.3125" r="1.3125"></circle>
+                        <circle id="Oval-14" cx="6.5625" cy="1.3125" r="1.3125"></circle>
+                        <circle id="Oval-14" cx="11.8125" cy="1.3125" r="1.3125"></circle>
+                        <circle id="Oval-14" cx="1.3125" cy="4.8125" r="1.3125"></circle>
+                        <circle id="Oval-14" cx="6.5625" cy="4.8125" r="1.3125"></circle>
+                        <circle id="Oval-14" cx="1.3125" cy="8.3125" r="1.3125"></circle>
+                        <circle id="Oval-14" cx="6.5625" cy="8.3125" r="1.3125"></circle>
+                        <circle id="Oval-14" cx="11.8125" cy="4.8125" r="1.3125"></circle>
+                    </g>
+                    <circle id="Oval-13" stroke="#4a4a4a" stroke-width="0.5" fill="#FFFFFF" cx="16.625" cy="14.875" r="4.375"></circle>
+                    <g id="Checkmark" transform="translate(15.750000, 13.125000)" stroke="#4a4a4a" stroke-linecap="square">
+                        <path d="M0.875,2.625 L2.625,0.875" id="Line-33"></path>
+                        <polyline id="Line-32" points="0 1.75 0.875 2.625 1.75 1.75"></polyline>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

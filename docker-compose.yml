@@ -13,7 +13,7 @@ services:
       - ./deploy/backup:/backup
 
   api:
-    build: ./api
+    build: .
     ports:
       - "8117:8001"
     links:
@@ -31,12 +31,14 @@ services:
       - UWSGI_OFFLOAD_THREADS=1
       - UWSGI_HARAKIRI=15
       - UWSGI_DIE_ON_TERM=1
+      - UWSGI_STATIC_INDEX=index.html
 
   importer:
     build: ./importer
     links:
       - database:database
     environment:
+      PGPASSWORD: insecure
       # Following are secret, should be provided as environment variables.
       # E.g. by running in terminal
       # export STADSWERKEN_OBJECTSTORE_PASSWORD="mypassword"

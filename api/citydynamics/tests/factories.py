@@ -10,7 +10,6 @@ from citydynamics.datasets import models
 
 
 class DrukteindexFactory(factory.DjangoModelFactory):
-
     class Meta:
         model = models.Drukteindex
 
@@ -22,11 +21,22 @@ class DrukteindexFactory(factory.DjangoModelFactory):
     weekday = fuzzy.FuzzyInteger(0, 6)
     hour = fuzzy.FuzzyFloat(0, 23)
 
-    google_live = fuzzy.FuzzyFloat(0, 1)
-    google_week = fuzzy.FuzzyFloat(0, 1)
+    # google_live = fuzzy.FuzzyFloat(0, 1)
+    # google_week = fuzzy.FuzzyFloat(0, 1)
     gvb_buurt = fuzzy.FuzzyFloat(0, 1)
     gvb_stad = fuzzy.FuzzyFloat(0, 1)
-    verblijversindex = fuzzy.FuzzyFloat(0, 1)
-    google = fuzzy.FuzzyFloat(0, 1)
+    verblijvers = fuzzy.FuzzyFloat(0, 1)
+    # google = fuzzy.FuzzyFloat(0, 1)
     gvb = fuzzy.FuzzyFloat(0, 1)
-    drukte_index = fuzzy.FuzzyFloat(0, 1)
+    drukteindex = fuzzy.FuzzyFloat(0, 1)
+
+
+class HotspotsFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Hotspots
+
+    index = fuzzy.FuzzyInteger(low=0)
+    hotspot = fuzzy.FuzzyText()
+    lat = fuzzy.FuzzyFloat(low=0)
+    lon = fuzzy.FuzzyFloat(low=0)
+    # point_sm = fuzzy.GeometryField()

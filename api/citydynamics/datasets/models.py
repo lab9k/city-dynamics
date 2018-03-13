@@ -1,8 +1,7 @@
-from django.db import models
 from django.contrib.gis.db import models
-from rest_framework import serializers
-from datetime import datetime
-from django.contrib.gis.db import models as geo
+from django.contrib.postgres.fields import JSONField
+
+from django.conf import settings
 
 
 class Buurtcombinatie(models.Model):
@@ -15,10 +14,12 @@ class Buurtcombinatie(models.Model):
     type = models.CharField(max_length=255, blank=True, null=True)
     uri = models.CharField(max_length=255, blank=True, null=True)
     wkb_geometry = models.GeometryField(blank=True, null=True)
-    wkb_geometry_simplified = models.GeometryField(srid=0, blank=True, null=True)
+    wkb_geometry_simplified = models.GeometryField(
+        srid=0, blank=True, null=True)
 
     class Meta:
         db_table = 'buurtcombinatie'
+        managed = False
 
 
 class Drukteindex(models.Model):
@@ -41,25 +42,61 @@ class Drukteindex(models.Model):
     verblijvers_ha_2016 = models.FloatField(blank=True, null=True)
     alpha = models.FloatField(blank=True, null=True)
     gvb = models.FloatField(blank=True, null=True)
-    drukte_index = models.FloatField(blank=True, null=True)
+    drukteindex = models.FloatField(blank=True, null=True)
 
     class Meta:
-        managed = False
-        db_table = 'drukteindex'
+        db_table = 'drukteindex_DUPLICAAT'
 
+
+class BuurtCombinatieDrukteindex(models.Model):
+    index = models.BigIntegerField(primary_key=True)
+    vollcode = models.ForeignKey(
+        'Buurtcombinatie',
+        related_name='druktecijfers_bc', on_delete=models.DO_NOTHING)
+    hour = models.IntegerField()
+    weekday = models.IntegerField()
+    drukteindex = models.FloatField()
+
+
+# class Hotspots(models.Model):
+#     index = models.BigIntegerField(primary_key=True)
+#     hotspot = models.TextField(db_column='Hotspot', blank=True, null=True)
+#     latitude = models.FloatField(db_column='Latitude', blank=True, null=True)
+#     longitude = models.FloatField(db_column='Longitude', blank=True, null=True)
+#     point_sm = models.GeometryField(srid=0, blank=True, null=True)
 
 
 class Hotspots(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    hotspot = models.TextField(db_column='Hotspot', blank=True, null=True)
-    latitude = models.FloatField(db_column='Latitude', blank=True, null=True)
-    longitude = models.FloatField(db_column='Longitude', blank=True, null=True)
-    point_sm = models.GeometryField(srid=0, blank=True, null=True)
+    hotspot = models.TextField(blank=True, null=True)
+    lat = models.FloatField(blank=True, null=True)
+    lon = models.FloatField(blank=True, null=True)
+    geom = models.GeometryField(srid=0, blank=True, null=True)
+    vollcode = models.CharField(max_length=255, blank=True, null=True)
+    stadsdeelcode = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'hotspots'
+
 
 
 class HotspotsDrukteIndex(models.Model):
     index = models.BigIntegerField(primary_key=True)
-    hotspot = models.ForeignKey('Hotspots', related_name='druktecijfers', on_delete=models.DO_NOTHING)
+    hotspot = models.ForeignKey(
+        'Hotspots', related_name='druktecijfers', on_delete=models.DO_NOTHING)
     hour = models.IntegerField()
-    # weekday = models.IntegerField()
+    weekday = models.IntegerField()
     drukteindex = models.FloatField()
+
+
+class RealtimeGoogle(models.Model):
+
+    place_id = models.TextField(db_index=True)
+    scraped_at = models.DateTimeField(blank=True, null=True)
+    name = models.TextField()
+    data = JSONField()
+
+    class Meta:
+        db_table = f'google_raw_locations_realtime_current_{settings.ENVIRONMENT}'  # noqa
+        managed=False

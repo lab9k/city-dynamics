@@ -21,8 +21,8 @@ from citydynamics.settings_databases import LocationKey,\
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(BASE_DIR)
 
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'acceptance')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -41,6 +41,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'test_without_migrations',
     'django.contrib.contenttypes',
     'django.contrib.staticfiles',
     'corsheaders',

@@ -33,6 +33,8 @@
 	</div>
 
 	<div class="logo"></div>
+	<div class="dlogo"><h2>DrukteRadar</h2></div>
+	<div class="beta"><span>BETA</span></div>
 
 	<div class="m_more">
 		<a href="javascript:void(0);"><i class="material-icons">more_vert</i></a>
@@ -40,7 +42,6 @@
 
 	<div class="m_menu">
 		<ul>
-			<li><a href="javascript:void(0);">DrukteRadar uitleg</a></li>
 			<li><a target="blank" href="https://formulieren.amsterdam.nl/TriplEforms/DirectRegelen/formulier/nl-NL/evAmsterdam/scmor.aspx/fMORGegevensMelding">Maak een melding van overlast:</a></li>
 			<li><a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a></li>
 		</ul>
@@ -54,9 +55,10 @@
 		<ul class="themas_buttons">
 			<li class="fiets_b" title="OV fietsen beschikbaarheid"></li>
 			<li class="park_b" title="Parkeergarage beschikbaarheid"></li>
-			<li class="hotspots_b" title="Hotspots"></li>
-			<!--<li class="google_b" now></li>-->
+			<!--<li class="hotspots_b" title="Hotspots"></li>-->
+			<!--<li class="google_b"></li>-->
 			<li class="events_b" title="Evenementen vandaag"></li>
+			<li class="traffic_b" title="Verkeersdrukte"></li>
 			<li class="cam_b" title="Webcams"></li>
 			<li class="water_b" title="Drukte op het water"></li>
 		</ul>
@@ -81,9 +83,12 @@
 	</div>
 
 	<div class="info">
-		<h2>DrukteRadar uitleg.</h2>
-		<p>De Amsterdam Drukte Radar geeft drukte in de stad weer aan de hand van een dichtheids-index voor iedere buurt van Amsterdam, vergeleken met de andere buurten van de stad.</p>
-		<p>De dichtheids-index is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Data van wegverkeer, OV, parkeren, en bezoeken aan openbare plekken wordt continue verzameld.</p>
+		<i class="material-icons info_icon">info</i>
+		<div class="info_content">
+			<h2>De Amsterdam DrukteRadar</h2>
+			<p>De Amsterdam Drukte Radar toont drukte in de openbare ruimte van Amsterdam over tijd met een drukte-score. De drukte-score geeft de relatieve drukte in een bepaald gebied weer ten opzichte van historische ‘normaalwaarden’ van dit gebied.</p>
+			<p>De drukte-score is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Momenteel bevat de drukte-score data van wegverkeer, openbaar vervoer, parkeren, en bezoeken aan openbare plekken.  Sommigen van deze bronnen geven de data ‘realtime’ weer, terwijl anderen gemiddelden over een bepaalde periode weergeven.</p>
+		</div>
 		<i class="material-icons close">close</i>
 	</div>
 
@@ -108,21 +113,32 @@
 					<feMergeNode in="SourceGraphic"/>
 				</feMerge>
 			</filter>
-			<linearGradient id="gradient" x1="50%" y1="100%" x2="50%" y2="0%" >
+			<linearGradient gradientUnits="userSpaceOnUse" id="gradient1" x1="50%" y1="100%" x2="50%" y2="0%" >
 				<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
 				<stop offset="100%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
 			</linearGradient>
+			<defs>
+				<linearGradient gradientUnits="userSpaceOnUse" id="gradient" x1="50%" y1="100%" x2="50%" y2="0%" >
+					<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
+					<stop offset="50%" style="stop-color:rgb(245,166,35);stop-opacity:1" />
+					<stop offset="100%" style="stop-color:rgb(219,50,42);stop-opacity:1" />
+				</linearGradient>
+			</defs>
 		</defs>
 	</svg>
 </div>
 
 <div class="graphbar">
 	<div class="graphbar_left">
-		<a class="map_buurten" href="javascript:void(0);"></a>
-		<a class="map_hotspots active" href="javascript:void(0);"></a>
+		<div class="legend">
+			<span class="crowded">Drukker</span>
+			<div class="linear"></div>
+			<span class="quiet">Rustiger</span>
+		</div>
+
 	</div>
 		<div class="graphbar_center">
-			<div class="graphbar_title"><h2>Amsterdam</h2><span></span></div>
+			<div class="graphbar_title"><i class="material-icons reset_icon">replay</i><h2>Amsterdam</h2><i class="material-icons info_icon">info</i><span></span></div>
 			<div class="graphbar_graph">
 			</div>
 		</div>
@@ -131,8 +147,9 @@
 			<a class="meld_link1" target="blank" href="https://formulieren.amsterdam.nl/TriplEforms/DirectRegelen/formulier/nl-NL/evAmsterdam/scmor.aspx/fMORGegevensMelding">Maak een melding van overlast:</a>
 			<a class="meld_link2" target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>
 		</div>
-		<img src="images/weer.svg">
-		<!--<iframe id="widget-frame" src="//www.weeronline.nl/Go/ExternalWidgetsNew/OneDayCitySmall?gid=4058223&temperatureScale=Celsius&defaultSettings=False" width="125" height="60" frameborder="0" scrolling="no" style="border: none;" allowtransparency="true"></iframe>-->
+		<div class="weather_widget">
+			<iframe id="widget-frame" src="//www.weeronline.nl/Go/ExternalWidgetsNew/OneDayCitySmall?gid=4058223&temperatureScale=Celsius&defaultSettings=False" width="125" height="60" frameborder="0" scrolling="no" style="border: none;" allowtransparency="true"></iframe>
+		</div>
 	</div>
 
 

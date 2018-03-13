@@ -1,12 +1,11 @@
 import os
-import argparse
-import configparser
 import datetime
 import numpy as np
 import pandas as pd
 import re
-import csv
 import glob
+from ETLFunctions import DatabaseInteractions
+from ETLFunctions import ModifyTables
 
 
 def parse_gvb(datadir,
@@ -272,9 +271,12 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
     # rename columns
     df.rename(columns={
         'Tellus Id': 'tellus_id', 'Tijd Van': 'timestamp',
-        'Latitude': 'lat', 'Longitude': 'lon', 'Meetwaarde': 'meetwaarde',
+        'Latitude': 'lat', 'Longitude': 'lon', 'Meetwaarde': 'tellus',
         'Representatief': 'representatief', 'Richting': 'richting',
-        'Richting 1': 'richting 1', 'Richting 2': 'richting 2'}, inplace=True)
+        'Richting 1': 'richting_1', 'Richting 2': 'richting_2'}, inplace=True)
+
+    # Process number-strings to int
+    df['tellus'] = df.tellus.astype(int)
 
     # change comma to dot and type object to type float64
     df['lon'] = df['lon'].str.replace(',', '.')
@@ -289,13 +291,13 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
     df = df.loc[indx, :]
 
     # only direction centrum
-    indx1 = np.logical_and(df['richting 1'] == 'Centrum', df.richting == '1')
-    indx2 = np.logical_and(df['richting 2'] == 'Centrum', df.richting == '2')
+    indx1 = np.logical_and(df['richting_1'] == 'Centrum', df.richting == '1')
+    indx2 = np.logical_and(df['richting_2'] == 'Centrum', df.richting == '2')
     df = df.loc[np.logical_or(indx1, indx2), :]
 
     # drop columns
-    df.drop(['richting', 'richting 1',
-             'richting 2', 'representatief'], axis=1, inplace=True)
+    df.drop(['richting', 'richting_1',
+             'richting_2', 'representatief'], axis=1, inplace=True)
 
     return df
 
@@ -308,17 +310,26 @@ def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
     return df
 
 
+def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1.csv'):
+    path = os.path.join(datadir, filename)
+    df = pd.read_csv(path)
+    df.rename(columns={'Hotspot':'hotspot', 'Latitude':'lat', 'Longitude':'lon'}, inplace=True)
+    df.columns = [x.lower() for x in df.columns]
+
+    return df
+
+
 def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, sep=';')
     return df
 
 
+
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
     path = os.path.join(datadir, filename)
     df = pd.read_excel(path, sheet_name=3)
-    indx = np.logical_and(df.wijk != 'gemiddelde',
-                          np.logical_not(df.wijk.isnull()))
+
     cols = ['wijk',
             'aantal inwoners',
             'aantal werkzame personen',
@@ -342,8 +353,7 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
                         'oppervlakte land en water in vierkante meter': 'oppervlakte_land_water_m2',
                         'verbl. Per HA (land) 2016': 'verblijvers_ha_2016'}, inplace=True)
 
-    # df.columns = [x.replace(" ", "_") for x in df.columns]
-    df = df.head(98)
+    df = df.head(98)  # Remove last two rows (no relevant data there)
     return df
 
 
@@ -410,3 +420,80 @@ def parse_parkeren(datadir):
     df_parkeer = df_parkeer.drop(['timestamp', 'DateTime'], axis=1)
 
     return df_parkeer
+
+def parse_alpha(datadir):
+
+    def create_row_sql(id, place_id, name, url, weekday, hour, expected, lat, lon,
+                       address, location_type, visit_duration, types, category):
+
+        row_sql = '''INSERT INTO public.alpha_locations_expected(id, \
+        place_id, name, url, weekday, hour, expected, lat, lon, address, \
+        location_type, visit_duration, types, category)
+        VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
+        ''' % (id, place_id, name, url, weekday, hour, expected, lat, lon, address,
+               location_type, visit_duration, types, category)
+
+        return row_sql
+
+    # Create database connection
+    db_int = DatabaseInteractions()
+    conn = db_int.get_sqlalchemy_connection()
+
+    # Load raw Alpha data dump from table
+    raw = pd.read_sql_table('google_raw_locations_expected_acceptance', conn)
+
+    # Create table for modified Alpha data
+    conn.execute(ModifyTables.create_alpha_table())
+
+    # Lambda function to double up quotation marks for sql writing.
+    fix_quotes = lambda x: re.sub("'", "''", x)
+
+    # Iterate over raw entries to fill new table
+    id_counter = 0
+    for i in range(0, len(raw)):
+        place_id = raw.place_id[i]
+        name = raw.name[i]
+        url = raw.data[i]['url']
+        weekday = raw.scraped_at[i].weekday()
+        lat = raw.data[i]['location']['coordinates'][1]
+        lon = raw.data[i]['location']['coordinates'][0]
+        address = raw.data[i]['formatted_address']
+        location_type = raw.data[i]['location']['type']
+        visit_duration = raw.data[i]['VisitDuration']
+        types = str(raw.data[i]['types'])
+        category = raw.data[i]['Category']
+
+        # Fix quotes for sql writing
+        name = fix_quotes(name)
+        url = fix_quotes(url)
+        address = fix_quotes(address)
+        location_type = fix_quotes(location_type)
+        visit_duration = fix_quotes(visit_duration)
+        types = fix_quotes(types)
+
+        # Loop over all expected hour intervals for each location and scrape day
+        for interval in raw.data[i]['Expected']:
+
+            # Truncate time interval to first hour of the interval
+            hour = interval['TimeInterval'][0:2]
+            hour = int(re.sub("[^0-9]", "", hour))
+            ampm = interval['TimeInterval'][1:4]
+            ampm = re.sub('[^a-zA-Z]+', '', ampm)
+            if ampm == 'pm':
+                if hour == 12:
+                    pass
+                else:
+                    hour += 12
+
+            # Get the expected crowdedness value for this hour (relative value)
+            expected = interval['ExpectedValue']
+
+            # Create sql query to write data to database
+            row_sql = create_row_sql(id_counter, place_id, name, url, weekday, hour, expected,
+                            lat, lon, address, location_type, visit_duration, types, category)
+
+            # Write data to database
+            conn.execute(row_sql)
+
+            # Update id counter so all rows have a unique id
+            id_counter += 1

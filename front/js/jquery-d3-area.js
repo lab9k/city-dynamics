@@ -10,6 +10,10 @@
 			// set the dimensions and margins of the graph
 			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
 			graph.width = graph.container.width() - graph.margin.left - graph.margin.right;
+			if(graph.width > 360)
+			{
+				graph.width = graph.width - 16;
+			}
 			graph.height = graph.container.height() - graph.margin.top - graph.margin.bottom;
 
 			// set the ranges
@@ -26,7 +30,7 @@
 				.x(function(d) { return x(d.x); })
 				.y0(y(0))
 				.y1(function(d) { return y(d.y); });
-				//.curve(d3.curveBasis); // d3.curveNatural , d3.curveLinear
+			//.curve(d3.curveBasis); // d3.curveNatural , d3.curveLinear
 
 
 			// append the svg obgect to the body of the page
@@ -45,6 +49,7 @@
 				return d.x;
 			}));
 			y.domain([0, 100]);
+
 
 			// Add the valueline path.
 			graph.svg.append("path")
@@ -80,16 +85,29 @@
 				.attr("y2",graph.height)
 				.attr("style",'stroke:rgb(255,255,255);stroke-width:2');
 
+			// graph.svg.append("text")
+			// 	.attr("x", '10px')
+			// 	.attr('y','100%')
+			// 	.attr("dy", "-30px")
+			// 	.attr("text-anchor", "start")
+			// 	.attr("fill",'#fff')
+			// 	.attr("font-size",'12px')
+			// 	.text('Rustig');
+			//
+			// graph.svg.append("text")
+			// 	.attr("x", '10px')
+			// 	.attr('y','0')
+			// 	.attr("dy", "20px")
+			// 	.attr("text-anchor", "start")
+			// 	.attr("fill",'#fff')
+			// 	.attr("font-size",'12px')
+			// 	.text('Druk');
 
-			graph.update = function(newData){
+			//add r altime
+			graph.realtime_bar = graph.svg.append("rect");
 
-				// graph.svg.selectAll('path.area')
-				// 	.datum(newData)
-				// 	.attr("d", graph.area);
 
-				// graph.svg.selectAll("path.area-line")
-				// 	.datum(newData)
-				// 	.attr("d", graph.topline);
+			graph.update = function(newData,realtime){
 
 				graph.svg.selectAll('path.area')
 					.datum(graph.data)
@@ -114,6 +132,25 @@
 							return graph.topline( interpolator( t ) );
 						}
 					});
+
+				graph.realtime_bar.attr("height",0);
+				if(realtime>0)
+				{
+
+					var hours = getHourDigit();
+
+					graph.realtime_bar
+						.attr("height", (realtime * graph.height))
+						.attr('width', '20px')
+						.attr('y', graph.height - (realtime*100))
+						.attr('x', (100/23*hours)+'%')
+						.attr('rx', 5)
+						.attr('ry', 5)
+						.attr("stroke", "#4a4a4a")
+						.attr("fill", "#ffffff")
+						.attr("class", "realtime_bar");
+				}
+
 			}
 
 			graph.startCount = function(){
@@ -176,6 +213,18 @@
 
 
 			}
+			graph.stop = function(){
+				// stop hotspots animation
+				stopAnimation();
+
+				console.log('pause');
+				graph.lineGroup
+					.attr('state','pause')
+					.transition()
+					.duration( 0 );
+
+
+			}
 
 
 
@@ -183,6 +232,8 @@
 			// export update function
 			graph.container[0].update = graph.update;
 			graph.container[0].startCount = graph.startCount;
+			graph.container[0].stopResumeCount = graph.stopResumeCount;
+			graph.container[0].stop = graph.stop;
 		});
 		// return
 		return this;

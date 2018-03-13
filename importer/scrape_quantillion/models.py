@@ -1,5 +1,6 @@
 import os
 import logging
+import argparse
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, TIMESTAMP
@@ -13,14 +14,10 @@ from sqlalchemy_utils.functions import database_exists
 from sqlalchemy_utils.functions import create_database
 from sqlalchemy_utils.functions import drop_database
 
-import configparser
+from settings import config_auth
 
-
-config_auth = configparser.RawConfigParser()
-config_auth.read('../auth.conf')
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
-
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
@@ -28,6 +25,7 @@ log = logging.getLogger(__name__)
 Base = declarative_base()
 
 Session = sessionmaker()
+
 session = []
 
 
@@ -51,8 +49,8 @@ def make_conf(section):
 
 
 def create_db(section='test'):
-    log.info(f"Created database")
     CONF = make_conf(section)
+    log.info(f"Created database")
     if not database_exists(CONF):
         create_database(CONF)
 
@@ -73,15 +71,16 @@ def make_engine(section='docker'):
 def set_engine(engine):
     global session
     Session.configure(bind=engine)
-    # create a configured "Session" class
+    # create a configured "session" object for tests
     session = Session()
+    return session
 
 
 class GoogleRawLocationsRealtime(Base):
     """
     Raw json location information realtime
     """
-    __tablename__ = 'google_raw_locations_realtime'
+    __tablename__ = f'google_raw_locations_realtime_{ENVIRONMENT}'
     id = Column(Integer, Sequence('grl_seq'), primary_key=True)
     place_id = Column(String, index=True)
     scraped_at = Column(TIMESTAMP, index=True)
@@ -93,7 +92,7 @@ class GoogleRawLocationsExpected(Base):
     """
     Raw json location information of expected data
     """
-    __tablename__ = 'google_raw_locations_expected'
+    __tablename__ = f'google_raw_locations_expected_{ENVIRONMENT}'
     id = Column(Integer, Sequence('grl_seq'), primary_key=True)
     place_id = Column(String, index=True)
     scraped_at = Column(TIMESTAMP, index=True)
@@ -101,10 +100,64 @@ class GoogleRawLocationsExpected(Base):
     data = Column(JSONB)
 
 
+class GoogleRawLocationsRealtimeCurrent(Base):
+    """
+    Raw json location information realtime
+    """
+    __tablename__ = f'google_raw_locations_realtime_current_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    name = Column(String)
+    data = Column(JSONB)
+
+
+class GoogleRawLocationsExpectedCurrent(Base):
+    """
+    Raw json location information expected
+    """
+    __tablename__ = f'google_raw_locations_expected_current_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    name = Column(String)
+    data = Column(JSONB)
+
+
+
+
+class GoogleLocations(Base):
+    """
+    Unique locations with proper bag_id / vestiging ids
+    """
+    __tablename__ = f'google_locations_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    bag_id = Column(Integer, unique=True)
+    place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    name = Column(String)
+    data = Column(JSONB)
+
+
 if __name__ == '__main__':
-    # resets everything
-    log.warning('RECREATING DEFINED TABLES')
+    desc = "Manage google tables."
+    inputparser = argparse.ArgumentParser(desc)
+
+    inputparser.add_argument(
+        '--drop',
+        action='store_true',
+        default=False,
+        help="Drop existing")
+
+    args = inputparser.parse_args()
     engine = make_engine()
-    Base.metadata.drop_all(engine)
+
+    if args.drop:
+        # resets everything
+        log.warning('DROPPING DEFINED TABLES')
+        Base.metadata.drop_all(engine)
+
+    log.warning('CREATING DEFINED TABLES')
+    # recreate tables
     Base.metadata.create_all(engine)
     # create tables

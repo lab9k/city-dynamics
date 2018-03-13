@@ -6,14 +6,17 @@ var circles_d3 = [];
 var circles_layer;
 var markers = [];
 var geojson;
+var traffic_layer;
 
 // global arrays
 var buurtcode_prop_array = [];
 var hotspot_array = [];
+var realtime_array = [];
 
 // states
 var vollcode;
 var mobile = false;
+var active_layer = 'hotspots';
 
 // global vars
 var marker; // used by search
@@ -21,20 +24,46 @@ var lastClickedLayer;
 var total_index;
 var areaGraph;
 
+// interval
+var popup_interval;
+
 // links
 var geomap1 = 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png';
 var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
-var origin = 'http://127.0.0.1:8117';
+
+// Initially assume we have the API running locally.
+var origin = 'http://127.0.0.1:8117'
+
+// When using the production server, get the API from there.
+// TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
+if(window.location.href.indexOf('api.data.amsterdam') > -1)
+{
+	var origin = 'https://api.data.amsterdam.nl';
+}
+
+// However, when using the acceptation server, get the API from there.
+if(window.location.href.indexOf('acc.api.data.amsterdam') > -1)
+{
+	var origin = 'https://acc.api.data.amsterdam.nl';
+}
+
 var base_api = origin + '/citydynamics/';
 var dindex_api = base_api + 'drukteindex/?format=json&op=';
 var dindex_hotspots_api = base_api + 'hotspots/?format=json';
+var realtimeUrl = base_api + 'realtime/?format=json';
 var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
 var proj4RD = proj4('WGS84', def);
+var amsterdam = {
+	coordinates: [52.368, 4.897],
+	druktecijfers: [{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}],
+	hotspot: "Amsterdam",
+	index: -1
+}
 
 $(document).ready(function(){
 
@@ -59,8 +88,8 @@ $(document).ready(function(){
 	map = L.map('mapid', {zoomControl: false}).setView(map_center, zoom);
 
 	L.tileLayer(geomap2, {
-		minZoom: 12,
-		maxZoom: 16
+		minZoom: 10,
+		maxZoom: 18
 	}).addTo(map);
 
 	L.control.zoom({
@@ -68,6 +97,7 @@ $(document).ready(function(){
 	}).addTo(map);
 
 	var dindexJsonUrl = dindex_api + getNowDate();
+	//var dindexJsonUrl = dindex_api + '07-12-2017-16-00-00';
 	console.log(dindexJsonUrl);
 
 	// district map init
@@ -115,22 +145,52 @@ $(document).ready(function(){
 		});
 	});
 
+
+
+
 	// hotspots map init
 	var hotspotsJsonUrl = dindex_hotspots_api+'&timestamp='+ getNowDate();
 	console.log(hotspotsJsonUrl);
 
 	$.getJSON(hotspotsJsonUrl).done(function(hotspotsJson) {
-		console.log(hotspotsJson);
+		//console.log(hotspotsJson);
 
+		var hotspot_count = 0;
 		$.each(hotspotsJson.results, function (key, value) {
 
-			var dataset = this;
+			this.druktecijfers.sort(function (a, b) {
+				return a.h - b.h;
+			});
 
+			// used for ams average todo: calc average in backend
+			$.each(this.druktecijfers, function (key, value) {
+
+				// console.log(this.d);
+				amsterdam.druktecijfers[this.h].d += this.d
+
+				// console.log('cum: '+amsterdam.druktecijfers[this.h].d);
+			});
+
+			var dataset = this;
+			if(this.druktecijfers.length<1)
+			{
+				this.druktecijfers = '[{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}];'
+			}
+
+			hotspot_count++;
 			hotspot_array.push(dataset);
 
 		});
 
-		console.log(hotspot_array);
+		hotspot_array.sort(function (a, b) {
+			return a.index - b.index;
+		});
+
+
+		// used for ams average todo: calc average in backend
+		$.each(amsterdam.druktecijfers, function (key, value) {
+			amsterdam.druktecijfers[this.h].d = amsterdam.druktecijfers[this.h].d / hotspot_count;
+		});
 
 		circles_layer = L.layerGroup();
 		$.each(hotspot_array, function (key, value) {
@@ -139,21 +199,31 @@ $(document).ready(function(){
 			var dindex = this.druktecijfers[hh].d;
 
 			circles[key] = L.circleMarker(this.coordinates, {
-				color: '#61FEEE',
+				color: getColor(dindex),
 				fillColor: getColor(dindex),
-				stroke: 0,
 				fillOpacity: 1,
-				radius: (10),
+				radius: (12),
 				name: this.hotspot
 			});
 			circles[key].addTo(map);
+			$(circles[key]._path).attr('stroke-opacity' , 0.6);
+			$(circles[key]._path).attr('stroke' , '#4a4a4a');
 			$(circles[key]._path).attr('hotspot' , this.index);
 			$(circles[key]._path).addClass('hotspot_'+ this.index);
-			circles[key].bindPopup("<b>" + this.hotspot + "</b>", {autoClose: false});
+			circles[key].bindPopup('<div class="popup_hotspot"><i class="material-icons">fiber_manual_record</i><h3>' + this.hotspot + '</h3></div>', {autoClose: false});
 			circles[key].on("click", function(e){
 				var clickedCircle = e.target;
 
-				updateLineGraph($(clickedCircle._path).attr('hotspot'));
+				var hotspot_id = $(clickedCircle._path).attr('hotspot');
+
+				updateLineGraph(hotspot_id);
+
+				clearInterval(popup_interval);
+
+				popup_interval = setInterval(function(){
+					var current_fill = $('[hotspot='+hotspot_id+']').css('fill');
+					$('.popup_hotspot .material-icons').css('color', current_fill);
+				}, 100);
 
 				// do something, like:
 				$('.graphbar_title h2').text(clickedCircle.options.name);
@@ -172,8 +242,11 @@ $(document).ready(function(){
 	// init auto complete
 	$('#loc_i').autocomplete({
 		source: function (request, response) {
+			//console.log(request.term);
 			$.getJSON("https://api.data.amsterdam.nl/atlas/typeahead/bag/?q=" + request.term).done( function (data) {
+				//console.log(data[0].content);
 				response($.map(data[0].content, function (value, key) {
+					//console.log(value);
 					return {
 						label: value._display,
 						value: value.uri
@@ -186,6 +259,9 @@ $(document).ready(function(){
 		select: function(event, ui) {
 
 			event.preventDefault();
+
+			console.log(ui.item);
+
 			$('#loc_i').val(ui.item.label);
 
 			$.getJSON("https://api.data.amsterdam.nl/" + ui.item.value).done( function (data) {
@@ -201,14 +277,16 @@ $(document).ready(function(){
 					point.x = data.geometrie.coordinates[0];
 					point.y =  data.geometrie.coordinates[1];
 
+
 					var latLang = getLatLang(point);
+					//console.log(latLang);
 
 					var blackIcon = L.icon({
 						iconUrl: 'images/loc.svg',
 
-						iconSize:     [60, 60], 
+						iconSize:     [60, 60],
 						iconAnchor:   [30, 52],
-						popupAnchor:  [0, -50] 
+						popupAnchor:  [0, -50]
 					});
 
 					marker = L.marker(latLang, {icon: blackIcon}).addTo(map);
@@ -231,6 +309,39 @@ $(document).ready(function(){
 		}
 	});
 
+	// realtime check
+	console.log(realtimeUrl);
+	$.getJSON(realtimeUrl).done(function (realtimeJson) {
+
+		var hotspots_match_array = [];
+		hotspots_match_array[18] = 'ARTIS';
+		hotspots_match_array[34] = 'Museumplein';
+		hotspots_match_array[0] = 'Amsterdam Centraal';
+		hotspots_match_array[3] = 'Madame Tussauds Amsterdam'; //dam
+		hotspots_match_array[33] = 'Dappermarkt';
+		hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
+		hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
+		hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
+
+		console.log(hotspots_match_array);
+
+		$.each(realtimeJson.results, function (key, value) {
+
+			var name = this.name;
+			var exists = $.inArray(name, hotspots_match_array );
+			if(exists > -1)
+			{
+				// console.log(name + ' - ' + this.data.place_id + ' - ' + this.data['Real-time']);
+				realtime_array[exists] = this.data['Real-time'];
+			}
+
+		});
+
+	});
+	console.log(realtime_array);
+
+
+
 	$('.detail_top i').on('click',function () {
 		closeDetails();
 	});
@@ -238,25 +349,31 @@ $(document).ready(function(){
 	$( document).on('click', ".search a",function () {
 		if($(this).parent().hasClass('open'))
 		{
-			$(this).parent().removeClass('open');
+			closeSearch();
 		}
 		else
 		{
-			$(this).parent().addClass('open');
+			openSearch();
 		}
 	});
 
 	$( document).on('click', ".m_more a",function () {
 		if($(this).parent().hasClass('open'))
 		{
-			$(this).parent().removeClass('open');
-			$('.m_menu').hide();
+			closeMobileMenu();
 		}
 		else
 		{
-			$(this).parent().addClass('open');
-			$('.m_menu').show();
+			openMobileMenu()
 		}
+	});
+
+	$( document).on('click', ".dlogo",function () {
+		showInfo('	<h2>De Amsterdam DrukteRadar</h2> <p>De Amsterdam Drukte Radar toont drukte in de openbare ruimte van Amsterdam over tijd met een drukte-score. De drukte-score geeft de relatieve drukte in een bepaald gebied weer ten opzichte van historische ‘normaalwaarden’ van dit gebied.</p> <p>De drukte-score is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Momenteel bevat de drukte-score data van wegverkeer, openbaar vervoer, parkeren, en bezoeken aan openbare plekken.  Sommigen van deze bronnen geven de data ‘realtime’ weer, terwijl anderen gemiddelden over een bepaalde periode weergeven.</p>')
+	});
+
+	$( document).on('click', ".beta",function () {
+		showInfo('<h2 style="color:red;">Beta</h2><p>De Drukte Radar is in de beta fase, wat inhoudt dat er continue verbeteringen aan gemaakt worden en dat we feedback aan het verzamelen zijn. <br><a href="mailto:@">Heb je feedback dan horen we graag van je.</a></p>')
 	});
 
 	$( document).on('click', ".searchclose",function () {
@@ -266,17 +383,37 @@ $(document).ready(function(){
 	$( document).on('click', ".close",function () {
 		$(this).parent().fadeOut();
 	});
+4
+	$( document).on('click', ".graphbar_title .reset_icon",function () {
+		resetMap();
+	});
+
+	$( document).on('click', ".graphbar_title .info_icon",function () {
+		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont de verwachte drukte in een gebied ten op zichte van de normale drukte op dat tijdstip. De balk op het actuele tijdstip toont de actuele drukte voor het gebied.</p>');
+	});
 
 	$( document).on('click', ".mapswitch a",function () {
 
 		if($(this).hasClass('active'))
 		{
+			// reset map
+			resetMap();
 			// hide hotspots
 			$('path[hotspot]').hide();
 			// show district
 			geojson.addTo(map);
 			// set latlong & zoom
-			map.setView([52.36, 4.95], 12);
+			if(mobile)
+			{
+				map.setView([52.368, 4.897], 11);
+			}
+			else
+			{
+				map.setView([52.36, 4.95], 12);
+			}
+
+			active_layer = 'buurten';
+
 
 			$('.mapswitch a span').html('Hotspots');
 
@@ -284,12 +421,16 @@ $(document).ready(function(){
 		}
 		else
 		{
+			// reset map
+			resetMap();
 			// hide district
 			map.removeLayer(geojson);
 			// show hotspots
 			$('path[hotspot]').show();
 			// set latlong & zoom
 			map.setView([52.368, 4.897], 13.5);
+
+			active_layer = 'hotspots';
 
 			$('.mapswitch a span').html('Buurten');
 
@@ -300,12 +441,16 @@ $(document).ready(function(){
 	$( document).on('click', ".fiets_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('De beschikbaarheid van de OV fietsen over de verschillende locaties.', 0);
 			showOvFiets();
 			$(this).addClass('active');
 		}
@@ -314,12 +459,16 @@ $(document).ready(function(){
 	$( document).on('click', ".cam_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('Verschillende webcams in en rond de stad.', 0);
 			showFeeds();
 			$(this).addClass('active');
 		}
@@ -328,12 +477,16 @@ $(document).ready(function(){
 	$( document).on('click', ".events_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('Geplande evenementen van vandaag.', 0);
 			showEvents();
 			$(this).addClass('active');
 		}
@@ -343,6 +496,7 @@ $(document).ready(function(){
 		if($(this).hasClass('active'))
 		{
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -357,6 +511,7 @@ $(document).ready(function(){
 		if($(this).hasClass('active'))
 		{
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -371,6 +526,7 @@ $(document).ready(function(){
 		if($(this).hasClass('active'))
 		{
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -381,11 +537,30 @@ $(document).ready(function(){
 		}
 	});
 
+	$( document).on('click', ".traffic_b",function () {
+		if($(this).hasClass('active'))
+		{
+			showActiveLayer();
+			hideMarkers();
+			hideInfo();
+			$(this).removeClass('active');
+		}
+		else
+		{
+			hideActiveLayer();
+			resetTheme();
+			showInfo('Verkeersdrukte in en rond de stad.', 0);
+			addTrafficLayer();
+			$(this).addClass('active');
+		}
+	});
+
 	$( document).on('click', ".hotspots_b",function () {
 		if($(this).hasClass('active'))
 		{
 
 			closeThemaDetails();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -395,12 +570,13 @@ $(document).ready(function(){
 			$(this).addClass('active');
 		}
 	});
-	
+
 	$( document).on('click', ".google_b",function () {
 		if($(this).hasClass('active'))
 		{
 
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
@@ -414,12 +590,16 @@ $(document).ready(function(){
 	$( document).on('click', ".park_b",function () {
 		if($(this).hasClass('active'))
 		{
+			showActiveLayer();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
+			hideActiveLayer();
 			resetTheme();
+			showInfo('De capaciteit en het aantal beschikbare plekken in de parkeergarages.', 0);
 			addParkLayer();
 			$(this).addClass('active');
 		}
@@ -428,13 +608,16 @@ $(document).ready(function(){
 	$( document).on('click', ".water_b",function () {
 		if($(this).hasClass('active'))
 		{
+			closeThemaDetails();
 			hideMarkers();
+			hideInfo();
 			$(this).removeClass('active');
 		}
 		else
 		{
 			resetTheme();
 			showWater();
+			showInfo('De waterdrukte binnen de stad.', 0);
 			$(this).addClass('active');
 		}
 	});
@@ -443,7 +626,18 @@ $(document).ready(function(){
 		map.setView([52.36, 4.95], 12);
 	});
 
+	// chrome control button style
+	if (navigator.appVersion.indexOf("Chrome/") != -1) {
+		$('.controls').addClass('chrome');
+	}
+
 });
+
+function resetMap() {
+	map.closePopup();
+	$('.graphbar_title h2').text(amsterdam.hotspot);
+	updateLineGraph('ams');
+}
 
 function stopAnimation()
 {
@@ -465,9 +659,12 @@ function startAnimation()
 	{
 		$.each(hotspot_array, function (key, value) {
 			circles_d3[key]
+				.attr('stroke-opacity', 0.6)
+				.attr('stroke-width', 3)
 				.transition()
 				.duration(1000)
-				.attr('fill', getColor(this.druktecijfers[0].d));
+				.attr('fill', getColor(this.druktecijfers[0].d))
+				.attr('stroke', '#4a4a4a');
 		});
 	}
 
@@ -477,11 +674,23 @@ function startAnimation()
 		if(elapsed_time > counter)
 		{
 			var hour = Math.ceil(elapsed_time);
+
+
+
 			$.each(hotspot_array, function (key, value) {
+
+				if(key==10)
+				{
+					//console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
+				}
+
 				circles_d3[key]
+					.attr('stroke-opacity', 0.6)
+					.attr('stroke-width', 3)
 					.transition()
 					.duration(1000)
-					.attr('fill', getColor(this.druktecijfers[hour].d));
+					.attr('fill', getColor(this.druktecijfers[hour].d))
+					.attr('stroke', '#4a4a4a');
 			});
 
 
@@ -496,112 +705,29 @@ function startAnimation()
 
 }
 
-function getDate()
-{
-	var today = new Date();
-	var dd = today.getDate();
-	var mm = today.getMonth()+1; //January is 0!
-
-	var yyyy = today.getFullYear();
-	if(dd<10){
-		dd='0'+dd;
-	}
-	if(mm<10){
-		mm='0'+mm;
-	}
-	var today = dd+'/'+mm+'/'+yyyy;
-	var today = "07/12/2017";
-
-	return today;
-}
-
-function getHours()
-{
-	var today = new Date();
-	var hh = today.getHours();
-
-	if(hh<10)
-	{
-		hh = '0'+hh;
-	}
-
-	return hh + ':00';
-}
-
-function getHourDigit()
-{
-	var today = new Date();
-	var hh = today.getHours();
-
-	return hh;
-}
-
-function getNowDate()
-{
-	// get date
-	var date = getDate();
-	//var date = $( ".date_i" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
-
-	// get time
-	var time = getHours();
-
-	var now_date = date.replace('/','-').replace('/','-')+'-'+time.replace(':','-')+'-00';
-
-	return now_date;
-}
-
-function getCurrentDateOnly()
-{
-	// get date
-	var date = getDate();
-
-	return date.replace('/','-').replace('/','-');
-}
-
-function openThemaDetails(show)
-{
-	// open detail
-	$('.themas').addClass('open');
-
-	$('.'+show).fadeIn();
-}
-
-function closeThemaDetails()
-{
-	// close detail
-	$('.themas').removeClass('open');
-
-	// remove content
-	$('.themas .themas_content div').hide();
-}
-
-function openDetails()
-{
-	$('.detail').addClass('open');
-	$('.cta').addClass('open');
-	$('.details_graph').show();
-}
-
-function closeDetails()
-{
-	$('.detail').removeClass('open');
-	$('.cta').removeClass('open');
-	$('.details_graph').hide();
-}
-
 function getLatLangArray(point) {
 	return lnglat = proj4RD.inverse([point.x, point.y]);
 }
 
 function getLatLang(point) {
 	var lnglat = proj4RD.inverse([point.x, point.y]);
-	return L.latLng(lnglat[1], lnglat[0]);
+	return L.latLng(lnglat[1]-0.0006, lnglat[0]-0.002);
 }
 
 function getColor(dindex)
 {
-	var a = '#50E6DB'; //50E6DB 63c6e6
-	var b = '#ff0000';
+	if(dindex<0.5)
+	{
+		var a = '#50E6DB'; //50E6DB 63c6e6
+		var b = '#F5A623';
+	}
+	else {
+		var a = '#F5A623';
+		var b = '#DB322A';
+	}
+
+	// var a = '#50E6DB'; //50E6DB 63c6e6
+	// var b = '#DB322A';
 
 	var ah = parseInt(a.replace(/#/g, ''), 16),
 		ar = ah >> 16, ag = ah >> 8 & 0xff, ab = ah & 0xff,
@@ -671,13 +797,13 @@ function setLayerActive(layer)
 	}
 
 	vollcode = layer.feature.properties.vollcode;
-	
+
 	var buurt = buurtcode_prop_array[vollcode].buurt;
 	var dindex = buurtcode_prop_array[vollcode].index;
 
 	// set name
 	$('.graphbar_title').html(buurt);
-	
+
 	$(layer.getElement()).addClass("active_path");
 
 	layer.setStyle({
@@ -695,36 +821,19 @@ function setLayerActive(layer)
 	lastClickedLayer = layer;
 }
 
-
 function initLineGraph()
 {
 	var data = [];
 
-
-	var count = 0;
-	do {
+	$.each(amsterdam.druktecijfers, function (key, value) {
 
 		var dataset = {};
-		dataset.y = Math.round(hotspot_array[0].druktecijfers[count].d * 100);
-		dataset.x = parseInt(hotspot_array[0].druktecijfers[count].h);
+		dataset.y = Math.round(this.d * 100);
+		dataset.x = parseInt(this.h);
 
-
-		data[count] = dataset;
-		count++;
-
-	}while(count < 24);
-
-
-	data.sort(function (a, b) {
-		return a.x - b.x;
+		data.push(dataset);
 	});
 
-	// console.log(data);
-
-	// data.push(data[0]);
-
-	// console.log(data);
-	
 	areaGraph = $('.graphbar_graph').areaGraph(data);
 
 	setTimeout(areaGraph[0].startCount(),3000); //todo: replace timeout for proper load flow
@@ -736,28 +845,216 @@ function updateLineGraph(hotspot)
 	// get proper data from json array
 	var data = [];
 
-	var count = 0;
-	do {
+
+	if(hotspot=='ams')
+	{
+		var point_array = amsterdam.druktecijfers;
+	}
+	else
+	{
+		var point_array = hotspot_array[hotspot].druktecijfers;
+	}
+
+
+	$.each(point_array, function (key, value) {
 
 		var dataset = {};
-		dataset.y = Math.round(hotspot_array[hotspot].druktecijfers[count].d * 100);
-		dataset.x = parseInt(hotspot_array[hotspot].druktecijfers[count].h);
+		dataset.y = Math.round(this.d * 100);
+		dataset.x = parseInt(this.h);
 
-
-		data[count] = dataset;
-		count++;
-
-	}while(count < 24);
-
-	data.sort(function (a, b) {
-		return a.x - b.x;
+		data.push(dataset);
 	});
 
-	// data.push(data[0]);
+	// console.log(data);
 
-	areaGraph[0].update(data);
+	var realtime = realtime_array[hotspot];
+
+	areaGraph[0].update(data,realtime);
 }
 
+function setView()
+{
+	// if(mobile)
+	// {
+	// 	map.setView([52.368, 4.897], 11);
+	// }
+	// else
+	// {
+	// 	map.setView([52.36, 4.95], 12);
+	// }
+}
+
+
+function getDate()
+{
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+
+	var yyyy = today.getFullYear();
+	if(dd<10){
+		dd='0'+dd;
+	}
+	if(mm<10){
+		mm='0'+mm;
+	}
+	var today = dd+'/'+mm+'/'+yyyy;
+
+	return today;
+}
+
+function getHours()
+{
+	var today = new Date();
+	var hh = today.getHours();
+
+	if(hh<10)
+	{
+		hh = '0'+hh;
+	}
+
+	return hh + ':00';
+}
+
+function getHourDigit()
+{
+	var today = new Date();
+	var hh = today.getHours();
+
+	return hh;
+}
+
+function getNowDate()
+{
+	// get date
+	var date = getDate();
+	//var date = $( ".date_i" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
+
+	// get time
+	var time = getHours();
+
+	var now_date = date.replace('/','-').replace('/','-')+'-'+time.replace(':','-')+'-00';
+
+	return now_date;
+}
+
+function getCurrentDateOnly()
+{
+	// get date
+	var date = getDate();
+
+	return date.replace('/','-').replace('/','-');
+}
+
+function showInfo(content,duration)
+{
+	$('.info_content').html(content);
+
+	$('.info').show();
+
+	closeMobileMenu();
+
+	if(duration>0)
+	{
+		setTimeout(function(){$('.info').fadeOut()},duration);
+	}
+}
+
+function hideInfo()
+{
+	$('.info').fadeOut();
+}
+
+function openMobileMenu()
+{
+	closeSearch();
+	hideInfo();
+
+	// hide mobile menu
+	$('.m_menu').show();
+	$('.m_more').addClass('open');
+}
+
+function closeMobileMenu()
+{
+	// hide mobile menu
+	$('.m_menu').hide();
+	$('.m_more').removeClass('open');
+}
+
+function openSearch()
+{
+	closeMobileMenu();
+	hideInfo();
+
+	$('.search').addClass('open');
+}
+
+function closeSearch()
+{
+	$('.search').removeClass('open');
+}
+
+function hideActiveLayer()
+{
+	areaGraph[0].stop();
+	//
+	// switch(active_layer)
+	// {
+	// 	case 'hotspots':
+	// 		$('path[hotspot]').hide();
+	// 		break;
+	// 	case 'buurten':
+	// 		map.removeLayer(geojson);
+	// 		break;
+	// }
+}
+function showActiveLayer()
+{
+	areaGraph[0].stopResumeCount();
+
+	// switch(active_layer)
+	// {
+	// 	case 'hotspots':
+	// 		$('path[hotspot]').show();
+	// 		break;
+	// 	case 'buurten':
+	// 		geojson.addTo(map);
+	// 		break;
+	// }
+}
+
+
+function openThemaDetails(show)
+{
+	// open detail
+	$('.themas').addClass('open');
+
+	$('.'+show).fadeIn();
+}
+
+function closeThemaDetails()
+{
+	// close detail
+	$('.themas').removeClass('open');
+
+	// remove content
+	$('.themas .themas_content div').hide();
+}
+
+function openDetails()
+{
+	$('.detail').addClass('open');
+	$('.cta').addClass('open');
+	$('.details_graph').show();
+}
+
+function closeDetails()
+{
+	$('.detail').removeClass('open');
+	$('.cta').removeClass('open');
+	$('.details_graph').hide();
+}
 
 function resetTheme()
 {
@@ -792,8 +1089,12 @@ function resetThemeDetail()
 	}
 }
 
+
+
 function showFeeds()
 {
+	setView();
+
 	var feeds = new Array();
 
 	feeds[0] = {name:"Dam",url:"https://www.youtube.com/embed/6Pc-59pPXpY?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3732104", lon:"4.8914401"};
@@ -810,14 +1111,14 @@ function showFeeds()
 	var camIcon = L.icon({
 		iconUrl: 'images/cam_marker.svg',
 
-		iconSize:     [35, 40], 
-		iconAnchor:   [17.5, 40],
-		popupAnchor:  [0, -50] 
+		iconSize:     [35, 58],
+		iconAnchor:   [17.5, 58],
+		popupAnchor:  [0, -50]
 	});
 
 	$.each(feeds, function(key,value) {
 		var cam_marker = L.marker([this.lat,this.lon], {icon: camIcon,title:this.name,alt:this.url}).addTo(map).on('click', function(){showFeed(this.options.title,this.options.alt);});
-		cam_marker.bindPopup("<b>" + this.name + "</b>", {autoClose: false});
+		cam_marker.bindPopup("<h3>" + this.name + "</h3>", {autoClose: false});
 		markers.push(cam_marker);
 	});
 
@@ -829,7 +1130,6 @@ function showLeftBox(content,header)
 	$( ".leftbox .content" ).html('');
 	$( ".leftbox h2" ).html('');
 
-	$( ".legend" ).fadeOut( "slow" );
 	$( ".leftbox" ).fadeIn( "slow" );
 
 	$( ".leftbox h2" ).append(header);
@@ -839,7 +1139,6 @@ function showLeftBox(content,header)
 function hideLeftBox()
 {
 	$( ".leftbox" ).fadeOut( "slow" );
-	$( ".legend" ).fadeIn( "slow" );
 
 	$( ".leftbox .content" ).html('');
 	$( ".leftbox h2" ).html('');
@@ -867,8 +1166,8 @@ function removeThemeLayer()
 
 function addParkLayer()
 {
-
-	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
+	setView();
+	// var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
 	var parkJsonUrl = 'data/parkjson.json';
 
 	$.getJSON(parkJsonUrl).done(function(parkJson){
@@ -880,26 +1179,47 @@ function addParkLayer()
 
 function pointToLayerPark(feature, latlng) {
 
-	if(feature.properties.Name.includes("P+R"))
-	{
-		var parkIcon = L.icon({
-			iconUrl: 'images/park_marker_green.svg',
+	// if(feature.properties.Name.includes("P+R"))
+	// {
+	// 	var parkIcon = L.icon({
+	// 		iconUrl: 'images/park_marker_green.svg',
+	//
+	// 		iconSize:     [35, 40],
+	// 		iconAnchor:   [17.5, 40],
+	// 		popupAnchor:  [0, -50]
+	// 	});
+	// }
+	// else
+	// {
+	// 	var parkIcon = L.icon({
+	// 		iconUrl: 'images/park_marker.svg',
+	//
+	// 		iconSize:     [35, 40],
+	// 		iconAnchor:   [17.5, 40],
+	// 		popupAnchor:  [0, -50]
+	// 	});
+	// }
 
-			iconSize:     [35, 40], 
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
-		});
-	}
-	else
+	var suffix = 'none';
+	var height = 64;
+	if(feature.properties.FreeSpaceShort<10)
 	{
-		var parkIcon = L.icon({
-			iconUrl: 'images/park_marker.svg',
-
-			iconSize:     [35, 40], 
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
-		});
+		suffix = 'some';
+		height = 72;
 	}
+	if(feature.properties.FreeSpaceShort>10)
+	{
+		suffix = 'plenty';
+		height = 80;
+	}
+
+	var parkIcon = L.icon({
+		iconUrl: 'images/park_marker_'+suffix+'.svg',
+
+		iconSize:     [35, 58],
+		iconAnchor:   [17.5, 58],
+		popupAnchor:  [0, -50]
+	});
 
 	var marker = L.marker(latlng, {icon: parkIcon});
 	var long ='';
@@ -907,13 +1227,13 @@ function pointToLayerPark(feature, latlng) {
 
 	if(feature.properties.ShortCapacity>0)
 	{
-		short = "<br>Parkeren kort: " + feature.properties.FreeSpaceShort + " / " + feature.properties.ShortCapacity;
+		short = "<p>Parkeren kort: " + feature.properties.FreeSpaceShort + " / " + feature.properties.ShortCapacity + '</p>';
 	}
 	if(feature.properties.LongCapacity>0)
 	{
-		long = "<br>Parkeren lang: " + feature.properties.FreeSpaceLong + " / " + feature.properties.LongCapacity;
+		long = "<p>Parkeren lang: " + feature.properties.FreeSpaceLong + " / " + feature.properties.LongCapacity + '</p>';
 	}
-	marker.bindPopup("<h3>" + feature.properties.Name + "</h3>"+ short + long , {autoClose: false});
+	marker.bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + feature.properties.Name + '</h3><div class="pop_inner_content">'+ short + long +'<span class="ammount">' +  feature.properties.FreeSpaceShort + '</span></div></div>', {autoClose: false});
 
 	markers.push(marker);
 
@@ -938,6 +1258,8 @@ function onEachFeaturePark(feature, layer) {
 
 function showOvFiets()
 {
+	setView();
+
 	var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
 
 	$.getJSON(fietsJsonUrl).done(function(fietsJson){
@@ -945,13 +1267,6 @@ function showOvFiets()
 
 		var ams_locaties = ['ASB','RAI','ASA','ASDM','ASDZ','ASD','ASDL','ASS'];
 
-		var camIcon = L.icon({
-			iconUrl: 'images/fiets_marker.svg',
-
-			iconSize:     [35, 40], 
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
-		});
 
 		$.each(fietsJson.locaties, function(key,value) {
 			if(ams_locaties.indexOf(this.stationCode)>=0)
@@ -959,12 +1274,39 @@ function showOvFiets()
 				//console.log(this.stationCode);
 				if(this.lat>0 && this.lng>0)
 				{
+					var suffix = 'none';
+					if(this.extra.rentalBikes>0)
+					{
+						suffix = 'some';
+					}
+					if(this.extra.rentalBikes>10)
+					{
+						suffix = 'plenty';
+					}
+
+					var fietsIcon = L.icon({
+						iconUrl: 'images/fiets_marker_'+suffix+'.svg',
+
+						iconSize:     [50, 58],
+						iconAnchor:   [25, 58],
+						popupAnchor:  [0, -50]
+					});
+
 					var marker_info = {};
 					marker_info.name = this.name;
 					marker_info.free = this.extra.rentalBikes;
-					var fiets_marker = L.marker([this.lat,this.lng], {icon: camIcon,title:this.description,alt:this.url}).addTo(map);
-					fiets_marker.bindPopup("<h3>" + this.name + "</h3><br>Fietsen beschikbaar: " + this.extra.rentalBikes, {autoClose: false});
+					var fiets_marker = L.marker([this.lat,this.lng], {icon: fietsIcon,title:this.description,alt:this.url}).addTo(map);
+					fiets_marker.bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + this.name + '</h3><div class="pop_inner_content"><h4>Fietsen beschikbaar : '+ this.extra.rentalBikes + '</h4><span class="ammount">' + this.extra.rentalBikes + '</span></div></div>', {autoClose: false});
 					markers.push(fiets_marker);
+
+					// var popup = new L.Popup();
+					// var popupLocation = new L.LatLng(this.lat, this.lng);
+					// var popupContent = "<h3>" + this.name + "</h3><br>Fietsen beschikbaar: " + this.extra.rentalBikes;
+					// popup.setLatLng(popupLocation);
+					// popup.setContent(popupContent);
+					//
+					// map.addLayer(popup);
+					// markers.push(popup);
 				}
 			}
 		});
@@ -972,7 +1314,7 @@ function showOvFiets()
 	});
 }
 
-function showEvents()
+function showEventsOld()
 {
 	var eventsJsonUrl = 'data/Evenementen.json';
 
@@ -983,9 +1325,9 @@ function showEvents()
 		var camIcon = L.icon({
 			iconUrl: 'images/events_marker.svg',
 
-			iconSize:     [35, 40], 
+			iconSize:     [35, 40],
 			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
+			popupAnchor:  [0, -50]
 		});
 
 		$.each(eventsJson, function(key,value) {
@@ -1011,6 +1353,57 @@ function showEvents()
 	});
 }
 
+function showEvents()
+{
+	setView();
+	// var eventsJsonUrl = 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today';
+	var eventsJsonUrl = 'data/events.js';
+	console.log(eventsJsonUrl);
+	$.getJSON(eventsJsonUrl).done(function(eventsJson){
+
+		$.each(eventsJson, function(key,value) {
+
+			if(this.attending<100)
+			{
+				suffix = 'plenty';
+			}
+			else if(this.attending<500)
+			{
+				suffix = 'some';
+			}
+			else if(this.attending>500)
+			{
+				var suffix = 'none';
+			}
+
+			var eventIcon = L.icon({
+				iconUrl: 'images/events_marker_'+suffix+'.svg',
+
+				iconSize:     [35, 58],
+				iconAnchor:   [17.5, 58],
+				popupAnchor:  [0, -50]
+			});
+
+
+
+			// console.log(this);
+			markers[key] = L.marker([this.lat,this.long], {
+				icon: eventIcon,
+				name: this.location
+			});
+			markers[key].addTo(map);
+			markers[key].bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + this.location +'</h3><img src="'+this.img+'"><div class="pop_inner_content"><p>'+ this.date+'</p><h4>'+this.title+'</h4><p>Aanmeldingen: '+this.attending+'</p><span class="ammount">' +  this.attending + '</span></div></div>', {autoClose: false});
+			markers[key].on("click", function(e){
+				var clickedCircle = e.target;
+
+			});
+
+
+		});
+
+	});
+}
+
 function showMuseum()
 {
 	var eventsJsonUrl = 'data/MuseaGalleries.json';
@@ -1021,9 +1414,9 @@ function showMuseum()
 		var camIcon = L.icon({
 			iconUrl: 'images/musea_marker.svg',
 
-			iconSize:     [35, 40], 
+			iconSize:     [35, 40],
 			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50] 
+			popupAnchor:  [0, -50]
 		});
 
 		$.each(eventsJson, function(key,value) {
@@ -1053,9 +1446,9 @@ function pointToLayerParc(feature, latlng) {
 	var parkIcon = L.icon({
 		iconUrl: 'images/parc_marker.svg',
 
-		iconSize:     [35, 40], 
+		iconSize:     [35, 40],
 		iconAnchor:   [17.5, 40],
-		popupAnchor:  [0, -50] 
+		popupAnchor:  [0, -50]
 	});
 	var marker = L.marker(latlng, {icon: parkIcon});
 	marker.bindPopup("<h3>" + feature.properties.Naam + "</h3>", {autoClose: false});
@@ -1094,9 +1487,9 @@ function pointToLayerMarket(feature, latlng) {
 	var marketIcon = L.icon({
 		iconUrl: 'images/market_marker.svg',
 
-		iconSize:     [35, 40], 
+		iconSize:     [35, 40],
 		iconAnchor:   [17.5, 40],
-		popupAnchor:  [0, -50] 
+		popupAnchor:  [0, -50]
 	});
 	var marker =  L.marker(latlng, {icon: marketIcon});
 	var website = '';
@@ -1123,16 +1516,60 @@ function onEachFeatureMarket(feature, layer) {
 
 }
 
+
+function addTrafficLayer()
+{
+	// var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
+	var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+
+	$.getJSON(trafficJsonUrl).done(function(trafficJson){
+		console.log(trafficJson);
+
+
+		$.each(trafficJson.features, function(key,value) {
+
+			var coordinates = [];
+			$.each(this.geometry.coordinates, function(key,value) {
+				coordinates.push([this[1],this[0]]);
+			});
+
+			var event_marker = L.polyline(coordinates, {color: speedToColor(this.properties.Type, this.properties.Velocity)}).addTo(map);
+			markers.push(event_marker);
+		});
+
+	});
+
+}
+
+function speedToColor(type, speed){
+	if(type == "H"){
+		//Snelweg
+		var speedColors = {0: "#D0D0D0", 1: "#BE0000", 30: "#FF0000", 50: "#FF9E00", 70: "#FFFF00", 90: "#AAFF00",120: "#00B22D"};
+	} else {
+		//Overige wegen
+		var speedColors = {0: "#D0D0D0", 1: "#BE0000", 10: "#FF0000", 20: "#FF9E00", 30: "#FFFF00", 40: "#AAFF00", 70: "#00B22D"};
+	}
+	var currentColor = "#D0D0D0";
+	for(var i in speedColors){
+		if(speed >= i) currentColor = speedColors[i];
+	}
+	return currentColor;
+}
+
+
 function showGoogle()
 {
-	var googleJsonUrl = 'http://apis.quantillion.io:3001/gemeenteamsterdam/locations/realtime/current';
+	// var googleJsonUrl = 'http://apis.quantillion.io:3001/gemeenteamsterdam/locations/realtime/current';
+	var googleJsonUrl =  realtimeUrl;
 
 	$.getJSON(googleJsonUrl).done(function(googleJson){
-		//console.log(googleJsonUrl);
+		console.log(googleJsonUrl);
 
-		$.each(googleJson, function(key,value) {
 
-			var ratio =  this['Real-time'] / this['Expected'] * 100;
+		$.each(googleJson.results, function(key,value) {
+
+
+			var ratio =  this.data['Real-time'] / this.data['Expected'] * 100;
 
 			var marker_icon = 'images/google_marker_2.svg';
 
@@ -1156,31 +1593,28 @@ function showGoogle()
 			var googleIcon = L.icon({
 				iconUrl: marker_icon,
 
-				iconSize:     [35, 40], 
+				iconSize:     [35, 40],
 				iconAnchor:   [17.5, 40],
-				popupAnchor:  [0, -50] 
+				popupAnchor:  [0, -50]
 			});
 
 			var header = this.name;
-			var content = '<p>Expected' + this.Expected +  '</p>'  + '<p>Realtime' + this['Real-time'] +  '</p>'  + '<p>' + this.formatted_address +  '</p>' + '<br /><a target="blank" href="' + this.url +  '">Website</a>';
+			var content = '<p>Expected' + this.data['Expected'] +  '</p>'  + '<p>Realtime' + this.data['Real-time'] +  '</p>'  + '<p>' + this.data.formatted_address +  '</p>' + '<br /><a target="blank" href="' + this.data.url +  '">Website</a>';
 
-			var latitude = this.lat;
-			var longitude = this.lng;
-			var event_marker = L.marker([latitude,longitude], {icon: googleIcon,title:this.name, alt:this['Real-time']}).addTo(map).on('click', function(){
+			var latitude = this.data.location.coordinates[0];
+			var longitude =  this.data.location.coordinates[1];
+			var event_marker = L.marker([latitude,longitude], {icon: googleIcon,title: this.data.name, alt: this.data['Real-time']}).addTo(map).on('click', function(){
 				closeDetails();
 
-				gauge[0].set(Math.round(this.options.alt * 100));
 				$('.detail h2').html(this.options.title);
-
-				showLeftBox(content,header);
 
 			});
 
-			event_marker.bindPopup("<b>" + this.name + "</b>", {autoClose: false});
+			event_marker.bindPopup("<h3>" + this.name + "</h3>" + content, {autoClose: false});
 			markers.push(event_marker);
 		});
 
-	});	
+	});
 }
 
 function showWater()
@@ -1188,16 +1622,16 @@ function showWater()
 	var waterIcon = L.icon({
 		iconUrl: 'images/water_marker.svg',
 
-		iconSize:     [35, 40], 
-		iconAnchor:   [17.5, 40],
-		popupAnchor:  [0, -50] 
+		iconSize:     [35, 58],
+		iconAnchor:   [17.5, 58],
+		popupAnchor:  [0, -50]
 	});
 
-	var title = 'Watermeetpunt Prinsegracht';
+	var title = 'Watermeetpunt Prinsengracht';
 	var latitude = '52.375389';
 	var longitude = '4.883740';
 	var event_marker = L.marker([latitude,longitude], {icon: waterIcon,title:title}).addTo(map);
-	event_marker.bindPopup("<b>"+title+"</b>", {autoClose: false});
+	event_marker.bindPopup("<h3>"+title+"</h3>", {autoClose: false});
 	markers.push(event_marker);
 
 	openThemaDetails('water_content');
