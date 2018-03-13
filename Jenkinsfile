@@ -54,7 +54,7 @@ if (BRANCH == "master") {
     node {
         stage('Push acceptance image') {
             tryStep "image tagging", {
-                def image = docker.image("build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}")
+                def image = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}")
                 image.pull()
                 image.push("acceptance")
             }
@@ -81,7 +81,7 @@ if (BRANCH == "master") {
     //node {
     //    stage('Push production image') {
     //        tryStep "image tagging", {
-    //            def kibana = docker.image("build.datapunt.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
+    //            def kibana = docker.image("build.app.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
     //            kibana.pull()
     //            kibana.push("production")
     //            kibana.push("latest")
