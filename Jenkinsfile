@@ -77,10 +77,10 @@ if (BRANCH == "master") {
         }
     }
 
-    stage('Waiting for approval') {
-        slackSend channel: '#stadinbalans', color: 'warning', message: 'City dynamics is waiting for Production Release - please confirm'
-        input "Deploy to Production?"
-    }
+    //stage('Waiting for approval') {
+    //    slackSend channel: '#stadinbalans', color: 'warning', message: 'City dynamics is waiting for Production Release - please confirm'
+    //    input "Deploy to Production?"
+    //}
 
     //node {
     //    stage('Push production image') {
