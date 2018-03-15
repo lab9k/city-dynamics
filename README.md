@@ -2,17 +2,11 @@
 
 Gaining and presenting insights regarding crowdedness in Amsterdam. How many people are where, at what moment?
 
-Collaborators: Jerome Cremers, Rene Luijk, Swaan Dekkers, Thomas Jongstra, Stephan Preeker
+Collaborators: Jerome Cremers, Thomas Jongstra, Stephan Preeker, Swaan Dekkers
 
 ---
 
-Create a local environment named `venv` inside the city-dynamics project directory, and activate it.
-Exiting a virtual environment can be done using `deactivate`.
-
-```
-virtualenv --python=$(which python3) venv
-source venv/bin/activate
-```
+To keep this project's dependencies and libraries separate from your global Python instance, create a local virtual Python environment. For Anaconda users, see https://conda.io/docs/user-guide/tasks/manage-environments.html. For non-Anaconda users, see https://virtualenvwrapper.readthedocs.io/en/latest/.
 
 Install required packages.
 
@@ -53,7 +47,7 @@ Build the importer. This does not yet download any data from the objectstore.
 docker-compose build importer
 ```
 
-Download the data from the objectstore, store it in a folder `/data` within the container, and write it to the (locally running) database.
+Download the data from the objectstore, store it in a folder `/data` within the Importer container, and write it to the (locally running) database.
 
 ```
 docker-compose run importer /app/run_import.sh
@@ -73,13 +67,6 @@ docker-compose up analyzer
 docker-compose up api
 docker-compose up front
 ```
-
-To combine all building and activation steps at the same time, we can also run:
-```
-docker-compose build
-docker-compose up
-```
-
 ---
 
 The front end of the application can now be visualized locally by opening `front/index.html` in a browser.
