@@ -1,7 +1,8 @@
 """ MAIN ETL Pipeline
 
 Script which executes the import pipeline:
-- downloads raw data sources from objectstore, guided by the sources.conf file, and stores it in a local data directory.
+- downloads raw data sources from objectstore, guided by the sources.conf file,
+  and stores it in a local data directory.
 - parses the raw data and writes it to a postgresql database
 """
 
@@ -35,7 +36,7 @@ def download_from_os():
     use_local = True if os.environ.get(ENV_VAR, '') == 'TRUE' else False
 
     if not use_local:
-        download_from_objectstore.main(local_data_directory, os_folders)
+        download_from_objectstore.main(LOCAL_DATA_DIRECTORY, os_folders)
     else:
         logger.info('No download from datastore requested, quitting.')
 
@@ -44,18 +45,21 @@ def parse_and_write():
     for dataset in datasets:
         logger.info('Parsing and writing {} data...'.format(dataset))
 
-        # if statement below is needed because alpha's parser writes directly to database, whereas other parsers
+        # if statement below is needed because alpha's parser writes
+        # directly to database, whereas other parsers
         # return a dataframe. #TODO refactor?
         if dataset == 'alpha':
-            getattr(parsers, 'parse_' + dataset)(datadir=local_data_directory)
+            getattr(parsers, 'parse_' + dataset)(datadir=LOCAL_DATA_DIRECTORY)
 
         else:
-            df = getattr(parsers, 'parse_' + dataset)(datadir=local_data_directory)
+            df = getattr(parsers, 'parse_' + dataset)(datadir=LOCAL_DATA_DIRECTORY)
             df.to_sql(
                 name=config_src.get(dataset, 'TABLE_NAME'),
                 con=conn, index=True, if_exists='replace')
 
-            conn.execute(ModifyTables.set_primary_key(config_src.get(dataset, 'TABLE_NAME')))
+            conn.execute(
+                ModifyTables.set_primary_key(
+                    config_src.get(dataset, 'TABLE_NAME')))
 
             logger.info('... done')
 
@@ -100,7 +104,7 @@ if __name__ == "__main__":
         'targetdir', type=str, help='Local data directory.', nargs=1)
     parser.add_argument('dataset', nargs='?', help="Upload specific dataset")
     args = parser.parse_args()
-    local_data_directory = args.targetdir[0]
+    LOCAL_DATA_DIRECTORY = args.targetdir[0]
 
     # ==== MAIN ETL PIPELINE ====
 
