@@ -49,7 +49,7 @@ if(window.location.href.indexOf('acc.api.data.amsterdam') > -1)
 	var origin = 'https://acc.api.data.amsterdam.nl';
 }
 
-var base_api = origin + '/';
+var base_api = origin + '/citydynamics/';
 var dindex_api = base_api + 'drukteindex/?format=json&op=';
 var dindex_hotspots_api = base_api + 'hotspots/?format=json';
 var realtimeUrl = base_api + 'realtime/?format=json';
