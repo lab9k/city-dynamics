@@ -23,6 +23,7 @@ services:
       DATABASE_PASSWORD: insecure
       DATABASE_HOST_OVERRIDE: database
       DATABASE_PORT_OVERRIDE: 5432
+      PGPASSWORD: insecure
       STADSWERKEN_OBJECTSTORE_PASSWORD:
       PYTHONPATH: /app/scrape_quantillion
       QUANTILLION_PASSWORD:
