@@ -38,15 +38,15 @@ var origin = 'http://127.0.0.1:8117'
 
 // When using the production server, get the API from there.
 // TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
-if(window.location.href.indexOf('api.data.amsterdam') > -1)
+if(window.location.href.indexOf('prod.citydynamics.amsterdam') > -1)
 {
-	var origin = 'https://api.data.amsterdam.nl';
+	var origin = 'https://prod.citydynamics.amsterdam.nl';
 }
 
 // However, when using the acceptation server, get the API from there.
-if(window.location.href.indexOf('acc.api.data.amsterdam') > -1)
+if(window.location.href.indexOf('acc.citydynamics.amsterdam') > -1)
 {
-	var origin = 'https://acc.api.data.amsterdam.nl';
+	var origin = 'https://acc.citydynamics.amsterdam.nl/citydynamics';
 }
 
 var base_api = origin + '/';
