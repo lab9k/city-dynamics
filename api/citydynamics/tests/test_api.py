@@ -11,11 +11,11 @@ from . import factories
 class BrowseDatasetsTestCase(APITestCase):
 
     datasets = [
-        'citydynamics/drukteindex',
-        'citydynamics/recentmeasures',
-        'citydynamics/buurtcombinatie',
-        'citydynamics/realtime',
-        'citydynamics/hotspots',
+        'api/drukteindex',
+        'api/recentmeasures',
+        'api/buurtcombinatie',
+        'api/realtime',
+        'api/hotspots',
     ]
 
     def setUp(self):
@@ -44,7 +44,7 @@ class BrowseDatasetsTestCase(APITestCase):
             'Wrong Content-Type for {}'.format(url))
 
     def test_index_pages(self):
-        url = 'citydynamics'
+        url = 'api'
 
         response = self.client.get('/{}/'.format(url))
 
@@ -77,13 +77,17 @@ class BrowseDatasetsTestCase(APITestCase):
                 'count', response.data, 'No count attribute in {}'.format(url))
 
     def test_druktecijfers_in_hotspots(self):
-        url = f"citydynamics/hotspots/{self.h.index}"
+        url = f"api/hotspots/{self.h.index}"
         response = self.client.get('/{}/'.format(url))
 
         self.assertIn(
-            'druktecijfers', response.data, 'Missing druktecijfers attribute in {}'.format(url))
+            'druktecijfers',
+            response.data,
+            'Missing druktecijfers attribute in {}'.format(url))
 
-        url = "/citydynamics/hotspots/"
+        url = "/api/hotspots/"
         response = self.client.get(url)
         self.assertIn(
-            'druktecijfers', response.data['results'][0], 'Missing druktecijfers attribute in {}'.format(url))
+            'druktecijfers',
+            response.data['results'][0],
+            'Missing druktecijfers attribute in {}'.format(url))
