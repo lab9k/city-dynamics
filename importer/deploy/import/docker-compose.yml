@@ -13,7 +13,7 @@ services:
       - ./backup-db-google.sh:/backup-db-google.sh
 
   importer:
-    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_importer:${ENVIRONMENT}
+    image: build.app.amsterdam.nl:5000/stadswerken/citydynamics_importer:${ENVIRONMENT}
     # build: ../../
     links:
       - database
@@ -35,12 +35,12 @@ services:
       - ./backup-google-current.sh:/backup-google-current.sh
 
   api:
-    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics:${ENVIRONMENT}
+    image: build.app.amsterdam.nl:5000/stadswerken/citydynamics:${ENVIRONMENT}
     links:
       - database:database
 
   analyzer:
-    image: build.datapunt.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${ENVIRONMENT}
+    image: build.app.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${ENVIRONMENT}
     # build: ./analyzer
     links:
       - database:database
