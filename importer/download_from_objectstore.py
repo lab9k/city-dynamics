@@ -89,6 +89,7 @@ def download_containers(conn, datasets, targetdir):
     * do not overwrite / delete old data
     """
     logger.debug('Checking local data directory exists and is empty')
+
     if not os.path.exists(targetdir):
         raise Exception('Local data directory does not exist.')
 

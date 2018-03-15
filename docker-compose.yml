@@ -22,16 +22,17 @@ services:
       - DB_NAME=city-dynamics
       - DB_PASSWORD=insecure
       - UWSGI_HTTP=0.0.0.0:8001
-      - UWSGI_MODULE=citydynamics.wsgi:application
       - UWSGI_MASTER=1
-      - UWSGI_STATIC_MAP=/static=/static
+      - UWSGI_STATIC_INDEX=index.html
+      - UWSGI_STATIC_MAP=/=/static
       - UWSGI_CALLABLE=application
       - UWSGI_VACUUM=1
       - UWSGI_STATIC_EXPIRES=/* 3600
       - UWSGI_OFFLOAD_THREADS=1
       - UWSGI_HARAKIRI=15
       - UWSGI_DIE_ON_TERM=1
-      - UWSGI_STATIC_INDEX=index.html
+      - UWSGI_MODULE=citydynamics.wsgi:application
+      # - UWSGI_MOUNT=/api=citydynamics.wsgi:application
 
   importer:
     build: ./importer

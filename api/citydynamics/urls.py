@@ -40,7 +40,7 @@ router.register('realtime', RealtimeGoogleViewset, 'realtime')
 urlpatterns = router.urls
 
 urlpatterns = [
-    url(r'^citydynamics/', include(router.urls)),
+    url(r'^api/', include(router.urls)),
     url(r'^status/', include('health.urls', namespace='health')),
 ]
 
