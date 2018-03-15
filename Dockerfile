@@ -6,7 +6,6 @@ ENV PYTHONUNBUFFERED 1
 
 RUN mkdir -p /static && chown datapunt /static
 
-COPY front /static/radar
 
 COPY /api/requirements.txt /app/
 
@@ -25,5 +24,7 @@ USER datapunt
 RUN export DJANGO_SETTINGS_MODULE=citydynamics.settings
 
 RUN python manage.py collectstatic --no-input
+
+COPY front /static/
 
 CMD uwsgi

@@ -4,5 +4,5 @@ set -x
 set -u
 set -e
 
-python main_ETL.py data
+python main_ETL.py /data
 

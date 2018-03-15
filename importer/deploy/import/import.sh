@@ -23,8 +23,8 @@ dc build
 
 dc up -d database
 dc run --rm importer bash /app/deploy/docker-wait.sh
-dc run --rm api python manage.py migrate
 dc run --rm importer bash /app/run_import.sh
+dc run --rm api python manage.py migrate
 
 dc run --rm analyzer
 
