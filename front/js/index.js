@@ -44,9 +44,9 @@ if(window.location.href.indexOf('prod.citydynamics.amsterdam') > -1)
 }
 
 // However, when using the acceptation server, get the API from there.
-if(window.location.href.indexOf('acc.citydynamics.amsterdam') > -1)
+if(window.location.href.indexOf('acc.citydynamics.amsterdam.nl') > -1)
 {
-	var origin = 'https://acc.citydynamics.amsterdam.nl/citydynamics';
+	var origin = 'https://acc.citydynamics.amsterdam.nl/api/';
 }
 
 var base_api = origin + '/';
