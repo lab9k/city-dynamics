@@ -127,7 +127,7 @@ if __name__ == "__main__":
     download_from_os()
 
     # 3. Restore alpha dump to database
-    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw.dump'
+    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/google_raw.dump'
     os.system(cmd)
 
     # 4. Parse the data and write to postgresql database
