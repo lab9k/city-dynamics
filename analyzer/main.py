@@ -316,6 +316,7 @@ def fill_table_in_db(org_table_name, fill_table_name, columns):
     connection = process.connect_database(dbconfig)
 
     insert_into_api_table = """
+    TRUNCATE TABLE datasets_buurtcombinatiedrukteindex;
     insert into datasets_buurtcombinatiedrukteindex (
     index,
     hour,
