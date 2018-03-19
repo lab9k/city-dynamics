@@ -151,6 +151,8 @@
 						.attr("class", "realtime_bar");
 				}
 
+				graph.data = newData;
+
 			}
 
 			graph.startCount = function(){
