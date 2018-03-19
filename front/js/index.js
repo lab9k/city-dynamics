@@ -7,6 +7,7 @@ var circles_layer;
 var markers = [];
 var geojson;
 var traffic_layer;
+var districts_d3 = [];
 
 // global arrays
 var buurtcode_prop_array = [];
@@ -14,6 +15,7 @@ var hotspot_array = [];
 var realtime_array = [];
 
 // states
+var debug = true;
 var vollcode;
 var mobile = false;
 var active_layer = 'hotspots';
@@ -32,9 +34,9 @@ var geomap1 = 'https://t1.data.amsterdam.nl/topo_wm/{z}/{x}/{y}.png';
 var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
-
 // Initially assume we have the API running locally.
 var origin = 'http://127.0.0.1:8117'
+//var origin = 'https://acc.api.data.amsterdam.nl'
 
 // When using the production server, get the API from there.
 // TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
@@ -54,6 +56,13 @@ var dindex_api = base_api + 'drukteindex/?format=json&op=';
 var dindex_hotspots_api = base_api + 'hotspots/?format=json';
 var realtimeUrl = base_api + 'realtime/?format=json';
 var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
+var dindex_uurtcombinaties_api = base_api + 'buurtcombinaties_drukteindex/?format=json';
+
+// temp local api
+dindex_hotspots_api = 'data/hotspots_drukteindex.json';
+// dindex_hotspots_api = 'data/hotspots_fallback.json';
+geoJsonUrl = 'data/buurtcombinaties.json';
+dindex_uurtcombinaties_api = 'data/buurtcombinaties_drukteindex.json';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -65,11 +74,49 @@ var amsterdam = {
 	index: -1
 }
 
+// ######### onload init sequence ###############
 $(document).ready(function(){
 
 	// check device resolution
 	mobile = ($( document ).width()<=360);
 
+	initMap();
+
+	var sequence_array = [];
+
+	sequence_array.push(getDistrictIndex());
+	sequence_array.push(getHotspots());
+	sequence_array.push(getRealtime());
+
+	// first promise chain
+	$.when(sequence_array).done(
+		function(){
+			// second promise chain
+			$.when(getDistricts()).done(
+				function() {
+					initLineGraph();
+
+					initAutoComplete();
+
+					initEventMapping();
+				}
+			)
+
+		}
+	);
+
+
+
+	// chrome control button style
+	if (navigator.appVersion.indexOf("Chrome/") != -1) {
+		$('.controls').addClass('chrome');
+	}
+
+});
+
+// ######### general init and get functions ###############
+function initMap()
+{
 	if(mobile) {
 		var map_center = [52.368, 4.897];
 		var zoom = 13.5;
@@ -87,7 +134,7 @@ $(document).ready(function(){
 	// wgs map
 	map = L.map('mapid', {zoomControl: false}).setView(map_center, zoom);
 
-	L.tileLayer(geomap2, {
+	L.tileLayer(geomap3, {
 		minZoom: 10,
 		maxZoom: 18
 	}).addTo(map);
@@ -95,65 +142,125 @@ $(document).ready(function(){
 	L.control.zoom({
 		position:'topright'
 	}).addTo(map);
+}
 
-	var dindexJsonUrl = dindex_api + getNowDate();
-	//var dindexJsonUrl = dindex_api + '07-12-2017-16-00-00';
-	console.log(dindexJsonUrl);
+function getDistrictIndex() {
 
-	// district map init
-	$.getJSON(dindexJsonUrl).done(function (dindexJson) {
-		console.log(dindexJson);
+	var dindexJsonUrl = dindex_uurtcombinaties_api;
+	if(debug) {
+		console.log('Start: getDistrictIndex');
+		console.log(dindexJsonUrl);
+	}
 
-		var calc_index = 0;
-		var count_index = 0;
+	var promise = $.getJSON(dindexJsonUrl).done(function (dindexJson) {
+		if(debug) { console.log(dindexJson) }
 
 		$.each(dindexJson.results, function (key, value) {
+
 			var buurtcode = this.vollcode;
-			var $dataset = [];
 
-			if(this.drukte_index>0)
-			{
-				dindex = this.drukte_index,buurtcode;
-				$dataset["index"] = dindex;
-			}
-			else
-			{
-				$dataset["index"] = 0;
-			}
+			var dataset = {};
 
-			calc_index += Math.round($dataset["index"] * 100);
-			count_index++;
+			dataset.index = this.druktecijfers_bc;
 
-			buurtcode_prop_array[buurtcode] = $dataset;
+			buurtcode_prop_array[buurtcode] = dataset;
 		});
 
+		if(debug) { console.log('getDistrictIndex: OK') }
 
-		total_index = Math.round(calc_index / count_index);
-
-		$.getJSON(geoJsonUrl).done(function (geoJson) {
-			geojson = L.geoJSON(geoJson.results, {style: style, onEachFeature: onEachFeature}).addTo(map);
-
-			geojson.eachLayer(function (layer) {
-				layer._path.id = 'feature-' + layer.feature.properties.vollcode;
-				buurtcode_prop_array[layer.feature.properties.vollcode]['layer'] = layer;
-				buurtcode_prop_array[layer.feature.properties.vollcode]['buurt'] = layer.feature.properties.naam;
-			});
-
-			// hide map by default
-			map.removeLayer(geojson);
-
-		});
 	});
 
+	return promise;
+}
+
+function getDistricts()
+{
+	var promise = $.getJSON(geoJsonUrl).done(function (geoJson) {
+		if(debug) {
+			console.log('Start: getDistricts');
+			console.log(geoJsonUrl);
+		}
+		geojson = L.geoJSON(geoJson.results, {style: style, onEachFeature: onEachFeature}).addTo(map);
+
+		geojson.eachLayer(function (layer) {
+			layer._path.id = 'feature-' + layer.feature.properties.vollcode;
+			districts_d3[layer.feature.properties.vollcode] = d3.select('#feature-' + layer.feature.properties.vollcode);
+		});
+
+		// hide map by default
+		map.removeLayer(geojson);
+
+		if(debug) { console.log('getDistricts: OK') }
+	});
+
+	return promise;
+}
+
+function addDistrictLayer()
+{
+	geojson.addTo(map);
+
+	geojson.eachLayer(function (layer) {
+		layer._path.id = 'feature-' + layer.feature.properties.vollcode;
+		districts_d3[layer.feature.properties.vollcode] = d3.select('#feature-' + layer.feature.properties.vollcode);
+	});
+}
+
+function style(feature) {
+
+	if(buurtcode_prop_array[feature.properties.vollcode].index.length)
+	{
+		var dindex = buurtcode_prop_array[feature.properties.vollcode].index[0].d * 10;
+		if(dindex>1) { dindex=1;}
+	}
+	else
+	{
+		var dindex = 0;
+	}
 
 
+	return {
+		fillColor: getColor(dindex),
+		weight: 1,
+		opacity: 0.6,
+		color: '#fff',
+		fillOpacity: 0.7
+	};
+}
 
+function onEachFeature(feature, layer) {
+
+	buurtcode_prop_array[feature.properties.vollcode].layer = layer;
+	buurtcode_prop_array[feature.properties.vollcode].buurt = feature.properties.naam;
+
+	layer.on({
+		mouseover: highlightFeature,
+		mouseout: resetHighlight,
+		click: zoomToFeature
+	});
+
+	layer.bindPopup('<div><h3>' + layer.feature.properties.naam + '</h3></div>');
+	layer.on('mouseover', function (e) {
+		this.openPopup();
+	});
+	layer.on('mouseout', function (e) {
+		this.closePopup();
+	});
+}
+
+function getHotspots() {
 	// hotspots map init
-	var hotspotsJsonUrl = dindex_hotspots_api+'&timestamp='+ getNowDate();
-	console.log(hotspotsJsonUrl);
+	var hotspotsJsonUrl = dindex_hotspots_api + '&timestamp=' + getNowDate();
+	var hotspotsJsonUrl = dindex_hotspots_api;
+	if (debug) {
+		console.log('Start: getHotspots');
+		console.log(hotspotsJsonUrl);
+	}
 
-	$.getJSON(hotspotsJsonUrl).done(function(hotspotsJson) {
-		//console.log(hotspotsJson);
+	var promise = $.getJSON(hotspotsJsonUrl).done(function (hotspotsJson) {
+		if (debug) {
+			console.log(hotspotsJson)
+		}
 
 		var hotspot_count = 0;
 		$.each(hotspotsJson.results, function (key, value) {
@@ -172,8 +279,7 @@ $(document).ready(function(){
 			});
 
 			var dataset = this;
-			if(this.druktecijfers.length<1)
-			{
+			if (this.druktecijfers.length < 1) {
 				this.druktecijfers = '[{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}];'
 			}
 
@@ -199,29 +305,29 @@ $(document).ready(function(){
 			var dindex = this.druktecijfers[hh].d;
 
 			circles[key] = L.circleMarker(this.coordinates, {
-				color: getColor(dindex),
-				fillColor: getColor(dindex),
+				color      : getColorBucket(dindex),
+				fillColor  : getColorBucket(dindex),
 				fillOpacity: 1,
-				radius: (12),
-				name: this.hotspot
+				radius     : (12),
+				name       : this.hotspot
 			});
 			circles[key].addTo(map);
-			$(circles[key]._path).attr('stroke-opacity' , 0.6);
-			$(circles[key]._path).attr('stroke' , '#4a4a4a');
-			$(circles[key]._path).attr('hotspot' , this.index);
-			$(circles[key]._path).addClass('hotspot_'+ this.index);
+			$(circles[key]._path).attr('stroke-opacity', 0.6);
+			$(circles[key]._path).attr('stroke', '#4a4a4a');
+			$(circles[key]._path).attr('hotspot', this.index);
+			$(circles[key]._path).addClass('hotspot_' + this.index);
 			circles[key].bindPopup('<div class="popup_hotspot"><i class="material-icons">fiber_manual_record</i><h3>' + this.hotspot + '</h3></div>', {autoClose: false});
-			circles[key].on("click", function(e){
+			circles[key].on("click", function (e) {
 				var clickedCircle = e.target;
 
 				var hotspot_id = $(clickedCircle._path).attr('hotspot');
 
-				updateLineGraph(hotspot_id);
+				updateLineGraph(hotspot_id,'hotspot');
 
 				clearInterval(popup_interval);
 
-				popup_interval = setInterval(function(){
-					var current_fill = $('[hotspot='+hotspot_id+']').css('fill');
+				popup_interval = setInterval(function () {
+					var current_fill = $('[hotspot=' + hotspot_id + ']').css('fill');
 					$('.popup_hotspot .material-icons').css('color', current_fill);
 				}, 100);
 
@@ -231,14 +337,58 @@ $(document).ready(function(){
 			circles[key].addTo(circles_layer);
 
 
-			circles_d3[key] = d3.select('path.hotspot_'+ this.index);
+			circles_d3[key] = d3.select('path.hotspot_' + this.index);
 
 		});
 
-		initLineGraph();
+		if(debug) { console.log('getHotspots: OK') }
+	});
+
+	return promise;
+}
+
+
+function getRealtime()
+{
+	// realtime check
+	if(debug) { console.log('Start: getRealtime'); console.log(realtimeUrl); }
+	var promise = $.getJSON(realtimeUrl).done(function (realtimeJson) {
+
+		var hotspots_match_array = [];
+		hotspots_match_array[18] = 'ARTIS';
+		hotspots_match_array[34] = 'Museumplein';
+		hotspots_match_array[0] = 'Amsterdam Centraal';
+		hotspots_match_array[3] = 'Madame Tussauds Amsterdam'; //dam
+		hotspots_match_array[33] = 'Dappermarkt';
+		hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
+		hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
+		hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
+
+		if(debug) { console.log(hotspots_match_array) }
+
+		$.each(realtimeJson.results, function (key, value) {
+
+			var name = this.name;
+			var exists = $.inArray(name, hotspots_match_array );
+			if(exists > -1)
+			{
+				// console.log(name + ' - ' + this.data.place_id + ' - ' + this.data['Real-time']);
+				realtime_array[exists] = this.data['Real-time'];
+			}
+
+		});
+
+		if(debug) { console.log(realtime_array) }
+
+		if(debug) { console.log('getRealtime: OK') }
 
 	});
 
+	return promise;
+}
+
+function initAutoComplete()
+{
 	// init auto complete
 	$('#loc_i').autocomplete({
 		source: function (request, response) {
@@ -260,7 +410,7 @@ $(document).ready(function(){
 
 			event.preventDefault();
 
-			console.log(ui.item);
+			// console.log(ui.item);
 
 			$('#loc_i').val(ui.item.label);
 
@@ -308,39 +458,10 @@ $(document).ready(function(){
 
 		}
 	});
+}
 
-	// realtime check
-	console.log(realtimeUrl);
-	$.getJSON(realtimeUrl).done(function (realtimeJson) {
-
-		var hotspots_match_array = [];
-		hotspots_match_array[18] = 'ARTIS';
-		hotspots_match_array[34] = 'Museumplein';
-		hotspots_match_array[0] = 'Amsterdam Centraal';
-		hotspots_match_array[3] = 'Madame Tussauds Amsterdam'; //dam
-		hotspots_match_array[33] = 'Dappermarkt';
-		hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
-		hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
-		hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
-
-		console.log(hotspots_match_array);
-
-		$.each(realtimeJson.results, function (key, value) {
-
-			var name = this.name;
-			var exists = $.inArray(name, hotspots_match_array );
-			if(exists > -1)
-			{
-				// console.log(name + ' - ' + this.data.place_id + ' - ' + this.data['Real-time']);
-				realtime_array[exists] = this.data['Real-time'];
-			}
-
-		});
-
-	});
-	console.log(realtime_array);
-
-
+function initEventMapping()
+{
 
 	$('.detail_top i').on('click',function () {
 		closeDetails();
@@ -383,7 +504,7 @@ $(document).ready(function(){
 	$( document).on('click', ".close",function () {
 		$(this).parent().fadeOut();
 	});
-4
+	4
 	$( document).on('click', ".graphbar_title .reset_icon",function () {
 		resetMap();
 	});
@@ -401,7 +522,7 @@ $(document).ready(function(){
 			// hide hotspots
 			$('path[hotspot]').hide();
 			// show district
-			geojson.addTo(map);
+			addDistrictLayer();
 			// set latlong & zoom
 			if(mobile)
 			{
@@ -625,95 +746,10 @@ $(document).ready(function(){
 	$('.controls').on('click',function(){
 		map.setView([52.36, 4.95], 12);
 	});
-
-	// chrome control button style
-	if (navigator.appVersion.indexOf("Chrome/") != -1) {
-		$('.controls').addClass('chrome');
-	}
-
-});
-
-function resetMap() {
-	map.closePopup();
-	$('.graphbar_title h2').text(amsterdam.hotspot);
-	updateLineGraph('ams');
-}
-
-function stopAnimation()
-{
-	clearInterval(interval);
-
-	$.each(hotspot_array, function (key, value) {
-
-		circles_d3[key]
-			.transition()
-			.duration(0);
-	});
 }
 
 
-function startAnimation()
-{
-	var elapsed_time = $('.line-group').attr('time');
-	if(elapsed_time<1)
-	{
-		$.each(hotspot_array, function (key, value) {
-			circles_d3[key]
-				.attr('stroke-opacity', 0.6)
-				.attr('stroke-width', 3)
-				.transition()
-				.duration(1000)
-				.attr('fill', getColor(this.druktecijfers[0].d))
-				.attr('stroke', '#4a4a4a');
-		});
-	}
-
-	var counter = 0;
-	interval = setInterval(function() {
-		elapsed_time = $('.line-group').attr('time');
-		if(elapsed_time > counter)
-		{
-			var hour = Math.ceil(elapsed_time);
-
-
-
-			$.each(hotspot_array, function (key, value) {
-
-				if(key==10)
-				{
-					//console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
-				}
-
-				circles_d3[key]
-					.attr('stroke-opacity', 0.6)
-					.attr('stroke-width', 3)
-					.transition()
-					.duration(1000)
-					.attr('fill', getColor(this.druktecijfers[hour].d))
-					.attr('stroke', '#4a4a4a');
-			});
-
-
-			counter++;
-		}
-		if(elapsed_time>23)
-		{
-			clearInterval(interval);
-		}
-
-	},500);
-
-}
-
-function getLatLangArray(point) {
-	return lnglat = proj4RD.inverse([point.x, point.y]);
-}
-
-function getLatLang(point) {
-	var lnglat = proj4RD.inverse([point.x, point.y]);
-	return L.latLng(lnglat[1]-0.0006, lnglat[0]-0.002);
-}
-
+// ######### map / animation functions ###############
 function getColor(dindex)
 {
 	if(dindex<0.5)
@@ -740,33 +776,136 @@ function getColor(dindex)
 	return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
 }
 
-function style(feature) {
+function getColorBucket(dindex)
+{
+	if(dindex<0.40)
+	{
+		return '#50E6DB'; //50E6DB 63c6e6
 
-	var dindex = buurtcode_prop_array[feature.properties.vollcode].index
+	}
+	else if(dindex<0.60){
+		return  '#F5A623';
+	}
+	else
+	{
+		return '#DB322A';
+	}
 
-	return {
-		fillColor: getColor(dindex),
-		weight: 1,
-		opacity: 0.6,
-		color: '#fff',
-		fillOpacity: 0.7
-	};
 }
 
-function onEachFeature(feature, layer) {
-	layer.on({
-		mouseover: highlightFeature,
-		mouseout: resetHighlight,
-		click: zoomToFeature
-	});
+function resetMap() {
+	map.closePopup();
+	$('.graphbar_title h2').text(amsterdam.hotspot);
+	updateLineGraph('ams','ams');
+}
 
-	layer.bindPopup('<div><h3>' + layer.feature.properties.naam + '</h3></div>');
-	layer.on('mouseover', function (e) {
-		this.openPopup();
+function stopAnimation()
+{
+	clearInterval(interval);
+
+	$.each(hotspot_array, function (key, value) {
+
+		circles_d3[key]
+			.transition()
+			.duration(0);
 	});
-	layer.on('mouseout', function (e) {
-		this.closePopup();
-	});
+}
+
+function startAnimation()
+{
+	var elapsed_time = $('.line-group').attr('time');
+
+	if(elapsed_time<1)
+	{
+		// hotspots
+		// $.each(hotspot_array, function (key, value) {
+		// 	circles_d3[key]
+		// 		.attr('stroke-opacity', 0.6)
+		// 		.attr('stroke-width', 3)
+		// 		// .transition()
+		// 		// .duration(1000)
+		// 		.attr('fill', getColorBucket(this.druktecijfers[0].d))
+		// 		.attr('stroke', '#4a4a4a');
+		// });
+
+		// buurtcombinaties
+		// $.each(buurtcode_prop_array, function (key, value) {
+		//
+		// 	var start_index = this['index'][0].d * 10;
+		//
+		// 	districts_d3[key].transition()
+		// 		.duration(1000)
+		// 		.attr('fill', getColor(start_index))
+		//
+		// });
+	}
+
+	var counter = 0;
+	interval = setInterval(function() {
+		elapsed_time = $('.line-group').attr('time');
+		if(elapsed_time > counter)
+		{
+			var hour = Math.ceil(elapsed_time);
+
+			// hotspots
+			$.each(hotspot_array, function (key, value) {
+
+				// if(key==10)
+				// {
+				// 	console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
+				// }
+
+				circles_d3[key]
+					.attr('stroke-opacity', 0.6)
+					.attr('stroke-width', 3)
+					// .transition()
+					// .duration(1000)
+					.attr('fill', getColorBucket(this.druktecijfers[hour].d))
+					.attr('stroke', '#4a4a4a');
+			});
+
+			// buurtcombinaties
+			for (i in buurtcode_prop_array) {
+				buurt_obj = buurtcode_prop_array[i];
+
+				var dindex = 0;
+				if(buurt_obj.index.length) {
+					dindex = buurt_obj.index[hour].d;
+				}
+
+				if(dindex>1){dindex=1;}
+
+				districts_d3[i]
+					.transition()
+					.duration(1000)
+					.attr('fill', getColor(dindex));
+
+				// $('#feature-'+ i).attr('fill', getColorBucket(dindex));
+				// $('#feature-'+ i).remove();
+
+
+				 // console.log(districts_d3[i]);
+			};
+
+			console.log(hour);
+
+			counter++;
+		}
+		if(elapsed_time>23)
+		{
+			clearInterval(interval);
+		}
+
+	},500);
+}
+
+function getLatLangArray(point) {
+	return lnglat = proj4RD.inverse([point.x, point.y]);
+}
+
+function getLatLang(point) {
+	var lnglat = proj4RD.inverse([point.x, point.y]);
+	return L.latLng(lnglat[1]-0.0006, lnglat[0]-0.002);
 }
 
 function highlightFeature(e) {
@@ -801,8 +940,10 @@ function setLayerActive(layer)
 	var buurt = buurtcode_prop_array[vollcode].buurt;
 	var dindex = buurtcode_prop_array[vollcode].index;
 
+	updateLineGraph(vollcode,'district');
+
 	// set name
-	$('.graphbar_title').html(buurt);
+	$('.graphbar_title h2').html(buurt);
 
 	$(layer.getElement()).addClass("active_path");
 
@@ -821,6 +962,7 @@ function setLayerActive(layer)
 	lastClickedLayer = layer;
 }
 
+// ######### graph functions ###############
 function initLineGraph()
 {
 	var data = [];
@@ -840,19 +982,27 @@ function initLineGraph()
 
 }
 
-function updateLineGraph(hotspot)
+function updateLineGraph(key,type)
 {
 	// get proper data from json array
 	var data = [];
 
+	//console.log(key);
 
-	if(hotspot=='ams')
+	var realtime = 0;
+
+	if(type=='ams')
 	{
 		var point_array = amsterdam.druktecijfers;
 	}
+	else if(type == 'hotspot')
+	{
+		var point_array = hotspot_array[key].druktecijfers;
+		realtime = realtime_array[key];
+	}
 	else
 	{
-		var point_array = hotspot_array[hotspot].druktecijfers;
+		var point_array =  buurtcode_prop_array[key].index;
 	}
 
 
@@ -867,11 +1017,12 @@ function updateLineGraph(hotspot)
 
 	// console.log(data);
 
-	var realtime = realtime_array[hotspot];
+
 
 	areaGraph[0].update(data,realtime);
 }
 
+// ######### date functions ###############
 function setView()
 {
 	// if(mobile)
@@ -884,7 +1035,36 @@ function setView()
 	// }
 }
 
+function hideActiveLayer()
+{
+	areaGraph[0].stop();
+	//
+	// switch(active_layer)
+	// {
+	// 	case 'hotspots':
+	// 		$('path[hotspot]').hide();
+	// 		break;
+	// 	case 'buurten':
+	// 		map.removeLayer(geojson);
+	// 		break;
+	// }
+}
+function showActiveLayer()
+{
+	areaGraph[0].stopResumeCount();
 
+	// switch(active_layer)
+	// {
+	// 	case 'hotspots':
+	// 		$('path[hotspot]').show();
+	// 		break;
+	// 	case 'buurten':
+	// 		addDistrictLayer();
+	// 		break;
+	// }
+}
+
+// ######### date functions ###############
 function getDate()
 {
 	var today = new Date();
@@ -946,6 +1126,7 @@ function getCurrentDateOnly()
 	return date.replace('/','-').replace('/','-');
 }
 
+// ######### window / visualisation handling ###############
 function showInfo(content,duration)
 {
 	$('.info_content').html(content);
@@ -995,35 +1176,6 @@ function closeSearch()
 	$('.search').removeClass('open');
 }
 
-function hideActiveLayer()
-{
-	areaGraph[0].stop();
-	//
-	// switch(active_layer)
-	// {
-	// 	case 'hotspots':
-	// 		$('path[hotspot]').hide();
-	// 		break;
-	// 	case 'buurten':
-	// 		map.removeLayer(geojson);
-	// 		break;
-	// }
-}
-function showActiveLayer()
-{
-	areaGraph[0].stopResumeCount();
-
-	// switch(active_layer)
-	// {
-	// 	case 'hotspots':
-	// 		$('path[hotspot]').show();
-	// 		break;
-	// 	case 'buurten':
-	// 		geojson.addTo(map);
-	// 		break;
-	// }
-}
-
 
 function openThemaDetails(show)
 {
@@ -1055,6 +1207,27 @@ function closeDetails()
 	$('.cta').removeClass('open');
 	$('.details_graph').hide();
 }
+
+function showLeftBox(content,header)
+{
+	$( ".leftbox .content" ).html('');
+	$( ".leftbox h2" ).html('');
+
+	$( ".leftbox" ).fadeIn( "slow" );
+
+	$( ".leftbox h2" ).append(header);
+	$( ".leftbox .content" ).append(content);
+}
+
+function hideLeftBox()
+{
+	$( ".leftbox" ).fadeOut( "slow" );
+
+	$( ".leftbox .content" ).html('');
+	$( ".leftbox h2" ).html('');
+}
+
+// ######### theme layer handling ###############
 
 function resetTheme()
 {
@@ -1089,7 +1262,19 @@ function resetThemeDetail()
 	}
 }
 
+function hideMarkers()
+{
+	$.each(markers, function(key,value) {
+		map.removeLayer(this);
+	});
+}
 
+function removeThemeLayer()
+{
+	map.removeLayer(theme_layer);
+}
+
+// ######### theme layers ###############
 
 function showFeeds()
 {
@@ -1106,7 +1291,6 @@ function showFeeds()
 	feeds[6] = {name:"Knooppunt Westpoort",url:"https://vid.nl/EmbedStream/cam/41?w=100p", lat:"52.396049", lon:"4.844490"};
 	//feeds[x] = {name:"Oudezijds Voorburgwal",url:"https://www.youtube.com/embed/_uj8ELeiYKs?rel=0&amp;controls=0&amp;showinfo=0&amp;autoplay=1", lat:"52.3747178", lon:"4.8991389"};
 	// feeds[1] = {name:"Centraal Station (zicht op het IJ)",url:"https://www.portofamsterdam.com/nl/havenbedrijf/webcam	", lat:"52.380149", lon:"4.900437"};
-
 
 	var camIcon = L.icon({
 		iconUrl: 'images/cam_marker.svg',
@@ -1125,43 +1309,12 @@ function showFeeds()
 	return feeds;
 }
 
-function showLeftBox(content,header)
-{
-	$( ".leftbox .content" ).html('');
-	$( ".leftbox h2" ).html('');
-
-	$( ".leftbox" ).fadeIn( "slow" );
-
-	$( ".leftbox h2" ).append(header);
-	$( ".leftbox .content" ).append(content);
-}
-
-function hideLeftBox()
-{
-	$( ".leftbox" ).fadeOut( "slow" );
-
-	$( ".leftbox .content" ).html('');
-	$( ".leftbox h2" ).html('');
-}
-
 function showFeed(title, url)
 {
 
 	var content = '<iframe width="100%" height="100%" src="'+url+'" frameborder="0"></iframe>';
 
 	showLeftBox(content,'Webcam '+title);
-}
-
-function hideMarkers()
-{
-	$.each(markers, function(key,value) {
-		map.removeLayer(this);
-	});
-}
-
-function removeThemeLayer()
-{
-	map.removeLayer(theme_layer);
 }
 
 function addParkLayer()
@@ -1255,18 +1408,16 @@ function onEachFeaturePark(feature, layer) {
 
 }
 
-
 function showOvFiets()
 {
 	setView();
 
 	var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
-
+	if(debug) { console.log(fietsJsonUrl) }
 	$.getJSON(fietsJsonUrl).done(function(fietsJson){
-		//console.log(fietsJson);
+		if(debug) { console.log(fietsJson) }
 
 		var ams_locaties = ['ASB','RAI','ASA','ASDM','ASDZ','ASD','ASDL','ASS'];
-
 
 		$.each(fietsJson.locaties, function(key,value) {
 			if(ams_locaties.indexOf(this.stationCode)>=0)
@@ -1299,55 +1450,8 @@ function showOvFiets()
 					fiets_marker.bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + this.name + '</h3><div class="pop_inner_content"><h4>Fietsen beschikbaar : '+ this.extra.rentalBikes + '</h4><span class="ammount">' + this.extra.rentalBikes + '</span></div></div>', {autoClose: false});
 					markers.push(fiets_marker);
 
-					// var popup = new L.Popup();
-					// var popupLocation = new L.LatLng(this.lat, this.lng);
-					// var popupContent = "<h3>" + this.name + "</h3><br>Fietsen beschikbaar: " + this.extra.rentalBikes;
-					// popup.setLatLng(popupLocation);
-					// popup.setContent(popupContent);
-					//
-					// map.addLayer(popup);
-					// markers.push(popup);
 				}
 			}
-		});
-
-	});
-}
-
-function showEventsOld()
-{
-	var eventsJsonUrl = 'data/Evenementen.json';
-
-	$.getJSON(eventsJsonUrl).done(function(eventsJson){
-		//console.log(eventsJsonUrl);
-		// console.log(eventsJson);
-
-		var camIcon = L.icon({
-			iconUrl: 'images/events_marker.svg',
-
-			iconSize:     [35, 40],
-			iconAnchor:   [17.5, 40],
-			popupAnchor:  [0, -50]
-		});
-
-		$.each(eventsJson, function(key,value) {
-
-
-			var current_date = getCurrentDateOnly();
-
-			if(typeof(this.dates.singles)=='object')
-			{
-				//console.log(this.dates.singles);
-				if(this.dates.singles.indexOf(current_date)>=0)
-				{
-					var latitude = this.location.latitude.replace(',','.');
-					var longitude = this.location.longitude.replace(',','.');
-					var event_marker = L.marker([latitude,longitude], {icon: camIcon,title:this.details.nl.title}).addTo(map);
-					event_marker.bindPopup("<h3>" + this.title + "</h3><br>" + this.details.nl.shortdescription + '<br><a target="blank" href="' +  this.urls[0] + '">Website >></a>' , {autoClose: false});
-					markers.push(event_marker);
-				}
-			}
-
 		});
 
 	});
@@ -1358,8 +1462,10 @@ function showEvents()
 	setView();
 	// var eventsJsonUrl = 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today';
 	var eventsJsonUrl = 'data/events.js';
-	console.log(eventsJsonUrl);
+
+	if(debug) { console.log(eventsJsonUrl) }
 	$.getJSON(eventsJsonUrl).done(function(eventsJson){
+		if(debug) { console.log(eventsJson) }
 
 		$.each(eventsJson, function(key,value) {
 
@@ -1407,9 +1513,9 @@ function showEvents()
 function showMuseum()
 {
 	var eventsJsonUrl = 'data/MuseaGalleries.json';
-
+	if(debug) { console.log(eventsJsonUrl) }
 	$.getJSON(eventsJsonUrl).done(function(eventsJson){
-		// console.log(eventsJson);
+		if(debug) { console.log(eventsJson) }
 
 		var camIcon = L.icon({
 			iconUrl: 'images/musea_marker.svg',
@@ -1435,8 +1541,9 @@ function addParcLayer()
 	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
 	var parcJsonUrl = 'data/AGROEN_7_STADSPARK.json';
 
+	if(debug) { console.log(parcJsonUrl) }
 	$.getJSON(parcJsonUrl).done(function(parcJson){
-		//console.log(parcJson);
+		if(debug) { console.log(parcJson) }
 		theme_layer = L.geoJSON(parcJson,{style: styleParc, onEachFeature: onEachFeatureParc, pointToLayer: pointToLayerParc}).addTo(map);
 	});
 
@@ -1470,14 +1577,13 @@ function onEachFeatureParc(feature, layer) {
 
 }
 
-
 function addMarketLayer()
 {
-	//var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json"; /* cors not enabled
 	var marketJsonUrl = 'data/MARKTEN.json';
 
+	if(debug) { console.log(marketJsonUrl) }
 	$.getJSON(marketJsonUrl).done(function(marketJson){
-		//console.log(marketJson);
+		if(debug) { console.log(marketJson) }
 		theme_layer = L.geoJSON(marketJson,{style: styleMarket, onEachFeature: onEachFeatureMarket, pointToLayer: pointToLayerMarket}).addTo(map);
 	});
 
@@ -1516,15 +1622,14 @@ function onEachFeatureMarket(feature, layer) {
 
 }
 
-
 function addTrafficLayer()
 {
 	// var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
 	var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 
+	if(debug) { console.log(trafficJsonUrl) }
 	$.getJSON(trafficJsonUrl).done(function(trafficJson){
-		console.log(trafficJson);
-
+		if(debug) { console.log(trafficJson) }
 
 		$.each(trafficJson.features, function(key,value) {
 
@@ -1556,15 +1661,14 @@ function speedToColor(type, speed){
 	return currentColor;
 }
 
-
 function showGoogle()
 {
 	// var googleJsonUrl = 'http://apis.quantillion.io:3001/gemeenteamsterdam/locations/realtime/current';
 	var googleJsonUrl =  realtimeUrl;
 
+	if(debug) { console.log(googleJsonUrl) }
 	$.getJSON(googleJsonUrl).done(function(googleJson){
-		console.log(googleJsonUrl);
-
+		if(debug) { console.log(googleJson) }
 
 		$.each(googleJson.results, function(key,value) {
 
