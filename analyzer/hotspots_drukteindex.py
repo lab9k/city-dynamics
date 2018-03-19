@@ -148,6 +148,7 @@ def main():
     drukteindex_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
 
     insert_into_models_hotspots = """
+    TRUNCATE TABLE datasets_hotspotsdrukteindex;
     insert into datasets_hotspotsdrukteindex (
     index,
     hour,
