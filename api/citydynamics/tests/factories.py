@@ -1,7 +1,5 @@
 # Python
 # Packages
-from datetime import datetime
-from datetime import timezone
 import factory
 from factory import fuzzy
 

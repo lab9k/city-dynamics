@@ -17,15 +17,6 @@ class BrowseDatasetsTestCase(APITestCase):
     ]
 
     def setUp(self):
-        # stamp = datetime(2017, 1, 1, 1, 1, tzinfo=timezone.utc)
-        # one_hour = timedelta(seconds=3600)
-        #
-        # for _i in range(1001):
-        #     factories.DrukteindexFactory(
-        #         timestamp=stamp,
-        #     )
-        #     stamp = stamp + one_hour
-
         self.h = factories.HotspotsFactory()
 
     def valid_html_response(self, url, response):
