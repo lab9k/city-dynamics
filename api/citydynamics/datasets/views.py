@@ -1,6 +1,3 @@
-from django_filters.rest_framework import FilterSet
-from django_filters.rest_framework import filters
-from rest_framework.serializers import ValidationError
 from rest_framework import viewsets
 # from django.db.models import Avg
 
