@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from datapunt_api import rest
 from . import models
 from . import serializers
-from datetime import datetime, timedelta
+from datetime import datetime
 import logging
 
 log = logging.getLogger(__name__)
