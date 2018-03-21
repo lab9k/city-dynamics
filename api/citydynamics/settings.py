@@ -122,7 +122,7 @@ DATABASES = {
     'default': DATABASE_OPTIONS[get_database_key()]
 }
 
-HEALTH_MODEL = 'datasets.Drukteindex'
+HEALTH_MODEL = 'datasets.HotspotsDrukteindex'
 
 
 # Password validation
