@@ -13,6 +13,8 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="js/jquery-d3-area.js"></script>
+	<!--<script src="js/svg.min.js"></script>-->
+	<!--<script src="js/svg.draggable.js"></script>-->
 	<script src="js/index.js"></script>
 
 	<link rel="stylesheet" href="css/leaflet.css">
@@ -117,20 +119,21 @@
 				<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
 				<stop offset="100%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
 			</linearGradient>
-			<defs>
-				<!--<linearGradient gradientUnits="userSpaceOnUse" id="gradient" x1="50%" y1="100%" x2="50%" y2="0%" >-->
-					<!--<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />-->
-					<!--<stop offset="50%" style="stop-color:rgb(245,166,35);stop-opacity:1" />-->
-					<!--<stop offset="100%" style="stop-color:rgb(219,50,42);stop-opacity:1" />-->
-				<!--</linearGradient>-->
-				<linearGradient gradientUnits="userSpaceOnUse" id="gradient" x1="50%" y1="100%" x2="50%" y2="0%" >
-					<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
-					<stop offset="20%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
-					<stop offset="50%" style="stop-color:rgb(245,166,35);stop-opacity:1" />
-					<stop offset="80%" style="stop-color:rgb(219,50,42);stop-opacity:1" />
-					<stop offset="100%" style="stop-color:rgb(219,50,42);stop-opacity:1" />
-				</linearGradient>
-			</defs>
+			<!--<linearGradient gradientUnits="userSpaceOnUse" id="gradient" x1="50%" y1="100%" x2="50%" y2="0%" >-->
+				<!--<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />-->
+				<!--<stop offset="50%" style="stop-color:rgb(245,166,35);stop-opacity:1" />-->
+				<!--<stop offset="100%" style="stop-color:rgb(219,50,42);stop-opacity:1" />-->
+			<!--</linearGradient>-->
+			<linearGradient gradientUnits="userSpaceOnUse" id="gradient" x1="50%" y1="100%" x2="50%" y2="0%" >
+				<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
+				<stop offset="20%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
+				<stop offset="50%" style="stop-color:rgb(245,166,35);stop-opacity:1" />
+				<stop offset="80%" style="stop-color:rgb(219,50,42);stop-opacity:1" />
+				<stop offset="100%" style="stop-color:rgb(219,50,42);stop-opacity:1" />
+			</linearGradient>
+			<mask id="cut-middle-line">
+				<rect x="0" y="0" width="3" height="10" fill="white" />
+			</mask>
 		</defs>
 	</svg>
 </div>

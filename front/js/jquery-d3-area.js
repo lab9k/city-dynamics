@@ -6,6 +6,8 @@
 			graph.container = $(this);
 			graph.data = data;
 			graph.time = 24000;
+			graph.currentHour = getHourDigit();
+			graph.hours = 23;
 
 			// set the dimensions and margins of the graph
 			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
@@ -35,7 +37,9 @@
 
 			// append the svg obgect to the body of the page
 			graph.svg = d3.select(graph.container[0]).append("svg")
-				.on('click', function(){ graph.stopResumeCount(); })
+				.on('click', function(){
+					//graph.stopResumeCount();
+				})
 				.attr("width", '100%')
 				.attr("height", graph.height +  graph.margin.top +  graph.margin.bottom)
 				.attr("class", "indexgraph")
@@ -72,10 +76,75 @@
 				.attr("dx", "0")
 				.attr("dy", ".15em");
 
+			graph.lineGroupCurrent = graph.svg.append("g")
+				.attr("transform", 'translate(' + graph.currentHour * graph.width/graph.hours + ',0)')
+				.attr("class", "line-group-current");
+
+
+			graph.currentline = graph.lineGroupCurrent.append("line")
+				.attr("class", "currentline")
+				.attr("x1",'0')
+				.attr("x2",'0')
+				.attr("y1",'0')
+				.attr("y2",graph.height)
+				.attr("stroke-dasharray",'5, 5')
+				.attr("style",'stroke:rgba(219, 50, 42, 0.8);stroke-width:3');
+
 			graph.lineGroup = graph.svg.append("g")
 				.attr("class", "line-group")
+				.attr("id", "line-group")
 				.attr('state','play')
-				.attr("time",0);
+				// .attr("mask",'url(#cut-middle-line)')
+				.attr("transform", 'translate(' + graph.currentHour * graph.width/graph.hours + ',0)')
+				.attr("time", graph.currentHour)
+				.call(d3.drag()
+					.on("start", dragstarted)
+					.on("drag", dragged)
+					.on("end", dragended));
+
+			graph.controlGroup = graph.svg.append("g")
+				.attr("transform", 'translate(' + 0 + ',0)')
+				.attr("class", "control-group");
+
+			graph.pause = graph.controlGroup.append("image")
+				.on('click', function(){
+					graph.stop();
+				})
+				.attr("xlink:href","images/pause.svg")
+				.attr("width", 18)
+				.attr("height", 18)
+				.attr("x", graph.width - 30 )
+				.attr("class", 'graph-pause');
+
+			graph.play = graph.controlGroup.append("image")
+				.on('click', function(){
+					graph.startCount();
+				})
+				.attr("xlink:href","images/play.svg")
+				.attr("width", 18)
+				.attr("height", 18)
+				.attr("x", graph.width - 30 )
+				.attr("style", 'display:none;')
+				.attr("class", 'graph-play');
+
+
+
+			function dragstarted() {
+				graph.stop();
+				d3.select(this).classed("active", true);
+			}
+
+			function dragged() {
+				if(graph.width>d3.event.x && d3.event.x>=0) {
+					d3.select(this).attr("transform", 'translate(' + d3.event.x + ',0)');
+					d3.select(this).attr("time", d3.event.x * graph.hours/graph.width );
+					dragAnimation();
+				}
+			}
+
+			function dragended() {
+				d3.select(this).classed("active", false);
+			}
 
 			graph.line = graph.lineGroup.append("line")
 				.attr("class", "nowline")
@@ -83,7 +152,9 @@
 				.attr("x2",'0')
 				.attr("y1",'0')
 				.attr("y2",graph.height)
-				.attr("style",'stroke:rgb(255,255,255);stroke-width:2');
+				.attr("style",'stroke:rgb(255,255,255);stroke-width:16');
+
+
 
 			// graph.svg.append("text")
 			// 	.attr("x", '10px')
@@ -103,7 +174,7 @@
 			// 	.attr("font-size",'12px')
 			// 	.text('Druk');
 
-			//add r altime
+			//add realtime
 			graph.realtime_bar = graph.svg.append("rect");
 
 
@@ -143,7 +214,7 @@
 						.attr("height", (realtime * graph.height))
 						.attr('width', '20px')
 						.attr('y', graph.height - (realtime*100))
-						.attr('x', (100/23*hours)+'%')
+						.attr('x', (100/graph.hours*hours)+'%')
 						.attr('rx', 5)
 						.attr('ry', 5)
 						.attr("stroke", "#4a4a4a")
@@ -158,6 +229,8 @@
 			graph.startCount = function(){
 
 				repeat();
+				graph.play.attr('style', 'display:none;');
+				graph.pause.attr('style', 'display:inherit;');
 
 				function repeat() {
 
@@ -216,6 +289,10 @@
 
 			}
 			graph.stop = function(){
+
+				graph.pause.attr('style', 'display:none;');
+				graph.play.attr('style', 'display:inherit;');
+
 				// stop hotspots animation
 				stopAnimation();
 

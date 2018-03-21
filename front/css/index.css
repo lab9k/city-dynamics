@@ -33,7 +33,7 @@ div {box-sizing: border-box;}
 
 
 /*info*/
-.info {position :absolute;left :50%;bottom :40px; z-index :500;width :600px;margin-left :-300px;min-height :40px;max-height :180px;overflow-y :auto;background : rgba(74, 74, 74, 0.8);color :#fff;border-radius :5px;border :0px solid #fff;box-shadow : 0 3px 14px rgba(0,0,0,0.4);padding :10px;font-size:14px;line-height:24px;}
+.info {display:none;position :absolute;left :50%;bottom :40px; z-index :500;width :600px;margin-left :-300px;min-height :40px;max-height :180px;overflow-y :auto;background : rgba(74, 74, 74, 0.8);color :#fff;border-radius :5px;border :0px solid #fff;box-shadow : 0 3px 14px rgba(0,0,0,0.4);padding :10px;font-size:14px;line-height:24px;}
 .info h2 {color:#fff;margin:0 0 10px 0;line-height:24px;}
 .info .info_content {margin:0 30px;}
 .info .info_content a{color:#50E6DB;}
@@ -176,6 +176,7 @@ div {box-sizing: border-box;}
 
 .indexgraph .axis text {font-size:12px;fill:#fff;}
 
+.indexgraph .nowline,.graph-play,.graph-pause {cursor:pointer;}
 
 /*legend*/
 .legend {
