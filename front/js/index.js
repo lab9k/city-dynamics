@@ -35,14 +35,14 @@ var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
 // Initially assume we have the API running locally.
-var origin = 'http://127.0.0.1:8117'
-//var origin = 'https://acc.api.data.amsterdam.nl'
+var origin = 'http://127.0.0.1:8117';
+// var origin = 'https://acc.citydynamics.amsterdam.nl/api';
 
 // When using the production server, get the API from there.
 // TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
 if(window.location.href.indexOf('prod.citydynamics.amsterdam') > -1)
 {
-	var origin = 'https://prod.citydynamics.amsterdam.nl';
+	var origin = 'https://prod.citydynamics.amsterdam.nl/api';
 }
 
 // However, when using the acceptation server, get the API from there.
@@ -60,9 +60,10 @@ var dindex_uurtcombinaties_api = base_api + 'buurtcombinaties_drukteindex/?forma
 
 // temp local api
 dindex_hotspots_api = 'data/hotspots_drukteindex.json';
-// dindex_hotspots_api = 'data/hotspots_fallback.json';
+dindex_hotspots_api = 'data/hotspots_fallback.json';
 geoJsonUrl = 'data/buurtcombinaties.json';
 dindex_uurtcombinaties_api = 'data/buurtcombinaties_drukteindex.json';
+realtimeUrl = 'data/realtime.json';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -103,7 +104,7 @@ $(document).ready(function(){
 			)
 
 		}
-	);
+	).fail(function(){console.error('One or more connections failed.')});
 
 
 
@@ -353,6 +354,7 @@ function getRealtime()
 	// realtime check
 	if(debug) { console.log('Start: getRealtime'); console.log(realtimeUrl); }
 	var promise = $.getJSON(realtimeUrl).done(function (realtimeJson) {
+		if(debug) { console.log(realtimeJson) }
 
 		var hotspots_match_array = [];
 		hotspots_match_array[18] = 'ARTIS';
@@ -887,7 +889,7 @@ function startAnimation()
 				 // console.log(districts_d3[i]);
 			};
 
-			console.log(hour);
+			// console.log(hour);
 
 			counter++;
 		}
@@ -897,6 +899,42 @@ function startAnimation()
 		}
 
 	},500);
+}
+
+function dragAnimation() {
+	elapsed_time = $('.line-group').attr('time');
+	var hour = Math.ceil(elapsed_time);
+
+	$.each(hotspot_array, function (key, value) {
+
+		// if(key==10)
+		// {
+		// 	console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
+		// }
+
+		circles_d3[key]
+			.attr('stroke-opacity', 0.6)
+			.attr('stroke-width', 3)
+			// .transition()
+			// .duration(1000)
+			.attr('fill', getColorBucket(this.druktecijfers[hour].d))
+			.attr('stroke', '#4a4a4a');
+	});
+
+	// buurtcombinaties
+	for (i in buurtcode_prop_array) {
+		buurt_obj = buurtcode_prop_array[i];
+
+		var dindex = 0;
+		if(buurt_obj.index.length) {
+			dindex = buurt_obj.index[hour].d;
+		}
+
+		if(dindex>1){dindex=1;}
+
+		districts_d3[i].attr('fill', getColor(dindex));
+
+	};
 }
 
 function getLatLangArray(point) {
@@ -978,7 +1016,7 @@ function initLineGraph()
 
 	areaGraph = $('.graphbar_graph').areaGraph(data);
 
-	setTimeout(areaGraph[0].startCount(),3000); //todo: replace timeout for proper load flow
+	areaGraph[0].startCount();
 
 }
 
