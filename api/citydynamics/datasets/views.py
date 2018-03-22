@@ -78,7 +78,6 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
 
     serializer_class = serializers.BCIndexSerializer
     serializer_detail_class = serializers.BCIndexSerializer
-    # filter_class = HotspotF
 
     filter_fields = (
         'druktecijfers_bc__weekday',
@@ -106,7 +105,7 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
 
     serializer_class = serializers.HotspotIndexSerializer
     serializer_detail_class = serializers.HotspotIndexSerializer
-    # filter_class = HotspotF
+
     filter_fields = (
         'druktecijfers__weekday',
     )

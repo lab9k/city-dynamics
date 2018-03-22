@@ -1,19 +1,25 @@
 # Packages
 from rest_framework.test import APITestCase
-
 from . import factories
 
 
 class BrowseDatasetsTestCase(APITestCase):
 
-    datasets = [
+    all_endpoints = [
         'api/buurtcombinatie',
-        'api/realtime',
+        'api/buurtcombinatie_drukteindex',
         'api/hotspots',
+        'api/realtime'
+    ]
+
+    druktecijfers_endpoints = [
+        'api/buurtcombinatie_drukteindex',
+        'api/hotspots'
     ]
 
     def setUp(self):
         self.h = factories.HotspotsFactory()
+        self.b = factories.BuurtcombinatieFactory()
 
     def valid_html_response(self, url, response):
         """
@@ -38,7 +44,7 @@ class BrowseDatasetsTestCase(APITestCase):
             200, 'Wrong response code for {}'.format(url))
 
     def test_lists(self):
-        for url in self.datasets:
+        for url in self.all_endpoints:
             response = self.client.get('/{}/'.format(url))
 
             self.assertEqual(
@@ -53,7 +59,7 @@ class BrowseDatasetsTestCase(APITestCase):
                 'count', response.data, 'No count attribute in {}'.format(url))
 
     def test_lists_html(self):
-        for url in self.datasets:
+        for url in self.all_endpoints:
             response = self.client.get('/{}/?format=api'.format(url))
 
             self.valid_html_response(url, response)
@@ -61,18 +67,13 @@ class BrowseDatasetsTestCase(APITestCase):
             self.assertIn(
                 'count', response.data, 'No count attribute in {}'.format(url))
 
-    def test_druktecijfers_in_hotspots(self):
-        url = f"api/hotspots/{self.h.index}"
-        response = self.client.get('/{}/'.format(url))
+    def test_druktecijfers(self):
+        for url in self.druktecijfers_endpoints:
+            response = self.client.get(url)
+            self.assertIn(
+                'druktecijfers',
+                response.data['results'][0],
+                'Missing druktecijfers attribute in {}'.format(url))
 
-        self.assertIn(
-            'druktecijfers',
-            response.data,
-            'Missing druktecijfers attribute in {}'.format(url))
 
-        url = "/api/hotspots/"
-        response = self.client.get(url)
-        self.assertIn(
-            'druktecijfers',
-            response.data['results'][0],
-            'Missing druktecijfers attribute in {}'.format(url))
+
