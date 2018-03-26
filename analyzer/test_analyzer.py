@@ -4,6 +4,7 @@
 ##############################################################################
 # Import public modules
 from pytest import approx
+import unittest
 import pandas as pd
 import numpy as np
 import copy
@@ -37,69 +38,72 @@ vollcodes_m2_land = {'A00': 125858.0, 'A01': 334392.0, 'A02': 139566.0, 'A03': 1
                      'T98': 2310156.0}
 
 ##############################################################################
-def test_main():
+class testMain(unittest.TestCase):
     """Test the main.py module."""
-    pass
+
+    def test_main(self):
+        pass
 
 ##############################################################################
-def test_process():
+class testProcess(unittest.TestCase):
     """Test the process.py module."""
 
-    dbconfig = 'dev'
+    def test_process(self):
+        dbconfig = 'docker'
 
-    # 1. Create mini-table in database
-    # 2. Test import_table
-    # 2. Test import_data (import mini-table twice)
+        # 1. Create mini-table in database
+        # 2. Test import_table
+        # 2. Test import_data (import mini-table twice)
 
-    # Create Process instance to test functions of Process class
-    x = process.Process(dbconfig)
-    x.name = "Test"
+        # Create Process instance to test functions of Process class
+        x = process.Process(dbconfig)
+        x.name = "Test"
 
-    # Test: Process > import_table
-    table = x.import_table('gvb_with_bc')
-    assert len(table) > 0
+        # Test: Process > import_table
+        table = x.import_table('gvb')
+        assert len(table) > 0
 
-    # Test: Process > import_data
-    x.import_data(['gvb_with_bc'], ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
-    assert len(x.data) > 0
+        # Test: Process > import_data
+        x.import_data(['gvb'], ['halte', 'incoming', 'timestamp', 'lat', 'lon', 'vollcode'])
+        assert len(x.data) > 0
 
-    # Test: Process > rename
-    x.rename({'halte': 'test'})
-    assert len(x.data.test) > 0
-    x.rename({'test': 'halte'})
+        # Test: Process > rename
+        x.rename({'halte': 'test'})
+        assert len(x.data.test) > 0
+        x.rename({'test': 'halte'})
 
-    # Test: Process > normalize
-    x.normalize('incoming')
-    x.normalize(['lat', 'lon'])
-    assert min(x.data.incoming) == approx(0.0)
-    assert max(x.data.incoming) == approx(1.0)
-    assert min(x.data.lat) == approx(0.0)
-    assert max(x.data.lat) == approx(1.0)
-    assert min(x.data.lon) == approx(0.0)
-    assert max(x.data.lon) == approx(1.0)
+        # Test: Process > normalize
+        x.normalize('incoming')
+        x.normalize(['lat', 'lon'])
+        assert min(x.data.incoming) == approx(0.0)
+        assert max(x.data.incoming) == approx(1.0)
+        assert min(x.data.lat) == approx(0.0)
+        assert max(x.data.lat) == approx(1.0)
+        assert min(x.data.lon) == approx(0.0)
+        assert max(x.data.lon) == approx(1.0)
 
-    # Test: Process > normalize_acreage
-    haltes = list(pd.read_csv('lookup_tables/metro_or_train.csv', sep=',')['station'])
-    indx = x.data.halte.isin(haltes)
-    gvb_buurt = x.data.loc[np.logical_not(indx), :]
-    x.data = gvb_buurt.groupby(['vollcode', 'weekday', 'hour'])['incoming'].mean().reset_index()
+        # Test: Process > normalize_acreage
+        haltes = list(pd.read_csv('lookup_tables/metro_or_train.csv', sep=',')['station'])
+        indx = x.data.halte.isin(haltes)
+        gvb_buurt = x.data.loc[np.logical_not(indx), :]
+        x.data = gvb_buurt.groupby(['vollcode', 'weekday', 'hour'])['incoming'].mean().reset_index()
 
-    m2 = pd.DataFrame(list(vollcodes_m2_land.items()), columns=['vollcode', 'oppervlakte_land_m2'])
+        m2 = pd.DataFrame(list(vollcodes_m2_land.items()), columns=['vollcode', 'oppervlakte_land_m2'])
 
-    col = 'incoming'
-    before = copy.deepcopy(x.data)
-    before = before.merge(m2)  # Merge to remove entries which also fall away in normalization
+        col = 'incoming'
+        before = copy.deepcopy(x.data)
+        before = before.merge(m2)  # Merge to remove entries which also fall away in normalization
 
-    x.normalize_acreage(col)
-    after = x.data.merge(m2)
-    after[col] = after[col] * after.oppervlakte_land_m2
+        x.normalize_acreage(col)
+        after = x.data.merge(m2)
+        after[col] = after[col] * after.oppervlakte_land_m2
 
-    # Check whether all entries are the same after "un-normalizing" them.
-    for i in range(0, len(before)):
-        assert before[col][i] == approx(after[col][i])
+        # Check whether all entries are the same after "un-normalizing" them.
+        for i in range(0, len(before)):
+            assert before[col][i] == approx(after[col][i])
 
 ##############################################################################
 
 if __name__ == "__main__":
-    test_main()
-    test_process()
+    testMain.test_main()
+    testProcess.test_process()
