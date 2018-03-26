@@ -1370,26 +1370,13 @@ function addParkLayer()
 
 function pointToLayerPark(feature, latlng) {
 
-	// if(feature.properties.Name.includes("P+R"))
-	// {
-	// 	var parkIcon = L.icon({
-	// 		iconUrl: 'images/park_marker_green.svg',
-	//
-	// 		iconSize:     [35, 40],
-	// 		iconAnchor:   [17.5, 40],
-	// 		popupAnchor:  [0, -50]
-	// 	});
-	// }
-	// else
-	// {
-	// 	var parkIcon = L.icon({
-	// 		iconUrl: 'images/park_marker.svg',
-	//
-	// 		iconSize:     [35, 40],
-	// 		iconAnchor:   [17.5, 40],
-	// 		popupAnchor:  [0, -50]
-	// 	});
-	// }
+	var prefix = 'park';
+	if(feature.properties.Name.includes("P+R"))
+	{
+		var prefix = 'parkride';
+	}
+
+
 
 	var suffix = 'none';
 	var height = 64;
@@ -1405,7 +1392,7 @@ function pointToLayerPark(feature, latlng) {
 	}
 
 	var parkIcon = L.icon({
-		iconUrl: 'images/park_marker_'+suffix+'.svg',
+		iconUrl: 'images/'+prefix+'_marker_'+suffix+'.svg',
 
 		iconSize:     [35, 58],
 		iconAnchor:   [17.5, 58],

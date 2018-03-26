@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="35px" height="56px" viewBox="0 0 35 56" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+<svg width="35px" height="50px" viewBox="0 0 35 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
     <title>fiets_marker_plenty</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="fiets_marker_plenty">
-            <g id="Polygon" fill-rule="nonzero">
-                <path d="M19.2888544,18.6060095 L21,22.0283008 L34.5690577,52.5586807 C34.8531888,53.1979757 35,53.8897813 35,54.589373 L35,57.0283008 L0,57.0283008 L0,54.589373 C7.01975208e-15,53.8897813 0.146811151,53.1979757 0.430942257,52.5586807 L14,22.0283008 L15.7111456,18.6060095 C16.2051241,17.6180525 17.4064702,17.2176039 18.3944272,17.7115823 C18.781482,17.9051098 19.095327,18.2189547 19.2888544,18.6060095 Z" id="Triangle-3" fill="#4A4A4A" transform="translate(17.500000, 37.264150) scale(-1, 1) rotate(-180.000000) translate(-17.500000, -37.264150) "></path>
-                <circle id="Oval-8" fill="#50E6DB" cx="17.5" cy="17.5" r="17.5"></circle>
-                <circle id="Oval-9" fill="#FFFFFF" cx="17.5" cy="17.5" r="15"></circle>
+            <g id="OV-Fiets-marker">
+                <circle id="Oval" fill="#50E6DB" cx="17.5" cy="17.5" r="15.5"></circle>
+                <g id="Marker-shape---template" fill="#4A4A4A">
+                    <path d="M17.5,0 C7.825,0 0,7.825 0,17.5 C0,30.625 17.5,50 17.5,50 C17.5,50 35,30.625 35,17.5 C35,7.825 27.175,0 17.5,0 L17.5,0 Z M17.5,33 C8.944,33 2,26.056 2,17.5 C2,8.944 8.944,2 17.5,2 C26.056,2 33,8.944 33,17.5 C33,26.056 26.056,33 17.5,33 L17.5,33 Z" id="Marker-shape"></path>
+                </g>
+                <g id="OV-fiets-Icon" transform="translate(6.500000, 5.500000)">
+                    <g id="Fiets" transform="translate(1.760000, 10.830769)" stroke="#4A4A4A">
+                        <path d="M10.9502885,2.61811043 L13.2158654,2.61811043" id="Line-4" stroke-linecap="square"></path>
+                        <path d="M12.1872414,2.72497208 L12.0830769,3.74015776" id="Line-3" stroke-linecap="square"></path>
+                        <path d="M4.68740053,3.93607078 L4.9998939,3.93607078" id="Line-5" stroke-linecap="square"></path>
+                        <path d="M9.5093179,3.81688278 L11.2371,7.72865245 L12.1155888,9.49953923 L12.1155888,9.49953923 C12.1401321,9.54901455 12.1199208,9.60901856 12.0704455,9.63356192 C12.0566334,9.64041372 12.041424,9.64397892 12.0260058,9.64397892 L4.9998939,9.64397892 L9.33753413,3.79770058 L9.33753413,3.79770058 C9.37044223,3.75334699 9.43307521,3.74406858 9.4774288,3.77697669 C9.49133404,3.78729366 9.50232225,3.80104433 9.5093179,3.81688278 Z" id="Triangle-2" transform="translate(8.566695, 6.692068) scale(1, -1) translate(-8.566695, -6.692068) "></path>
+                        <path d="M3.02076923,9.72441016 L4.90875,1.12204733" id="Line" stroke-linecap="square"></path>
+                        <path d="M4.9998939,1.12204733 L7.17432692,1.12204733" id="Line-2" stroke-linecap="square"></path>
+                        <path d="M12.1783769,3.9289505 L15.1038462,9.72441016 L10.1950962,9.72441016 L9.59339275,9.72441016 L9.59339275,9.72441016 C9.53816428,9.72441016 9.49339275,9.67963864 9.49339275,9.62441016 C9.49339275,9.61049597 9.49629649,9.59673491 9.50191827,9.58400697 L11.9976313,3.93361017 L11.9976313,3.93361017 C12.0199454,3.8830902 12.078989,3.86022481 12.129509,3.88253887 C12.1506778,3.89188891 12.1679486,3.90829153 12.1783769,3.9289505 Z" id="Triangle"></path>
+                        <ellipse id="Oval-3" cx="3.02076923" cy="9.72441016" rx="3.02076923" ry="2.9921262"></ellipse>
+                        <ellipse id="Oval-3" cx="15.1038462" cy="9.72441016" rx="3.02076923" ry="2.9921262"></ellipse>
+                    </g>
+                    <text id="OV" font-family="AvenirNext-DemiBold, Avenir Next" font-size="11" font-weight="500" fill="#4A4A4A">
+                        <tspan x="2.805" y="11">OV</tspan>
+                    </text>
+                </g>
             </g>
-            <g id="Fiets" transform="translate(6.000000, 9.000000)" stroke="#4A4A4A" stroke-width="0.5">
-                <path d="M15,1 L18,1" id="Line-4" stroke-linecap="square"></path>
-                <path d="M16.5,1.5 L16,3" id="Line-3" stroke-linecap="square"></path>
-                <polygon id="Triangle-2" transform="translate(10.750000, 7.000000) scale(-1, 1) rotate(-180.000000) translate(-10.750000, -7.000000) " points="12.1818182 3 16 11 5.5 11"></polygon>
-                <path d="M4,11 L7,0" id="Line" stroke-linecap="square"></path>
-                <path d="M7,0 L9,0" id="Line-2" stroke-linecap="square"></path>
-                <polygon id="Triangle" points="16 3 20 11 12 11"></polygon>
-                <circle id="Oval-3" cx="4" cy="11" r="4"></circle>
-                <circle id="Oval-3" cx="20" cy="11" r="4"></circle>
-            </g>
-            <text id="OV" fill="#EC0000" font-family="AvenirNext-Regular, Avenir Next" font-size="4" font-weight="normal">
-                <tspan x="5.542" y="12">OV</tspan>
-            </text>
         </g>
     </g>
 </svg>
