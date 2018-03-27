@@ -26,7 +26,7 @@ node {
     stage('Test') {
         tryStep "test", {
             sh "api/deploy/test/the_test.sh &&" +
-               "importer/deploy/test/test.sh &&"
+               "importer/deploy/test/test.sh"
         }
     }
 
