@@ -163,7 +163,7 @@ REST_FRAMEWORK = dict(
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC = '/'
+STATIC_URL = '/'
 
 if DEBUG:
     STATIC_URL = '/static/'
