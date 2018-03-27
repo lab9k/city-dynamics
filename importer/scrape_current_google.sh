@@ -10,5 +10,5 @@ cd scrape_api
 python models.py --drop
 
 # load data in database
-python slurp_api.py realtime/current
-python slurp_api.py expected/current
+python slurp_api.py qa_realtime/current
+python slurp_api.py qa_expected/current

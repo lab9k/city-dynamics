@@ -111,9 +111,6 @@ PARSING_DATA = {
 }
 
 
-cache = expiringdict.ExpiringDict(max_len=100, max_age_seconds=60)
-
-
 def cleanup(api_response):
     """Cleanup some api cruft
 
@@ -130,6 +127,9 @@ def cleanup(api_response):
         cleaned = cleaned[:-len(tailjunk)]
 
     return json.loads(cleaned)
+
+
+cache = expiringdict.ExpiringDict(max_len=100, max_age_seconds=60)
 
 
 @api_view(['GET', ])
@@ -156,26 +156,26 @@ def api_proxy(request):
     if api_source not in options:
         return r400
 
+    # only allow 1 request every 60 seconds
     data = cache.get(api_source)
 
     if data:
-        log.error('from cache!')
+        log.info('from cache!')
+        return Response(data)
 
-    if not data:
-        # only allow 1 request every 60 seconds
-        response = requests.get(PROXY_URLS[api_source])
+    response = requests.get(PROXY_URLS[api_source])
 
-        if response.status_code != 200:
-            return r500
+    if response.status_code != 200:
+        return r500
 
-        if api_source in PARSING_DATA:
-            if PARSING_DATA[api_source] == 'json':
-                data = response.json()
-            if PARSING_DATA[api_source] == 'cleanup':
-                data = cleanup(response.text)
-        else:
-            data = response.text
+    if api_source in PARSING_DATA:
+        if PARSING_DATA[api_source] == 'json':
+            data = response.json()
+        if PARSING_DATA[api_source] == 'cleanup':
+            data = cleanup(response.text)
+    else:
+        data = response.text
 
-        cache[api_source] = data
+    cache[api_source] = data
 
     return Response(data)
