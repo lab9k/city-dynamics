@@ -81,8 +81,8 @@ if (BRANCH == "master") {
     node {
         stage('Push production image') {
             tryStep "image tagging", {
-                def api = docker.image("build.app.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
-                def analyzer = docker.image("build.app.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
+                def api = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}")
+                def analyzer = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${env.BUILD_NUMBER}")
                 def importer = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics_importer:${env.BUILD_NUMBER}")
 
                 analyzer.push("production")
