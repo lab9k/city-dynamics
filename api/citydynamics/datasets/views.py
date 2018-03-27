@@ -1,5 +1,6 @@
 import requests
 import datetime
+import json
 
 import expiringdict
 from rest_framework import viewsets
@@ -106,10 +107,29 @@ PROXY_URLS = {
 PARSING_DATA = {
     'parking_garages': 'geojson',
     'traveltime': 'geojson',
+    'events': 'cleanup',
 }
 
 
 cache = expiringdict.ExpiringDict(max_len=100, max_age_seconds=60)
+
+
+def cleanup(api_response):
+    """Cleanup some api cruft
+
+    Return jons from response.
+    """
+    junk = "__ng_jsonp__.__req1.finished("
+    cleaned = ""
+
+    if api_response.startswith(junk):
+        cleaned = api_response[len(junk):]
+
+    tailjunk = ");"
+    if cleaned.endswith(tailjunk):
+        cleaned = cleaned[:-len(tailjunk)]
+
+    return json.loads(cleaned)
 
 
 @api_view(['GET', ])
@@ -149,7 +169,10 @@ def api_proxy(request):
             return r500
 
         if api_source in PARSING_DATA:
-            data = response.json()
+            if PARSING_DATA[api_source] == 'json':
+                data = response.json()
+            if PARSING_DATA[api_source] == 'cleanup':
+                data = cleanup(response.text)
         else:
             data = response.text
 
