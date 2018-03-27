@@ -6,6 +6,7 @@
 
 """
 
+import time
 import psycopg2
 import configparser
 import logging
@@ -70,10 +71,10 @@ class ModifyTables(DatabaseInteractions):
 
     def table_has_point(self, tableName):
         sql = """
-        SELECT EXISTS (SELECT 1 
-        FROM    information_schema.columns 
-        WHERE   table_schema='public' 
-        AND     table_name='{0}' 
+        SELECT EXISTS (SELECT 1
+        FROM    information_schema.columns
+        WHERE   table_schema='public'
+        AND     table_name='{0}'
         AND     column_name='{1}');
         """.format(tableName, self.GEOMETRY_POINT_NAME)
 
@@ -122,11 +123,11 @@ class ModifyTables(DatabaseInteractions):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   vollcode;
-        
+
         ALTER TABLE "{0}" add vollcode varchar;
-        
+
         UPDATE "{0}" SET vollcode = buurtcombinatie.vollcode
-        FROM buurtcombinatie 
+        FROM buurtcombinatie
         WHERE st_intersects("{0}".geom, buurtcombinatie.wkb_geometry)
         """.format(tableName)
 
@@ -139,7 +140,7 @@ class ModifyTables(DatabaseInteractions):
         ALTER TABLE "{0}" add stadsdeelcode varchar;
 
         UPDATE "{0}" SET stadsdeelcode = stadsdeel.code
-        FROM stadsdeel 
+        FROM stadsdeel
         WHERE st_intersects("{0}".geom, stadsdeel.wkb_geometry)
         """.format(tableName)
 
@@ -148,11 +149,11 @@ class ModifyTables(DatabaseInteractions):
         return """
         ALTER table	"{0}"
         DROP COLUMN IF EXISTS hotspot;
-        
+
         ALTER TABLE "{0}" add hotspot varchar;
-        
+
         UPDATE "{0}" SET hotspot = hotspots."hotspot"
-        FROM hotspots 
+        FROM hotspots
         WHERE st_intersects("{0}".geom,
             ST_BUFFER(hotspots.geom, 100));
         """.format(tableName)
@@ -202,9 +203,18 @@ class LoadGebieden:
 
     @classmethod
     def run_command_sync(self, cmd, allow_fail=False):
-        #logging.debug('Running %s', self.scrub(cmd))
-        p = subprocess.Popen(cmd)
-        p.wait()
+        logging.debug('Running %s', self.scrub(cmd))
+
+        retry = 0
+
+        while retry < 5:
+            p = subprocess.Popen(cmd)
+            p.wait()
+            if p.returncode != 0:
+                time.sleep(10)
+                retry += 1
+            else:
+                break
 
         if p.returncode != 0 and not allow_fail:
             raise self.NonZeroReturnCode
@@ -218,7 +228,6 @@ class LoadGebieden:
             '-nln', layer_name, '-F', 'PostgreSQL', pg_str, url]
         self.run_command_sync(cmd)
 
-
     @staticmethod
     def load_gebieden(pg_str):
         areaNames = [
@@ -226,9 +235,7 @@ class LoadGebieden:
             'buurtcombinatie', 'gebiedsgerichtwerken']
         srsName = 'EPSG:4326'
         for areaName in areaNames:
-            WFS = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME=" \
+            WFS = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME=" \   # noqa
                   + srsName + "&typename=" + areaName
             LoadGebieden.wfs2psql(WFS, pg_str, areaName)
             logger.info(areaName + ' loaded into PG.')
-
-
