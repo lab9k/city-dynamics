@@ -19,7 +19,7 @@ import collections
 # Added to open Files on dev server
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework import routers, views, reverse, renderers, schemas, response
+from rest_framework import routers, views, reverse, response
 
 from citydynamics.datasets.views import BuurtcombinatieViewset
 from citydynamics.datasets.views import DrukteindexHotspotViewset
@@ -83,7 +83,6 @@ class HybridRouter(routers.DefaultRouter):
                 return response.Response(od)
 
         return APIRoot.as_view()
-
 
 
 router = HybridRouter()
