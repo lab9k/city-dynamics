@@ -315,7 +315,7 @@ def main(args):
     models.set_engine(engine)
 
     # api proxy parkinglocations, events, traveltime
-    if enpoint in apimethods:
+    if endpoint in API_METHODS:
         API_METHODS[endpoint](endpoint)
 
     #  quantillion.
