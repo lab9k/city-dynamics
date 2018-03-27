@@ -43,10 +43,6 @@ node {
             def api = docker.build("build.app.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}", ".")
                 api.push()
                 api.push("acceptance")
-
-            def front = docker.build("build.app.amsterdam.nl:5000/stadswerken/citydynamics_front:${env.BUILD_NUMBER}", "front")
-                front.push()
-                front.push("acceptance")
         }
     }
 }
@@ -85,10 +81,18 @@ if (BRANCH == "master") {
     node {
         stage('Push production image') {
             tryStep "image tagging", {
-                def kibana = docker.image("build.app.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
-                kibana.pull()
-                kibana.push("production")
-                kibana.push("latest")
+                def api = docker.image("build.app.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
+                def analyzer = docker.image("build.app.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
+                def importer = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics_importer:${env.BUILD_NUMBER}")
+
+                analyzer.push("production")
+                analyzer.push("latest")
+
+                importer.push("production")
+                importer.push("latest")
+
+                api.push("production")
+                api.push("latest")
             }
         }
     }
