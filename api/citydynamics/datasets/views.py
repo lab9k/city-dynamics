@@ -1,10 +1,13 @@
 from rest_framework import viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 # from django.db.models import Avg
+import requests
+import expiringdict
 
 from datapunt_api import rest
 from . import models
 from . import serializers
-from datetime import datetime
 import logging
 
 log = logging.getLogger(__name__)
@@ -17,49 +20,6 @@ def convert_to_date(input_date):
         log.exception("Got an invalid date value")
         date_obj = None
     return date_obj
-
-
-# class DateFilter(FilterSet):
-#     vanaf = filters.CharFilter(label='vanaf', method='vanaf_filter')
-#     tot = filters.CharFilter(label='tot', method='tot_filter')
-#     op = filters.CharFilter(label='op', method='op_filter')
-#
-#     class Meta:
-#         model = models.Drukteindex
-#         fields = [
-#             'timestamp',
-#             'vanaf',
-#             'tot',
-#             'op',
-#             'vollcode'
-#         ]
-#
-#     def vanaf_filter(self, queryset, _name, value):
-#         date = convert_to_date(value)
-#         if not date:
-#             raise ValidationError(
-#                 'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')  # noqa
-#         queryset = queryset.filter(timestamp__gte=date)
-#
-#         return queryset
-#
-#     def tot_filter(self, queryset, _name, value):
-#         date = convert_to_date(value)
-#         if not date:
-#             raise ValidationError(
-#                 'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')  # noqa
-#         queryset = queryset.filter(timestamp__lte=date)
-#
-#         return queryset
-#
-#     def op_filter(self, queryset, _name, value):
-#         date = convert_to_date(value)
-#         if not date:
-#             raise ValidationError(
-#                 'Please insert a datetime Year-Month-Day-Hour-Minute-Second, like: 26-10-2017-16-00-00')   # noqa
-#         queryset = queryset.filter(timestamp=date)
-#
-#         return queryset
 
 
 class BuurtcombinatieViewset(viewsets.ModelViewSet):
@@ -134,3 +94,64 @@ class RealtimeGoogleViewset(rest.DatapuntViewSet):
     serializer_detail_class = serializers.RealtimeGoogleSerializer
 
     queryset = models.RealtimeGoogle.objects.order_by('name')
+
+
+PROXY_URLS = {
+    'events': 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today',  # noqa
+    'parking_garages': 'http://opd.it-t.nl/data/amsterdam/ParkingLocation.json',    # noqa
+    'traveltime': 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson',  # noqa
+}
+
+PARSING_DATA = {
+    'parking_garages': 'geojson',
+    'traveltime': 'geojson',
+}
+
+
+cache = expiringdict.ExpiringDict(max_len=100, max_age_seconds=60)
+
+
+@api_view(['GET', ])
+def api_proxy(request):
+    """Proxy API to avoid cors headers. with a x minute cache.
+
+    provide ?api=events, parking_garages, traveltime
+
+    Historical data needs to be loaded later.
+    """
+    api_source = request.GET.get('api')
+
+    options = list(PROXY_URLS.keys())
+
+    r400 = Response(
+        {"message": f"api parameters needs to be one of {options}"}, 400)
+
+    r500 = Response(
+        {"message": f"remote api failed"}, 500)
+
+    if not api_source:
+        return r400
+
+    if api_source not in options:
+        return r400
+
+    data = cache.get(api_source)
+
+    if data:
+        log.error('from cache!')
+
+    if not data:
+        # only allow 1 request every 60 seconds
+        response = requests.get(PROXY_URLS[api_source])
+
+        if response.status_code != 200:
+            return r500
+
+        if api_source in PARSING_DATA:
+            data = response.json()
+        else:
+            data = response.text
+
+        cache[api_source] = data
+
+    return Response(data)

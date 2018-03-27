@@ -4,7 +4,7 @@ set -x
 set -u
 set -e
 
-cd scrape_quantillion
+cd scrape_api
 
 # completely reset database
 python models.py --drop
