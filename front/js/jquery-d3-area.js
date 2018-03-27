@@ -222,7 +222,7 @@
 						.attr("class", "realtime_bar");
 				}
 
-				graph.data = newData;
+				setTimeout(function(){graph.data = newData},1001);
 
 			}
 

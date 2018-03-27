@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>Icon CCTV - selected - desktop</title>
+    <title>cam_icon_active</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Icon-CCTV---selected---desktop">
-            <rect id="Rectangle-48" fill="#F9F9F9" x="0" y="0" width="40" height="40"></rect>
-            <g id="CCTV-icon" transform="translate(6.000000, 9.000000)">
-                <g id="Camera" transform="translate(13.898826, 13.179676) rotate(-20.000000) translate(-13.898826, -13.179676) translate(2.898826, 3.179676)">
-                    <polygon id="Rectangle-2" fill="#4A4A4A" points="0.755060406 2.88374227 3.72001059 2.52869899 3.75506041 6.52869899 0.755060406 6.16104872"></polygon>
-                    <rect id="Rectangle" fill="#4A4A4A" x="4.75506041" y="0.528698988" width="15.25" height="8" rx="1"></rect>
-                    <polygon id="Rectangle-3" fill="#4A4A4A" points="13 8.38019169 14.5016634 8.07274567 14.9266003 15.6766544 13.376205 15.4624605"></polygon>
-                    <polygon id="Rectangle-4" fill="#4A4A4A" transform="translate(17.049783, 17.203639) rotate(20.000000) translate(-17.049783, -17.203639) " points="12.80223 16.3286388 21.2973361 16.3286388 21.2973361 18.0786388 13.3019421 18.0786388"></polygon>
-                    <path d="M16.5822125,8.11592957 L17.2041427,17.0944151" id="Line" stroke="#4A4A4A" stroke-width="0.5" stroke-linecap="square"></path>
+        <g id="cam_icon_active">
+            <g id="CCTV-icon" transform="translate(2.000000, 6.000000)">
+                <g id="Camera" transform="translate(17.869919, 16.596629) rotate(-20.000000) translate(-17.869919, -16.596629) translate(3.727062, 4.004037)">
+                    <polygon id="Rectangle-2" fill="#4A4A4A" points="0.97079195 3.63137915 4.78287076 3.18428761 4.82793481 8.22132465 0.97079195 7.75835765"></polygon>
+                    <rect id="Rectangle" fill="#4A4A4A" x="6.11364909" y="0.665769096" width="19.6071429" height="10.0740741" rx="1"></rect>
+                    <polygon id="Rectangle-3" fill="#4A4A4A" points="16.7142857 10.552834 18.6449959 10.1656797 19.1913433 19.7409723 17.1979778 19.4712465"></polygon>
+                    <polygon id="Rectangle-4" fill="#4A4A4A" transform="translate(21.921150, 21.663842) rotate(20.000000) translate(-21.921150, -21.663842) " points="16.46001 20.5619897 27.3822892 20.5619897 27.3822892 22.7656934 17.102497 22.7656934"></polygon>
+                    <path d="M21.3199874,10.2200595 L22.1196121,21.5263005" id="Line" stroke="#4A4A4A" stroke-width="0.5" stroke-linecap="square"></path>
                 </g>
             </g>
         </g>
