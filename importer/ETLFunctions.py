@@ -207,9 +207,13 @@ class LoadGebieden:
             p = subprocess.Popen(cmd)
             p.wait()
             if p.returncode != 0:
+                logging.debug(
+                    'Serive failed. Retry %d %s',
+                    retry, self.scrub(cmd))
                 time.sleep(10)
                 retry += 1
             else:
+                # done. we got the data!
                 break
 
         if p.returncode != 0 and not allow_fail:
