@@ -37,12 +37,13 @@ var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 // Initially assume we have the API running locally.
 var origin = 'http://127.0.0.1:8117';
 // var origin = 'https://acc.citydynamics.amsterdam.nl/api';
+// var origin = 'https://citydynamics.amsterdam.nl/api';
 
 // When using the production server, get the API from there.
 // TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
-if(window.location.href.indexOf('prod.citydynamics.amsterdam') > -1)
+if(window.location.href.indexOf('citydynamics.amsterdam.nl') > -1)
 {
-	var origin = 'https://prod.citydynamics.amsterdam.nl/api';
+	var origin = 'https://citydynamics.amsterdam.nl/api';
 }
 
 // However, when using the acceptation server, get the API from there.
