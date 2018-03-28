@@ -36,7 +36,6 @@ class DatabaseInteractions:
         return 'PG:host={} port={} user={} dbname={} password={}'.format(
             self.host, self.port, self.user, self.database, self.password)
 
-
     def execute_sql(self, sql):
         with psycopg2.connect(self.pg_string) as conn:
             with conn.cursor() as cursor:
@@ -105,18 +104,16 @@ class ModifyTables(DatabaseInteractions):
       CREATE INDEX {1} ON "{0}" USING GIST(geom);
       """.format(tableName, 'geom_' + tableName)
 
-
     @staticmethod
     def simplify_polygon(tableName, original_column, simplified_column):
-        return """
-        ALTER TABLE             "{0}"
-        DROP COLUMN IF EXISTS   "{2}";
-        ALTER TABLE             "{0}"
-        ADD COLUMN              "{2}" geometry;
-        UPDATE                  "{0}"
-        SET wkb_geometry_simplified = ST_SimplifyPreserveTopology("{1}", 0.0001);
+        return f"""
+        ALTER TABLE             "{tableName}"
+        DROP COLUMN IF EXISTS   "{simplified_column}";
+        ALTER TABLE             "{tableName}"
+        ADD COLUMN              "{simplified_column}" geometry;
+        UPDATE                  "{tableName}"
+        SET wkb_geometry_simplified = ST_SimplifyPreserveTopology("{original_column}", 0.0001);
         """.format(tableName, original_column, simplified_column)
-
 
     @staticmethod
     def add_vollcodes(tableName):
@@ -158,7 +155,6 @@ class ModifyTables(DatabaseInteractions):
             ST_BUFFER(hotspots.geom, 100));
         """.format(tableName)
 
-
     @staticmethod
     def create_alpha_table():
         return """
@@ -184,8 +180,8 @@ class ModifyTables(DatabaseInteractions):
 
 class LoadGebieden:
     """
-    This class contains functionality to read geometrical information on areas in
-    Amsterdam from a webservice
+    This class contains functionality to read geometrical
+    information on areas in Amsterdam from a webservice
     """
 
     class NonZeroReturnCode(Exception):
@@ -230,12 +226,13 @@ class LoadGebieden:
 
     @staticmethod
     def load_gebieden(pg_str):
+        GEBIEDEN_WFS = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME="  # noqa
         areaNames = [
             'stadsdeel', 'buurt',
             'buurtcombinatie', 'gebiedsgerichtwerken']
+
         srsName = 'EPSG:4326'
         for areaName in areaNames:
-            WFS = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME=" \   # noqa
-                  + srsName + "&typename=" + areaName
+            WFS = GEBIEDEN_WFS + srsName + "&typename=" + areaName
             LoadGebieden.wfs2psql(WFS, pg_str, areaName)
             logger.info(areaName + ' loaded into PG.')

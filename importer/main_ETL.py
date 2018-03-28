@@ -41,18 +41,25 @@ def download_from_os():
         logger.info('No download from datastore requested, quitting.')
 
 
+def load_gebieden():
+    pg_str = db_int.get_postgresql_string()
+    LoadGebieden.load_gebieden(pg_str)
+
+
 def parse_and_write():
     for dataset in datasets:
-        logger.info('Parsing and writing {} data...'.format(dataset))
+        logger.info(f'Parsing and writing {dataset} data...')
 
         # if statement below is needed because alpha's parser writes
         # directly to database, whereas other parsers
         # return a dataframe. #TODO refactor?
         if dataset == 'alpha':
-            getattr(parsers, 'parse_' + dataset)(datadir=LOCAL_DATA_DIRECTORY)
+            getattr(parsers, 'parse_' + dataset)(
+                datadir=LOCAL_DATA_DIRECTORY)
 
         else:
-            df = getattr(parsers, 'parse_' + dataset)(datadir=LOCAL_DATA_DIRECTORY)
+            df = getattr(parsers, 'parse_' + dataset)(
+                    datadir=LOCAL_DATA_DIRECTORY)
             df.to_sql(
                 name=config_src.get(dataset, 'TABLE_NAME'),
                 con=conn, index=True, if_exists='replace')
@@ -64,18 +71,22 @@ def parse_and_write():
             logger.info('... done')
 
     logger.info('Loading and writing area codes to database')
-
-    pg_str = db_int.get_postgresql_string()
-    LoadGebieden.load_gebieden(pg_str)
+    load_gebieden()
     logger.info('... done')
 
 
 def modify_tables():
-    # simplify the polygon of the buurtcombinaties: limits data traffic to the front end.
+    """
+    Shitty name. what does this do.
+    """
 
+    # simplify the polygon of the
+    # buurtcombinaties: limits data traffic to the front end.
     logger.info('Enhancing tables with geographical information...')
 
-    conn.execute(ModifyTables.simplify_polygon('buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
+    conn.execute(
+        ModifyTables.simplify_polygon(
+            'buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
 
     for dataset in datasets:
         if config_src.get(dataset, 'CREATE_POINT') == 'YES':
@@ -84,8 +95,10 @@ def modify_tables():
             conn.execute(ModifyTables.add_vollcodes(table_name))
             conn.execute(ModifyTables.add_stadsdeelcodes(table_name))
 
+    # do the same for alpha table
+    # TODO: refactor configuration so it is not
+    # needed to do this separately
 
-    # do the same for alpha table TODO: refactor configuration so it is not needed to do this separately
     table_name = 'alpha_locations_expected'
     conn.execute(ModifyTables.create_geometry_column(table_name))
     conn.execute(ModifyTables.add_vollcodes(table_name))
@@ -95,32 +108,35 @@ def modify_tables():
     logger.info('... done')
 
 
-if __name__ == "__main__":
+TASKS = {
+    'gebieden': load_gebieden
+}
 
-    logging.basicConfig(level=logging.DEBUG)
-    desc = "Download data from object store."
+
+def config_parser():
+    """Configure argument parser
+    """
     parser = argparse.ArgumentParser(desc)
+
     parser.add_argument(
         'targetdir', type=str, help='Local data directory.', nargs=1)
-    parser.add_argument('dataset', nargs='?', help="Upload specific dataset")
-    args = parser.parse_args()
-    LOCAL_DATA_DIRECTORY = args.targetdir[0]
+    parser.add_argument(
+        'dataset', nargs='?', help="Upload specific dataset")
 
-    # ==== MAIN ETL PIPELINE ====
+    # add options to parser
+    for k in TASKS.keys():
+        parser.add_argument(
+            f'--{k}', action='store_true', help="Download gebieden")
 
-    # 1. Determine which data sources are used
+    return parser
 
-    p_datasets = config_src.sections()
 
-    datasets = []
-
-    for x in p_datasets:
-        if config_src.get(x, 'ENABLE') == 'YES':
-            datasets.append(x)
-
-    # overwrite datasets, if a specific dataset is given via a command line argument
-    if args.dataset:
-        datasets = [args.dataset]
+def main(args):
+    # make it possible to execute individual steps
+    for k, task in TASKS.items():
+        if getattr(args, k):
+            task()
+            return
 
     # 2. Download data from objectstore
 
@@ -137,3 +153,30 @@ if __name__ == "__main__":
     # 5. Modify tables
 
     modify_tables()
+
+
+if __name__ == "__main__":
+
+    logging.basicConfig(level=logging.DEBUG)
+    desc = "Importing all different data sources"
+
+    parser = config_parser()
+    args = parser.parse_args()
+
+    LOCAL_DATA_DIRECTORY = args.targetdir[0]
+
+    # 1. Determine which data sources are used
+    p_datasets = config_src.sections()
+
+    datasets = []
+
+    for x in p_datasets:
+        if config_src.get(x, 'ENABLE') == 'YES':
+            datasets.append(x)
+
+    # overwrite datasets, if a specific dataset is
+    # given via a command line argument
+    if args.dataset:
+        datasets = [args.dataset]
+
+    main(args)
