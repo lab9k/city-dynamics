@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>cam_icon_active</title>
+    <title>icons/cctv_icon_active</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="cam_icon_active">
-            <g id="CCTV-icon" transform="translate(2.000000, 6.000000)">
-                <g id="Camera" transform="translate(17.869919, 16.596629) rotate(-20.000000) translate(-17.869919, -16.596629) translate(3.727062, 4.004037)">
-                    <polygon id="Rectangle-2" fill="#4A4A4A" points="0.97079195 3.63137915 4.78287076 3.18428761 4.82793481 8.22132465 0.97079195 7.75835765"></polygon>
-                    <rect id="Rectangle" fill="#4A4A4A" x="6.11364909" y="0.665769096" width="19.6071429" height="10.0740741" rx="1"></rect>
-                    <polygon id="Rectangle-3" fill="#4A4A4A" points="16.7142857 10.552834 18.6449959 10.1656797 19.1913433 19.7409723 17.1979778 19.4712465"></polygon>
-                    <polygon id="Rectangle-4" fill="#4A4A4A" transform="translate(21.921150, 21.663842) rotate(20.000000) translate(-21.921150, -21.663842) " points="16.46001 20.5619897 27.3822892 20.5619897 27.3822892 22.7656934 17.102497 22.7656934"></polygon>
-                    <path d="M21.3199874,10.2200595 L22.1196121,21.5263005" id="Line" stroke="#4A4A4A" stroke-width="0.5" stroke-linecap="square"></path>
-                </g>
+    <g id="City-Dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-(Out-of-date-versions)" transform="translate(-13975.000000, -2931.000000)"></g>
+        <g id="icons/cctv_icon_active" fill="#4A4A4A">
+            <g id="Camera" transform="translate(24.893260, 26.126268) rotate(-20.000000) translate(-24.893260, -26.126268) translate(10.393260, 12.626268)">
+                <path d="M22.7457742,11.0931101 L22.5026087,21.8000773 L28.2397308,23.888219 L27.4163801,26.1503565 L17.1099178,22.399111 L17.2808844,20.0171851 L16.8081642,11.0931101 L6.48711331,11.0931101 L6.48711331,11.0931101 C5.93482856,11.0931101 5.48711331,10.6453949 5.48711331,10.0931101 L5.48711331,1.08823529 L5.48711331,1.08823529 C5.48711331,0.535950544 5.93482856,0.0882352941 6.48711331,0.0882352941 L25.4067328,0.0882352941 L25.4067328,0.0882352941 C25.9590175,0.0882352941 26.4067328,0.535950544 26.4067328,1.08823529 L26.4067328,10.0931101 C26.4067328,10.6453949 25.9590175,11.0931101 25.4067328,11.0931101 L22.7457742,11.0931101 Z M22.1767979,11.0931101 L18.8922457,11.0931101 L19.4265341,20.6804777 L21.991216,21.6139456 L22.1767979,11.0931101 Z M-5.41788836e-14,3.32785486 L4.06725441,2.83945401 L4.11533498,8.34189143 L-5.41788836e-14,7.83614828 L-5.41788836e-14,3.32785486 Z" id="Combined-Shape"></path>
             </g>
         </g>
     </g>

@@ -176,6 +176,7 @@ div {box-sizing: border-box;}
 
 .indexgraph .axis text {font-size:12px;fill:#fff;}
 
+
 .indexgraph .nowline,.graph-play,.graph-pause {cursor:pointer;}
 
 /*legend*/

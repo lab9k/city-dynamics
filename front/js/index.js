@@ -15,7 +15,7 @@ var hotspot_array = [];
 var realtime_array = [];
 
 // states
-var debug = true;
+var debug = false;
 var vollcode;
 var mobile = false;
 var active_layer = 'hotspots';
@@ -59,18 +59,18 @@ var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
 var dindex_uurtcombinaties_api = base_api + 'buurtcombinaties_drukteindex/?format=json';
 
 // temp local api
-// dindex_hotspots_api = 'data/hotspots_drukteindex.json';
-// dindex_hotspots_api = 'data/hotspots_fallback.json';
-// geoJsonUrl = 'data/buurtcombinaties.json';
-// dindex_uurtcombinaties_api = 'data/buurtcombinaties_drukteindex.json';
-// realtimeUrl = 'data/realtime.json';
+dindex_hotspots_api = 'data/hotspots_drukteindex.json';
+dindex_hotspots_api = 'data/hotspots_fallback.json';
+geoJsonUrl = 'data/buurtcombinaties.json';
+dindex_uurtcombinaties_api = 'data/buurtcombinaties_drukteindex.json';
+realtimeUrl = 'data/realtime.json';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
 var proj4RD = proj4('WGS84', def);
 var amsterdam = {
 	coordinates: [52.368, 4.897],
-	druktecijfers: [{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}],
+	druktecijfers: [{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0},{h:24,d:0}],
 	hotspot: "Amsterdam",
 	index: -1
 }
@@ -163,6 +163,10 @@ function getDistrictIndex() {
 			var dataset = {};
 
 			dataset.index = this.druktecijfers_bc;
+			if(dataset.index.lenght>0)
+			{
+				dataset.index.push({h:24,d:dataset.index[0].d});
+			}
 
 			buurtcode_prop_array[buurtcode] = dataset;
 		});
@@ -270,6 +274,9 @@ function getHotspots() {
 				return a.h - b.h;
 			});
 
+			var time24 = {h:24,d:this.druktecijfers[0].d};
+			this.druktecijfers.push(time24);
+
 			// used for ams average todo: calc average in backend
 			$.each(this.druktecijfers, function (key, value) {
 
@@ -284,6 +291,8 @@ function getHotspots() {
 				this.druktecijfers = '[{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}];'
 			}
 
+
+
 			hotspot_count++;
 			hotspot_array.push(dataset);
 
@@ -292,7 +301,6 @@ function getHotspots() {
 		hotspot_array.sort(function (a, b) {
 			return a.index - b.index;
 		});
-
 
 		// used for ams average todo: calc average in backend
 		$.each(amsterdam.druktecijfers, function (key, value) {
@@ -870,8 +878,9 @@ function startAnimation()
 			for (i in buurtcode_prop_array) {
 				buurt_obj = buurtcode_prop_array[i];
 
+
 				var dindex = 0;
-				if(buurt_obj.index.length) {
+				if(buurt_obj.index.length==25) {
 					dindex = buurt_obj.index[hour].d;
 				}
 
@@ -906,17 +915,9 @@ function dragAnimation() {
 	var hour = Math.ceil(elapsed_time);
 
 	$.each(hotspot_array, function (key, value) {
-
-		// if(key==10)
-		// {
-		// 	console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
-		// }
-
 		circles_d3[key]
 			.attr('stroke-opacity', 0.6)
 			.attr('stroke-width', 3)
-			// .transition()
-			// .duration(1000)
 			.attr('fill', getColorBucket(this.druktecijfers[hour].d))
 			.attr('stroke', '#4a4a4a');
 	});
@@ -935,6 +936,36 @@ function dragAnimation() {
 		districts_d3[i].attr('fill', getColor(dindex));
 
 	};
+}
+function setToCurrentTime()
+{
+
+	var hour = getHourDigit();
+
+	$.each(hotspot_array, function (key, value) {
+		circles_d3[key]
+			.attr('stroke-opacity', 0.6)
+			.attr('stroke-width', 3)
+			.attr('fill', getColorBucket(this.druktecijfers[hour].d))
+			.attr('stroke', '#4a4a4a');
+	});
+
+	// buurtcombinaties
+	for (i in buurtcode_prop_array) {
+		buurt_obj = buurtcode_prop_array[i];
+
+		var dindex = 0;
+		if(buurt_obj.index.length) {
+			dindex = buurt_obj.index[hour].d;
+		}
+
+		if(dindex>1){dindex=1;}
+
+		districts_d3[i].attr('fill', getColor(dindex));
+
+	};
+
+	areaGraph[0].setToTime();
 }
 
 function getLatLangArray(point) {
@@ -1075,7 +1106,9 @@ function setView()
 
 function hideActiveLayer()
 {
-	areaGraph[0].stop();
+	// stop time and set to time
+	setToCurrentTime();
+
 	//
 	// switch(active_layer)
 	// {
@@ -1140,6 +1173,17 @@ function getHourDigit()
 	var hh = today.getHours();
 
 	return hh;
+}
+
+function getTimeInt()
+{
+	var today = new Date();
+	var hh = today.getHours();
+	var mm =today.getMinutes();
+
+	mm =  Math.round(mm / 60 * 100);
+
+	return hh+'.'+mm;
 }
 
 function getNowDate()
@@ -1358,8 +1402,8 @@ function showFeed(title, url)
 function addParkLayer()
 {
 	setView();
-	// var parkJsonUrl = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json";
-	var parkJsonUrl = 'data/parkjson.json';
+	var parkJsonUrl = "https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=parking_garages&format=json";
+	// `var parkJsonUrl = 'data/parkjson.json';
 
 	$.getJSON(parkJsonUrl).done(function(parkJson){
 		//console.log(parkJson);
@@ -1485,8 +1529,8 @@ function showOvFiets()
 function showEvents()
 {
 	setView();
-	// var eventsJsonUrl = 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today';
-	var eventsJsonUrl = 'data/events.js';
+	var eventsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=events&format=json';
+	// var eventsJsonUrl = 'data/events.js';
 
 	if(debug) { console.log(eventsJsonUrl) }
 	$.getJSON(eventsJsonUrl).done(function(eventsJson){
@@ -1649,8 +1693,8 @@ function onEachFeatureMarket(feature, layer) {
 
 function addTrafficLayer()
 {
-	// var trafficJsonUrl = 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson';
-	var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+	var trafficJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=traveltime&format=json';
+	// var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 
 	if(debug) { console.log(trafficJsonUrl) }
 	$.getJSON(trafficJsonUrl).done(function(trafficJson){
