@@ -144,16 +144,17 @@ class ModifyTables(DatabaseInteractions):
     @staticmethod
     def add_hotspot_names(tableName):
         return """
-        ALTER table	"{0}"
+        ALTER table "{0}"
         DROP COLUMN IF EXISTS hotspot;
 
         ALTER TABLE "{0}" add hotspot varchar;
 
-        UPDATE "{0}" SET hotspot = hotspots."hotspot"
+        UPDATE "{0}"
+        SET hotspot = hotspots."hotspot"
         FROM hotspots
-        WHERE st_intersects("{0}".geom,
-            ST_BUFFER(hotspots.geom, 100));
+        WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), alpha_locations_expected.geom);
         """.format(tableName)
+
 
     @staticmethod
     def create_alpha_table():

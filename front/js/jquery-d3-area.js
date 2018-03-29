@@ -6,8 +6,8 @@
 			graph.container = $(this);
 			graph.data = data;
 			graph.time = 24000;
-			graph.currentHour = getHourDigit();
-			graph.hours = 23;
+			graph.currentHour = getTimeInt();
+			graph.hours = 24;
 
 			// set the dimensions and margins of the graph
 			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
@@ -70,14 +70,21 @@
 			graph.svg.append("g")
 				.attr("class", "axis")
 				.attr("transform", "translate(0," + graph.height + ")")
-				.call(d3.axisBottom(x).tickFormat( function(d) { return (d < 10) ? "0"+ d : d; } ).ticks(25, ",f"))
+				.call(d3.axisBottom(x).tickFormat( function(d) {
+					var text = (d < 10) ? "0"+ d : d;
+					if(text==00 || text==24)
+					{
+						text='';
+					}
+					return text;
+				} ).ticks(graph.hours+1, ",f"))
 				.selectAll("text")
 				.style("text-anchor", "middle")
 				.attr("dx", "0")
 				.attr("dy", ".15em");
 
 			graph.lineGroupCurrent = graph.svg.append("g")
-				.attr("transform", 'translate(' + graph.currentHour * graph.width/graph.hours + ',0)')
+				.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
 				.attr("class", "line-group-current");
 
 
@@ -95,7 +102,7 @@
 				.attr("id", "line-group")
 				.attr('state','play')
 				// .attr("mask",'url(#cut-middle-line)')
-				.attr("transform", 'translate(' + graph.currentHour * graph.width/graph.hours + ',0)')
+				.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
 				.attr("time", graph.currentHour)
 				.call(d3.drag()
 					.on("start", dragstarted)
@@ -180,6 +187,8 @@
 
 			graph.update = function(newData,realtime){
 
+				console.log(newData);
+
 				graph.svg.selectAll('path.area')
 					.datum(graph.data)
 					.transition()
@@ -223,6 +232,28 @@
 				}
 
 				setTimeout(function(){graph.data = newData},1001);
+
+			}
+
+			graph.updateTime = function(){
+				// set new time
+				graph.currentHour = getTimeInt();
+
+				// update time indicator
+				graph.lineGroupCurrent.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)');
+			}
+
+			graph.setToTime = function(){
+				//stop
+				graph.stop();
+				// set new time
+				graph.currentHour = getTimeInt();
+
+				// update time indicator
+				setTimeout(function(){
+					graph.lineGroup.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
+						.attr('time',graph.currentHour);
+				},100);
 
 			}
 
@@ -305,11 +336,15 @@
 
 			}
 
-
-
+			// update time indicator every x seconds
+			setInterval(function () {
+				graph.updateTime();
+			}, 60000);
 
 			// export update function
 			graph.container[0].update = graph.update;
+			graph.container[0].updateTime = graph.updateTime;
+			graph.container[0].setToTime = graph.setToTime;
 			graph.container[0].startCount = graph.startCount;
 			graph.container[0].stopResumeCount = graph.stopResumeCount;
 			graph.container[0].stop = graph.stop;
