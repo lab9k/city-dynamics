@@ -1,6 +1,6 @@
 # City dynamics #
 
-Gaining and presenting insights regarding crowdedness in Amsterdam. How many people are where, at what moment?
+Gaining and presenting insights regarding crowdedness in Amsterdam. How many people are where? Which hotspots are busy? Based on historical patterns, what is the expected crowdedness in the upcoming hours?
 
 Collaborators: Jerome Cremers, Thomas Jongstra, Stephan Preeker, Swaan Dekkers
 

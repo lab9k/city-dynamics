@@ -11,6 +11,7 @@ h1 {cursor:pointer;}
 }
 .close {position:absolute;top:10px;right:10px;cursor:pointer;}
 div {box-sizing: border-box;}
+.search,.logo,.dlogo,.m_more,.m_menu,.beta,.controls,.themas,.mapswitch,.info,.leftbox{cursor:default;}
 
 /*search*/
 .search {position:relative;transition: width 0.5s;color:#fff;overflow:hidden; white-space: nowrap;position:absolute;left:10px;top:10px; z-index:500;width:70px;height:70px;background-color: #4a4a4a;border-radius:5px;padding:10px;}
@@ -129,6 +130,7 @@ div {box-sizing: border-box;}
 /*.leaflet-tile-container {opacity: 0.45;}*/
 /*.leaflet-container {background-color:#000;}*/
 
+
 /*popup*/
 .leaflet-popup-content-wrapper {position:relative;background-color : rgba(74, 74, 74, 0.85);border-radius :5px;padding :0px;min-width:260px;}
 .leaflet-popup-content {margin:0px;color:#fff;font-size:14px;}
@@ -175,6 +177,7 @@ div {box-sizing: border-box;}
 }
 
 .indexgraph .axis text {font-size:12px;fill:#fff;}
+
 
 .indexgraph .nowline,.graph-play,.graph-pause {cursor:pointer;}
 
