@@ -1,4 +1,12 @@
-"""Import data and calculate drukte index."""
+"""
+Old (archive) version of the calc_index script.
+
+#REMOVE (marked for future removal)
+
+DESCRIPTION:
+The functionality of this script is now replaced by main.py and process.py.
+Was used to perform the following task: Import data and calculate the drukte index.
+"""
 
 import configparser
 import argparse

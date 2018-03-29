@@ -1,5 +1,8 @@
+"""
+Old SQL migrations script
 
-""" SQL migrations
+#REMOVE (marked for future removal)
+
 This this script creates the database tables that are going to be served by the API.
 """
 
