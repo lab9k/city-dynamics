@@ -26,8 +26,7 @@ node {
     stage('Test') {
         tryStep "test", {
             sh "api/deploy/test/the_test.sh &&" +
-               "importer/deploy/test/test.sh &&" +
-               "analyzer/deploy/test/test.sh"
+               "importer/deploy/test/test.sh"
         }
     }
 
@@ -44,10 +43,6 @@ node {
             def api = docker.build("build.app.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}", ".")
                 api.push()
                 api.push("acceptance")
-
-            def front = docker.build("build.app.amsterdam.nl:5000/stadswerken/citydynamics_front:${env.BUILD_NUMBER}", "front")
-                front.push()
-                front.push("acceptance")
         }
     }
 }
@@ -78,31 +73,39 @@ if (BRANCH == "master") {
         }
     }
 
-    //stage('Waiting for approval') {
-    //    slackSend channel: '#stadinbalans', color: 'warning', message: 'City dynamics is waiting for Production Release - please confirm'
-    //    input "Deploy to Production?"
-    //}
+    stage('Waiting for approval') {
+        slackSend channel: '#stadinbalans', color: 'warning', message: 'City dynamics is waiting for Production Release - please confirm'
+        input "Deploy to Production?"
+    }
 
-    //node {
-    //    stage('Push production image') {
-    //        tryStep "image tagging", {
-    //            def kibana = docker.image("build.app.amsterdam.nl:5000/stadswerken/city_dynamics:${env.BUILD_NUMBER}")
-    //            kibana.pull()
-    //            kibana.push("production")
-    //            kibana.push("latest")
-    //        }
-    //    }
-    //}
+    node {
+        stage('Push production image') {
+            tryStep "image tagging", {
+                def api = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics:${env.BUILD_NUMBER}")
+                def analyzer = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics_analyzer:${env.BUILD_NUMBER}")
+                def importer = docker.image("build.app.amsterdam.nl:5000/stadswerken/citydynamics_importer:${env.BUILD_NUMBER}")
 
-    //node {
-    //    stage("Deploy") {
-    //        tryStep "deployment", {
-    //            build job: 'Subtask_Openstack_Playbook',
-    //            parameters: [
-    //                    [$class: 'StringParameterValue', name: 'INVENTORY', value: 'production'],
-    //                    [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-citydynamics.yml'],
-    //            ]
-    //        }
-    //    }
-    //}
+                analyzer.push("production")
+                analyzer.push("latest")
+
+                importer.push("production")
+                importer.push("latest")
+
+                api.push("production")
+                api.push("latest")
+            }
+        }
+    }
+
+    node {
+        stage("Deploy") {
+            tryStep "deployment", {
+                build job: 'Subtask_Openstack_Playbook',
+                parameters: [
+                        [$class: 'StringParameterValue', name: 'INVENTORY', value: 'production'],
+                        [$class: 'StringParameterValue', name: 'PLAYBOOK', value: 'deploy-citydynamics.yml'],
+                ]
+            }
+        }
+    }
 }

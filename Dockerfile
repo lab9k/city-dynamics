@@ -27,4 +27,4 @@ RUN python manage.py collectstatic --no-input
 
 COPY front /static/
 
-CMD uwsgi
+CMD uwsgi -i

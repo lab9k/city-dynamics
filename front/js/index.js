@@ -37,12 +37,13 @@ var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 // Initially assume we have the API running locally.
 var origin = 'http://127.0.0.1:8117';
 // var origin = 'https://acc.citydynamics.amsterdam.nl/api';
+// var origin = 'https://citydynamics.amsterdam.nl/api';
 
 // When using the production server, get the API from there.
 // TODO: Update this when the website name becomes "drukteradar.nl" or something alike.
-if(window.location.href.indexOf('prod.citydynamics.amsterdam') > -1)
+if(window.location.href.indexOf('citydynamics.amsterdam.nl') > -1)
 {
-	var origin = 'https://prod.citydynamics.amsterdam.nl/api';
+	var origin = 'https://citydynamics.amsterdam.nl/api';
 }
 
 // However, when using the acceptation server, get the API from there.
@@ -56,7 +57,7 @@ var dindex_api = base_api + 'drukteindex/?format=json&op=';
 var dindex_hotspots_api = base_api + 'hotspots/?format=json';
 var realtimeUrl = base_api + 'realtime/?format=json';
 var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
-var dindex_uurtcombinaties_api = base_api + 'buurtcombinaties_drukteindex/?format=json';
+var dindex_uurtcombinaties_api = base_api + 'buurtcombinatie_drukteindex/?format=json';
 
 // temp local api
 dindex_hotspots_api = 'data/hotspots_drukteindex.json';

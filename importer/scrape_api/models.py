@@ -100,6 +100,42 @@ class GoogleRawLocationsExpected(Base):
     data = Column(JSONB)
 
 
+class ParkingLocation(Base):
+    """
+    Raw json proxy for api.
+    """
+    __tablename__ = f'parkinglocations_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    # place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    # name = Column(String)
+    data = Column(JSONB)
+
+
+class Events(Base):
+    """
+    Raw json proxy for api.
+    """
+    __tablename__ = f'eventlocations_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    # place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    # name = Column(String)
+    data = Column(JSONB)
+
+
+class TravelTime(Base):
+    """
+    Raw json proxy for api.
+    """
+    __tablename__ = f'traveltime_{ENVIRONMENT}'
+    id = Column(Integer, Sequence('grl_seq'), primary_key=True)
+    # place_id = Column(String, index=True)
+    scraped_at = Column(TIMESTAMP, index=True)
+    # name = Column(String)
+    data = Column(JSONB)
+
+
 class GoogleRawLocationsRealtimeCurrent(Base):
     """
     Raw json location information realtime
@@ -122,8 +158,6 @@ class GoogleRawLocationsExpectedCurrent(Base):
     scraped_at = Column(TIMESTAMP, index=True)
     name = Column(String)
     data = Column(JSONB)
-
-
 
 
 class GoogleLocations(Base):
@@ -154,7 +188,7 @@ if __name__ == '__main__':
 
     if args.drop:
         # resets everything
-        log.warning('DROPPING DEFINED TABLES')
+        log.warning('DROPPING ALL DEFINED TABLES')
         Base.metadata.drop_all(engine)
 
     log.warning('CREATING DEFINED TABLES')

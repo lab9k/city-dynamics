@@ -7,10 +7,8 @@ set -x
 DIR="$(dirname $0)"
 
 dc() {
-	docker-compose -p stadswerken_current -f ${DIR}/docker-compose.yml $*
+    docker-compose -p qa_current${ENVIRONMENT} -f ${DIR}/docker-compose.yml $*
 }
-
-# trap 'dc kill ; dc rm -f' EXIT
 
 rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups
