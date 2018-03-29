@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DrukteRadar - Amsterdam</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="js/leaflet.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="   crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="js/jquery-d3-area.js"></script>
+	<script src="js/index.js"></script>
+
+	<link rel="stylesheet" href="css/leaflet.css">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="css/index.css">
+
+</head>
+<body id="overwrite">
+
+
+
+<div id="mapid">
+	<div class="search" id="search">
+		<a href="javascript:void(0);" ><i class="material-icons">search</i></a>
+		<input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam">
+		<i class="material-icons searchclose">close</i>
+	</div>
+
+	<div class="logo" id="logo"></div>
+	<div class="dlogo" id="dlogo"><h2>DrukteRadar</h2></div>
+	<div class="beta" id="beta"><span>BETA</span></div>
+
+	<div class="m_more" id="m_more">
+		<a href="javascript:void(0);"><i class="material-icons">more_vert</i></a>
+	</div>
+
+	<div class="m_menu" id="m_menu">
+		<ul>
+			<li><a target="blank" href="https://formulieren.amsterdam.nl/TriplEforms/DirectRegelen/formulier/nl-NL/evAmsterdam/scmor.aspx/fMORGegevensMelding">Maak een melding van overlast:</a></li>
+			<li><a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a></li>
+		</ul>
+	</div>
+
+	<div class="controls" id="controls">
+		<a href="javascript:void(0);"><i class="material-icons">all_out</i></a>
+	</div>
+
+	<div class="themas" id="themas">
+		<ul class="themas_buttons">
+			<li class="fiets_b" title="OV fietsen beschikbaarheid"></li>
+			<li class="park_b" title="Parkeergarage beschikbaarheid"></li>
+			<!--<li class="hotspots_b" title="Hotspots"></li>-->
+			<!--<li class="google_b"></li>-->
+			<li class="events_b" title="Evenementen vandaag"></li>
+			<li class="traffic_b" title="Verkeersdrukte"></li>
+			<li class="cam_b" title="Webcams"></li>
+			<li class="water_b" title="Drukte op het water"></li>
+		</ul>
+		<div class="themas_content">
+			<div class="hotspots_content">
+				<h3>Hotspots</h3>
+				<ul class="hotspot_list">
+					<li class="option_museum">Museums</li>
+					<li class="option_parc">Public parcs</li>
+					<li class="option_market">Markets</li>
+				</ul>
+			</div>
+			<div class="water_content">
+				<h3>Boot tellingen Prinsegracht</h3>
+				<img src="content/waterdrukte.png" />
+			</div>
+		</div>
+	</div>
+
+	<div class="mapswitch" id="mapswitch">
+		<a href="javascript:void(0);" class="active"><span>Buurten</span></a>
+	</div>
+
+	<div class="info" id="info">
+		<i class="material-icons info_icon">info</i>
+		<div class="info_content">
+			<h2>De Amsterdam DrukteRadar</h2>
+			<p>De Amsterdam Drukte Radar toont drukte in de openbare ruimte van Amsterdam over tijd met een drukte-score. De drukte-score geeft de relatieve drukte in een bepaald gebied weer ten opzichte van historische ‘normaalwaarden’ van dit gebied.</p>
+			<p>De drukte-score is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Momenteel bevat de drukte-score data van wegverkeer, openbaar vervoer, parkeren, en bezoeken aan openbare plekken.  Sommigen van deze bronnen geven de data ‘realtime’ weer, terwijl anderen gemiddelden over een bepaalde periode weergeven.</p>
+		</div>
+		<i class="material-icons close">close</i>
+	</div>
+
+	<div class="leftbox" id="leftbox">
+		<h2></h2><i class="material-icons close">close</i>
+		<div class="content">
+		</div>
+	</div>
+
+	<svg xmlns="w3.org/2000/svg" version="1.1" style="width:0;height:0;">
+		<defs>
+			<filter id="shadow" width="3" height="3" x="-.25" y="-.25">
+				<feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+				<feColorMatrix result="bluralpha" type="matrix" values=
+						"1 0 0 0   0
+             0 1 0 0   0
+             0 0 1 0   0
+             0 0 0 0.4 0 "/>
+				<feOffset in="bluralpha" dx="3" dy="3" result="offsetBlur"/>
+				<feMerge>
+					<feMergeNode in="offsetBlur"/>
+					<feMergeNode in="SourceGraphic"/>
+				</feMerge>
+			</filter>
+			<linearGradient gradientUnits="userSpaceOnUse" id="gradient1" x1="50%" y1="100%" x2="50%" y2="0%" >
+				<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
+				<stop offset="100%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
+			</linearGradient>
+			<linearGradient gradientUnits="userSpaceOnUse" id="gradient" x1="50%" y1="100%" x2="50%" y2="0%" >
+				<stop offset="0%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
+				<stop offset="20%" style="stop-color:rgb(80,230,219);stop-opacity:1" />
+				<stop offset="50%" style="stop-color:rgb(245,166,35);stop-opacity:1" />
+				<stop offset="80%" style="stop-color:rgb(219,50,42);stop-opacity:1" />
+				<stop offset="100%" style="stop-color:rgb(219,50,42);stop-opacity:1" />
+			</linearGradient>
+			<mask id="cut-middle-line">
+				<rect x="0" y="0" width="3" height="10" fill="white" />
+			</mask>
+		</defs>
+	</svg>
+</div>
+
+<div class="graphbar">
+	<div class="graphbar_left">
+		<div class="legend">
+			<span class="crowded">Drukker</span>
+			<div class="linear"></div>
+			<span class="quiet">Rustiger</span>
+		</div>
+
+	</div>
+		<div class="graphbar_center">
+			<div class="graphbar_title"><i class="material-icons reset_icon">replay</i><h2>Amsterdam</h2><i class="material-icons info_icon">info</i><span></span></div>
+			<div class="graphbar_graph">
+			</div>
+		</div>
+	<div class="graphbar_right">
+		<div class="meldlinks">
+			<a class="meld_link1" target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast:</a>
+			<a class="meld_link2" target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>
+		</div>
+		<div class="weather_widget">
+			<iframe id="widget-frame" src="//www.weeronline.nl/Go/ExternalWidgetsNew/OneDayCitySmall?gid=4058223&temperatureScale=Celsius&defaultSettings=False" width="125" height="60" frameborder="0" scrolling="no" style="border: none;" allowtransparency="true"></iframe>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
