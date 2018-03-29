@@ -10,6 +10,7 @@ var traffic_layer;
 var districts_d3 = [];
 
 // global arrays
+var control_array = ['search','logo','dlogo','m_more','m_menu','beta','controls','themas','mapswitch','info','leftbox']
 var buurtcode_prop_array = [];
 var hotspot_array = [];
 var realtime_array = [];
@@ -81,6 +82,12 @@ $(document).ready(function(){
 
 	// check device resolution
 	mobile = ($( document ).width()<=360);
+
+	$.each(control_array, function (key, value) {
+		var controlDiv = L.DomUtil.get(value);
+		L.DomEvent.disableClickPropagation(controlDiv);
+	});
+
 
 	initMap();
 
