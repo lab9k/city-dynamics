@@ -25,7 +25,7 @@ services:
       DATABASE_PORT_OVERRIDE: 5432
       PGPASSWORD: insecure
       STADSWERKEN_OBJECTSTORE_PASSWORD:
-      PYTHONPATH: /app/scrape_quantillion
+      PYTHONPATH: /app/scrape_api
       QUANTILLION_PASSWORD:
       ENVIRONMENT:
       GOOGLE_DAYS: 50

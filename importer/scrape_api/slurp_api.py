@@ -1,5 +1,10 @@
 """
-Quantillion provides api with scraped google data.
+API sources:
+
+- Quantillion provides api with scraped google data.
+- http://opd.it-t.nl/data/amsterdam/ParkingLocation.json
+- Evenementen: http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today  # noqa
+- Reistijden: http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson  # noqa
 
 Production
 host: http://apis.quantillion.io
@@ -45,24 +50,43 @@ STATUS = {
 }
 
 ENDPOINTS = [
-    'realtime',
-    'expected',
-    'realtime/current',
-    'expected/current',
+    # qa == quantillion.
+    'qa_realtime',
+    'qa_expected',
+    'qa_realtime/current',
+    'qa_expected/current',
+    'parkinglocations',
+    'events',
+    'traveltime',
 ]
 
 ENDPOINT_MODEL = {
-    'realtime': models.GoogleRawLocationsRealtime,
-    'expected': models.GoogleRawLocationsExpected,
-    'realtime/current': models.GoogleRawLocationsRealtimeCurrent,
-    'expected/current': models.GoogleRawLocationsExpectedCurrent,
+    'qa_realtime': models.GoogleRawLocationsRealtime,
+    'qa_expected': models.GoogleRawLocationsExpected,
+    'qa_realtime/current': models.GoogleRawLocationsRealtimeCurrent,
+    'qa_expected/current': models.GoogleRawLocationsExpectedCurrent,
+    'parkinglocations': models.ParkingLocation,
+    # 'events': models.Events,
+    # 'traveltime': models.TravelTime,
 }
 
 ENDPOINT_URL = {
-    'realtime': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
-    'expected': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
-    'realtime/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
-    'expected/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
+    'qa_realtime': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
+    'qa_expected': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
+    'qa_realtime/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
+    'qa_expected/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
+    'parkinglocations': 'http://opd.it-t.nl/data/amsterdam/ParkingLocation.json',  # noqa
+}
+
+
+def save_proxy_json(endpoint):
+    pass
+
+
+API_METHODS = {
+    'parkinglocations': save_proxy_json,
+    'traveltime': save_proxy_json,
+    'eventlocations': save_proxy_json,
 }
 
 
@@ -115,6 +139,7 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
         json = response.json()
 
     return json
+
 
 
 def add_locations_to_db(endpoint, json: list):
@@ -284,12 +309,16 @@ def run_workers(endpoint, workers=WORKERS, parralleltask=get_locations):
 
 
 def main(args):
-
     endpoint = args.endpoint[0]
     engine = models.make_engine(section='docker')
     # models.Base.metadata.create_all(engine)
     models.set_engine(engine)
 
+    # api proxy parkinglocations, events, traveltime
+    if endpoint in API_METHODS:
+        API_METHODS[endpoint](endpoint)
+
+    #  quantillion.
     if args.dedupe:
         delete_duplicates(ENDPOINT_MODEL[endpoint])
     else:
@@ -299,11 +328,12 @@ def main(args):
 
 if __name__ == '__main__':
 
-    desc = "Scrape goolge quantillion api."
+    desc = "Scrape API."
     inputparser = argparse.ArgumentParser(desc)
+
     inputparser.add_argument(
         'endpoint', type=str,
-        default='realtime',
+        default='qa_realtime',
         choices=ENDPOINTS,
         help="Provide Endpoint to scrape",
         nargs=1)

@@ -165,6 +165,9 @@ REST_FRAMEWORK = dict(
 
 STATIC_URL = '/'
 
+if DEBUG:
+    STATIC_URL = '/static/'
+
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 
 # STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'),)

@@ -31,7 +31,7 @@ set `QUANTILLION_PASSWORD` you can find it in rattic/password management
 Tests
 ======
 
-`cd` into scrape_quantillion
+`cd` into scrape_api
 
         export PYTHONPATH=.
 
@@ -42,7 +42,7 @@ JSON
 
 not all attributes are documented
 
-category =1 : no data available were found
-category =2 : only expected data were found
+category = 1 : no data available were found
+category = 2 : only expected data were found
 category = 3 : both live and expected data were found
 
