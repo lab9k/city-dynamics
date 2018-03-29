@@ -57,7 +57,7 @@ var dindex_api = base_api + 'drukteindex/?format=json&op=';
 var dindex_hotspots_api = base_api + 'hotspots/?format=json';
 var realtimeUrl = base_api + 'realtime/?format=json';
 var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
-var dindex_uurtcombinaties_api = base_api + 'buurtcombinaties_drukteindex/?format=json';
+var dindex_uurtcombinaties_api = base_api + 'buurtcombinatie_drukteindex/?format=json';
 
 // temp local api
 // dindex_hotspots_api = 'data/hotspots_drukteindex.json';
