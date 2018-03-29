@@ -310,7 +310,7 @@ def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
     return df
 
 
-def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1.csv'):
+def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1_new.csv'):
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path)
     df.rename(columns={'Hotspot':'hotspot', 'Latitude':'lat', 'Longitude':'lon'}, inplace=True)
