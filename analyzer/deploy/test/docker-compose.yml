@@ -5,7 +5,7 @@ services:
     image: amsterdam/postgres
     environment:
       POSTGRES_PASSWORD: insecure
-      POSTGRES_DB: citydynamics
+      POSTGRES_DB: citydynamics_test
       POSTGRES_USER: citydynamics
 
   analyzer:
@@ -13,7 +13,7 @@ services:
     links:
       - database
     environment:
-      DATABASE_NAME: citydynamics
+      DATABASE_NAME: citydynamics_test
       DATABASE_USER: citydynamics
       DATABASE_PASSWORD: insecure
       DATABASE_HOST_OVERRIDE: database
