@@ -118,10 +118,12 @@ def cleanup(api_response):
     Return jons from response.
     """
     junk = "__ng_jsonp__.__req1.finished("
+    junk = "__ng_jsonp__.__req8.finished("
+
     cleaned = ""
 
-    if api_response.startswith(junk):
-        cleaned = api_response[len(junk):]
+    # if api_response.startswith(junk):
+    cleaned = api_response[len(junk):]
 
     tailjunk = ");"
     if cleaned.endswith(tailjunk):
@@ -158,6 +160,7 @@ def api_proxy(request):
         return r400
 
     # only allow 1 request every 60 seconds
+
     data = cache.get(api_source)
 
     if data:
@@ -167,10 +170,11 @@ def api_proxy(request):
     response = requests.get(PROXY_URLS[api_source])
 
     if response.status_code != 200:
+        log.error('EXTERNAL API FAILED: %s', PROXY_URLS[api_source])
         return r500
 
     if api_source in PARSING_DATA:
-        if PARSING_DATA[api_source] == 'json':
+        if PARSING_DATA[api_source] == 'geojson':
             data = response.json()
         if PARSING_DATA[api_source] == 'cleanup':
             data = cleanup(response.text)
@@ -178,5 +182,8 @@ def api_proxy(request):
         data = response.text
 
     cache[api_source] = data
+
+    if not data:
+        log.error('EXT API DATA MISSING %s %s', api_source, data)
 
     return Response(data)
