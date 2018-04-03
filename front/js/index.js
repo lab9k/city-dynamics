@@ -60,12 +60,21 @@ var realtimeUrl = base_api + 'realtime/?format=json';
 var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
 var dindexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
 
+// theme api
+var trafficJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=traveltime&format=json';
+var parkJsonUrl = "https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=parking_garages&format=json";
+var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
+var eventsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=events&format=json';
+
 // temp local api
 // dindex_hotspots_api = 'data/hotspots_drukteindex.json';
 // dindex_hotspots_api = 'data/hotspots_fallback.json';
 // geoJsonUrl = 'data/buurtcombinaties.json';
 // dindex_uurtcombinaties_api = 'data/buurtcombinaties_drukteindex.json';
 // realtimeUrl = 'data/realtime.json';
+// var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+// `var parkJsonUrl = 'data/parkjson.json';
+// var eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -136,11 +145,13 @@ $(document).ready(function(){
 					initEventMapping();
 
 				}
-	).fail(function(){
-		console.error('One or more apis failed.')
+	).fail(function(dindexJson,geoJson,hotspotsJson,realtimeJson){
+		console.error('One or more apis failed.');
+		if(dindexJson[1]!='success')
+		{
+			console.error('One or more apis failed.');
+		}
 	});
-
-
 
 	// chrome control button style
 	if (navigator.appVersion.indexOf("Chrome/") != -1) {
@@ -258,8 +269,8 @@ function onEachFeature(feature, layer) {
 		mouseout: resetHighlight,
 		click: zoomToFeature
 	});
+	layer.bindPopup('<div class="popup_district"><i class="material-icons">fiber_manual_record</i><h3>' + layer.feature.properties.naam + '</h3></div>', {autoClose: false});
 
-	layer.bindPopup('<div><h3>' + layer.feature.properties.naam + '</h3></div>');
 	layer.on('mouseover', function (e) {
 		this.openPopup();
 	});
@@ -391,6 +402,26 @@ function getRealtime(realtimeJson)
 
 function initAutoComplete()
 {
+	$('#loc_i').keypress(function(e) {
+		if(e.which == 13) {
+			var term = $('#loc_i').val();
+
+			term_array = term.split(' ');
+			term_count = term_array.length;
+			if(term_count>1 && !isNaN(term_array[term_count-1])) {
+				var loc_obj = $.getJSON("https://api.data.amsterdam.nl/atlas/typeahead/bag/?q=" + term).done(function (data) {
+					var label = data[0].content[0]._display;
+					var value = data[0].content[0].uri;
+					setLocationMarker(value, label);
+				});
+			}
+			else {
+				alert('Geef een huisnummer op voor de exacte locatie.');
+			}
+
+		}
+	});
+
 	// init auto complete
 	$('#loc_i').autocomplete({
 		source: function (request, response) {
@@ -413,52 +444,59 @@ function initAutoComplete()
 			event.preventDefault();
 
 			// console.log(ui.item);
+			setLocationMarker(ui.item.value,ui.item.label)
 
 			$('#loc_i').val(ui.item.label);
 
-			$.getJSON("https://api.data.amsterdam.nl/" + ui.item.value).done( function (data) {
-
-				if (marker) {
-					map.removeLayer(marker);
-				}
-
-				// set marker
-				if(data.geometrie.type == 'Point')
-				{
-					var point = [];
-					point.x = data.geometrie.coordinates[0];
-					point.y =  data.geometrie.coordinates[1];
+		}
+	});
+}
 
 
-					var latLang = getLatLang(point);
-					//console.log(latLang);
+function setLocationMarker(address,label)
+{
+	$.getJSON("https://api.data.amsterdam.nl/" + address).done( function (data) {
 
-					var blackIcon = L.icon({
-						iconUrl: 'images/loc.svg',
+		if (marker) {
+			map.removeLayer(marker);
+		}
 
-						iconSize:     [60, 60],
-						iconAnchor:   [30, 52],
-						popupAnchor:  [0, -50]
-					});
+		// set marker
+		if(data.geometrie.type == 'Point')
+		{
+			var point = [];
+			point.x = data.geometrie.coordinates[0];
+			point.y =  data.geometrie.coordinates[1];
 
-					marker = L.marker(latLang, {icon: blackIcon}).addTo(map);
-					map.setView(latLang);
-				}
-				else
-				{
-					//alert('Vul een adres in plus huisnummer voor het bepalen van de locatie.'); #todo better selection add default nr..
-				}
 
-				var active_layer = buurtcode_prop_array[data._buurtcombinatie.vollcode].layer;
-				setLayerActive(active_layer);
+			var latLang = getLatLang(point);
+			//console.log(latLang);
 
-				$('.detail h2').html(buurtcode_prop_array[data._buurtcombinatie.vollcode].buurt);
-				$('.detail').show();
-				$('.details_graph').show();
+			var blackIcon = L.icon({
+				iconUrl: 'images/loc.svg',
 
+				iconSize:     [60, 60],
+				iconAnchor:   [30, 52],
+				popupAnchor:  [0, -50]
 			});
 
+			marker = L.marker(latLang, {icon: blackIcon}).addTo(map);
+			marker.bindPopup('<div class="popup_location"><i class="material-icons">fiber_manual_record</i><h3>' + label + '</h3></div>', {autoClose: false});
+
+			map.setView(latLang);
 		}
+		else
+		{
+			alert('Geef een huisnummer op voor de exacte locatie.');
+		}
+
+		var active_layer = buurtcode_prop_array[data._buurtcombinatie.vollcode].layer;
+		setLayerActive(active_layer);
+
+		$('.detail h2').html(buurtcode_prop_array[data._buurtcombinatie.vollcode].buurt);
+		$('.detail').show();
+		$('.details_graph').show();
+
 	});
 }
 
@@ -1369,8 +1407,8 @@ function showFeeds()
 	var camIcon = L.icon({
 		iconUrl: 'images/cam_marker.svg',
 
-		iconSize:     [35, 58],
-		iconAnchor:   [17.5, 58],
+		iconSize:     [35, 50],
+		iconAnchor:   [17.5, 50],
 		popupAnchor:  [0, -50]
 	});
 
@@ -1394,11 +1432,17 @@ function showFeed(title, url)
 function addParkLayer()
 {
 	setView();
-	var parkJsonUrl = "https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=parking_garages&format=json";
-	// `var parkJsonUrl = 'data/parkjson.json';
+
+	if(debug) {
+		console.log('Park api:');
+		console.log(parkJsonUrl);
+	}
 
 	$.getJSON(parkJsonUrl).done(function(parkJson){
-		//console.log(parkJson);
+		if(debug) {
+			console.log('Park json:');
+			console.log(parkJson);
+		}
 		theme_layer = L.geoJSON(parkJson,{style: stylePark, onEachFeature: onEachFeaturePark, pointToLayer: pointToLayerPark}).addTo(map);
 	});
 
@@ -1430,8 +1474,8 @@ function pointToLayerPark(feature, latlng) {
 	var parkIcon = L.icon({
 		iconUrl: 'images/'+prefix+'_marker_'+suffix+'.svg',
 
-		iconSize:     [35, 58],
-		iconAnchor:   [17.5, 58],
+		iconSize:     [35, 50],
+		iconAnchor:   [17.5, 50],
 		popupAnchor:  [0, -50]
 	});
 
@@ -1473,7 +1517,6 @@ function showOvFiets()
 {
 	setView();
 
-	var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
 	if(debug) { console.log(fietsJsonUrl) }
 	$.getJSON(fietsJsonUrl).done(function(fietsJson){
 		if(debug) { console.log(fietsJson) }
@@ -1521,8 +1564,6 @@ function showOvFiets()
 function showEvents()
 {
 	setView();
-	var eventsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=events&format=json';
-	// var eventsJsonUrl = 'data/events.js';
 
 	if(debug) { console.log(eventsJsonUrl) }
 	$.getJSON(eventsJsonUrl).done(function(eventsJson){
@@ -1546,8 +1587,8 @@ function showEvents()
 			var eventIcon = L.icon({
 				iconUrl: 'images/events_marker_'+suffix+'.svg',
 
-				iconSize:     [35, 58],
-				iconAnchor:   [17.5, 58],
+				iconSize:     [35, 50],
+				iconAnchor:   [17.5, 50],
 				popupAnchor:  [0, -50]
 			});
 
@@ -1685,12 +1726,15 @@ function onEachFeatureMarket(feature, layer) {
 
 function addTrafficLayer()
 {
-	var trafficJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=traveltime&format=json';
-	// var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-
-	if(debug) { console.log(trafficJsonUrl) }
+	if(debug) {
+		console.log('Traffic api url:')
+		console.log(trafficJsonUrl)
+	}
 	$.getJSON(trafficJsonUrl).done(function(trafficJson){
-		if(debug) { console.log(trafficJson) }
+		if(debug) {
+			console.log('Traffic Json')
+			console.log(trafficJson)
+		}
 
 		$.each(trafficJson.features, function(key,value) {
 
@@ -1787,8 +1831,8 @@ function showWater()
 	var waterIcon = L.icon({
 		iconUrl: 'images/water_marker.svg',
 
-		iconSize:     [35, 58],
-		iconAnchor:   [17.5, 58],
+		iconSize:     [35, 50],
+		iconAnchor:   [17.5, 50],
 		popupAnchor:  [0, -50]
 	});
 
