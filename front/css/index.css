@@ -115,8 +115,8 @@ div {box-sizing: border-box;}
 #overwrite .leaflet-interactive:hover:not(.active_path) {fill-opacity:0.9;}
 
 .leaflet-tile-container img {
-	-webkit-filter: grayscale(100%);
-	filter: grayscale(100%);;
+	/*-webkit-filter: grayscale(100%);*/
+	/*filter: grayscale(100%);*/
 	/*blur()*/
 	/*brightness()*/
 	/*contrast()*/

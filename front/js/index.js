@@ -36,8 +36,8 @@ var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
 // Initially assume we have the API running locally.
-var origin = 'http://127.0.0.1:8117';
-// var origin = 'https://acc.citydynamics.amsterdam.nl/api';
+// var origin = 'http://127.0.0.1:8117';
+var origin = 'https://acc.citydynamics.amsterdam.nl/api';
 // var origin = 'https://citydynamics.amsterdam.nl/api';
 
 // When using the production server, get the API from there.
@@ -55,10 +55,10 @@ if(window.location.href.indexOf('acc.citydynamics.amsterdam.nl') > -1)
 
 var base_api = origin + '/';
 var dindex_api = base_api + 'drukteindex/?format=json&op=';
-var dindex_hotspots_api = base_api + 'hotspots/?format=json';
+var hotspotsJsonUrl = base_api + 'hotspots/?format=json';
 var realtimeUrl = base_api + 'realtime/?format=json';
 var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
-var dindex_uurtcombinaties_api = base_api + 'buurtcombinatie_drukteindex/?format=json';
+var dindexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
 
 // temp local api
 // dindex_hotspots_api = 'data/hotspots_drukteindex.json';
@@ -91,28 +91,54 @@ $(document).ready(function(){
 
 	initMap();
 
-	var sequence_array = [];
-
-	sequence_array.push(getDistrictIndex());
-	sequence_array.push(getHotspots());
-	sequence_array.push(getRealtime());
+	if(debug) {
+		console.log('Do mandatory api calls:');
+		console.log(dindexJsonUrl);
+		console.log(geoJsonUrl);
+		console.log(hotspotsJsonUrl);
+		console.log(realtimeUrl);
+	}
 
 	// first promise chain
-	$.when(sequence_array).done(
-		function(){
-			// second promise chain
-			$.when(getDistricts()).done(
-				function() {
+	$.when($.getJSON(dindexJsonUrl),$.getJSON(geoJsonUrl),$.getJSON(hotspotsJsonUrl),$.getJSON(realtimeUrl)).done(
+		function(dindexJson,geoJson,hotspotsJson,realtimeJson){
+
+					if(debug) {
+						console.log('Districts index api:');
+						console.log(dindexJson);
+						console.log('Districts geo api:');
+						console.log(geoJson);
+						console.log('Hotspots api:');
+						console.log(hotspotsJson);
+						console.log('Realtime api:');
+						console.log(realtimeJson);
+					}
+
+					getDistrictIndex(dindexJson[0]);
+
+					getDistricts(geoJson[0]);
+
+					getHotspots(hotspotsJson[0]);
+
+					getRealtime(realtimeJson[0]);
+
+					if(debug) {
+						console.log('buurtcode_prop_array:');
+						console.log(buurtcode_prop_array);
+						console.log('hotspot_array:');
+						console.log(hotspot_array);
+					}
+
 					initLineGraph();
 
 					initAutoComplete();
 
 					initEventMapping();
-				}
-			)
 
-		}
-	).fail(function(){console.error('One or more connections failed.')});
+				}
+	).fail(function(){
+		console.error('One or more apis failed.')
+	});
 
 
 
@@ -143,7 +169,7 @@ function initMap()
 	// wgs map
 	map = L.map('mapid', {zoomControl: false}).setView(map_center, zoom);
 
-	L.tileLayer(geomap3, {
+	L.tileLayer(geomap2, {
 		minZoom: 10,
 		maxZoom: 18
 	}).addTo(map);
@@ -153,16 +179,7 @@ function initMap()
 	}).addTo(map);
 }
 
-function getDistrictIndex() {
-
-	var dindexJsonUrl = dindex_uurtcombinaties_api;
-	if(debug) {
-		console.log('Start: getDistrictIndex');
-		console.log(dindexJsonUrl);
-	}
-
-	var promise = $.getJSON(dindexJsonUrl).done(function (dindexJson) {
-		if(debug) { console.log(dindexJson) }
+function getDistrictIndex(dindexJson) {
 
 		$.each(dindexJson.results, function (key, value) {
 
@@ -171,7 +188,7 @@ function getDistrictIndex() {
 			var dataset = {};
 
 			dataset.index = this.druktecijfers_bc;
-			if(dataset.index.lenght>0)
+			if(dataset.index.length>0)
 			{
 				dataset.index.push({h:24,d:dataset.index[0].d});
 			}
@@ -179,34 +196,24 @@ function getDistrictIndex() {
 			buurtcode_prop_array[buurtcode] = dataset;
 		});
 
-		if(debug) { console.log('getDistrictIndex: OK') }
-
-	});
-
-	return promise;
+		if(debug) { console.log('getDistrictIndex: Done') }
 }
 
-function getDistricts()
+function getDistricts(geoJson)
 {
-	var promise = $.getJSON(geoJsonUrl).done(function (geoJson) {
-		if(debug) {
-			console.log('Start: getDistricts');
-			console.log(geoJsonUrl);
-		}
-		geojson = L.geoJSON(geoJson.results, {style: style, onEachFeature: onEachFeature}).addTo(map);
+	geojson = L.geoJSON(geoJson.results, {style: style, onEachFeature: onEachFeature}).addTo(map);
 
-		geojson.eachLayer(function (layer) {
-			layer._path.id = 'feature-' + layer.feature.properties.vollcode;
-			districts_d3[layer.feature.properties.vollcode] = d3.select('#feature-' + layer.feature.properties.vollcode);
-		});
+	geojson.eachLayer(function (layer) {
 
-		// hide map by default
-		map.removeLayer(geojson);
-
-		if(debug) { console.log('getDistricts: OK') }
+		layer._path.id = 'feature-' + layer.feature.properties.vollcode;
+		districts_d3[layer.feature.properties.vollcode] = d3.select('#feature-' + layer.feature.properties.vollcode);
 	});
 
-	return promise;
+	// hide map by default
+	map.removeLayer(geojson);
+
+	if(debug) { console.log('getDistricts: Done') }
+
 }
 
 function addDistrictLayer()
@@ -261,148 +268,125 @@ function onEachFeature(feature, layer) {
 	});
 }
 
-function getHotspots() {
-	// hotspots map init
-	var hotspotsJsonUrl = dindex_hotspots_api + '&timestamp=' + getNowDate();
-	var hotspotsJsonUrl = dindex_hotspots_api;
-	if (debug) {
-		console.log('Start: getHotspots');
-		console.log(hotspotsJsonUrl);
-	}
+function getHotspots(hotspotsJson) {
 
-	var promise = $.getJSON(hotspotsJsonUrl).done(function (hotspotsJson) {
-		if (debug) {
-			console.log(hotspotsJson)
-		}
+	var hotspot_count = 0;
+	$.each(hotspotsJson.results, function (key, value) {
 
-		var hotspot_count = 0;
-		$.each(hotspotsJson.results, function (key, value) {
-
-			this.druktecijfers.sort(function (a, b) {
-				return a.h - b.h;
-			});
-
-			var time24 = {h:24,d:this.druktecijfers[0].d};
-			this.druktecijfers.push(time24);
-
-			// used for ams average todo: calc average in backend
-			$.each(this.druktecijfers, function (key, value) {
-
-				// console.log(this.d);
-				amsterdam.druktecijfers[this.h].d += this.d
-
-				// console.log('cum: '+amsterdam.druktecijfers[this.h].d);
-			});
-
-			var dataset = this;
-			if (this.druktecijfers.length < 1) {
-				this.druktecijfers = '[{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}];'
-			}
-
-
-
-			hotspot_count++;
-			hotspot_array.push(dataset);
-
+		this.druktecijfers.sort(function (a, b) {
+			return a.h - b.h;
 		});
 
-		hotspot_array.sort(function (a, b) {
-			return a.index - b.index;
-		});
+		var time24 = {h:24,d:this.druktecijfers[0].d};
+		this.druktecijfers.push(time24);
 
 		// used for ams average todo: calc average in backend
-		$.each(amsterdam.druktecijfers, function (key, value) {
-			amsterdam.druktecijfers[this.h].d = amsterdam.druktecijfers[this.h].d / hotspot_count;
+		$.each(this.druktecijfers, function (key, value) {
+
+			// console.log(this.d);
+			amsterdam.druktecijfers[this.h].d += this.d
+
+			// console.log('cum: '+amsterdam.druktecijfers[this.h].d);
 		});
 
-		circles_layer = L.layerGroup();
-		$.each(hotspot_array, function (key, value) {
-
-			var hh = getHourDigit();
-			var dindex = this.druktecijfers[hh].d;
-
-			circles[key] = L.circleMarker(this.coordinates, {
-				color      : getColorBucket(dindex),
-				fillColor  : getColorBucket(dindex),
-				fillOpacity: 1,
-				radius     : (12),
-				name       : this.hotspot
-			});
-			circles[key].addTo(map);
-			$(circles[key]._path).attr('stroke-opacity', 0.6);
-			$(circles[key]._path).attr('stroke', '#4a4a4a');
-			$(circles[key]._path).attr('hotspot', this.index);
-			$(circles[key]._path).addClass('hotspot_' + this.index);
-			circles[key].bindPopup('<div class="popup_hotspot"><i class="material-icons">fiber_manual_record</i><h3>' + this.hotspot + '</h3></div>', {autoClose: false});
-			circles[key].on("click", function (e) {
-				var clickedCircle = e.target;
-
-				var hotspot_id = $(clickedCircle._path).attr('hotspot');
-
-				updateLineGraph(hotspot_id,'hotspot');
-
-				clearInterval(popup_interval);
-
-				popup_interval = setInterval(function () {
-					var current_fill = $('[hotspot=' + hotspot_id + ']').css('fill');
-					$('.popup_hotspot .material-icons').css('color', current_fill);
-				}, 100);
-
-				// do something, like:
-				$('.graphbar_title h2').text(clickedCircle.options.name);
-			});
-			circles[key].addTo(circles_layer);
+		var dataset = this;
+		if (this.druktecijfers.length < 1) {
+			this.druktecijfers = '[{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}];'
+		}
 
 
-			circles_d3[key] = d3.select('path.hotspot_' + this.index);
 
-		});
+		hotspot_count++;
+		hotspot_array.push(dataset);
 
-		if(debug) { console.log('getHotspots: OK') }
 	});
 
-	return promise;
+	hotspot_array.sort(function (a, b) {
+		return a.index - b.index;
+	});
+
+	// used for ams average todo: calc average in backend
+	$.each(amsterdam.druktecijfers, function (key, value) {
+		amsterdam.druktecijfers[this.h].d = amsterdam.druktecijfers[this.h].d / hotspot_count;
+	});
+
+	circles_layer = L.layerGroup();
+	$.each(hotspot_array, function (key, value) {
+
+		var hh = getHourDigit();
+		var dindex = this.druktecijfers[hh].d;
+
+		circles[key] = L.circleMarker(this.coordinates, {
+			color      : getColorBucket(dindex),
+			fillColor  : getColorBucket(dindex),
+			fillOpacity: 1,
+			radius     : (12),
+			name       : this.hotspot
+		});
+		circles[key].addTo(map);
+		$(circles[key]._path).attr('stroke-opacity', 0.6);
+		$(circles[key]._path).attr('stroke', '#4a4a4a');
+		$(circles[key]._path).attr('hotspot', this.index);
+		$(circles[key]._path).addClass('hotspot_' + this.index);
+		circles[key].bindPopup('<div class="popup_hotspot"><i class="material-icons">fiber_manual_record</i><h3>' + this.hotspot + '</h3></div>', {autoClose: false});
+		circles[key].on("click", function (e) {
+			var clickedCircle = e.target;
+
+			var hotspot_id = $(clickedCircle._path).attr('hotspot');
+
+			updateLineGraph(hotspot_id,'hotspot');
+
+			clearInterval(popup_interval);
+
+			popup_interval = setInterval(function () {
+				var current_fill = $('[hotspot=' + hotspot_id + ']').css('fill');
+				$('.popup_hotspot .material-icons').css('color', current_fill);
+			}, 100);
+
+			// do something, like:
+			$('.graphbar_title h2').text(clickedCircle.options.name);
+		});
+		circles[key].addTo(circles_layer);
+
+
+		circles_d3[key] = d3.select('path.hotspot_' + this.index);
+
+	});
+
+	if(debug) { console.log('getHotspots: Done') }
+
 }
 
 
-function getRealtime()
+function getRealtime(realtimeJson)
 {
-	// realtime check
-	if(debug) { console.log('Start: getRealtime'); console.log(realtimeUrl); }
-	var promise = $.getJSON(realtimeUrl).done(function (realtimeJson) {
-		if(debug) { console.log(realtimeJson) }
+	var hotspots_match_array = [];
+	hotspots_match_array[18] = 'ARTIS';
+	hotspots_match_array[34] = 'Museumplein';
+	hotspots_match_array[0] = 'Amsterdam Centraal';
+	hotspots_match_array[3] = 'Madame Tussauds Amsterdam'; //dam
+	hotspots_match_array[33] = 'Dappermarkt';
+	hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
+	hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
+	hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
 
-		var hotspots_match_array = [];
-		hotspots_match_array[18] = 'ARTIS';
-		hotspots_match_array[34] = 'Museumplein';
-		hotspots_match_array[0] = 'Amsterdam Centraal';
-		hotspots_match_array[3] = 'Madame Tussauds Amsterdam'; //dam
-		hotspots_match_array[33] = 'Dappermarkt';
-		hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
-		hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
-		hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
+	if(debug) { console.log(hotspots_match_array) }
 
-		if(debug) { console.log(hotspots_match_array) }
+	$.each(realtimeJson.results, function (key, value) {
 
-		$.each(realtimeJson.results, function (key, value) {
-
-			var name = this.name;
-			var exists = $.inArray(name, hotspots_match_array );
-			if(exists > -1)
-			{
-				// console.log(name + ' - ' + this.data.place_id + ' - ' + this.data['Real-time']);
-				realtime_array[exists] = this.data['Real-time'];
-			}
-
-		});
-
-		if(debug) { console.log(realtime_array) }
-
-		if(debug) { console.log('getRealtime: OK') }
+		var name = this.name;
+		var exists = $.inArray(name, hotspots_match_array );
+		if(exists > -1)
+		{
+			// console.log(name + ' - ' + this.data.place_id + ' - ' + this.data['Real-time']);
+			realtime_array[exists] = this.data['Real-time'];
+		}
 
 	});
 
-	return promise;
+	if(debug) { console.log(realtime_array) }
+
+	if(debug) { console.log('getRealtime: Done') }
 }
 
 function initAutoComplete()
