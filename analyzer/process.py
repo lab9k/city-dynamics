@@ -1,24 +1,7 @@
 """
-Module should implement class 'Process'.
+Module implements class 'Process'.
 
 For each dataset, a subclass of class 'Process' is created to load and pre-process this dataset.
-
-
-# Implemented methods of class 'Process':
-
-* def database_connection()
-* def import()
-* def normalize()
-* def min-max()
-* def rename()  # Optional: to rename columns
-
-# Children of class 'Process':
-
-* Class Process_gvb(Process)
-* Class Process_google(Process)
-* Class Process_verblijversindex(Process)
-* Class Process_tellus(Process)
-* Etc..
 """
 
 ##############################################################################
@@ -152,7 +135,7 @@ class Process():
 
 
     def normalize_acreage_city(self, col):
-        """Normalize on acreage on city wide """
+        """Normalize on acreage on city wide."""
 
         # TODO: Clean up this function. Current functionality is probably what we want.
         # TODO: Other option would be to divide by city wide value, and multiply by m2 of

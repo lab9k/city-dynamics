@@ -1,5 +1,12 @@
 """
-Module should implement class 'Process'.
+This module is a fallback version of process.py.
+
+#REMOVE (marked for future removal)
+
+This module is not in use anymore. It implements an older version of class 'Process'.
+The functionality of this script is now replaced by main.py and process.py.
+
+ORIGINAL DESCRIPTION:
 For each dataset, a subclass of class 'Process' is created to load and pre-process this dataset.
 # Implemented methods of class 'Process':
 * def database_connection()

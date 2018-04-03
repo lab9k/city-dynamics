@@ -63,49 +63,6 @@ def linear_model(drukte):
 def main():
     conn = get_conn()
 
-    #TODO: HACK. Make this work for existing geometries in the importer!
-    q1 = """
-    ALTER TABLE hotspots
-    DROP COLUMN IF EXISTS point_sm;
-    """
-
-    q2 = """
-    ALTER TABLE hotspots
-    ADD COLUMN point_sm geometry;
-    UPDATE hotspots SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857);
-    """
-    q3 = """
-    ALTER TABLE "alpha_locations_expected"
-    DROP COLUMN IF EXISTS point_sm;
-    """
-
-    q4 = """
-    ALTER TABLE alpha_locations_expected
-    ADD COLUMN point_sm geometry;
-    UPDATE alpha_locations_expected SET point_sm = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857);
-    """
-
-    q5 = """
-    UPDATE alpha_locations_expected SET hotspot = hotspots."hotspot"
-    FROM hotspots 
-    WHERE st_intersects(
-    alpha_locations_expected.point_sm,
-    ST_BUFFER(hotspots.point_sm, 100));
-    """
-
-    q6 = """
-    ALTER TABLE "alpha_locations_expected"
-    DROP COLUMN IF EXISTS point_sm;
-    """
-
-    conn.execute(q1)
-    conn.execute(q2)
-    conn.execute(q3)
-    conn.execute(q4)
-    conn.execute(q5)
-    conn.execute(q6)
-
-
     alpha_hotspots = pd.read_sql(sql="SELECT * FROM alpha_locations_expected", con=conn)
 
     hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)

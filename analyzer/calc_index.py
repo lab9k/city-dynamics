@@ -1,4 +1,12 @@
-"""Import data and calculate drukte index."""
+"""
+Old script for importing data and calculating the drukte index.
+
+#REMOVE (marked for future removal)
+
+DESCRIPTION:
+This script is now replaced by main.py and process.py.
+This script is not called anymore in analyzer/run_index.sh.
+"""
 
 import configparser
 import argparse
