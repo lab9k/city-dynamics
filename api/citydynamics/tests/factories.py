@@ -15,4 +15,12 @@ class HotspotsFactory(factory.DjangoModelFactory):
     hotspot = fuzzy.FuzzyText()
     lat = fuzzy.FuzzyFloat(low=0)
     lon = fuzzy.FuzzyFloat(low=0)
-    # point_sm = fuzzy.GeometryField()
+
+
+class BuurtcombinatieFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Buurtcombinatie
+
+    vollcode = fuzzy.FuzzyText()
+    naam = fuzzy.FuzzyText()
+    # wkb_geometry_simplified = ...

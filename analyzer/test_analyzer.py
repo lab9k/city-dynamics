@@ -49,7 +49,7 @@ class testProcess(unittest.TestCase):
     """Test the process.py module."""
 
     def test_process(self):
-        dbconfig = 'docker'
+        dbconfig = 'test'
 
         # 1. Create mini-table in database
         # 2. Test import_table

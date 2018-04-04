@@ -81,7 +81,8 @@ Create a parser function in `parsers.py` and call this function 'parser_x', wher
 To run the entire test test. run 
 ```
 api/deploy/test/the_tests.sh
-importer/deploy/test/tests.sh
+importer/deploy/test/test.sh
+analyzer/deploy/test/test.sh
 ```
 
 The api test are run manualy in your local development environment by

@@ -12,6 +12,7 @@ dc() {
 
 
 dc stop
+
 dc rm --force
 dc down
 dc pull
@@ -20,6 +21,7 @@ dc build
 dc up -d database
 
 dc run --rm analyzer /app/deploy/docker-wait.sh
+dc run --rm analyzer python /app/deploy/docker-load-testdata.py
 dc run --rm analyzer pytest
 
 
