@@ -3,6 +3,11 @@ This module is the main module of the analyzer.
 
 The analyzer imports data from all data sources and combines them into
 a single 'Drukte Index' value.
+
+main.py is dependent on process.py, which streamlines the datasource import
+and transformation process.
+
+main.py is called in run_index.sh when the docker
 """
 
 ##############################################################################

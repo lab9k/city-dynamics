@@ -1,5 +1,9 @@
 """
-This module is the main module of the analyzer.
+This module is the fallback version of the main module of the analyzer.
+
+#REMOVE (marked for future removal)
+
+ORIGINAL DESCRIPTION:
 The analyzer imports data from all data sources and combines them into
 a single 'Drukte Index' value.
 """
