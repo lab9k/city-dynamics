@@ -186,6 +186,10 @@ def delete_duplicates(db_model):
     """
     # make new session
     session = models.Session()
+
+    if session.query(db_model).count() == 0:
+        raise ValueError('NO DATA RECIEVED WHATSOEVER!')
+
     log.debug('Count before %d', session.query(db_model).count())
 
     tablename = db_model.__table__.name
