@@ -76,5 +76,3 @@ class BrowseDatasetsTestCase(APITestCase):
     #             response.data['results'][0],
     #             'Missing druktecijfers attribute in {}'.format(url))
 
-
-
