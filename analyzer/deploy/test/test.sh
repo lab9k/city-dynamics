@@ -13,9 +13,9 @@ dc() {
 
 dc stop
 
-#dc rm --force
-#dc down
-#dc pull
+dc rm --force
+dc down
+dc pull
 dc build
 
 dc up -d database
