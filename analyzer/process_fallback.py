@@ -86,6 +86,7 @@ class Process():
     """This class implements the process of loading and pre-processing all data from one datasource."""
 
     def __init__(self, dbconfig):
+        """Initialize a Process instance."""
         self.name = ''                                  # Name of datasource
         self.data = pd.DataFrame()                      # Data of datasource
         self.pattern = pd.DataFrame()                   # Patterns of datasource

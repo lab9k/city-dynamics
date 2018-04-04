@@ -63,6 +63,7 @@ def init_drukte_df(start_datetime, end_datetime, vollcodes):
 ##############################################################################
 
 def run_imports_fallback():
+    """Import datasets fallback"""
 
     # Import datasets
     dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
@@ -115,6 +116,7 @@ def run_imports_fallback():
 
 ##############################################################################
 def linear_model_fallback(drukte):
+    """Linear model fallback"""
 
     # Normalise verblijversindex en gvb
     drukte['verblijvers_ha_2016'] = process_fallback.norm(drukte.verblijvers_ha_2016)

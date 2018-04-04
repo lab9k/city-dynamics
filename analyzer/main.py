@@ -7,7 +7,7 @@ a single 'Drukte Index' value.
 main.py is dependent on process.py, which streamlines the datasource import
 and transformation process.
 
-main.py is called in run_index.sh when the docker
+main.py is called in abalyzer/run_index.sh.
 """
 
 ##############################################################################
@@ -61,69 +61,6 @@ vollcodes_m2_land = {'A00': 125858.0, 'A01': 334392.0, 'A02': 139566.0, 'A03': 1
 # temp = process.Process(dbconfig)
 # temp.import_data(['VERBLIJVERSINDEX'], ['vollcode', 'oppervlakte_land_m2'])
 # vollcodes_m2_land = dict(zip(list(temp.data.vollcode), list(temp.data.oppervlakte_land_m2)))
-
-##############################################################################
-def init_drukte_df(start_datetime, end_datetime, vollcodes):
-    timestamps = pd.date_range(start=start_datetime, end=end_datetime, freq='H')
-    ts_vc = [(ts, vc) for ts in timestamps for vc in vollcodes]
-    drukte = pd.DataFrame({
-        'timestamp': [x[0] for x in ts_vc],
-        'vollcode': [x[1] for x in ts_vc]
-    }).sort_values(['timestamp', 'vollcode'])
-    drukte['weekday'] = [ts.weekday() for ts in drukte.timestamp]
-    drukte['hour'] = [ts.hour for ts in drukte.timestamp]
-    return drukte
-
-
-##############################################################################
-# def run_imports():
-#     # Import datasets
-#     dbconfig = args.dbConfig[0]  # dbconfig is the same for all datasources now. Could be different in the future.
-#     brt = process.Process_buurtcombinatie(dbconfig)
-#     vbi = process.Process_verblijversindex(dbconfig)
-#     gvb_st = process.Process_gvb_stad(dbconfig)
-#     gvb_bc = process.Process_gvb_buurt(dbconfig)
-#     # tel = process.Process_tellus(dbconfig)
-#     alp_hist = process.Process_alpha_historical(dbconfig)
-#     alp_live = process.Process_alpha_live(dbconfig)
-#
-#     # initialize drukte dataframe
-#     start = datetime.datetime(2018, 2, 12, 0, 0)  # Start of a week: Monday at midnight
-#     end = datetime.datetime(2018, 2, 18, 23, 0)  # End of this week: Sunday 1 hour before midnight
-#     drukte = init_drukte_df(start, end, list(vollcodes_m2_land.keys()))
-#
-#     # merge datasets
-#     cols = ['vollcode', 'weekday', 'hour', 'alpha_week']
-#     drukte = pd.merge(
-#         drukte, alp_hist.data[cols],
-#         on=['weekday', 'hour', 'vollcode'], how='left')
-#
-#     drukte = pd.merge(
-#         drukte, gvb_bc.data,
-#         on=['vollcode', 'weekday', 'hour'], how='left')
-#
-#     drukte = pd.merge(
-#         drukte, gvb_st.data,
-#         on=['weekday', 'hour'], how='left')
-#
-#     drukte = pd.merge(
-#         drukte, vbi.data,
-#         on='vollcode', how='left')
-#
-#     # # Middel alpha expected en alpha live
-#     # drukte['alpha'] = drukte[['alpha_week', 'alpha_live']].mean(axis=1)
-#
-#     # HACK: alpha_live not available, so just take alpha_week
-#     drukte['alpha'] = drukte[['alpha_week']].mean(axis=1)
-#
-#     # Middel gvb
-#     drukte['gvb'] = drukte[['gvb_buurt', 'gvb_stad']].mean(axis=1)
-#
-#     # init drukte index
-#     drukte['drukteindex'] = 0
-#
-#     # Remove timestamps from weekpattern (only day and hour are relevant)
-#     drukte.drop('timestamp', axis=1, inplace=True)
 
 ##############################################################################
 def linear_model(drukte):
@@ -196,7 +133,7 @@ def linear_model(drukte):
 
 ##############################################################################
 def pipeline_model(drukte):
-    """Implement pipeline model for creating the Drukte Index"""
+    """Implements pipeline model for creating the Drukte Index"""
 
     # Compute mean value for gvb
     drukte.data['gvb'] = drukte.data[['gvb_buurt', 'gvb_stad']].mean(axis=1)
@@ -267,7 +204,7 @@ def pipeline_model(drukte):
 
 ##############################################################################
 def write_table_to_db(dataframe, table_name):
-    """Write dataframe to table with given name. If table already exists, replace it."""
+    """Write dataframe to database table with given name. If table already exists, replace it."""
     log.debug('Writing data to database: creating or replacing table \"%s\".' % table_name)
     dbconfig = args.dbConfig[0]
     connection = process.connect_database(dbconfig)
@@ -282,7 +219,7 @@ def write_table_to_db(dataframe, table_name):
 
 ##############################################################################
 def fill_table_in_db(org_table_name, fill_table_name, columns):
-    """Insert data from selected columns into an existing table."""
+    """Insert data from selected columns into an existing table in database."""
 
     #TODO: First test this via DBeaver. column names between org_table and fill_table will be different due to the foreign key constraint #noqa
     #
@@ -378,7 +315,6 @@ def run():
 
 ##############################################################################
 if __name__ == "__main__":
-
     """Run the analyzer."""
     desc = "Calculate index."
     log.debug(desc)

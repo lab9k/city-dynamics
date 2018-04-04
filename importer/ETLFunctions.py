@@ -1,9 +1,10 @@
-""" Script that contains functions that are used a lot in the ETL process.
+"""
+This module contains functions which are used a lot in the ETL process of the importer.
+(ETL = Extraction, Transformation, Load)
 
-    contains different functions on tables to
-    - create database connections
-    - transform, add, enrich tables etc.
-
+Contains several functions to work with database tables:
+    - Create database connections
+    - Transform, add, enrich tables etc.
 """
 
 import time

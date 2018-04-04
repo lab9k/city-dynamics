@@ -1,4 +1,12 @@
-"""Import data and calculate drukte index."""
+"""
+Script to run a sanity check on the Google data source.
+
+#REMOVE (marked for future removal)
+(Could possibly be converted to a test?)
+
+This script was used to check whether the information in the Google dataset
+is conform to expectations (no missing and/or incorrect values etc.)
+"""
 
 import configparser
 import argparse
