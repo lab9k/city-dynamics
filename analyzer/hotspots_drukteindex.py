@@ -76,13 +76,13 @@ def main():
     alpha_week_hotspots = alpha_week_location.groupby([
         'hotspot', 'hour'])['expected'].mean().reset_index()
 
-    alpha_week_hotspots.rename(columns={'expected': 'alpha_week'}, inplace=True)
+    alpha_week_hotspots.rename(columns={'expected': 'alpha'}, inplace=True)
 
     # fill the dataframe with all missing hotspot-hour combinations
     x = {"weekday": np.arange(7), "hour": np.arange(24), "hotspot": hotspots_df['hotspot'].unique().tolist()}
     hs_hour_combinations = pd.DataFrame(list(itertools.product(*x.values())), columns=x.keys())
     alpha_week_hotspots = alpha_week_hotspots.merge(hs_hour_combinations, on=['hour', 'hotspot'], how='outer')
-    alpha_week_hotspots['alpha_week'].fillna(value=0, inplace=True)
+    alpha_week_hotspots['alpha'].fillna(value=0, inplace=True)
 
     alpha_week_hotspots = alpha_week_hotspots.merge(hotspots_df[['hotspot', 'vollcode']], on='hotspot')
 
