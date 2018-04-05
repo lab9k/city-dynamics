@@ -85,7 +85,7 @@ def download_container(conn, container, targetdir):
 
 def download_containers(conn, objectstore_containers, targetdir):
     """
-    Download the citydynamics datasets, located in containers/folders on the objectstore, to local target directories.
+    Download the citydynamics datasets, located in containers/folders on the objectstore, into local target directories.
 
     Simplifying assumptions:
     * layout on data store matches intended layout of local data directory
@@ -93,15 +93,14 @@ def download_containers(conn, objectstore_containers, targetdir):
     * assumes we are running in a clean container (i.e. empty local data dir)
     * do not overwrite / delete old data
     """
-    logger.debug('Checking local data directory exists and is empty')
 
+    logger.debug('Checking whether local data directory exists and is empty')
     if not os.path.exists(targetdir):
         raise Exception('Local data directory does not exist.')
 
     resp_headers, containers = conn.get_account()
 
     logger.debug('Downloading datasets from objectstore folders into local directories...')
-
     for container in containers:
         if container['name'] in objectstore_containers:
             logger.debug(container['name'])
@@ -109,6 +108,6 @@ def download_containers(conn, objectstore_containers, targetdir):
 
 
 def main(objectstore_containers, targetdir):
-
+    """Main function to download all data from objectstore containers to local target directory."""
     conn = Connection(**OS_CONNECT)
     download_containers(conn, objectstore_containers, targetdir)

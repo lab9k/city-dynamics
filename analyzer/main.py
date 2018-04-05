@@ -1,6 +1,8 @@
 """
 This module is the main module of the analyzer.
 
+#REFACTOR: module needs refactoring.
+
 The analyzer imports data from all data sources and combines them into
 a single 'Drukte Index' value.
 

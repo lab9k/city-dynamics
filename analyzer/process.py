@@ -1,6 +1,8 @@
 """
 Module implements class 'Process'.
 
+#REFACTOR: module needs refactoring.
+
 For each dataset, a subclass of class 'Process' is created to load and pre-process this dataset.
 """
 

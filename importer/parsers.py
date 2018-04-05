@@ -1,4 +1,6 @@
-
+"""
+This module contains a parser to pre-process data from every datasource.
+"""
 
 import os
 import datetime
@@ -13,6 +15,7 @@ from ETLFunctions import ModifyTables
 def parse_gvb(datadir,
               rittenpath='Ritten GVB 24jun2017-7okt2017.csv',
               locationspath='Ortnr - coordinaten (ingangsdatum dec 2015) met LAT LONG.xlsx'):
+    """Parser for GVB data."""
 
     def fix_times(t, d):
         if t >= 24:
@@ -120,96 +123,9 @@ def parse_gvb(datadir,
     return inout
 
 
-def parse_google(datadir,
-                 filename='google_oct_nov2017.csv',
-                 locationsfile='locations2k_details.csv'):
-    # read google csv
-    path = os.path.join(datadir, filename)
-    df = pd.read_csv(path, delimiter=';')
-
-    # remove data with no values
-    df = df.loc[df.Expected != 'No Expected Value', :]
-
-    # convert to numeric
-    df['historical'] = df.Expected.astype(float)
-    df['live'] = df.Observed.astype(float)
-
-    df.drop(['Expected', 'Observed'], axis=1, inplace=True)
-
-    # read location file
-    path = os.path.join(datadir, locationsfile)
-    locations = pd.read_csv(path, sep=';')
-
-    # create Location column
-    locations['Location'] = [row['name'] + ', ' + row['address']
-                             for _, row in locations.iterrows()]
-    locations.drop('id', axis=1, inplace=True)
-
-    # change longitude column name
-    locations.rename(columns={'lng': 'lon'}, inplace=True)
-
-    # drop duplicated locations
-    indx = np.logical_not(locations.Location.duplicated())
-    locations = locations.loc[indx, :]
-
-    # add geometry, types
-    df = pd.merge(df, locations, on='Location')
-
-    # create timestamp
-    df['timestamp'] = [datetime.datetime.strptime(
-        ts, '%Y-%m-%d %H:%M:%S') for ts in df.timestamp]
-
-    # create column: difference between expected, observed
-    df['differences'] = df.historical - df.live
-
-    return df
-
-
-def parse_google2(datadir):
-    fname = os.path.join(datadir, 'merged_scraped_locations_BATCH{}.csv')
-    batch1 = pd.read_csv(fname.format('1'), header=0, sep=';')
-    batch2 = pd.read_csv(fname.format('2'), header=None,
-                         sep=';', names=batch1.columns)
-    batch3 = pd.read_csv(fname.format('3'), header=None,
-                         sep=';', names=batch1.columns)
-    data = pd.concat([batch1, batch2, batch3], ignore_index=True)
-    del batch1, batch2, batch3
-
-    # select columns
-    cols = ['Place_ID', 'Expected', 'Real-time', 'ScrapeTime']
-    data = data[cols]
-
-    # rename columns
-    data.rename(columns={
-        'Place_ID': 'place_id',
-        'Expected': 'historical',
-        'Real-time': 'live',
-        'ScrapeTime': 'timestamp'}, inplace=True)
-
-    # create timestamp
-    month_dict = {'Nov': 11, 'Dec': 12}
-    ts = [x.split() for x in data.timestamp]
-
-    def get_ts(x):
-        year = int(x[4])
-        month = month_dict[x[1]]
-        day = int(x[2])
-        hour = int(x[3].split(':')[0])
-        return datetime.datetime(year, month, day, hour)
-
-    data['timestamp'] = [get_ts(x) for x in ts]
-
-    # add locations
-    fname = os.path.join(datadir, 'scrapelist.csv')
-    locations = pd.read_csv(fname, sep=';')
-    locations = locations[['place_id', 'name', 'lat', 'lng', 'types']]
-    locations.rename(columns={'lng': 'lon'}, inplace=True)
-    data = pd.merge(data, locations, on='place_id', how='outer')
-
-    return data
-
-
 def parse_mora(datadir, filename='MORA_data_data.csv'):
+    """Parser for MORA data."""
+
     # read mora csv
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, delimiter=';')
@@ -238,6 +154,8 @@ def parse_mora(datadir, filename='MORA_data_data.csv'):
 
 
 def parse_tellus(datadir, filename='tellus2017.csv'):
+    """Parser for tellus data."""
+
     # open tellus csv
     path = os.path.join(datadir, filename)
     file = open(path, 'r', encoding='utf-8')
@@ -305,6 +223,8 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
 
 
 def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
+    """Parser for geomapping data."""
+
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, sep=';')
     df.drop('Unnamed: 8', axis=1, inplace=True)
@@ -313,6 +233,8 @@ def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
 
 
 def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1_new.csv'):
+    """Parser for hotspots definition file."""
+
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path)
     df.rename(columns={'Hotspot':'hotspot', 'Latitude':'lat', 'Longitude':'lon'}, inplace=True)
@@ -322,6 +244,8 @@ def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1_new.csv'):
 
 
 def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
+    """Parser for funciekaart data."""
+
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, sep=';')
     return df
@@ -329,6 +253,8 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
 
 
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
+    """Parser for verblijversindex data."""
+
     path = os.path.join(datadir, filename)
     df = pd.read_excel(path, sheet_name=3)
 
@@ -360,6 +286,8 @@ def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.
 
 
 def parse_cmsa(datadir):
+    """Parser for CMSA data."""
+
     def read_file(file, datadir):
         cam_number = re.sub('_.*', '', file.replace('Cam_loc', ''))
         df = pd.read_csv(os.path.join(datadir, file), sep=',')
@@ -380,6 +308,8 @@ def parse_cmsa(datadir):
 
 
 def parse_afval(datadir, filename='WEEGGEGEVENS(1-10_30-11_2017).csv'):
+    """Parser for AFVAL data."""
+
     fname = os.path.join(datadir, filename)
     df = pd.read_csv(fname, sep=';')
     df = df.loc[:, ['datum', 'tijd', 'fractie',
@@ -406,6 +336,8 @@ def parse_afval(datadir, filename='WEEGGEGEVENS(1-10_30-11_2017).csv'):
 
 
 def parse_parkeren(datadir):
+    """Parser for PARKEER data."""
+
     allfiles = glob.glob(datadir + "/2017-10*.csv")
     df_parkeer = pd.DataFrame()
     list_ = []
@@ -424,6 +356,7 @@ def parse_parkeren(datadir):
     return df_parkeer
 
 def parse_alpha(datadir):
+    """Parser for ALPHA data."""
 
     def create_row_sql(id, place_id, name, url, weekday, hour, expected, lat, lon,
                        address, location_type, visit_duration, types, category):

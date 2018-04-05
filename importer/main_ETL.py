@@ -1,9 +1,12 @@
-""" MAIN ETL Pipeline
+"""
+MAIN ETL Pipeline
 
-Script which executes the import pipeline:
-- downloads raw data sources from objectstore, guided by the sources.conf file,
-  and stores it in a local data directory.
-- parses the raw data and writes it to a postgresql database
+#REFACTOR: module needs refactoring.
+
+Module executes the import pipeline:
+    - Download raw data sources from objectstore, guided by the sources.conf file.
+    - Store this data in a local data directory.
+    - Parse the raw data and write the results to postgresql database (in Docker container).
 """
 
 import logging
@@ -15,7 +18,7 @@ import download_from_objectstore
 import parsers
 from ETLFunctions import DatabaseInteractions
 from ETLFunctions import ModifyTables
-from ETLFunctions import LoadGebieden
+from ETLFunctions import LoadLayers
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -28,7 +31,8 @@ conn = db_int.get_sqlalchemy_connection()
 
 
 # TODO Use this structure to refactor the main function
-def download_from_os():
+def execute_download_from_objectstore():
+    """This function downloads data for all ENABLED containers in importer/sources.conf from the objectstore."""
     objectstore_containers = [config_src.get(x, 'OBJSTORE_CONTAINER') for x in datasets]
 
     # Check whether locally cached downloads should be used.
@@ -41,12 +45,14 @@ def download_from_os():
         logger.info('No download from datastore requested, quitting.')
 
 
-def load_gebieden():
+def load_areas():
+    """Load 'stadsdeel' and 'buurtcombinatie' tables into database."""
     pg_str = db_int.get_postgresql_string()
-    LoadGebieden.load_gebieden(pg_str)
+    LoadLayers.load_layers(pg_str)
 
 
 def parse_and_write():
+    """This function parses the data downloaded from the objectstore and writes it to the database (Docker container)"""
 
     # Remove dependent tables created by the Analyzer (only necessary when developing locally)
     drop_query = """
@@ -80,7 +86,7 @@ def parse_and_write():
             logger.info('... done')
 
     logger.info('Loading and writing area codes to database')
-    load_gebieden()
+    load_areas()
     logger.info('... done')
 
 
@@ -89,14 +95,16 @@ def modify_tables():
     This function modifies tables in the database (in Docker container).
 
     Modification steps this function can conduct:
-    - creating a table for the alpha datasource
-    - adding geometry column
-    - adding vollcode column
-    - adding stadsdeelcode column
-    - adding hotspots column
-    - simplifying polygons in polygon column
+    - Changing the table's primary key
+    - Checking whether a column exists in a given table
+    - Creating a table for the alpha datasource
+    - Adding geometry column
+    - Adding vollcode column
+    - Adding stadsdeelcode column
+    - Adding hotspots column
+    - Simplifying polygons in polygon column
     """
-    # TODO: Refactor task: divide this function into multiple separate table modification functions
+    # TODO: Refactor task: divide this function into multiple separate table modification functions.
 
     # simplify the polygon of the
     # buurtcombinaties: limits data traffic to the front end.
@@ -126,14 +134,14 @@ def modify_tables():
     logger.info('... done')
 
 
+# This global dictionary is created to allow quick starting of ETL functions from the command line.
 TASKS = {
-    'gebieden': load_gebieden
+    'areas': load_areas
 }
 
 
 def config_parser():
-    """Configure argument parser
-    """
+    """Configure commandline argument parser."""
     parser = argparse.ArgumentParser(desc)
 
     parser.add_argument(
@@ -150,30 +158,30 @@ def config_parser():
 
 
 def main(args):
-    # make it possible to execute individual steps
+    """This is the main function of this module. Starts the ETL process."""
+
+    # 1. make it possible to execute individual steps.
     for k, task in TASKS.items():
         if getattr(args, k):
             task()
             return
 
-    # 2. Download data from objectstore
+    # 2. Download data from objectstore.
+    execute_download_from_objectstore()
 
-    download_from_os()
-
-    # 3. Restore alpha dump to database
+    # 3. Restore alpha dump to database.
     cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/google_raw.dump'
     os.system(cmd)
 
-    # 4. Parse the data and write to postgresql database
-
+    # 4. Parse the data and write to postgresql database.
     parse_and_write()
 
-    # 5. Modify tables
-
+    # 5. Modify (pre-process) the tables in the database.
     modify_tables()
 
 
 if __name__ == "__main__":
+    """This function is ran when calling this module from the command line."""
 
     logging.basicConfig(level=logging.DEBUG)
     desc = "Importing all different data sources"
