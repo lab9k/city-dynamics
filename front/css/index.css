@@ -95,20 +95,20 @@ div {box-sizing: border-box;}
 }
 
 /*controls*/
-.controls {position:absolute;right:10px;top:70px; z-index:500;width:26px;height:26px;background-color: #4a4a4a;border-radius:5px;}
-.controls a ,.controls i {color:#FFF;line-height:26px;font-size:22px;text-indent:2px;}
+.controls {position:absolute;right:10px;top:80px; z-index:500;width:30px;height:30px;background-color: #4a4a4a;border-radius:3px;}
+.controls a ,.controls i {color:#FFF;line-height:30px;font-size:22px;text-indent:4px;}
 .controls a:hover {color:#000;}
 
-.controls.chrome {width:30px;height:30px;top:80px;right:12px;}
-.controls.chrome  a ,.controls.chrome  i {color:#FFF;line-height:30px;font-size:26px;}
+/*.controls.chrome {width:30px;height:30px;top:80px;right:12px;}*/
+/*.controls.chrome  a ,.controls.chrome  i {color:#FFF;line-height:30px;font-size:26px;}*/
 
 /*jquery ui overwrites*/
 .ui-autocomplete {z-index:501;}
 
 /*leaflet styles*/
-.active_path {filter: url(#shadow);stroke:#4a4a4a;stroke-width:3px;}
+.active_path {filter: url(#shadow);stroke:#FFFFFF;stroke-width:3px;}
 .leaflet-top .leaflet-control-zoom {}
-.leaflet-control-zoom.leaflet-bar {box-shadow: none;}
+.leaflet-control-zoom.leaflet-bar {box-shadow: none;border:0;}
 .leaflet-control-zoom.leaflet-bar a{background-color: #4a4a4a;color:#fff;}
 .leaflet-control-attribution {display:none;}
 .leaflet-interactive {cursor:pointer;}

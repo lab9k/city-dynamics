@@ -63,8 +63,7 @@ var dindexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
 // theme api
 var trafficJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=traveltime&format=json';
 var parkJsonUrl = "https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=parking_garages&format=json";
-var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
-// var fietsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=ovfiets&format=json';
+var fietsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=ovfiets&format=json';
 var eventsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=events&format=json';
 
 // temp local api
@@ -1492,7 +1491,7 @@ function pointToLayerPark(feature, latlng) {
 	{
 		long = "<p>Parkeren lang: " + feature.properties.FreeSpaceLong + " / " + feature.properties.LongCapacity + '</p>';
 	}
-	marker.bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + feature.properties.Name + '</h3><div class="pop_inner_content">'+ short + long +'<span class="ammount">' +  feature.properties.FreeSpaceShort + '</span></div></div>', {autoClose: false});
+	marker.bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + feature.properties.Name + '</h3><div class="pop_inner_content"><h4>Plekken beschikbaar: ' + feature.properties.FreeSpaceShort +'</h4><span class="ammount">' +  feature.properties.FreeSpaceShort + '</span></div></div>', {autoClose: false});
 
 	markers.push(marker);
 
@@ -1601,7 +1600,7 @@ function showEvents()
 				name: this.location
 			});
 			markers[key].addTo(map);
-			markers[key].bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + this.location +'</h3><img src="'+this.img+'"><div class="pop_inner_content"><p>'+ this.date+'</p><h4>'+this.title+'</h4><p>Aanmeldingen: '+this.attending+'</p><span class="ammount">' +  this.attending + '</span></div></div>', {autoClose: false});
+			markers[key].bindPopup('<div class="popup_'+ suffix +'"><i class="material-icons">fiber_manual_record</i><h3>' + this.location +'</h3><img src="'+this.img+'"><div class="pop_inner_content"><p>'+ this.date+'</p><h4>'+this.title+'</h4><br><p>Aanmeldingen: '+this.attending+'</p><span class="ammount">' +  this.attending + '</span></div></div>', {autoClose: false});
 			markers[key].on("click", function(e){
 				var clickedCircle = e.target;
 
@@ -1728,13 +1727,13 @@ function onEachFeatureMarket(feature, layer) {
 function addTrafficLayer()
 {
 	if(debug) {
-		console.log('Traffic api url:')
-		console.log(trafficJsonUrl)
+		console.log('Traffic api url:');
+		console.log(trafficJsonUrl);
 	}
 	$.getJSON(trafficJsonUrl).done(function(trafficJson){
 		if(debug) {
-			console.log('Traffic Json')
-			console.log(trafficJson)
+			console.log('Traffic Json');
+			console.log(trafficJson);
 		}
 
 		$.each(trafficJson.features, function(key,value) {
@@ -1744,8 +1743,9 @@ function addTrafficLayer()
 				coordinates.push([this[1],this[0]]);
 			});
 
-			var event_marker = L.polyline(coordinates, {color: speedToColor(this.properties.Type, this.properties.Velocity)}).addTo(map);
-			markers.push(event_marker);
+			var traffic_line = L.polyline(coordinates, {color: speedToColor(this.properties.Type, this.properties.Velocity)}).addTo(map);
+			traffic_line.bringToBack();
+			markers.push(traffic_line);
 		});
 
 	});
