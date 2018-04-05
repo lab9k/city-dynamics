@@ -1,5 +1,3 @@
-
-
 import os
 import datetime
 import numpy as np
@@ -325,7 +323,6 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, sep=';')
     return df
-
 
 
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
