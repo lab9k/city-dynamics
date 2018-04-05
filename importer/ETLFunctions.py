@@ -81,18 +81,6 @@ class ModifyTables(DatabaseInteractions):
         r = super().execute_sql()
         return r
 
-    # @staticmethod
-    # def create_geometry_column(tableName):
-    #     return """
-    #     ALTER TABLE             "{0}"
-    #     DROP COLUMN IF EXISTS   geom;
-    #     ALTER TABLE             "{0}"
-    #     ADD COLUMN              geom        geometry;
-    #     UPDATE "{0}" SET geom = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
-    #     """.format(tableName, 'geom_' + tableName)
-
-    # Alternative method to create a geometry point from lat, long coordinates. Not used for now
-
     @staticmethod
     def create_geometry_column(tableName):
         return """
@@ -155,7 +143,6 @@ class ModifyTables(DatabaseInteractions):
         FROM hotspots
         WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), alpha_locations_expected.geom);
         """.format(tableName)
-
 
     @staticmethod
     def create_alpha_table():
