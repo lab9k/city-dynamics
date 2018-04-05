@@ -1,6 +1,7 @@
 """
-Access the druktemonitor project data on the data store.
-For now the convention is that only relevant files are in the datastore and
+Access the drukteradar project data on our data store (called objectstore).
+
+For now, the convention is that only relevant files are in the datastore and
 the layout there matches the layout expected by our data loading scripts.
 (We may have to complicate this in the future if we get to automatic
 delivery of new data for this project.)
@@ -47,11 +48,14 @@ OS_CONNECT = {
 
 
 def file_exists(target):
+    """Check whether target file exists."""
     target = Path(target)
     return target.is_file()
 
 
 def download_container(conn, container, targetdir):
+    """Download data from a container (folder) on the objectstore into local targetdirectory."""
+
     # list of container's content
     content = objectstore.get_full_container_list(conn, container['name'])
 
@@ -79,9 +83,10 @@ def download_container(conn, container, targetdir):
             new_file.write(obj_content)
 
 
-def download_containers(conn, datasets, targetdir):
+def download_containers(conn, objectstore_containers, targetdir):
     """
-    Download the citydynamics datasets from object store.
+    Download the citydynamics datasets, located in containers/folders on the objectstore, to local target directories.
+
     Simplifying assumptions:
     * layout on data store matches intended layout of local data directory
     * datasets do not contain nested directories
@@ -95,15 +100,15 @@ def download_containers(conn, datasets, targetdir):
 
     resp_headers, containers = conn.get_account()
 
-    logger.debug('Downloading containers ...')
+    logger.debug('Downloading datasets from objectstore folders into local directories...')
 
-    for c in containers:
-        if c['name'] in datasets:
-            logger.debug(c['name'])
-            download_container(conn, c, targetdir)
+    for container in containers:
+        if container['name'] in objectstore_containers:
+            logger.debug(container['name'])
+            download_container(conn, container, targetdir)
 
 
-def main(targetdir, os_folders):
+def main(objectstore_containers, targetdir):
 
     conn = Connection(**OS_CONNECT)
-    download_containers(conn, os_folders, targetdir)
+    download_containers(conn, objectstore_containers, targetdir)

@@ -29,14 +29,14 @@ conn = db_int.get_sqlalchemy_connection()
 
 # TODO Use this structure to refactor the main function
 def download_from_os():
-    os_folders = [config_src.get(x, 'OBJSTORE_FOLDER') for x in datasets]
+    objectstore_containers = [config_src.get(x, 'OBJSTORE_CONTAINER') for x in datasets]
 
     # Check whether locally cached downloads should be used.
     ENV_VAR = 'EXTERNAL_DATASERVICES_USE_LOCAL'
     use_local = True if os.environ.get(ENV_VAR, '') == 'TRUE' else False
 
     if not use_local:
-        download_from_objectstore.main(LOCAL_DATA_DIRECTORY, os_folders)
+        download_from_objectstore.main(objectstore_containers, LOCAL_DATA_DIRECTORY)
     else:
         logger.info('No download from datastore requested, quitting.')
 

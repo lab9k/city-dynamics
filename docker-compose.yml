@@ -45,7 +45,7 @@ services:
       # export STADSWERKEN_OBJECTSTORE_PASSWORD="mypassword"
       STADSWERKEN_OBJECTSTORE_PASSWORD:
     volumes:
-      - /app/data:/data
+      - ~/data:/data
 
   analyzer:
     build: ./analyzer
