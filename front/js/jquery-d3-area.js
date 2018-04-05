@@ -113,6 +113,7 @@
 				.attr("class", "line-group")
 				.attr("id", "line-group")
 				.attr('state','play')
+				.attr('width','20px')
 				// .attr("mask",'url(#cut-middle-line)')
 				.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
 				.attr("time", graph.currentHour)
@@ -120,6 +121,14 @@
 					.on("start", dragstarted)
 					.on("drag", dragged)
 					.on("end", dragended));
+
+			graph.line = graph.lineGroup.append("line")
+				.attr("class", "nowline")
+				.attr("x1",'0')
+				.attr("x2",'0')
+				.attr("y1",'0')
+				.attr("y2",graph.height)
+				.attr("style",'stroke:rgba(255,255,255,0.7);stroke-width:10');
 
 			graph.controlGroup = graph.svg.append("g")
 				.attr("transform", 'translate(' + 0 + ',0)')
@@ -146,8 +155,6 @@
 				.attr("style", 'display:none;')
 				.attr("class", 'graph-play');
 
-
-
 			function dragstarted() {
 				graph.stop();
 				d3.select(this).classed("active", true);
@@ -165,13 +172,7 @@
 				d3.select(this).classed("active", false);
 			}
 
-			graph.line = graph.lineGroup.append("line")
-				.attr("class", "nowline")
-				.attr("x1",'0')
-				.attr("x2",'0')
-				.attr("y1",'0')
-				.attr("y2",graph.height)
-				.attr("style",'stroke:rgb(255,255,255);stroke-width:16');
+
 
 
 
