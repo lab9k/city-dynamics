@@ -220,7 +220,7 @@ div {box-sizing: border-box;}
 .m_menu {display:none;}
 
 /*handheld styling*/
-@media only screen and (max-width: 360px) {
+@media only screen and (max-width: 750px) {
 
 	.detail {display:none;}
 	.cta {display:none;}
