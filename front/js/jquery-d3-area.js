@@ -187,8 +187,6 @@
 
 			graph.update = function(newData,realtime){
 
-				console.log(newData);
-
 				graph.svg.selectAll('path.area')
 					.datum(graph.data)
 					.transition()
@@ -303,6 +301,7 @@
 					stopAnimation();
 
 					console.log('pause');
+					if(debug) { console.log('pause') };
 					graph.lineGroup
 						.attr('state','pause')
 						.transition()
@@ -310,7 +309,7 @@
 				}
 				else
 				{
-					console.log('play');
+					if(debug) { console.log('play') };
 					graph.lineGroup
 						.attr('state','play');
 
@@ -327,7 +326,7 @@
 				// stop hotspots animation
 				stopAnimation();
 
-				console.log('pause');
+				if(debug) { console.log('pause') };
 				graph.lineGroup
 					.attr('state','pause')
 					.transition()

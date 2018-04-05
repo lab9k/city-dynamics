@@ -58,7 +58,7 @@ class testProcess(unittest.TestCase):
 
     def test_process(self):
         """Run a set of unit tests for process.py."""
-        dbconfig = 'docker'
+        dbconfig = 'test'
 
         # 1. Create mini-table in database
         # 2. Test import_table

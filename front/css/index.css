@@ -44,7 +44,7 @@ div {box-sizing: border-box;}
 .mapswitch {position :absolute;left :10px;bottom :10px; z-index :500;background-color: #4a4a4a;color :#fff;border-radius :5px;border :0px solid #fff;padding :4px;}
 .mapswitch a {position :relative;display:block;height :80px;width:80px;background:url(../images/bubble.png);}
 .mapswitch a.active {background:url(../images/choro.png);}
-.mapswitch span {position :absolute;display:block;width:100%;left :0px;bottom :0px;color:#fff;background:rgba(74, 74, 74, 0.5);font-size:12px;text-indent:2px;}
+.mapswitch span {position :absolute;display:block;width:100%;left :0px;bottom :0px;color:#fff;background:rgba(74, 74, 74, 0.5);font-size:14px;text-indent:2px;}
 
 /*leftbox*/
 .leftbox {display:none;position:absolute;right:10px;bottom:10px; z-index:500;min-width:500px;height:380px;background-color: #4a4a4a;border-radius:5px;padding:10px;}
@@ -115,8 +115,8 @@ div {box-sizing: border-box;}
 #overwrite .leaflet-interactive:hover:not(.active_path) {fill-opacity:0.9;}
 
 .leaflet-tile-container img {
-	-webkit-filter: grayscale(100%);
-	filter: grayscale(100%);;
+	/*-webkit-filter: grayscale(100%);*/
+	/*filter: grayscale(100%);*/
 	/*blur()*/
 	/*brightness()*/
 	/*contrast()*/
@@ -148,6 +148,8 @@ div {box-sizing: border-box;}
 .popup_some .pop_inner_content .ammount{color:#F5A623;border-color:#F5A623;}
 .popup_plenty .pop_inner_content .ammount{color:#50E6DB;border-color:#50E6DB;}
 .leaflet-popup-content-wrapper .popup_hotspot  h3 {border-radius:5px;}
+.leaflet-popup-content-wrapper .popup_district  h3 {border-radius:5px;}
+.leaflet-popup-content-wrapper .popup_location  h3 {border-radius:5px;}
 .leaflet-popup-close-button {color:#fff;}
 .leaflet-popup-tip{background-color : rgba(74, 74, 74, 0.85);}
 

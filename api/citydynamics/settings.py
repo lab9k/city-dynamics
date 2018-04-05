@@ -195,6 +195,11 @@ LOGGING = {
         },
     },
 
+    'root': {
+        'handlers': ['console'],
+        'level': 'ERROR'
+    },
+
     'loggers': {
         'django': {
             'handlers': ['console'],

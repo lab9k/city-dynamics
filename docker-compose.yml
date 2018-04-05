@@ -11,6 +11,7 @@ services:
     volumes:
       - ./deploy/backup-db.sh:/backup-db.sh
       - ./deploy/backup:/backup
+      - "~/.ssh/datapunt.key:/root/.ssh/datapunt.key"
 
   api:
     build: .
