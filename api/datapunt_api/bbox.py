@@ -13,7 +13,7 @@ def determine_bbox(request):
     Create a bounding box if it is given with the request.
     """
 
-    err = "invalid bbox given"
+    err = "Invalid bbox given"
 
     if 'bbox' not in request.query_params:
         # set default value
