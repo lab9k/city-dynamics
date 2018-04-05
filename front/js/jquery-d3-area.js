@@ -12,7 +12,7 @@
 			// set the dimensions and margins of the graph
 			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
 			graph.width = graph.container.width() - graph.margin.left - graph.margin.right;
-			if(graph.width > 360)
+			if(graph.width > 750)
 			{
 				graph.width = graph.width - 16;
 			}
