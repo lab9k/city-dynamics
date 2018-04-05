@@ -1,9 +1,12 @@
-""" Script that contains functions that are used a lot in the ETL process.
+"""
+This module contains functions which are used a lot in the ETL process of the importer.
+(ETL = Extraction, Transformation, Load)
 
-    contains different functions on tables to
-    - create database connections
-    - transform, add, enrich tables etc.
+#REFACTOR: module needs refactoring.
 
+Contains several functions to work with database tables:
+    - Create database connections
+    - Transform, add, enrich tables etc.
 """
 
 import time
@@ -20,8 +23,10 @@ logger = logging.getLogger(__name__)
 
 
 class DatabaseInteractions:
+    """This class implements several interactions with the database (inside the Docker container)."""
 
     def __init__(self):
+        """Initialization of a database interaction class instance."""
         config_auth = configparser.RawConfigParser()
         config_auth.read('auth.conf')
         config_section = 'database'
@@ -33,16 +38,18 @@ class DatabaseInteractions:
         self.password = config_auth.get(config_section, 'password')
 
     def get_postgresql_string(self):
+        """Create and return a generic string to use as (commandline-)arguments to connect with database."""
         return 'PG:host={} port={} user={} dbname={} password={}'.format(
             self.host, self.port, self.user, self.database, self.password)
 
     def execute_sql(self, sql):
+        """Execute a provided string of SQL code."""
         with psycopg2.connect(self.pg_string) as conn:
             with conn.cursor() as cursor:
                 cursor.execute(sql)
 
     def get_sqlalchemy_connection(self):
-        """Create a connection to the database."""
+        """Create a SQL database connection using the credentials provided in the class instance properties."""
         postgres_url = URL(
             drivername='postgresql',
             username=self.user,
@@ -56,44 +63,45 @@ class DatabaseInteractions:
 
 
 class ModifyTables(DatabaseInteractions):
+    """The functions in this class allow the modification of tables
+
+    Modification steps the functions in this class can conduct:
+    - Changing the table's primary key
+    - Checking whether a column exists in a given table
+    - Creating a table for the alpha datasource
+    - Adding geometry column
+    - Adding vollcode column
+    - Adding stadsdeelcode column
+    - Adding hotspots column
+    - Simplifying polygons in polygon column
+    """
+    # TODO: refactor this class into separate functions
 
     def __init__(self):
         GEOMETRY_POINT_NAME = "geom"  # name of our point geometry on table
         GEOMETRY_POLY_NAME = "polygon"  # name of our poly geometry on table
 
     @staticmethod
-    def set_primary_key(tableName):
+    def set_primary_key(table_name):
         return """
         ALTER TABLE "{}" ADD PRIMARY KEY (index)
-        """.format(tableName)
+        """.format(table_name)
 
 
-    def table_has_point(self, tableName):
+    def check_column_existence(self, table_name, column_name):
         sql = """
         SELECT EXISTS (SELECT 1
         FROM    information_schema.columns
         WHERE   table_schema='public'
         AND     table_name='{0}'
         AND     column_name='{1}');
-        """.format(tableName, self.GEOMETRY_POINT_NAME)
+        """.format(table_name, column_name)
 
-        r = super().execute_sql()
-        return r
-
-    # @staticmethod
-    # def create_geometry_column(tableName):
-    #     return """
-    #     ALTER TABLE             "{0}"
-    #     DROP COLUMN IF EXISTS   geom;
-    #     ALTER TABLE             "{0}"
-    #     ADD COLUMN              geom        geometry;
-    #     UPDATE "{0}" SET geom = ST_TRANSFORM( ST_SETSRID ( ST_POINT( "lon", "lat"), 4326), 3857)
-    #     """.format(tableName, 'geom_' + tableName)
-
-    # Alternative method to create a geometry point from lat, long coordinates. Not used for now
+        result = super().execute_sql(sql)
+        return bool(result)
 
     @staticmethod
-    def create_geometry_column(tableName):
+    def create_geometry_column(table_name):
         return """
       ALTER TABLE "{0}"
         DROP COLUMN IF EXISTS geom;
@@ -102,21 +110,21 @@ class ModifyTables(DatabaseInteractions):
       UPDATE "{0}"
           SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
       CREATE INDEX {1} ON "{0}" USING GIST(geom);
-      """.format(tableName, 'geom_' + tableName)
+      """.format(table_name, 'geom_' + table_name)
 
     @staticmethod
-    def simplify_polygon(tableName, original_column, simplified_column):
+    def simplify_polygon(table_name, original_column, simplified_column):
         return f"""
-        ALTER TABLE             "{tableName}"
+        ALTER TABLE             "{table_name}"
         DROP COLUMN IF EXISTS   "{simplified_column}";
-        ALTER TABLE             "{tableName}"
+        ALTER TABLE             "{table_name}"
         ADD COLUMN              "{simplified_column}" geometry;
-        UPDATE                  "{tableName}"
+        UPDATE                  "{table_name}"
         SET wkb_geometry_simplified = ST_SimplifyPreserveTopology("{original_column}", 0.0001);
-        """.format(tableName, original_column, simplified_column)
+        """.format(table_name, original_column, simplified_column)
 
     @staticmethod
-    def add_vollcodes(tableName):
+    def add_vollcodes(table_name):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   vollcode;
@@ -126,10 +134,10 @@ class ModifyTables(DatabaseInteractions):
         UPDATE "{0}" SET vollcode = buurtcombinatie.vollcode
         FROM buurtcombinatie
         WHERE st_intersects("{0}".geom, buurtcombinatie.wkb_geometry)
-        """.format(tableName)
+        """.format(table_name)
 
     @staticmethod
-    def add_stadsdeelcodes(tableName):
+    def add_stadsdeelcodes(table_name):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   stadsdeelcode;
@@ -139,10 +147,10 @@ class ModifyTables(DatabaseInteractions):
         UPDATE "{0}" SET stadsdeelcode = stadsdeel.code
         FROM stadsdeel
         WHERE st_intersects("{0}".geom, stadsdeel.wkb_geometry)
-        """.format(tableName)
+        """.format(table_name)
 
     @staticmethod
-    def add_hotspot_names(tableName):
+    def add_hotspot_names(table_name):
         return """
         ALTER table "{0}"
         DROP COLUMN IF EXISTS hotspot;
@@ -153,8 +161,7 @@ class ModifyTables(DatabaseInteractions):
         SET hotspot = hotspots."hotspot"
         FROM hotspots
         WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), alpha_locations_expected.geom);
-        """.format(tableName)
-
+        """.format(table_name)
 
     @staticmethod
     def create_alpha_table():
@@ -179,17 +186,22 @@ class ModifyTables(DatabaseInteractions):
         """
 
 
-class LoadGebieden:
+class LoadLayers:
     """
-    This class contains functionality to read geometrical
-    information on areas in Amsterdam from a webservice
+    This class contains functionality to read geometrical information on areas in Amsterdam from a webservice.
+
+    The following tables are requested and stored in the database:
+        - stadsdeel
+        - buurtcombinatie
     """
 
     class NonZeroReturnCode(Exception):
+        """Used for subprocess error messages."""
         pass
 
     @classmethod
     def scrub(self, l):
+        """Hide the login credentials of Postgres in the console."""
         out = []
         for x in l:
             if x.strip().startswith('PG:'):
@@ -200,6 +212,15 @@ class LoadGebieden:
 
     @classmethod
     def run_command_sync(self, cmd, allow_fail=False):
+        """
+        Run a string in the command line. Auto-retry up to 5 times when execution fails.
+        Args:
+            1. cmd: command line code formatted as a list::
+                ['ogr2ogr', '-overwrite', '-t_srs', 'EPSG:28992','-nln',layer_name,'-F' ,'PostgreSQL' ,pg_str ,url]
+            2. Optional: allow_fail: True or false to return error code
+        Returns:
+            Excuted program or error message.
+        """
         logging.debug('Running %s', self.scrub(cmd))
 
         retry = 0
@@ -209,7 +230,7 @@ class LoadGebieden:
             p.wait()
             if p.returncode != 0:
                 logging.debug(
-                    'Serive failed. Retry %d %s',
+                    'Service failed. Retry %d %s',
                     retry, self.scrub(cmd))
                 time.sleep(10)
                 retry += 1
@@ -224,20 +245,27 @@ class LoadGebieden:
 
     @classmethod
     def wfs2psql(self, url, pg_str, layer_name, **kwargs):
+        """Command line ogr2ogr string to load a WFS into PostGres."""
         cmd = [
             'ogr2ogr', '-overwrite', '-t_srs', 'EPSG:4326',
             '-nln', layer_name, '-F', 'PostgreSQL', pg_str, url]
         self.run_command_sync(cmd)
 
     @staticmethod
-    def load_gebieden(pg_str):
-        GEBIEDEN_WFS = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME="  # noqa
-        areaNames = [
-            'stadsdeel', 'buurt',
-            'buurtcombinatie', 'gebiedsgerichtwerken']
+    def load_layers(pg_str):
+        """
+        Load layers into Postgres using a list of titles of each layer within the WFS service.
+        Args:
+            pg_str: psycopg2 connection string::
+            'PG:host= port= user= dbname= password='
+        Returns:
+            Loaded layers into postgres using ogr2ogr.
+        """
+        WFS_base = "https://map.data.amsterdam.nl/maps/gebieden?REQUEST=GetFeature&SERVICE=wfs&Version=2.0.0&SRSNAME="  # noqa
+        layerNames = ['stadsdeel', 'buurtcombinatie']
 
         srsName = 'EPSG:4326'
-        for areaName in areaNames:
-            WFS = GEBIEDEN_WFS + srsName + "&typename=" + areaName
-            LoadGebieden.wfs2psql(WFS, pg_str, areaName)
-            logger.info(areaName + ' loaded into PG.')
+        for layerName in layerNames:
+            WFS = WFS_base + srsName + "&typename=" + layerName
+            LoadLayers.wfs2psql(WFS, pg_str, layerName)
+            logger.info(layerName + ' loaded into PG.')

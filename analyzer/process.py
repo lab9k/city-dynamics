@@ -1,6 +1,8 @@
 """
 Module implements class 'Process'.
 
+#REFACTOR: module needs refactoring.
+
 For each dataset, a subclass of class 'Process' is created to load and pre-process this dataset.
 """
 
@@ -37,7 +39,7 @@ vollcodes_m2_land = {'A00': 125858.0, 'A01': 334392.0, 'A02': 139566.0, 'A03': 1
 # Helper Functions
 
 def connect_database(dbconfig):
-    """Create connection with a database."""
+    """Create a sqlachemy connection with a database."""
     postgres_url = URL(
         drivername='postgresql',
         host=config_auth.get(dbconfig, 'host'),
@@ -49,7 +51,7 @@ def connect_database(dbconfig):
     return create_engine(postgres_url)
 
 def norm(x):
-    """Scale numeric array to [0, 1]."""
+    """Scale all values in a given numeric array to range [0, 1]."""
     x = np.array(x)
     x = (x - np.nanmin(x)) / (np.nanmax(x) - np.nanmin(x))
     return x
@@ -59,9 +61,10 @@ class Process():
     """This class implements the process of loading and pre-processing all data from one datasource."""
 
     def __init__(self, dbconfig):
+        """Initialize a Process instance."""
         self.name = ''                                  # Name of datasource
         self.data = pd.DataFrame()                      # Data of datasource
-        self.pattern = pd.DataFrame()                   # Patterns of datasource
+        self.patterns = pd.DataFrame()                  # Patterns of datasource
         self.conn = connect_database(dbconfig)          # Database connection of datasource
 
     def __str__(self):
@@ -109,7 +112,7 @@ class Process():
 
 
     def normalize(self, cols_norm):
-        """Normalize all specified columns"""
+        """Normalize all specified columns. Can be given one column name as a string, or a list of column names."""
         if cols_norm != []:                 # Check if any columns should be normalized at all.
             if type(cols_norm) == str:      # Check whether we have a single column name string,
                 cols_norm = [cols_norm]     # if so, wrap this single name in a list.
@@ -135,7 +138,7 @@ class Process():
 
 
     def normalize_acreage_city(self, col):
-        """Normalize on acreage on city wide."""
+        """Normalize all values of the given column using the total city-wide acreage."""
 
         # TODO: Clean up this function. Current functionality is probably what we want.
         # TODO: Other option would be to divide by city wide value, and multiply by m2 of
@@ -156,17 +159,22 @@ class Process():
 
     def aggregate_on_column(self, col):
         """Aggregate the dataframe in self.data on the given column."""
+
         # TODO: (4) Implement aggregate on column method.
         pass
 
 
     def create_pattern(self, time_period, area_precision):
         """Create a crowdedness pattern.
-        # TODO: Implement pattern creation method
+
+        The crowdedness pattern is computed for the given time period and area precision (grainedness).
+
         Keyword arguments:
         time_period - the period for which we create the pattern (e.g. 'day', 'week', 'year')
         area_precision - the "area" precision of the pattern (e.g. 'lat/long', 'vollcode', 'stadsdeelcode', 'stad')
         """
+
+        # TODO: Implement pattern creation method
         pass
 
 
@@ -285,76 +293,6 @@ class Process_alpha_locations_expected(Process):
         self.data = pd.concat([google_week, google_week_stadsdeel])
 
 ##############################################################################
-'''
-class Process_alpha_historical(Process):
-    """This class implements all data importing and pre-processing steps for the alpha datasource."""
-
-    def __init__(self, dbconfig):
-        super().__init__(dbconfig)
-        self.name = 'alpha_historical_week'
-        self.import_data(['google_with_bc', 'google_dec_with_bc'],
-                         ['name', 'vollcode', 'timestamp', 'historical', 'stadsdeelcode'])
-        self.dataset_specific()
-        self.rename({'historical': 'alpha_week'})
-        # self.normalize('alpha_week')
-
-
-    def dataset_specific(self):
-        area_mapping = self.data[['vollcode', 'stadsdeelcode']].drop_duplicates()
-
-        # historical weekpatroon
-        # first calculate the average weekpatroon per location
-        google_week_location = self.data.groupby([
-            'weekday', 'hour', 'vollcode', 'name'])['historical'].mean().reset_index()
-        google_week_location = google_week_location.merge(area_mapping, on='vollcode')
-
-        # and then calculate the average weekpatroon per vollcode
-        google_week_vollcode = google_week_location.groupby([
-            'vollcode', 'weekday', 'hour'])['historical'].mean().reset_index()
-
-        # also calculate the average weekpatroon per stadsdeel
-        google_week_stadsdeel = google_week_location.groupby([
-            'stadsdeelcode', 'weekday', 'hour'])['historical'].mean().reset_index()
-
-        # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
-        # in case of sparse data, take the stadsdeelcode aggregation
-        minimal_hours = 98
-        cnt = google_week_vollcode.vollcode.value_counts()
-        sparse_vollcodes = cnt[cnt < minimal_hours].index.tolist()
-
-        # first take the vollcode aggregation for vollcodes that have enough data
-        google_week_vollcode = google_week_vollcode[~google_week_vollcode.vollcode.isin(sparse_vollcodes)]
-
-        # then take the staddeelcode aggregation for vollcodes for which data is sparse
-        google_week_stadsdeel = google_week_stadsdeel.merge(area_mapping, on='stadsdeelcode')
-        google_week_stadsdeel.drop('stadsdeelcode', axis=1, inplace=True)
-        google_week_stadsdeel = google_week_stadsdeel[google_week_stadsdeel.vollcode.isin(sparse_vollcodes)]
-
-        self.data = pd.concat([google_week_vollcode, google_week_stadsdeel])
-
-##############################################################################
-class Process_alpha_live(Process):
-    """This class implements all data importing and pre-processing steps for the alpha datasource."""
-
-    def __init__(self, dbconfig):
-        super().__init__(dbconfig)
-        self.name = 'alpha_live'
-        self.import_data(['google_with_bc', 'google_dec_with_bc'],
-                         ['name', 'vollcode', 'timestamp', 'live', 'stadsdeelcode'])
-        self.dataset_specific()
-        self.rename({'live': 'alpha_live'})
-        # self.normalize('alpha_live')
-
-
-    def dataset_specific(self):
-        self.data = self.data.loc[self.data.live.notnull(), :]
-        self.data = self.data.groupby(['vollcode', 'timestamp'])['live'].mean()
-        self.data = self.data.reset_index()
-        self.data['weekday'] = [ts.weekday() for ts in self.data.timestamp]
-        self.data['hour'] = [ts.hour for ts in self.data.timestamp]
-'''
-
-##############################################################################
 class Process_verblijversindex(Process):
     """This class implements all data importing and pre-processing steps for the verblijversindex datasource."""
 
@@ -380,6 +318,7 @@ class Process_tellus(Process):
 
 ##############################################################################
 class Process_buurtcombinatie(Process):
+    """This class implements all data importing and pre-processing steps for the buurtcombinatie codes dataset."""
 
     def __init__(self, dbconfig):
         super().__init__(dbconfig)
@@ -389,7 +328,7 @@ class Process_buurtcombinatie(Process):
 
 ##############################################################################
 class Process_drukte(Process):
-    """This class implements the drukte process to combine all multiple datasources"""
+    """This class implements the drukte process to combine multiple datasources for further analysis."""
 
     def __init__(self, dbconfig):
         super().__init__(dbconfig)
@@ -444,6 +383,7 @@ class Process_drukte(Process):
 
 
     def init_drukte_df(self, start_datetime, end_datetime, vollcodes):
+        """This function creates a dataframe with weekdays, hours and vollcodes for a given time period."""
         timestamps = pd.date_range(start=start_datetime, end=end_datetime, freq='H')
         ts_vc = [(ts, vc) for ts in timestamps for vc in vollcodes]
         df = pd.DataFrame({
