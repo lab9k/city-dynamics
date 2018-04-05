@@ -47,6 +47,15 @@ def load_gebieden():
 
 
 def parse_and_write():
+
+    # Remove dependent tables created by the Analyzer (only necessary when developing locally)
+    drop_query = """
+    DROP TABLE IF EXISTS public.datasets_buurtcombinatiedrukteindex;
+    DROP TABLE IF EXISTS public.datasets_hotspotsdrukteindex;
+    """
+    conn.execute(drop_query)
+
+    # Parse raw data from objectstore and place result into database (in Docker container).
     for dataset in datasets:
         logger.info(f'Parsing and writing {dataset} data...')
 
@@ -77,8 +86,17 @@ def parse_and_write():
 
 def modify_tables():
     """
-    Shitty name. what does this do.
+    This function modifies tables in the database (in Docker container).
+
+    Modification steps this function can conduct:
+    - creating a table for the alpha datasource
+    - adding geometry column
+    - adding vollcode column
+    - adding stadsdeelcode column
+    - adding hotspots column
+    - simplifying polygons in polygon column
     """
+    # TODO: Refactor task: divide this function into multiple separate table modification functions
 
     # simplify the polygon of the
     # buurtcombinaties: limits data traffic to the front end.
