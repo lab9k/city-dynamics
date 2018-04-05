@@ -232,9 +232,8 @@ def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
     return df
 
 
-def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1_new.csv'):
+def parse_hotspots(datadir, filename='Amsterdam Hotspots - Sheet1_05-04-18.csv'):
     """Parser for hotspots definition file."""
-
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path)
     df.rename(columns={'Hotspot':'hotspot', 'Latitude':'lat', 'Longitude':'lon'}, inplace=True)
@@ -249,7 +248,6 @@ def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
     path = os.path.join(datadir, filename)
     df = pd.read_csv(path, sep=';')
     return df
-
 
 
 def parse_verblijversindex(datadir, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
