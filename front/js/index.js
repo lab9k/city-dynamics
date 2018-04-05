@@ -36,8 +36,8 @@ var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
 // Initially assume we have the API running locally.
-var origin = 'http://127.0.0.1:8117/api';
-// var origin = 'https://acc.citydynamics.amsterdam.nl/api';
+// var origin = 'http://127.0.0.1:8117/api';
+var origin = 'https://acc.citydynamics.amsterdam.nl/api';
 // var origin = 'https://citydynamics.amsterdam.nl/api';
 
 // When using the production server, get the API from there.
@@ -90,7 +90,7 @@ var amsterdam = {
 $(document).ready(function(){
 
 	// check device resolution
-	mobile = ($( document ).width()<=360);
+	mobile = ($( document ).width()<=750);
 
 	$.each(control_array, function (key, value) {
 		var controlDiv = L.DomUtil.get(value);
@@ -823,7 +823,7 @@ function getColorBucket(dindex)
 		return '#50E6DB'; //50E6DB 63c6e6
 
 	}
-	else if(dindex<0.60){
+	else if(dindex<0.70){
 		return  '#F5A623';
 	}
 	else
