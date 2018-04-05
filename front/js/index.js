@@ -64,6 +64,7 @@ var dindexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
 var trafficJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=traveltime&format=json';
 var parkJsonUrl = "https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=parking_garages&format=json";
 var fietsJsonUrl = 'http://fiets.openov.nl/locaties.json';
+// var fietsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=ovfiets&format=json';
 var eventsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=events&format=json';
 
 // temp local api
