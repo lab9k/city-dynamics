@@ -71,10 +71,10 @@ ENDPOINT_MODEL = {
 }
 
 ENDPOINT_URL = {
-    'qa_realtime': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
-    'qa_expected': '{host}:{port}/gemeenteamsterdam/{endpoint}/timerange',
-    'qa_realtime/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
-    'qa_expected/current': '{host}:{port}/gemeenteamsterdam/{endpoint}',
+    'qa_realtime': '{host}:{port}/gemeenteamsterdam/realtime/timerange',
+    'qa_expected': '{host}:{port}/gemeenteamsterdam/expected/timerange',
+    'qa_realtime/current': '{host}:{port}/gemeenteamsterdam/realtime/current',
+    'qa_expected/current': '{host}:{port}/gemeenteamsterdam/expected/current',
     'parkinglocations': 'http://opd.it-t.nl/data/amsterdam/ParkingLocation.json',  # noqa
 }
 
@@ -118,8 +118,7 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
     host = api_config['hosts'][ENVIRONMENT]
 
     url = ENDPOINT_URL[endpoint]
-    url = url.format(host=host, port=port, endpoint=endpoint)
-
+    url = url.format(host=host, port=port)
     async_r = grequests.get(url, params=params, auth=AUTH)
     gevent.spawn(async_r.send).join()
 
