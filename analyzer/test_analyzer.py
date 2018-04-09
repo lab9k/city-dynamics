@@ -1,4 +1,11 @@
-"""Unit tests for scripts/modules in the Analyzer"""
+"""
+Unit tests for scripts/modules in the Analyzer
+
+This module implements a list of unit tests for modules in the analyzer.
+Most importantly, this modules (should) test the functionality of main.py, process.py and hotspots_drukteindex.py.
+
+This module is compatible pytest. It should automatically be ran as a test in the Jenkins continuous integration cycle.
+"""
 
 
 ##############################################################################
@@ -42,6 +49,7 @@ class testMain(unittest.TestCase):
     """Test the main.py module."""
 
     def test_main(self):
+        """Run a set of unit tests for main.py."""
         pass
 
 ##############################################################################
@@ -49,6 +57,7 @@ class testProcess(unittest.TestCase):
     """Test the process.py module."""
 
     def test_process(self):
+        """Run a set of unit tests for process.py."""
         dbconfig = 'test'
 
         # 1. Create mini-table in database
@@ -105,5 +114,8 @@ class testProcess(unittest.TestCase):
 ##############################################################################
 
 if __name__ == "__main__":
+    """Running this script as a stand-alone module should run all the tests and complete them without failures."""
+    print("Starting tests now...")
     testMain.test_main()
     testProcess.test_process()
+    print("Testing completed.")

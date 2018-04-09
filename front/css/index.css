@@ -95,20 +95,20 @@ div {box-sizing: border-box;}
 }
 
 /*controls*/
-.controls {position:absolute;right:10px;top:70px; z-index:500;width:26px;height:26px;background-color: #4a4a4a;border-radius:5px;}
-.controls a ,.controls i {color:#FFF;line-height:26px;font-size:22px;text-indent:2px;}
+.controls {position:absolute;right:10px;top:80px; z-index:500;width:30px;height:30px;background-color: #4a4a4a;border-radius:3px;}
+.controls a ,.controls i {color:#FFF;line-height:30px;font-size:22px;text-indent:4px;}
 .controls a:hover {color:#000;}
 
-.controls.chrome {width:30px;height:30px;top:80px;right:12px;}
-.controls.chrome  a ,.controls.chrome  i {color:#FFF;line-height:30px;font-size:26px;}
+/*.controls.chrome {width:30px;height:30px;top:80px;right:12px;}*/
+/*.controls.chrome  a ,.controls.chrome  i {color:#FFF;line-height:30px;font-size:26px;}*/
 
 /*jquery ui overwrites*/
 .ui-autocomplete {z-index:501;}
 
 /*leaflet styles*/
-.active_path {filter: url(#shadow);stroke:#4a4a4a;stroke-width:3px;}
+.active_path {filter: url(#shadow);stroke:#FFFFFF;stroke-width:3px;}
 .leaflet-top .leaflet-control-zoom {}
-.leaflet-control-zoom.leaflet-bar {box-shadow: none;}
+.leaflet-control-zoom.leaflet-bar {box-shadow: none;border:0;}
 .leaflet-control-zoom.leaflet-bar a{background-color: #4a4a4a;color:#fff;}
 .leaflet-control-attribution {display:none;}
 .leaflet-interactive {cursor:pointer;}
@@ -132,6 +132,7 @@ div {box-sizing: border-box;}
 
 
 /*popup*/
+.leaflet-popup {min-width:260px !important;}
 .leaflet-popup-content-wrapper {position:relative;background-color : rgba(74, 74, 74, 0.85);border-radius :5px;padding :0px;min-width:260px;}
 .leaflet-popup-content {margin:0px;color:#fff;font-size:14px;}
 .leaflet-popup-content .pop_inner_content{padding:10px;min-height:50px;}
@@ -181,7 +182,7 @@ div {box-sizing: border-box;}
 .indexgraph .axis text {font-size:12px;fill:#fff;}
 
 
-.indexgraph .nowline,.graph-play,.graph-pause {cursor:pointer;}
+.indexgraph .line-group,.graph-play,.graph-pause {cursor:pointer;}
 
 /*legend*/
 .legend {
@@ -220,7 +221,7 @@ div {box-sizing: border-box;}
 .m_menu {display:none;}
 
 /*handheld styling*/
-@media only screen and (max-width: 360px) {
+@media only screen and (max-width: 750px) ,screen and (max-height: 700px){
 
 	.detail {display:none;}
 	.cta {display:none;}
@@ -233,29 +234,29 @@ div {box-sizing: border-box;}
 	.info .info_icon, .info .close{font-size:16px;line-height:16px;}
 	.info h2{font-size:16px;line-height:16px;}
 	.info .info_content{margin:0 24px;line-height:16px;}
-	.search {top:5px;left:5px;width:40px;height:40px;background-color: #4a4a4a;border-radius:5px;padding:5px;}
-	.search.open {width:calc(100% - 70px);}
-	.loc_i {height :28px;line-height :28px; width:calc(100% - 70px);}
-	.search a {width: 30px;height: 30px;line-height: 30px;}
-	.search a i{line-height: 30px;font-size:24px; }
+	.search {top:5px;left:5px;width:50px;height:50px;background-color: #4a4a4a;border-radius:5px;padding:5px;}
+	.search.open {width:calc(100% - 80px);}
+	.loc_i {height :38px;line-height :38px; width:calc(100% - 80px);}
+	.search a {width: 40px;height: 40px;line-height: 40px;}
+	.search a i{line-height: 40px;font-size:24px; }
 	.searchclose{font-size:14px; }
 	.logo {display:none;width:50px;height:38px;background-size:100%;left:50px;}
 	.dlogo {left :80px;bottom : 5px; }
 	.dlogo h2{font-size:30px;line-height:30px}
 	.beta {left:266px;bottom:5px;}
 	.beta span{font-size:14px;line-height:14px;}
-	.themas {left:5px;width:40px;padding:5px;top:55px}
-	.themas_buttons li {width:30px;height :30px;line-height :30px;background-size: 30px 30px;}
+	.themas {left:5px;width:50px;padding:5px;top:65px}
+	.themas_buttons li {width:40px;height :40px;line-height :40px;background-size: 40px 40px;}
 	.mapswitch {left:5px;bottom:5px;padding:5px;}
 	.mapswitch a {height :60px;width:60px;background:url(../images/bubble_m.png);}
 	.mapswitch a.active {background:url(../images/choro_m.png);}
-	.m_more {right:5px;top:5px;display:block;position:absolute;width:40px;height :40px;z-index:500;background: #4a4a4a;border-radius:5px;padding:5px;}
-	.m_more a {display:block;width:30px;height :30px;line-height: 30px;text-align:center;color:#fff;}
+	.m_more {right:5px;top:5px;display:block;position:absolute;width:50px;height :50px;z-index:500;background: #4a4a4a;border-radius:5px;padding:5px;}
+	.m_more a {display:block;width:40px;height :40px;line-height: 30px;text-align:center;color:#fff;}
 	.m_more.open {border-top-left-radius :0px; border-bottom-left-radius :0px;}
-	.m_more a i{line-height: 30px;}
+	.m_more a i{line-height: 40px;}
 	.m_menu{display:none;position:absolute;right:45px;top:5px;width:calc(100% - 110px);min-height:50px;z-index:500;background: #4a4a4a;border-top-left-radius :5px;border-bottom-left-radius :5px;border-bottom-right-radius :5px;}
 	.m_menu ul{padding:0;margin:5px;}
-	.m_menu li{line-height:30px;list-style: none;text-indent:10px;margin: 0 2px;}
+	.m_menu li{line-height:40px;list-style: none;text-indent:10px;margin: 0 2px;}
 	.m_menu li a{color:#fff;text-decoration:none;}
 	.m_menu li a:hover{color : #cccccc;}
 

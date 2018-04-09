@@ -12,7 +12,7 @@
 			// set the dimensions and margins of the graph
 			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
 			graph.width = graph.container.width() - graph.margin.left - graph.margin.right;
-			if(graph.width > 360)
+			if(graph.width > 750)
 			{
 				graph.width = graph.width - 16;
 			}
@@ -25,14 +25,15 @@
 			// define line
 			graph.topline = d3.line()
 				.x(function(d) { return x(d.x); })
-				.y(function(d) { return y(d.y); });
+				.y(function(d) { return y(d.y); })
+				.curve(d3.curveBasis);
 
 			// define area
 			graph.area = d3.area()
 				.x(function(d) { return x(d.x); })
 				.y0(y(0))
-				.y1(function(d) { return y(d.y); });
-			//.curve(d3.curveBasis); // d3.curveNatural , d3.curveLinear
+				.y1(function(d) { return y(d.y); })
+				.curve(d3.curveBasis); // d3.curveNatural , d3.curveLinear
 
 
 			// append the svg obgect to the body of the page
@@ -56,15 +57,27 @@
 
 
 			// Add the valueline path.
-			graph.svg.append("path")
+
+			graph.svg.append("rect")
+				.attr("x", "0")
+				.attr("y", "0")
+				.attr("width", "100%")
+				.attr("height", graph.height)
+				.attr("fill", "url(#gradient)")
+				.attr("clip-path", "url(#graphclip)");
+
+			graph.defs = graph.svg.append("defs");
+			graph.clipPath = graph.svg.append("clipPath").attr("id", "graphclip");
+
+			graph.clipPath.append("path")
 				.datum(graph.data)
 				.attr("class", "area")
 				.attr("d", graph.area);
 
-			graph.svg.append("path")
-				.datum(graph.data)
-				.attr("class", "area-line")
-				.attr("d", graph.topline);
+			// graph.svg.append("path")
+			// 	.datum(graph.data)
+			// 	.attr("class", "area-line")
+			// 	.attr("d", graph.topline);
 
 			// Add the X Axis
 			graph.svg.append("g")
@@ -101,6 +114,7 @@
 				.attr("class", "line-group")
 				.attr("id", "line-group")
 				.attr('state','play')
+				.attr('width','20px')
 				// .attr("mask",'url(#cut-middle-line)')
 				.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
 				.attr("time", graph.currentHour)
@@ -108,6 +122,14 @@
 					.on("start", dragstarted)
 					.on("drag", dragged)
 					.on("end", dragended));
+
+			graph.line = graph.lineGroup.append("line")
+				.attr("class", "nowline")
+				.attr("x1",'0')
+				.attr("x2",'0')
+				.attr("y1",'0')
+				.attr("y2",graph.height)
+				.attr("style",'stroke:rgba(255,255,255,0.7);stroke-width:10');
 
 			graph.controlGroup = graph.svg.append("g")
 				.attr("transform", 'translate(' + 0 + ',0)')
@@ -134,8 +156,6 @@
 				.attr("style", 'display:none;')
 				.attr("class", 'graph-play');
 
-
-
 			function dragstarted() {
 				graph.stop();
 				d3.select(this).classed("active", true);
@@ -153,13 +173,7 @@
 				d3.select(this).classed("active", false);
 			}
 
-			graph.line = graph.lineGroup.append("line")
-				.attr("class", "nowline")
-				.attr("x1",'0')
-				.attr("x2",'0')
-				.attr("y1",'0')
-				.attr("y2",graph.height)
-				.attr("style",'stroke:rgb(255,255,255);stroke-width:16');
+
 
 
 

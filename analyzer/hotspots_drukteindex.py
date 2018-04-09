@@ -1,3 +1,7 @@
+"""
+This module computes the drukteindex values for ~40 hand-picked hotspots.
+"""
+
 import configparser
 import argparse
 import logging
@@ -28,8 +32,15 @@ def get_conn():
     return conn
 
 
-# COPIED from main.py
 def linear_model(drukte):
+    """
+    This linear model is copied from analyzer/main.py.
+
+    This function is slightly adapted here (i.e. changed linear_weight values)
+    in order to compute values for the hotspots which are predominantly based
+    on the (relative) Alpha values of the hotspot locations.
+    """
+
     # Normalise verblijversindex en gvb
     # drukte['verblijvers_ha_2016'] = process.norm(drukte.verblijvers_ha_2016)
     # drukte['gvb'] = process.norm(drukte.gvb)
@@ -61,6 +72,14 @@ def linear_model(drukte):
 
 
 def main():
+    """
+    This is the main function of this script.
+
+    This function processes all the hotspots: it finds all relevant locations in a 200m radius
+    around each hotspot and computes a prediction value for the hotspot for each hour of the week.
+    When no data is available from locations around the hotspot, the data from the vollcode area
+    of the hotspot is used as fallback.
+    """
     conn = get_conn()
 
     alpha_hotspots = pd.read_sql(sql="SELECT * FROM alpha_locations_expected", con=conn)
@@ -76,13 +95,13 @@ def main():
     alpha_week_hotspots = alpha_week_location.groupby([
         'hotspot', 'hour'])['expected'].mean().reset_index()
 
-    alpha_week_hotspots.rename(columns={'expected': 'alpha_week'}, inplace=True)
+    alpha_week_hotspots.rename(columns={'expected': 'alpha'}, inplace=True)
 
     # fill the dataframe with all missing hotspot-hour combinations
     x = {"weekday": np.arange(7), "hour": np.arange(24), "hotspot": hotspots_df['hotspot'].unique().tolist()}
     hs_hour_combinations = pd.DataFrame(list(itertools.product(*x.values())), columns=x.keys())
     alpha_week_hotspots = alpha_week_hotspots.merge(hs_hour_combinations, on=['hour', 'hotspot'], how='outer')
-    alpha_week_hotspots['alpha_week'].fillna(value=0, inplace=True)
+    alpha_week_hotspots['alpha'].fillna(value=0, inplace=True)
 
     alpha_week_hotspots = alpha_week_hotspots.merge(hotspots_df[['hotspot', 'vollcode']], on='hotspot')
 
