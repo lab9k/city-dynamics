@@ -134,11 +134,18 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
     elif response.status_code == 500:
         log.debug(f'FAIL {response.status_code}:{url}')
 
+    # we did WRONG requests. crash hard!
+    elif response.status_code == 400:
+        log.error(f' 400 {response.status_code}:{url}')
+        raise ValueError('400. wrong request.')
+    elif response.status_code == 404:
+        log.error(f' 404 {response.status_code}:{url}')
+        raise ValueError('404. NOT FOUND wrong request.')
+
     if response:
         json = response.json()
 
     return json
-
 
 
 def add_locations_to_db(endpoint, json: list):
