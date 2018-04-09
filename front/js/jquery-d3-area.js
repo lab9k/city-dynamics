@@ -12,7 +12,7 @@
 			// set the dimensions and margins of the graph
 			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
 			graph.width = graph.container.width() - graph.margin.left - graph.margin.right;
-			if(graph.width > 360)
+			if(graph.width > 750)
 			{
 				graph.width = graph.width - 16;
 			}
@@ -25,14 +25,15 @@
 			// define line
 			graph.topline = d3.line()
 				.x(function(d) { return x(d.x); })
-				.y(function(d) { return y(d.y); });
+				.y(function(d) { return y(d.y); })
+				.curve(d3.curveBasis);
 
 			// define area
 			graph.area = d3.area()
 				.x(function(d) { return x(d.x); })
 				.y0(y(0))
-				.y1(function(d) { return y(d.y); });
-			//.curve(d3.curveBasis); // d3.curveNatural , d3.curveLinear
+				.y1(function(d) { return y(d.y); })
+				.curve(d3.curveBasis); // d3.curveNatural , d3.curveLinear
 
 
 			// append the svg obgect to the body of the page
@@ -73,10 +74,10 @@
 				.attr("class", "area")
 				.attr("d", graph.area);
 
-			graph.svg.append("path")
-				.datum(graph.data)
-				.attr("class", "area-line")
-				.attr("d", graph.topline);
+			// graph.svg.append("path")
+			// 	.datum(graph.data)
+			// 	.attr("class", "area-line")
+			// 	.attr("d", graph.topline);
 
 			// Add the X Axis
 			graph.svg.append("g")

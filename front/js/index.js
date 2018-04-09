@@ -90,7 +90,7 @@ var amsterdam = {
 $(document).ready(function(){
 
 	// check device resolution
-	mobile = ($( document ).width()<=360);
+	mobile = ($( document ).width()<=750);
 
 	$.each(control_array, function (key, value) {
 		var controlDiv = L.DomUtil.get(value);
@@ -823,7 +823,7 @@ function getColorBucket(dindex)
 		return '#50E6DB'; //50E6DB 63c6e6
 
 	}
-	else if(dindex<0.60){
+	else if(dindex<0.70){
 		return  '#F5A623';
 	}
 	else
