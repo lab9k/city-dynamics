@@ -239,7 +239,7 @@
 
 					var y = Math.round(graph.height - (realtime*100));
 					var height =  Math.round(realtime * graph.height);
-					console.log(y);
+
 					graph.realtime_bar
 						.attr("height", height )
 						.attr('width', '20px')
@@ -251,7 +251,7 @@
 						.attr("style", "stroke-width:5;")
 						.attr("stroke-dasharray", "20,"+((2*height)+20))
 						.attr("stroke", getColorBucket(height/100))
-						.attr("fill", "rgba(255,255,255,0.7)")
+						.attr("fill", "rgba(126,126,126,0.7)")
 						.attr("class", "realtime_bar");
 				}
 
