@@ -371,7 +371,8 @@ def parse_alpha(datadir):
     conn = db_int.get_sqlalchemy_connection()
 
     # Load raw Alpha data dump from table
-    raw = pd.read_sql_table('google_raw_locations_expected_acceptance', conn)
+    raw = pd.read_sql_table('google_raw_locations_expected_acceptance', conn)  # << old table name
+    # raw = pd.read_sql_table('google_raw_locations_expected_acceptance', conn)    # << new table name (all tables of new alpha dump are empty,
 
     # Create table for modified Alpha data
     conn.execute(ModifyTables.create_alpha_table())

@@ -170,7 +170,7 @@ def main(args):
     execute_download_from_objectstore()
 
     # 3. Restore alpha dump to database.
-    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/alpha_raw.dump'
+    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/google_raw_feb.dump'
     os.system(cmd)
 
     # 4. Parse the data and write to postgresql database.
