@@ -35,7 +35,7 @@
         },
         "place_id": "ChIJufaJMsEJxkcRSiGAzmpg3Qc",
         "BatchTime": "2018-03-18T06:03:42.811000Z",
-        "Real-time": 0,
+        "Real-time": 0.4,
         "ScrapeTime": "2018-03-18T06:03:49Z",
         "VisitDuration": "N/A",
         "formatted_address": "Jonge Roelensteeg 12-14, 1012 PL Amsterdam, Netherlands"
@@ -9923,7 +9923,7 @@
         },
         "place_id": "ChIJAUBsos8JxkcRwnuLcQmb2-M",
         "BatchTime": "2018-03-18T05:43:02.392000Z",
-        "Real-time": 0,
+        "Real-time": 0.6,
         "ScrapeTime": "2018-03-18T05:43:14Z",
         "VisitDuration": "N/A",
         "formatted_address": "Noordermarkt 43, 1015 NA Amsterdam, Netherlands"
