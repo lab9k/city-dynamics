@@ -10,7 +10,7 @@ dc() {
 	docker-compose -p citydgoogle${ENVIRONMENT} -f ${DIR}/docker-compose.yml $*
 }
 
-# trap 'dc kill ; dc rm -f' EXIT
+trap 'dc down; dc kill ; dc rm -f -v' EXIT
 
 rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups

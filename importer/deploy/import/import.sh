@@ -10,7 +10,7 @@ dc() {
     docker-compose -p cityd${ENVIRONMENT} -f ${DIR}/docker-compose.yml $*
 }
 
-# trap 'dc kill ; dc rm -f' EXIT
+trap 'dc down; dc kill ; dc rm -f -v' EXIT
 
 rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups
@@ -29,3 +29,7 @@ dc run --rm api python manage.py migrate
 dc run --rm analyzer
 
 dc exec -T database backup-db.sh citydynamics
+
+dc stop
+dc rm
+dc down
