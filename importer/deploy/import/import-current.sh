@@ -6,6 +6,10 @@ set -x
 
 DIR="$(dirname $0)"
 
+
+trap 'dc down; dc kill ; dc rm -f -v' EXIT
+
+
 dc() {
     docker-compose -p qa_current${ENVIRONMENT} -f ${DIR}/docker-compose.yml $*
 }
@@ -25,3 +29,7 @@ dc run --rm importer /app/deploy/docker-wait.sh
 dc run --rm importer ./scrape_current_google.sh
 
 dc exec -T database ./backup-google-current.sh
+
+dc stop
+dc rm --force
+dc down
