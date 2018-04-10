@@ -132,8 +132,6 @@ def main():
 
     drukteindex_hotspots.rename(columns={'drukte_index': 'drukteindex'}, inplace=True)
 
-    q.d()
-
     log.debug('Writing to db..')
     drukteindex_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
 
