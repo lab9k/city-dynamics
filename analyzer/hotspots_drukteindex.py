@@ -95,9 +95,7 @@ def main():
         singular_hotspots = pd.Series(singular_hotspots_df.alpha_hotspot_name.values,
                                       index=singular_hotspots_df.hotspot).to_dict()
 
-        temp = copy.deepcopy(alpha_hotspots)
-
-        for alpha_hotspot_name, hotspot in singular_hotspots.items():
+        for hotspot, alpha_hotspot_name in singular_hotspots.items():
             alpha_hotspots.drop(
                 alpha_hotspots[(alpha_hotspots.hotspot == hotspot) & (alpha_hotspots.name != alpha_hotspot_name)].index,
                 inplace=True)
