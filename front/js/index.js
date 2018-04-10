@@ -16,7 +16,7 @@ var hotspot_array = [];
 var realtime_array = [];
 
 // states
-var debug = false;
+var debug = true;
 var vollcode;
 var mobile = false;
 var active_layer = 'hotspots';
@@ -36,8 +36,8 @@ var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
 // Initially assume we have the API running locally.
-var origin = 'http://127.0.0.1:8117/api';
-// var origin = 'https://acc.citydynamics.amsterdam.nl/api';
+// var origin = 'http://127.0.0.1:8117/api';
+var origin = 'https://acc.citydynamics.amsterdam.nl/api';
 // var origin = 'https://citydynamics.amsterdam.nl/api';
 
 // When using the production server, get the API from there.
@@ -71,7 +71,7 @@ var eventsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=even
 // dindex_hotspots_api = 'data/hotspots_fallback.json';
 // geoJsonUrl = 'data/buurtcombinaties.json';
 // dindex_uurtcombinaties_api = 'data/buurtcombinaties_drukteindex.json';
-// realtimeUrl = 'data/realtime.json';
+realtimeUrl = 'data/realtime.json';
 // var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 // `var parkJsonUrl = 'data/parkjson.json';
 // var eventsJsonUrl = 'data/events.js';
@@ -384,7 +384,11 @@ function getRealtime(realtimeJson)
 	if(debug) { console.log(hotspots_match_array) }
 
 	$.each(realtimeJson.results, function (key, value) {
-
+		console.log(this.data['Real-time']);
+		if(this.data['Real-time']>0)
+		{
+			console.log(key);
+		}
 		var name = this.name;
 		var exists = $.inArray(name, hotspots_match_array );
 		if(exists > -1)

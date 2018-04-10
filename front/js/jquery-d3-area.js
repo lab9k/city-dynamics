@@ -123,13 +123,20 @@
 					.on("drag", dragged)
 					.on("end", dragended));
 
+			graph.line = graph.lineGroup.append("rect")
+				.attr("x",'-10')
+				.attr("y",'0')
+				.attr("width",'20')
+				.attr("height",graph.height)
+				.attr("style",'fill:rgba(255,255,255,0.2);stroke-width:0');
+
 			graph.line = graph.lineGroup.append("line")
 				.attr("class", "nowline")
 				.attr("x1",'0')
 				.attr("x2",'0')
 				.attr("y1",'0')
 				.attr("y2",graph.height)
-				.attr("style",'stroke:rgba(255,255,255,0.7);stroke-width:10');
+				.attr("style",'stroke:rgba(255,255,255,0.8);stroke-width:3');
 
 			graph.controlGroup = graph.svg.append("g")
 				.attr("transform", 'translate(' + 0 + ',0)')
