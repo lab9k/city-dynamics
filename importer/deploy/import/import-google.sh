@@ -4,6 +4,7 @@ set -e
 set -u
 set -x
 
+
 DIR="$(dirname $0)"
 
 dc() {
@@ -33,3 +34,10 @@ dc run --rm importer python scrape_api/slurp_api.py qa_realtime/current
 dc run --rm importer python scrape_api/slurp_api.py qa_expected/current
 
 dc exec -T database ./backup-db-google.sh
+
+dc run --rm importer python -m objectstore.databasedumps /backups/google_raw.dump quantillion_dump --upload-db
+
+# python -m objectstore.databasedumps . quantillion_dump --download-db
+dc stop
+##dc rm --force
+dc down
