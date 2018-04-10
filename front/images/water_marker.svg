@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="20px" height="32px" viewBox="0 0 20 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="35px" height="50px" viewBox="0 0 35 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>Water poly</title>
+    <title>water_marker_none</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Water-poly">
-            <g id="Polygon">
-                <path d="M11.7888544,11.1060109 L12,11.5283022 L19.5690577,28.5586821 L19.5690577,28.5586821 C19.8531888,29.1979771 20,29.8897827 20,30.5893744 L20,31.5283022 L0,31.5283022 L0,30.5893744 L1.77635684e-15,30.5893744 C1.69068156e-15,29.8897827 0.146811151,29.1979771 0.430942257,28.5586821 L8,11.5283022 L8.21114562,11.1060109 L8.21114562,11.1060109 C8.70512412,10.1180539 9.9064702,9.71760523 10.8944272,10.2115837 C11.281482,10.4051111 11.595327,10.7189561 11.7888544,11.1060109 Z" id="Triangle-3" fill="#4a4a4a" transform="translate(10.000000, 20.764151) scale(1, -1) translate(-10.000000, -20.764151) "></path>
-                <circle id="Oval-8" fill="#4a4a4a" cx="10" cy="10" r="10"></circle>
-                <circle id="Oval-9" fill="#FFFFFF" cx="10" cy="10" r="9"></circle>
-            </g>
-            <g id="Water" transform="translate(4.000000, 5.500000)" stroke-linecap="square" stroke-width="2" stroke="#4a4a4a">
-                <polyline id="Line" points="-3.55271368e-15 0 0.535199418 0.28913072 1.85106383 1 4.31914894 0 6.78723404 1 9.25531915 0 11.7234043 1"></polyline>
-                <polyline id="Line" points="-3.55271368e-15 4 0.535199418 4.28913072 1.85106383 5 4.31914894 4 6.78723404 5 9.25531915 4 11.7234043 5"></polyline>
-                <polyline id="Line" points="-3.55271368e-15 8 0.535199418 8.28913072 1.85106383 9 4.31914894 8 6.78723404 9 9.25531915 8 11.7234043 9"></polyline>
+        <g id="water_marker_none">
+            <g id="water-marker">
+                <circle id="Oval" fill="#FFFFFF" cx="17.5" cy="17.5" r="15.5"></circle>
+                <g id="Marker-shape---template" fill="#4A4A4A">
+                    <path d="M17.5,0 C7.825,0 0,7.825 0,17.5 C0,30.625 17.5,50 17.5,50 C17.5,50 35,30.625 35,17.5 C35,7.825 27.175,0 17.5,0 L17.5,0 Z M17.5,33 C8.944,33 2,26.056 2,17.5 C2,8.944 8.944,2 17.5,2 C26.056,2 33,8.944 33,17.5 C33,26.056 26.056,33 17.5,33 L17.5,33 Z" id="Marker-shape"></path>
+                </g>
+                <g id="Markers\water_template" transform="translate(7.000000, 8.000000)" stroke-linecap="square" stroke="#4A4A4A">
+                    <g id="Water" transform="translate(0.500000, 0.500000)">
+                        <polyline id="Line" points="0.110000134 2.82999992 2.31999969 0.823529412 4.52999973 2.82999992 6.73999977 0.823529412 8.94999981 2.82999992 11.1599998 0.823529412 13.3700008 2.82999992 15.5799999 0.823529412 17.7900009 2.82999992 20 0.823529412"></polyline>
+                        <polyline id="Line" points="0.110000134 7.82999992 2.31999969 5.82352941 4.52999973 7.82999992 6.73999977 5.82352941 8.94999981 7.82999992 11.1599998 5.82352941 13.3700008 7.82999992 15.5799999 5.82352941 17.7900009 7.82999992 20 5.82352941"></polyline>
+                        <polyline id="Line" points="0.110000134 12.8299999 2.31999969 10.8235294 4.52999973 12.8299999 6.73999977 10.8235294 8.94999981 12.8299999 11.1599998 10.8235294 13.3700008 12.8299999 15.5799999 10.8235294 17.7900009 12.8299999 20 10.8235294"></polyline>
+                        <polyline id="Line" points="0.110000134 17.8299999 2.31999969 15.8235294 4.52999973 17.8299999 6.73999977 15.8235294 8.94999981 17.8299999 11.1599998 15.8235294 13.3700008 17.8299999 15.5799999 15.8235294 17.7900009 17.8299999 20 15.8235294"></polyline>
+                    </g>
+                </g>
             </g>
         </g>
     </g>

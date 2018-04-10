@@ -115,7 +115,7 @@ def modify_tables():
             'buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
 
     for dataset in datasets:
-        if config_src.get(dataset, 'CREATE_POINT') == 'YES':
+        if config_src.get(dataset, 'CREATE_GEOMETRY') == 'YES':
             table_name = config_src.get(dataset, 'TABLE_NAME')
             conn.execute(ModifyTables.create_geometry_column(table_name))
             conn.execute(ModifyTables.add_vollcodes(table_name))
@@ -170,7 +170,7 @@ def main(args):
     execute_download_from_objectstore()
 
     # 3. Restore alpha dump to database.
-    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/google_raw.dump'
+    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/alpha_raw.dump'
     os.system(cmd)
 
     # 4. Parse the data and write to postgresql database.

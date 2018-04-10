@@ -236,17 +236,22 @@
 				if(realtime>0)
 				{
 
-					var hours = getHourDigit();
+
+					var y = Math.round(graph.height - (realtime*100));
+					var height =  Math.round(realtime * graph.height);
 
 					graph.realtime_bar
-						.attr("height", (realtime * graph.height))
+						.attr("height", height )
 						.attr('width', '20px')
-						.attr('y', graph.height - (realtime*100))
-						.attr('x', (100/graph.hours*hours)+'%')
-						.attr('rx', 5)
-						.attr('ry', 5)
-						.attr("stroke", "#4a4a4a")
-						.attr("fill", "#ffffff")
+						.attr('y', y)
+						.attr('x', -10)
+						.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
+						// .attr('rx', 5)
+						// .attr('ry', 5)
+						.attr("style", "stroke-width:5;")
+						.attr("stroke-dasharray", "20,"+((2*height)+20))
+						.attr("stroke", getColorBucket(height/100))
+						.attr("fill", "rgba(126,126,126,0.7)")
 						.attr("class", "realtime_bar");
 				}
 

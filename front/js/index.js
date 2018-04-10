@@ -16,7 +16,7 @@ var hotspot_array = [];
 var realtime_array = [];
 
 // states
-var debug = true;
+var debug = false;
 var vollcode;
 var mobile = false;
 var active_layer = 'hotspots';
@@ -36,8 +36,8 @@ var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
 // Initially assume we have the API running locally.
-// var origin = 'http://127.0.0.1:8117/api';
-var origin = 'https://acc.citydynamics.amsterdam.nl/api';
+var origin = 'http://127.0.0.1:8117/api';
+// var origin = 'https://acc.citydynamics.amsterdam.nl/api';
 // var origin = 'https://citydynamics.amsterdam.nl/api';
 
 // When using the production server, get the API from there.
@@ -380,15 +380,12 @@ function getRealtime(realtimeJson)
 	hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
 	hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
 	hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
+	hotspots_match_array[16] = 'Abraxas'; // Passenger terminal
+	hotspots_match_array[24] = 'Winkel 43'; // Passenger terminal
 
 	if(debug) { console.log(hotspots_match_array) }
 
 	$.each(realtimeJson.results, function (key, value) {
-		console.log(this.data['Real-time']);
-		if(this.data['Real-time']>0)
-		{
-			console.log(key);
-		}
 		var name = this.name;
 		var exists = $.inArray(name, hotspots_match_array );
 		if(exists > -1)
@@ -554,7 +551,7 @@ function initEventMapping()
 	});
 
 	$( document).on('click', ".graphbar_title .info_icon",function () {
-		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont de verwachte drukte in een gebied ten op zichte van de normale drukte op dat tijdstip. De balk op het actuele tijdstip toont de actuele drukte voor het gebied.</p>');
+		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont de verwachte drukte in een gebied / hotspot relatief aan de drukte in de andere gebieden / hotspots. De witte balk die verschijnt bij het selecteren van een gebied / hotspot toont de actuele drukte van nu.</p>');
 	});
 
 	$( document).on('click', ".mapswitch a",function () {
@@ -1463,16 +1460,14 @@ function pointToLayerPark(feature, latlng) {
 
 
 	var suffix = 'none';
-	var height = 64;
-	if(feature.properties.FreeSpaceShort<10)
+
+	if(feature.properties.FreeSpaceShort<10 && feature.properties.FreeSpaceShort>0)
 	{
 		suffix = 'some';
-		height = 72;
 	}
-	if(feature.properties.FreeSpaceShort>10)
+	else if(feature.properties.FreeSpaceShort>10)
 	{
 		suffix = 'plenty';
-		height = 80;
 	}
 
 	var parkIcon = L.icon({

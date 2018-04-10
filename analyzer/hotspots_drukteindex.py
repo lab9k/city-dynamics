@@ -3,13 +3,14 @@ This module computes the drukteindex values for ~40 hand-picked hotspots.
 """
 
 import configparser
-import argparse
 import logging
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 import pandas as pd
 import numpy as np
 import itertools
+import copy
+import q
 
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
@@ -86,6 +87,19 @@ def main():
 
     hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)
 
+    # for hotspots for which we want to use a particular google location only, we have to remove the other alpha locations related to that hotspot
+    use_singular_filter = True
+    if use_singular_filter:
+        singular_hotspots_df = hotspots_df[~ hotspots_df.alpha_hotspot_name.isnull()][['hotspot', 'alpha_hotspot_name']]
+
+        singular_hotspots = pd.Series(singular_hotspots_df.alpha_hotspot_name.values,
+                                      index=singular_hotspots_df.hotspot).to_dict()
+
+        for hotspot, alpha_hotspot_name in singular_hotspots.items():
+            alpha_hotspots.drop(
+                alpha_hotspots[(alpha_hotspots.hotspot == hotspot) & (alpha_hotspots.name != alpha_hotspot_name)].index,
+                inplace=True)
+
     # historical weekpatroon
     # first calculate the average weekpatroon per location
     alpha_week_location = alpha_hotspots.groupby([
@@ -119,6 +133,8 @@ def main():
     drukteindex_hotspots = drukteindex_hotspots[['hotspot', 'hour', 'weekday', 'drukte_index']]
 
     drukteindex_hotspots.rename(columns={'drukte_index': 'drukteindex'}, inplace=True)
+
+    q.d()
 
     log.debug('Writing to db..')
     drukteindex_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
