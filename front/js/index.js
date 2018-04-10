@@ -554,7 +554,7 @@ function initEventMapping()
 	});
 
 	$( document).on('click', ".graphbar_title .info_icon",function () {
-		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont de verwachte drukte in een gebied ten op zichte van de normale drukte op dat tijdstip. De balk op het actuele tijdstip toont de actuele drukte voor het gebied.</p>');
+		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont de verwachte drukte in een gebied / hotspot relatief aan de drukte in de andere gebieden / hotspots. De witte balk die verschijnt bij het selecteren van een gebied / hotspot toont de actuele drukte van nu.</p>');
 	});
 
 	$( document).on('click', ".mapswitch a",function () {
@@ -1463,16 +1463,14 @@ function pointToLayerPark(feature, latlng) {
 
 
 	var suffix = 'none';
-	var height = 64;
-	if(feature.properties.FreeSpaceShort<10)
+
+	if(feature.properties.FreeSpaceShort<10 && feature.properties.FreeSpaceShort>0)
 	{
 		suffix = 'some';
-		height = 72;
 	}
-	if(feature.properties.FreeSpaceShort>10)
+	else if(feature.properties.FreeSpaceShort>10)
 	{
 		suffix = 'plenty';
-		height = 80;
 	}
 
 	var parkIcon = L.icon({

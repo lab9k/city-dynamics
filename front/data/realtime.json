@@ -35,7 +35,7 @@
         },
         "place_id": "ChIJufaJMsEJxkcRSiGAzmpg3Qc",
         "BatchTime": "2018-03-18T06:03:42.811000Z",
-        "Real-time": 0,
+        "Real-time": 0.4,
         "ScrapeTime": "2018-03-18T06:03:49Z",
         "VisitDuration": "N/A",
         "formatted_address": "Jonge Roelensteeg 12-14, 1012 PL Amsterdam, Netherlands"

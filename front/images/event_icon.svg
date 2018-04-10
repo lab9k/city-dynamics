@@ -1,38 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>icons/event_icon</title>
-    <desc>Created with Sketch.</desc>
-    <defs>
-        <rect id="path-1" x="0.875" y="0.897435897" width="33.25" height="3.58974359"></rect>
-        <path d="M1,0 L2.5,0 L2.5,0 C3.05228475,-1.01453063e-16 3.5,0.44771525 3.5,1 L3.5,3.58974359 L0,3.58974359 L0,1 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z" id="path-2"></path>
-        <path d="M18.5,0 L20,0 L20,0 C20.5522847,-1.01453063e-16 21,0.44771525 21,1 L21,3.58974359 L17.5,3.58974359 L17.5,1 L17.5,1 C17.5,0.44771525 17.9477153,1.01453063e-16 18.5,0 Z" id="path-3"></path>
-    </defs>
-    <g id="City-Dashboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Desktop-(Out-of-date-versions)" transform="translate(-12598.000000, -2459.000000)"></g>
-        <g id="icons/event_icon">
-            <g id="Evenementen-Icon" transform="translate(7.500000, 7.500000)">
-                <g id="Calendar">
-                    <g id="Box" transform="translate(0.000000, 3.589744)">
-                        <rect id="Rectangle" stroke="#F9F9F9" x="0.5" y="0.5" width="34" height="30.4102564"></rect>
-                        <g id="Rectangle-3">
-                            <use fill="#F9F9F9" fill-rule="evenodd" xlink:href="#path-1"></use>
-                            <rect stroke="#F9F9F9" stroke-width="1" x="1.375" y="1.3974359" width="32.25" height="2.58974359"></rect>
-                        </g>
-                    </g>
-                    <g id="Hinges" transform="translate(7.000000, 0.000000)">
-                        <g id="Rectangle-2">
-                            <use fill="#F9F9F9" fill-rule="evenodd" xlink:href="#path-2"></use>
-                            <path stroke="#F9F9F9" stroke-width="1" d="M0.5,3.08974359 L3,3.08974359 L3,1 C3,0.723857625 2.77614237,0.5 2.5,0.5 L1,0.5 C0.723857625,0.5 0.5,0.723857625 0.5,1 L0.5,3.08974359 Z"></path>
-                        </g>
-                        <g id="Rectangle-2">
-                            <use fill="#F9F9F9" fill-rule="evenodd" xlink:href="#path-3"></use>
-                            <path stroke="#F9F9F9" stroke-width="1" d="M18,3.08974359 L20.5,3.08974359 L20.5,1 C20.5,0.723857625 20.2761424,0.5 20,0.5 L18.5,0.5 C18.2238576,0.5 18,0.723857625 18,1 L18,3.08974359 Z"></path>
-                        </g>
-                    </g>
-                    <path d="M10.625,22.8974359 L10.625,23.2307692 L26.125,23.2307692 L26.125,13.5641026 L25.7916667,13.5641026 L25.7916667,22.8974359 L10.625,22.8974359 Z" id="Rectangle-52" stroke="#F9F9F9" stroke-width="2" transform="translate(18.375000, 18.397436) scale(-1, 1) rotate(45.000000) translate(-18.375000, -18.397436) "></path>
-                </g>
-            </g>
-        </g>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50" height="50" viewBox="0 0 50 50">
+  <defs>
+    <rect id="event_icon-a" width="33.25" height="3.59" x=".875" y=".897"/>
+    <path id="event_icon-b" d="M1,0 L2.5,0 C3.05228475,-1.01453063e-16 3.5,0.44771525 3.5,1 L3.5,3.58974359 L0,3.58974359 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z"/>
+    <path id="event_icon-c" d="M18.5,0 L20,0 C20.5522847,-1.01453063e-16 21,0.44771525 21,1 L21,3.58974359 L17.5,3.58974359 L17.5,1 C17.5,0.44771525 17.9477153,1.01453063e-16 18.5,0 Z"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(7.5 7.5)">
+    <g transform="translate(0 3.59)">
+      <rect width="34" height="30.41" x=".5" y=".5" stroke="#F9F9F9"/>
+      <use fill="#F9F9F9" xlink:href="#event_icon-a"/>
+      <rect width="32.25" height="2.59" x="1.375" y="1.397" stroke="#F9F9F9"/>
     </g>
+    <g transform="translate(7)">
+      <use fill="#F9F9F9" xlink:href="#event_icon-b"/>
+      <path stroke="#F9F9F9" d="M0.5,3.08974359 L3,3.08974359 L3,1 C3,0.723857625 2.77614237,0.5 2.5,0.5 L1,0.5 C0.723857625,0.5 0.5,0.723857625 0.5,1 L0.5,3.08974359 Z"/>
+      <g>
+        <use fill="#F9F9F9" xlink:href="#event_icon-c"/>
+        <path stroke="#F9F9F9" d="M18,3.08974359 L20.5,3.08974359 L20.5,1 C20.5,0.723857625 20.2761424,0.5 20,0.5 L18.5,0.5 C18.2238576,0.5 18,0.723857625 18,1 L18,3.08974359 Z"/>
+      </g>
+    </g>
+    <path stroke="#F9F9F9" stroke-width="2" d="M10.625,22.8974359 L10.625,23.2307692 L26.125,23.2307692 L26.125,13.5641026 L25.7916667,13.5641026 L25.7916667,22.8974359 L10.625,22.8974359 Z" transform="scale(-1 1) rotate(45 0 -25.964)"/>
+  </g>
 </svg>
