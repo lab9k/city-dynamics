@@ -73,21 +73,15 @@ def download_container(conn, container, targetdir):
         # target filename of object
         target_filename = os.path.join(targetdir, obj['name'])
 
-        # Always (try to) remove the alpha_raw.dump file, since this file is updated nightly.
-        # datasets = config_src.sections()
-        # config_src = configparser.RawConfigParser()
-        # config_src.read('sources.conf')
-        # overwrite = [config_src.get(x, 'OVERWRITE') for x in datasets]
-        if target_filename == "alpha_raw.dump" or "hotspots.csv":
-            try:
+        # Check whether a local copy of the file already exists.
+        if file_exists(target_filename):
+            # Certain files have to be replaced in any case (due to nightly updates etc.)
+            if "alpha_raw.dump" in target_filename or "hotspots.csv" in target_filename:
                 os.remove(target_filename)
-            except OSError:
-                pass
-
-        # For other files,
-        elif file_exists(target_filename):
-            logger.debug('skipping %s, file already exists', target_filename)
-            continue
+            # For other files, the existing local copy should be used.
+            else:
+                logger.debug('skipping %s, file already exists', target_filename)
+                continue
 
         # write object in target file
         with open(target_filename, 'wb') as new_file:
