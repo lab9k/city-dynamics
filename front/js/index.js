@@ -381,15 +381,11 @@ function getRealtime(realtimeJson)
 	hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
 	hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
 	hotspots_match_array[16] = 'Abraxas'; // Passenger terminal
+	hotspots_match_array[24] = 'Winkel 43'; // Passenger terminal
 
 	if(debug) { console.log(hotspots_match_array) }
 
 	$.each(realtimeJson.results, function (key, value) {
-		console.log(this.data['Real-time']);
-		if(this.data['Real-time']>0)
-		{
-			console.log(key);
-		}
 		var name = this.name;
 		var exists = $.inArray(name, hotspots_match_array );
 		if(exists > -1)
