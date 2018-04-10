@@ -2,7 +2,7 @@ Babel==2.5.1
 certifi==2018.1.18
 chardet==3.0.4
 datapunt-config-loader==1.0.0
--e git+https://github.com/Amsterdam/objectstore.git@fad63da39ac7354b1a0a46c711474c9d2cfb37e8#egg=datapunt_objectstore
+-e git+https://github.com/Amsterdam/objectstore.git@6344f3412a8280f0b92f4c3ccc085eba846e1c0a#egg=datapunt_objectstore
 debtcollector==1.19.0
 flake8==3.5.0
 frosted==1.4.1

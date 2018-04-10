@@ -28,6 +28,10 @@ services:
       PYTHONPATH: /app/scrape_api
       QUANTILLION_PASSWORD:
       ENVIRONMENT:
+      TENANT_NAME: BGE000081_druktemeter
+      TENANT_ID: 97d77d9423fe46df8675937493b8521e
+      OBJECTSTORE_USER: druktemeter
+      OBJECTSTORE_PASSWORD:
       GOOGLE_DAYS: 50
 
     volumes:
