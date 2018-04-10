@@ -9,8 +9,6 @@ from sqlalchemy.engine.url import URL
 import pandas as pd
 import numpy as np
 import itertools
-import copy
-import q
 
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
