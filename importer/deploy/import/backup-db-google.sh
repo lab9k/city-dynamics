@@ -13,5 +13,5 @@ pg_dump  -t google_raw_locations* \
 	 -Fc \
 	 -U citydynamics \
 	 -h 0.0.0.0 -p 5432 \
-	 -f /tmp/backups/google_raw.dump \
+	 -f /tmp/backups/alpha_raw.dump \
 	 citydynamics

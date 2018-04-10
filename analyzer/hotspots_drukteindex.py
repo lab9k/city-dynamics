@@ -9,6 +9,8 @@ from sqlalchemy.engine.url import URL
 import pandas as pd
 import numpy as np
 import itertools
+import copy
+import q
 
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
@@ -93,6 +95,8 @@ def main():
         singular_hotspots = pd.Series(singular_hotspots_df.alpha_hotspot_name.values,
                                       index=singular_hotspots_df.hotspot).to_dict()
 
+        temp = copy.deepcopy(alpha_hotspots)
+
         for alpha_hotspot_name, hotspot in singular_hotspots.items():
             alpha_hotspots.drop(
                 alpha_hotspots[(alpha_hotspots.hotspot == hotspot) & (alpha_hotspots.name != alpha_hotspot_name)].index,
@@ -131,6 +135,8 @@ def main():
     drukteindex_hotspots = drukteindex_hotspots[['hotspot', 'hour', 'weekday', 'drukte_index']]
 
     drukteindex_hotspots.rename(columns={'drukte_index': 'drukteindex'}, inplace=True)
+
+    q.d()
 
     log.debug('Writing to db..')
     drukteindex_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
