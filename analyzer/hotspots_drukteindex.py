@@ -16,6 +16,7 @@ config_auth.read('auth.conf')
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
+
 def get_conn():
     """Create a connection to the database."""
     dbconfig = 'docker'
@@ -52,7 +53,8 @@ def linear_model(drukte):
 
     for col, weight in linear_weigths.items():
         if col in drukte.columns:
-            drukte['drukte_index'] = drukte['drukte_index'].add(drukte[col] * weight, fill_value=0)
+            drukte['drukte_index'] = drukte['drukte_index'].add(
+                drukte[col] * weight, fill_value=0)
 
     drukte['drukte_index'] = drukte['drukte_index'] / lw_normalize
 
@@ -70,11 +72,28 @@ def linear_model(drukte):
     return drukte
 
 
+def fill_hotspot_tables(conn=None):
+    insert_into_models_hotspots = """
+    TRUNCATE TABLE datasets_hotspotsdrukteindex;
+    insert into datasets_hotspotsdrukteindex (
+    index,
+    hour,
+    weekday,
+    drukteindex,
+    hotspot_id
+    ) select c.index, hour, weekday, drukteindex, h.index from hotspots h, drukteindex_hotspots c
+    where  h."hotspot" = c."hotspot";
+
+    """  # noqa
+    if not conn:
+        conn = get_conn()
+    conn.execute(insert_into_models_hotspots)
+    log.debug('done.')
+
+
 def main():
     """
-    This is the main function of this script.
-
-    This function processes all the hotspots: it finds all relevant locations in a 200m radius
+    Processes all the hotspots: it finds all relevant locations in a 200m radius
     around each hotspot and computes a prediction value for the hotspot for each hour of the week.
     When no data is available from locations around the hotspot, the data from the vollcode area
     of the hotspot is used as fallback.
@@ -85,7 +104,8 @@ def main():
 
     hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)
 
-    # for hotspots for which we want to use a particular google location only, we have to remove the other alpha locations related to that hotspot
+    # for hotspots for which we want to use a particular google location only,
+    # we have to remove the other alpha locations related to that hotspot
     use_singular_filter = True
     if use_singular_filter:
         singular_hotspots_df = hotspots_df[~ hotspots_df.alpha_hotspot_name.isnull()][['hotspot', 'alpha_hotspot_name']]
@@ -119,12 +139,13 @@ def main():
 
     di = pd.read_sql(sql="SELECT * FROM drukteindex_buurtcombinaties", con=conn)
 
-    drukteindex_hotspots = alpha_week_hotspots.merge(di[['index',
-                                                          'vollcode',
-                                                          'weekday',
-                                                          'hour',
-                                                          'verblijvers_ha_2016',
-                                                          'gvb']], on=['vollcode', 'weekday', 'hour'], how='left')
+    drukteindex_hotspots = alpha_week_hotspots.merge(
+        di[['index',
+            'vollcode',
+            'weekday',
+            'hour',
+            'verblijvers_ha_2016',
+            'gvb']], on=['vollcode', 'weekday', 'hour'], how='left')
 
     drukteindex_hotspots = linear_model(drukteindex_hotspots)
 
@@ -135,25 +156,11 @@ def main():
     log.debug('Writing to db..')
     drukteindex_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
 
-    insert_into_models_hotspots = """
-    TRUNCATE TABLE datasets_hotspotsdrukteindex;
-    insert into datasets_hotspotsdrukteindex (
-    index,
-    hour,
-    weekday,
-    drukteindex,
-    hotspot_id
-    ) select c.index, hour, weekday, drukteindex, h.index from hotspots h, drukteindex_hotspots c
-    where  h."hotspot" = c."hotspot";
-
-    """
-
-    conn.execute(insert_into_models_hotspots)
-
-    log.debug('done.')
+    fill_hotspot_tables(conn=conn)
 
 
 if __name__ == '__main__':
     desc = "Calculate index hotspots."
+    # fill_hotspot_tables()
     log.debug(desc)
     main()

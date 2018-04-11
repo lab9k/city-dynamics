@@ -73,10 +73,10 @@ var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
 var dindexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
 
 // theme api
-var trafficJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=traveltime&format=json';
-var parkJsonUrl = "https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=parking_garages&format=json";
-var fietsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=ovfiets&format=json';
-var eventsJsonUrl = 'https://acc.citydynamics.amsterdam.nl/api/apiproxy?api=events&format=json';
+var trafficJsonUrl = origin + '/apiproxy?api=traveltime&format=json';
+var parkJsonUrl = origin + '/apiproxy?api=parking_garages&format=json';
+var fietsJsonUrl = origin + '/apiproxy?api=ovfiets&format=json';
+var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 
 // temp local api
 // dindex_hotspots_api = 'data/hotspots_drukteindex.json';
