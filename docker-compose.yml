@@ -33,7 +33,7 @@ services:
       - UWSGI_HARAKIRI=15
       - UWSGI_DIE_ON_TERM=1
       - UWSGI_MODULE=citydynamics.wsgi:application
-      - UWSGI_ROUTE=^/* basicauth:drukteindex,pippo:pluto
+      - UWSGI_ROUTE=^/api/* basicauth:drukteindex,pipo:pluto
       # - UWSGI_MOUNT=/api=citydynamics.wsgi:application
 
   importer:
