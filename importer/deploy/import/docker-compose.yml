@@ -32,7 +32,7 @@ services:
       TENANT_ID: 97d77d9423fe46df8675937493b8521e
       OBJECTSTORE_USER: druktemeter
       OBJECTSTORE_PASSWORD:
-      GOOGLE_DAYS: 50
+      GOOGLE_DAYS: 10
 
     volumes:
       - data-volume:/data

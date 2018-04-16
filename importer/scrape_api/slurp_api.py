@@ -55,9 +55,6 @@ ENDPOINTS = [
     'qa_expected',
     'qa_realtime/current',
     'qa_expected/current',
-    'parkinglocations',
-    'events',
-    'traveltime',
 ]
 
 ENDPOINT_MODEL = {
@@ -66,8 +63,6 @@ ENDPOINT_MODEL = {
     'qa_realtime/current': models.GoogleRawLocationsRealtimeCurrent,
     'qa_expected/current': models.GoogleRawLocationsExpectedCurrent,
     'parkinglocations': models.ParkingLocation,
-    # 'events': models.Events,
-    # 'traveltime': models.TravelTime,
 }
 
 ENDPOINT_URL = {
@@ -119,7 +114,8 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
 
     url = ENDPOINT_URL[endpoint]
     url = url.format(host=host, port=port)
-    async_r = grequests.get(url, params=params, auth=AUTH)
+    async_r = grequests.get(
+        url, params=params, auth=AUTH, timeout=10)
     gevent.spawn(async_r.send).join()
 
     response = async_r.response
