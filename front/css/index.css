@@ -210,6 +210,8 @@ div {box-sizing: border-box;}
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#DB322A', endColorstr='#50E6DB',GradientType=0 ); /* ie6-9 */
 }
 
+.feedback {cursor:pointer;}
+
 
 .meldlinks {float:left;margin-top:20px;margin-left:30px;}
 .meld_link1,.meld_link2{display:block;width:140px;line-height:20px;background:#F9F9F9;border-radius: 5px;font-size:12px;text-align:center;text-decoration:none;color:#444;margin-bottom:20px;}
