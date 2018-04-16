@@ -2,7 +2,6 @@
 
 set -u
 set -e
-set -x
 
 echo 0.0.0.0:5432:citydynamics:citydynamics:insecure > ~/.pgpass
 
