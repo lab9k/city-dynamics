@@ -66,13 +66,13 @@ var fietsJsonUrl = origin + '/apiproxy?api=ovfiets&format=json';
 var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 
 // temp local api
-hotspotsJsonUrl = 'data/hotspots_fallback.json';
-geoJsonUrl = 'data/buurtcombinaties.json';
-dindexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
-realtimeUrl = 'data/realtime.json';
-trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-parkJsonUrl = 'data/parkjson.json';
-eventsJsonUrl = 'data/events.js';
+// hotspotsJsonUrl = 'data/hotspots_fallback.json';
+// geoJsonUrl = 'data/buurtcombinaties.json';
+// dindexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
+// realtimeUrl = 'data/realtime.json';
+// trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+// parkJsonUrl = 'data/parkjson.json';
+// eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -583,6 +583,7 @@ function initEventMapping()
 			$('.mapswitch a span').html('Hotspots');
 
 			$(this).removeClass('active');
+			setTag('map_districts');
 		}
 		else
 		{
@@ -600,6 +601,8 @@ function initEventMapping()
 			$('.mapswitch a span').html('Buurten');
 
 			$(this).addClass('active');
+
+			setTag('main');
 		}
 	});
 
@@ -610,6 +613,7 @@ function initEventMapping()
 			hideMarkers();
 			hideInfo();
 			$(this).removeClass('active');
+			setTag('main');
 		}
 		else
 		{
@@ -618,6 +622,7 @@ function initEventMapping()
 			showInfo('De beschikbaarheid van de OV fietsen over de verschillende locaties.', 0);
 			showOvFiets();
 			$(this).addClass('active');
+			setTag('ovfiets');
 		}
 	});
 
@@ -628,6 +633,7 @@ function initEventMapping()
 			hideMarkers();
 			hideInfo();
 			$(this).removeClass('active');
+			setTag('main');
 		}
 		else
 		{
@@ -636,6 +642,7 @@ function initEventMapping()
 			showInfo('Verschillende webcams in en rond de stad.', 0);
 			showFeeds();
 			$(this).addClass('active');
+			setTag('cam');
 		}
 	});
 
@@ -646,6 +653,7 @@ function initEventMapping()
 			hideMarkers();
 			hideInfo();
 			$(this).removeClass('active');
+			setTag('main');
 		}
 		else
 		{
@@ -654,6 +662,7 @@ function initEventMapping()
 			showInfo('Geplande evenementen van vandaag.', 0);
 			showEvents();
 			$(this).addClass('active');
+			setTag('events');
 		}
 	});
 
@@ -709,6 +718,7 @@ function initEventMapping()
 			hideMarkers();
 			hideInfo();
 			$(this).removeClass('active');
+			setTag('main');
 		}
 		else
 		{
@@ -717,6 +727,7 @@ function initEventMapping()
 			showInfo('Verkeersdrukte in en rond de stad.', 0);
 			addTrafficLayer();
 			$(this).addClass('active');
+			setTag('traffic');
 		}
 	});
 
@@ -759,6 +770,7 @@ function initEventMapping()
 			hideMarkers();
 			hideInfo();
 			$(this).removeClass('active');
+			setTag('main');
 		}
 		else
 		{
@@ -767,6 +779,7 @@ function initEventMapping()
 			showInfo('De capaciteit en het aantal beschikbare plekken in de parkeergarages.', 0);
 			addParkLayer();
 			$(this).addClass('active');
+			setTag('parking');
 		}
 	});
 
@@ -777,6 +790,7 @@ function initEventMapping()
 			hideMarkers();
 			hideInfo();
 			$(this).removeClass('active');
+			setTag('main');
 		}
 		else
 		{
@@ -784,12 +798,21 @@ function initEventMapping()
 			showWater();
 			showInfo('De waterdrukte binnen de stad.', 0);
 			$(this).addClass('active');
+			setTag('water');
 		}
 	});
 
 	$('.controls').on('click',function(){
 		map.setView([52.36, 4.95], 12);
 	});
+}
+
+// ######### map / animation functions ###############
+function setTag(tag)
+{
+	// google
+	ga('set', 'page', '/'+tag+'.html');
+	ga('send', 'pageview');
 }
 
 
