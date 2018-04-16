@@ -37,21 +37,8 @@ var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
 // Initially assume we have the API running locally.
 var origin = 'http://127.0.0.1:8117/api';
-// var origin = 'https://acc.citydynamics.amsterdam.nl/api';
-// var origin = 'https://citydynamics.amsterdam.nl/api';
+// var origin = 'https://acc.drukteradar.amsterdam.nl/api';
 
-// When using the production server, get the API from there.
-//
-if(window.location.href.indexOf('citydynamics.amsterdam.nl') > -1)
-{
-	var origin = 'https://citydynamics.amsterdam.nl/api';
-}
-
-// However, when using the acceptation server, get the API from there.
-if(window.location.href.indexOf('acc.citydynamics.amsterdam.nl') > -1)
-{
-	var origin = 'https://acc.citydynamics.amsterdam.nl/api';
-}
 
 if(window.location.href.indexOf('drukteradar.amsterdam.nl') > -1)
 {
@@ -79,14 +66,13 @@ var fietsJsonUrl = origin + '/apiproxy?api=ovfiets&format=json';
 var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 
 // temp local api
-// dindex_hotspots_api = 'data/hotspots_drukteindex.json';
-// dindex_hotspots_api = 'data/hotspots_fallback.json';
-// geoJsonUrl = 'data/buurtcombinaties.json';
-// dindex_uurtcombinaties_api = 'data/buurtcombinaties_drukteindex.json';
+hotspotsJsonUrl = 'data/hotspots_fallback.json';
+geoJsonUrl = 'data/buurtcombinaties.json';
+dindexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
 realtimeUrl = 'data/realtime.json';
-// var trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-// `var parkJsonUrl = 'data/parkjson.json';
-// var eventsJsonUrl = 'data/events.js';
+trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+parkJsonUrl = 'data/parkjson.json';
+eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -529,6 +515,11 @@ function initEventMapping()
 		{
 			openSearch();
 		}
+	});
+
+	$( document).on('click', ".feedback",function () {
+		console.log('feedback');
+		window.usabilla_live('trigger', 'general_trigger');
 	});
 
 	$( document).on('click', ".m_more a",function () {
