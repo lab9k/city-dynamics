@@ -6,6 +6,8 @@ import expiringdict
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django_filters.rest_framework import FilterSet
+from django_filters.rest_framework import filters
 # from django.db.models import Avg
 from datapunt_api import rest
 from . import models
@@ -87,6 +89,23 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
         return queryset
 
 
+class RealtimeFilter(FilterSet):
+
+    realtime = filters.CharFilter(method="realtime_filter", name="realtime")
+
+    class Meta:
+        model = models.RealtimeGoogle
+        fields = (
+            'place_id',
+            'scraped_at',
+            'name',
+        )
+
+    def realtime_filter(self, queryset, filter_name, value):
+        qs = queryset.objects.filter(**{'data__Real-time__gt': value})
+        return qs
+
+
 class RealtimeGoogleViewset(rest.DatapuntViewSet):
     """
     Quantillion scraped data
@@ -95,6 +114,8 @@ class RealtimeGoogleViewset(rest.DatapuntViewSet):
     serializer_detail_class = serializers.RealtimeGoogleSerializer
 
     queryset = models.RealtimeGoogle.objects.order_by('name')
+
+    filter_class = RealtimeFilter
 
 
 PROXY_URLS = {
