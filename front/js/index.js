@@ -519,7 +519,7 @@ function initEventMapping()
 
 	$( document).on('click', ".feedback",function () {
 		console.log('feedback');
-		window.usabilla_live('trigger', 'general_trigger');
+		window.usabilla_live('trigger', 'feedback');
 	});
 
 	$( document).on('click', ".m_more a",function () {
