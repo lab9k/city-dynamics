@@ -6,6 +6,7 @@ import expiringdict
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 # from django.db.models import Avg
@@ -91,7 +92,8 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
 
 class RealtimeFilter(FilterSet):
 
-    realtime = filters.CharFilter(method="realtime_filter", name="realtime")
+    realtime = filters.CharFilter(
+        method="realtime_filter", label="realtime", name="realtime")
 
     class Meta:
         model = models.RealtimeGoogle
@@ -99,10 +101,17 @@ class RealtimeFilter(FilterSet):
             'place_id',
             'scraped_at',
             'name',
+            'realtime',
         )
 
     def realtime_filter(self, queryset, filter_name, value):
-        qs = queryset.objects.filter(**{'data__Real-time__gt': value})
+        try:
+            float(value)
+        except ValueError:
+            raise ValidationError(
+                f'{filter_name} field must be an float value.')
+
+        qs = queryset.filter(**{'data__Real-time__gt': float(value)})
         return qs
 
 
