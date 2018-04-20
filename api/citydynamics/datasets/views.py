@@ -63,6 +63,15 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
         return queryset
 
 
+class HotspotViewset(viewsets.ModelViewSet):
+    """
+    ViewSet for retrieving hotspot polygons
+    """
+
+    queryset = models.Hotspots.objects.order_by('hotspot')
+    serializer_class = serializers.HotspotSerializer
+
+
 class DrukteindexHotspotViewset(rest.DatapuntViewSet):
     """
     Hotspot drukteindex API

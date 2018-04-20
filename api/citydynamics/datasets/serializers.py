@@ -50,6 +50,20 @@ class BCIndexSerializer(ModelSerializer):
         return BCCijferSerializer(cijfers, many=True).data
 
 
+class HotspotSerializer(GeoFeatureModelSerializer):
+    """ A class to serialize locations as GeoJSON compatible data """
+
+    coordinates = SerializerMethodField()
+
+    def get_coordinates(self, obj):
+        return [obj.lat, obj.lon]
+
+    class Meta:
+        model = Hotspots
+        geo_field = 'polygon'
+        fields = ('index', 'hotspot', 'coordinates',)
+
+
 class HotspotCijferSerializer(ModelSerializer):
 
     h = serializers.IntegerField(source='hour')
@@ -65,18 +79,13 @@ class HotspotCijferSerializer(ModelSerializer):
 
 class HotspotIndexSerializer(ModelSerializer):
 
-    coordinates = SerializerMethodField()
     druktecijfers = SerializerMethodField()
-
-    def get_coordinates(self, obj):
-        return [obj.lat, obj.lon]
 
     class Meta:
         model = Hotspots
         fields = (
             'index',
             'hotspot',
-            'coordinates',
             'druktecijfers',
         )
 
