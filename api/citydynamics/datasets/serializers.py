@@ -20,13 +20,15 @@ class BuurtcombinatieSerializer(GeoFeatureModelSerializer):
 class BCCijferSerializer(ModelSerializer):
 
     h = serializers.IntegerField(source='hour')
-    d = serializers.FloatField(source='drukteindex')
+    d = serializers.IntegerField(source='weekday')
+    i = serializers.FloatField(source='drukteindex')
 
     class Meta:
         model = BuurtCombinatieDrukteindex
         fields = (
             'h',
             'd',
+            'i',
         )
 
 
@@ -44,8 +46,10 @@ class BCIndexSerializer(ModelSerializer):
         )
 
     def get_druktecijfers_bc(self, obj):
-        weekday = datetime.datetime.today().weekday()
-        cijfers = obj.druktecijfers_bc.filter(weekday=weekday)
+        today_wkday = datetime.datetime.today().weekday()
+        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+        tomorrow_wkday = tomorrow.weekday()
+        cijfers = obj.druktecijfers_bc.filter(weekday__in=[today_wkday, tomorrow_wkday])
 
         return BCCijferSerializer(cijfers, many=True).data
 
@@ -67,13 +71,16 @@ class HotspotSerializer(GeoFeatureModelSerializer):
 class HotspotCijferSerializer(ModelSerializer):
 
     h = serializers.IntegerField(source='hour')
-    d = serializers.FloatField(source='drukteindex')
+    d = serializers.IntegerField(source='weekday')
+    i = serializers.FloatField(source='drukteindex')
+
 
     class Meta:
         model = HotspotsDrukteIndex
         fields = (
             'h',
             'd',
+            'i',
         )
 
 
@@ -90,8 +97,10 @@ class HotspotIndexSerializer(ModelSerializer):
         )
 
     def get_druktecijfers(self, obj):
-        weekday = datetime.datetime.today().weekday()
-        cijfers = obj.druktecijfers.filter(weekday=weekday)
+        today_wkday = datetime.datetime.today().weekday()
+        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+        tomorrow_wkday = tomorrow.weekday()
+        cijfers = obj.druktecijfers.filter(weekday__in=[today_wkday, tomorrow_wkday])
 
         return HotspotCijferSerializer(cijfers, many=True).data
 
