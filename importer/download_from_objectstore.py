@@ -76,7 +76,9 @@ def download_container(conn, container, targetdir):
         # Check whether a local copy of the file already exists.
         if file_exists(target_filename):
             # Certain files have to be replaced in any case (due to nightly updates etc.)
-            if "alpha_raw.dump" in target_filename or "hotspots.csv" in target_filename:
+            if "alpha_raw.dump" in target_filename or \
+                    "hotspots.csv" in target_filename or \
+                    "hotspots_dev.csv" in target_filename:
                 os.remove(target_filename)
             # For other files, the existing local copy should be used.
             else:

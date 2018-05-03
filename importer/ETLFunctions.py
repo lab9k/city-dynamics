@@ -75,6 +75,7 @@ class ModifyTables(DatabaseInteractions):
     - Adding hotspots column
     - Simplifying polygons in polygon column
     """
+
     # TODO: refactor this class into separate functions
 
     def __init__(self):
@@ -86,7 +87,6 @@ class ModifyTables(DatabaseInteractions):
         return """
         ALTER TABLE "{}" ADD PRIMARY KEY (index)
         """.format(table_name)
-
 
     def check_column_existence(self, table_name, column_name):
         sql = """
@@ -103,14 +103,22 @@ class ModifyTables(DatabaseInteractions):
     @staticmethod
     def create_geometry_column(table_name):
         return """
-      ALTER TABLE "{0}"
+        ALTER TABLE "{0}"
         DROP COLUMN IF EXISTS geom;
-      ALTER TABLE "{0}"
+        ALTER TABLE "{0}"
         ADD COLUMN geom geometry;
-      UPDATE "{0}"
-          SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
-      CREATE INDEX {1} ON "{0}" USING GIST(geom);
-      """.format(table_name, 'geom_' + table_name)
+        UPDATE "{0}"
+        SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
+        CREATE INDEX {1} ON "{0}" USING GIST(geom);
+        """.format(table_name, 'geom_' + table_name)
+
+    @staticmethod
+    def convert_to_geometry():
+        return """
+        ALTER TABLE hotspots
+        ALTER COLUMN polygon
+        TYPE Geometry USING polygon::Geometry;
+        """
 
     @staticmethod
     def simplify_polygon(table_name, original_column, simplified_column):
@@ -149,6 +157,24 @@ class ModifyTables(DatabaseInteractions):
         WHERE st_intersects("{0}".geom, stadsdeel.wkb_geometry)
         """.format(table_name)
 
+    ### One of below add_'hotspot_names' functions should be switched on. The top one is the old query, which maps google locations
+    ### to hotspots based on a buffer around the hotspot's lat-long centre.
+    ### The bottom one is the new query, using a buffer around the hotspot's polygon for mapping.
+    # @staticmethod
+    # def add_hotspot_names(table_name):
+    #     return """
+    #     ALTER table "{0}"
+    #     DROP COLUMN IF EXISTS hotspot;
+    #
+    #     ALTER TABLE "{0}" add hotspot varchar;
+    #
+    #     UPDATE "{0}"
+    #     SET hotspot = hotspots."hotspot"
+    #     FROM hotspots
+    #     WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), alpha_locations_expected.geom);
+    #     """.format(table_name)
+
+    ### TODO: visually check the mapping between google locations and hotspots (preferably with OpenJump)
     @staticmethod
     def add_hotspot_names(table_name):
         return """
@@ -160,7 +186,7 @@ class ModifyTables(DatabaseInteractions):
         UPDATE "{0}"
         SET hotspot = hotspots."hotspot"
         FROM hotspots
-        WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), alpha_locations_expected.geom);
+        WHERE st_intersects(ST_Buffer( CAST(hotspots.polygon AS geography), 50.0), alpha_locations_expected.geom);
         """.format(table_name)
 
     @staticmethod
