@@ -14,7 +14,7 @@
 			graph.width = graph.container.width() - graph.margin.left - graph.margin.right;
 			if(graph.width > 750)
 			{
-				graph.width = graph.width - 16;
+				// graph.width = graph.width - 16;
 			}
 			graph.height = graph.container.height() - graph.margin.top - graph.margin.bottom;
 

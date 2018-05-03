@@ -114,6 +114,9 @@ def modify_tables():
         ModifyTables.simplify_polygon(
             'buurtcombinatie', 'wkb_geometry', 'wkb_geometry_simplified'))
 
+    conn.execute(
+        ModifyTables.convert_to_geometry())
+
     for dataset in datasets:
         if config_src.get(dataset, 'CREATE_GEOMETRY') == 'YES':
             table_name = config_src.get(dataset, 'TABLE_NAME')

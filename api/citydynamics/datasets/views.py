@@ -6,6 +6,9 @@ import expiringdict
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
+from django_filters.rest_framework import FilterSet
+from django_filters.rest_framework import filters
 # from django.db.models import Avg
 from datapunt_api import rest
 from . import models
@@ -60,6 +63,15 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
         return queryset
 
 
+class HotspotViewset(viewsets.ModelViewSet):
+    """
+    ViewSet for retrieving hotspot polygons
+    """
+
+    queryset = models.Hotspots.objects.order_by('hotspot')
+    serializer_class = serializers.HotspotSerializer
+
+
 class DrukteindexHotspotViewset(rest.DatapuntViewSet):
     """
     Hotspot drukteindex API
@@ -87,6 +99,31 @@ class DrukteindexHotspotViewset(rest.DatapuntViewSet):
         return queryset
 
 
+class RealtimeFilter(FilterSet):
+
+    realtime = filters.CharFilter(
+        method="realtime_filter", label="realtime", name="realtime")
+
+    class Meta:
+        model = models.RealtimeGoogle
+        fields = (
+            'place_id',
+            'scraped_at',
+            'name',
+            'realtime',
+        )
+
+    def realtime_filter(self, queryset, filter_name, value):
+        try:
+            float(value)
+        except ValueError:
+            raise ValidationError(
+                f'{filter_name} field must be an float value.')
+
+        qs = queryset.filter(**{'data__Real-time__gt': float(value)})
+        return qs
+
+
 class RealtimeGoogleViewset(rest.DatapuntViewSet):
     """
     Quantillion scraped data
@@ -95,6 +132,8 @@ class RealtimeGoogleViewset(rest.DatapuntViewSet):
     serializer_detail_class = serializers.RealtimeGoogleSerializer
 
     queryset = models.RealtimeGoogle.objects.order_by('name')
+
+    filter_class = RealtimeFilter
 
 
 PROXY_URLS = {
