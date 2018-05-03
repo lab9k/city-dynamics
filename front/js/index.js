@@ -24,7 +24,7 @@ var hotspots_array = [];
 var realtime_array = [];
 
 // states
-var debug = true;
+var debug = false;
 var vollcode;
 var mobile = false;
 var active_layer = 'hotspots';
@@ -75,16 +75,16 @@ var fietsJsonUrl = origin + '/apiproxy?api=ovfiets&format=json';
 var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 
 // temp local api
-hotspotsJsonUrl = 'data/hotspots.json';
-hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
-districtJsonUrl = 'data/buurtcombinaties.json';
-districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
-realtimeUrl = 'data/realtime.json';
-
-trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-parkJsonUrl = 'data/parkjson.json';
-fietsJsonUrl = 'data/ovfiets.json';
-eventsJsonUrl = 'data/events.js';
+// hotspotsJsonUrl = 'data/hotspots.json';
+// hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
+// districtJsonUrl = 'data/buurtcombinaties.json';
+// districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
+// realtimeUrl = 'data/realtime.json';
+//
+// trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+// parkJsonUrl = 'data/parkjson.json';
+// fietsJsonUrl = 'data/ovfiets.json';
+// eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
