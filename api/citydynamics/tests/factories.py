@@ -23,4 +23,16 @@ class BuurtcombinatieFactory(factory.DjangoModelFactory):
 
     vollcode = fuzzy.FuzzyText()
     naam = fuzzy.FuzzyText()
+
+
+class BuurtcombinatieIndexFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.BuurtCombinatieDrukteindex
+
+    index = fuzzy.FuzzyInteger(low=0, high=99900090000000)
+    # vollcode = factory.SubFactory(BuurtcombinatieFactory)
+    #  naam = fuzzy.FuzzyText()
+    hour = fuzzy.FuzzyInteger(low=0, high=24)
+    weekday = fuzzy.FuzzyInteger(low=0, high=6)
+    drukteindex = fuzzy.FuzzyFloat(low=0, high=1)
     # wkb_geometry_simplified = ...

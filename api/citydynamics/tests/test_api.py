@@ -9,17 +9,22 @@ class BrowseDatasetsTestCase(APITestCase):
         'api/buurtcombinatie',
         'api/buurtcombinatie_drukteindex',
         'api/hotspots',
-        'api/realtime'
+        'api/realtime',
+        'api/historian'
     ]
 
     druktecijfers_endpoints = [
-        'api/buurtcombinatie_drukteindex',
-        'api/hotspots'
+        '/api/buurtcombinatie_drukteindex/',
+        '/api/hotspots/',
+        '/api/historian/',
     ]
 
     def setUp(self):
         self.h = factories.HotspotsFactory()
         self.b = factories.BuurtcombinatieFactory()
+        self.bi = factories.BuurtcombinatieIndexFactory(
+            vollcode=self.b
+        )
 
     def valid_html_response(self, url, response):
         """
@@ -68,10 +73,9 @@ class BrowseDatasetsTestCase(APITestCase):
                 'count', response.data, 'No count attribute in {}'.format(url))
 
     # #TODO: debug
-    # def test_druktecijfers(self):
-    #     for url in self.druktecijfers_endpoints:
-    #         response = self.client.get(url)
-    #         self.assertIn(
-    #             'druktecijfers',
-    #             response.data['results'][0],
-    #             'Missing druktecijfers attribute in {}'.format(url))
+    def test_druktecijfers(self):
+        for url in self.druktecijfers_endpoints:
+            response = self.client.get(url)
+            self.assertIn(
+                'count', response.data,
+                'Missing items attribute in {}'.format(url))
