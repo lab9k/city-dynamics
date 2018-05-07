@@ -26,6 +26,7 @@ from citydynamics.datasets.views import DrukteindexHotspotViewset
 from citydynamics.datasets.views import RealtimeGoogleViewset
 from citydynamics.datasets.views import DrukteindexBuurtcombinatieViewset
 from citydynamics.datasets.views import HotspotViewset
+from citydynamics.datasets.views import HistorianViewset
 from citydynamics.datasets.views import api_proxy
 
 
@@ -89,10 +90,12 @@ class HybridRouter(routers.DefaultRouter):
 router = HybridRouter()
 router.register('buurtcombinatie', BuurtcombinatieViewset, 'buurtcombinatie')
 router.register(
-    'buurtcombinatie_drukteindex', DrukteindexBuurtcombinatieViewset, 'buurtcombinatie_drukteindex')
+    'buurtcombinatie_drukteindex',
+    DrukteindexBuurtcombinatieViewset, 'buurtcombinatie_drukteindex')
 router.register('hotspots', HotspotViewset, 'hotspots')
-router.register('hotspots_drukteindex', DrukteindexHotspotViewset, 'hotspots_drukteindex')
+router.register('hotspots_drukteindex', DrukteindexHotspotViewset, 'hotspots_drukteindex')   # noqa
 router.register('realtime', RealtimeGoogleViewset, 'realtime')
+router.register('historian', HistorianViewset, 'historian')
 
 router.add_api_view(
         'apiproxy',
@@ -100,6 +103,8 @@ router.add_api_view(
 
 
 urlpatterns = router.urls
+
+app_name = "citydynamics"
 
 urlpatterns = [
     url(r'^api/', include(router.urls)),

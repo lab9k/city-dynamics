@@ -136,6 +136,32 @@ class RealtimeGoogleViewset(rest.DatapuntViewSet):
     filter_class = RealtimeFilter
 
 
+class HistorianFilter(FilterSet):
+
+    class Meta:
+        model = models.RealtimeHistorian
+        fields = (
+            'place_id',
+            'scraped_at',
+            'name',
+            'source',
+        )
+
+
+class HistorianViewset(rest.DatapuntViewSet):
+    """
+    Previous scraped data of external endpoints
+    saved here for future analysis
+    """
+    serializer_class = serializers.HistorianSerializerList
+    serializer_detail_class = serializers.HistorianSerializer
+
+    queryset = models.RealtimeHistorian.objects.order_by('scraped_at')
+
+    filter_class = HistorianFilter
+
+
+
 PROXY_URLS = {
     # 'events': 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today',  # noqa
     'events': 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req8.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today&startDate=&endDate=&hidelongterm=1',  # noqa
@@ -175,6 +201,38 @@ def cleanup(api_response):
 cache = expiringdict.ExpiringDict(max_len=100, max_age_seconds=60)
 
 
+def get_latest(api_source):
+
+    try:
+        latest = (
+            models.RealtimeHistorian.objects
+            .order_by('scraped_at')
+            .get(source=api_source).first()
+        )
+    except models.RealtimeHistorian.DoesNotExist:
+        return None
+
+    if not latest:
+        return None
+
+    if (datetime.now - latest.scraped_at) > 300:
+        return None
+
+    return latest.data
+
+
+def store(api_source, data):
+    """
+    Store realtime suggestion
+    """
+    r = models.RealtimeHistorian.objects.create(
+        scraped_at=datetime.datetime.now(),
+        source=api_source,
+        data=data,
+    )
+    r.save()
+
+
 @api_view(['GET', ])
 def api_proxy(request):
     """Proxy API to avoid cors headers. with a x minute cache.
@@ -199,12 +257,11 @@ def api_proxy(request):
     if api_source not in options:
         return r400
 
-    # only allow 1 request every 60 seconds
-
-    data = cache.get(api_source)
+    # Get the lastest known realtime information
+    data = get_latest(api_source)
 
     if data:
-        log.info('from cache!')
+        log.info('From cache!')
         return Response(data)
 
     response = requests.get(PROXY_URLS[api_source])
@@ -221,9 +278,11 @@ def api_proxy(request):
     else:
         data = response.text
 
-    cache[api_source] = data
-
     if not data:
         log.error('EXT API DATA MISSING %s %s', api_source, data)
+        # 598 (Informal convention) Network read timeout error
+        return Response([], status_code=598)
+
+    store(api_source, data)
 
     return Response(data)

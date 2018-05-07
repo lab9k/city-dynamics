@@ -81,5 +81,21 @@ class RealtimeGoogle(models.Model):
     data = JSONField()
 
     class Meta:
-        db_table = f'google_raw_locations_realtime_current_{settings.ENVIRONMENT}'  # noqa
-        managed=False
+        db_table = f'google_raw_locations_realtime_current_{settings.ENVIRONMENT}'   # noqa
+        managed = False
+
+
+class RealtimeHistorian(models.Model):
+    """
+    From serveral realtime endpoints keep data here
+    for analyzing purpose
+    """
+
+    place_id = models.TextField(db_index=True)
+    scraped_at = models.DateTimeField(blank=True, null=False, auto_now_add=True)
+    name = models.TextField(null=True)
+    source = models.CharField(max_length=40, null=False)
+    data = JSONField()
+
+    class Meta:
+        managed = True

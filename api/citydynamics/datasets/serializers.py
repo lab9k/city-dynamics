@@ -5,6 +5,7 @@ from citydynamics.datasets.models import Buurtcombinatie
 from citydynamics.datasets.models import BuurtCombinatieDrukteindex
 from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
 from citydynamics.datasets.models import RealtimeGoogle
+from citydynamics.datasets.models import RealtimeHistorian
 import datetime
 
 
@@ -112,6 +113,35 @@ class RealtimeGoogleSerializer(ModelSerializer):
         fields = (
             'scraped_at',
             'name',
+            'place_id',
+            'data'
+        )
+
+
+class HistorianSerializerList(ModelSerializer):
+    """
+    For external url endpoints store historial data
+    """
+    class Meta:
+        model = RealtimeHistorian
+        fields = (
+            'scraped_at',
+            'name',
+            'source',
+        )
+
+
+class HistorianSerializer(ModelSerializer):
+    """
+    For external url endpoints store historial data
+    """
+
+    class Meta:
+        model = RealtimeHistorian
+        fields = (
+            'scraped_at',
+            'name',
+            'source',
             'place_id',
             'data'
         )
