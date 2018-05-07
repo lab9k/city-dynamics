@@ -13,8 +13,10 @@ import logging
 import configparser
 import argparse
 import os
+import re
 
 import download_from_objectstore
+import objectstore
 import parsers
 from ETLFunctions import DatabaseInteractions
 from ETLFunctions import ModifyTables
@@ -172,8 +174,19 @@ def main(args):
     # 2. Download data from objectstore.
     execute_download_from_objectstore()
 
-    # 3. Restore alpha dump to database.
-    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/google_raw_feb.dump'
+    # Get list of all data files.
+    files = os.listdir(os.getcwd() + '/data')
+
+    # Create regex to find Quantillion dump files.
+    dumps_filter = re.compile("database\.production.*\.dump")
+
+    # Filter all Quantillion dump files, sort them on filename (so implicitly on date), and get the most recent dump.
+    selected_files = list(filter(dumps_filter.search, files))
+    selected_files.sort()
+    most_recent_dump = selected_files[-1]
+
+    # Restore the most recent Quantillion dump to the database.
+    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean ./data/' + most_recent_dump
     os.system(cmd)
 
     # 4. Parse the data and write to postgresql database.
