@@ -11,9 +11,9 @@ dc() {
 }
 
 
-# dc stop
-# dc rm --force
-# dc down
+dc stop
+dc rm --force
+dc down
 dc pull
 dc build
 
