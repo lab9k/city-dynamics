@@ -1,0 +1,1314 @@
+{
+  "count": 44,
+  "next": null,
+  "previous": null,
+  "results": {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "id": 18,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Artis",
+          "coordinates": [
+            52.366,
+            4.91653
+          ]
+        }
+      },
+      {
+        "id": 33,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Canvas",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        }
+      },
+      {
+        "id": 0,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.9050951,
+                52.378481
+              ],
+              [
+                4.8981214,
+                52.3809697
+              ],
+              [
+                4.8963618,
+                52.3800397
+              ],
+              [
+                4.8977995,
+                52.3788608
+              ],
+              [
+                4.8992372,
+                52.3780225
+              ],
+              [
+                4.9010825,
+                52.3775772
+              ],
+              [
+                4.9030352,
+                52.3773545
+              ],
+              [
+                4.9050951,
+                52.378481
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Centraal Station",
+          "coordinates": [
+            52.37876,
+            4.89978
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8942268,
+                52.3729792
+              ],
+              [
+                4.8935723,
+                52.3732674
+              ],
+              [
+                4.8930788,
+                52.3733198
+              ],
+              [
+                4.8924351,
+                52.3735229
+              ],
+              [
+                4.8917913,
+                52.3736277
+              ],
+              [
+                4.8917592,
+                52.3727827
+              ],
+              [
+                4.8926604,
+                52.3727172
+              ],
+              [
+                4.8931861,
+                52.3726844
+              ],
+              [
+                4.8938406,
+                52.3725272
+              ],
+              [
+                4.8942268,
+                52.3729792
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Dam",
+          "coordinates": [
+            52.3732,
+            4.89362
+          ]
+        }
+      },
+      {
+        "id": 1,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8980527,
+                52.3771292
+              ],
+              [
+                4.8963361,
+                52.3759109
+              ],
+              [
+                4.8951774,
+                52.3749416
+              ],
+              [
+                4.8932784,
+                52.3735399
+              ],
+              [
+                4.8935144,
+                52.3733696
+              ],
+              [
+                4.8953598,
+                52.3745617
+              ],
+              [
+                4.896615,
+                52.3756162
+              ],
+              [
+                4.898396,
+                52.3768737
+              ],
+              [
+                4.8980527,
+                52.3771292
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Damrak",
+          "coordinates": [
+            52.37518,
+            4.89587
+          ]
+        }
+      },
+      {
+        "id": 32,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Dappermarkt",
+          "coordinates": [
+            52.36219,
+            4.92778
+          ]
+        }
+      },
+      {
+        "id": 22,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "De 9 Straatjes",
+          "coordinates": [
+            52.37019,
+            4.88606
+          ]
+        }
+      },
+      {
+        "id": 30,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Elandsgracht",
+          "coordinates": [
+            52.36931,
+            4.87958
+          ]
+        }
+      },
+      {
+        "id": 37,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Erasmuspark",
+          "coordinates": [
+            52.375104,
+            4.851259
+          ]
+        }
+      },
+      {
+        "id": 38,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Flevopark",
+          "coordinates": [
+            52.36026,
+            4.949894
+          ]
+        }
+      },
+      {
+        "id": 39,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Frankendael Park",
+          "coordinates": [
+            52.350451,
+            4.93029
+          ]
+        }
+      },
+      {
+        "id": 26,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Haarlemmerdijk",
+          "coordinates": [
+            52.38295,
+            4.88662
+          ]
+        }
+      },
+      {
+        "id": 25,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Haarlemmerstraat",
+          "coordinates": [
+            52.38027,
+            4.89184
+          ]
+        }
+      },
+      {
+        "id": 31,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Javastraat",
+          "coordinates": [
+            52.36373,
+            4.93748
+          ]
+        }
+      },
+      {
+        "id": 7,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8919115,
+                52.3726988
+              ],
+              [
+                4.8918364,
+                52.3715001
+              ],
+              [
+                4.8916111,
+                52.3708189
+              ],
+              [
+                4.8913107,
+                52.3701704
+              ],
+              [
+                4.8910747,
+                52.3696332
+              ],
+              [
+                4.8908944,
+                52.3692441
+              ],
+              [
+                4.8910232,
+                52.3687987
+              ],
+              [
+                4.8913987,
+                52.368196
+              ],
+              [
+                4.8919888,
+                52.3676457
+              ],
+              [
+                4.8930938,
+                52.3671217
+              ],
+              [
+                4.8931797,
+                52.3672396
+              ],
+              [
+                4.8917527,
+                52.3679929
+              ],
+              [
+                4.8911626,
+                52.3688052
+              ],
+              [
+                4.8910339,
+                52.3693424
+              ],
+              [
+                4.8914309,
+                52.3701625
+              ],
+              [
+                4.8918815,
+                52.3710534
+              ],
+              [
+                4.8920488,
+                52.3716953
+              ],
+              [
+                4.8920864,
+                52.3724617
+              ],
+              [
+                4.8921025,
+                52.3726877
+              ],
+              [
+                4.8919115,
+                52.3726988
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Kalverstraat",
+          "coordinates": [
+            52.37003,
+            4.89135
+          ]
+        }
+      },
+      {
+        "id": 20,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Koningsplein",
+          "coordinates": [
+            52.367,
+            4.88923
+          ]
+        }
+      },
+      {
+        "id": 29,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Leidseplein",
+          "coordinates": [
+            52.36366,
+            4.882
+          ]
+        }
+      },
+      {
+        "id": 21,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Leidsestraat",
+          "coordinates": [
+            52.36651,
+            4.88757
+          ]
+        }
+      },
+      {
+        "id": 14,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Martelaarsgracht",
+          "coordinates": [
+            52.37794,
+            4.89645
+          ]
+        }
+      },
+      {
+        "id": 12,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8932129,
+                52.3669788
+              ],
+              [
+                4.892993,
+                52.3666382
+              ],
+              [
+                4.8932934,
+                52.3664056
+              ],
+              [
+                4.8934489,
+                52.3666677
+              ],
+              [
+                4.8936743,
+                52.3668478
+              ],
+              [
+                4.8938727,
+                52.3667921
+              ],
+              [
+                4.8939586,
+                52.3668871
+              ],
+              [
+                4.8937011,
+                52.3669887
+              ],
+              [
+                4.8932129,
+                52.3669788
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Muntplein",
+          "coordinates": [
+            52.36701,
+            4.89334
+          ]
+        }
+      },
+      {
+        "id": 34,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Museumplein",
+          "coordinates": [
+            52.35738,
+            4.88306
+          ]
+        }
+      },
+      {
+        "id": 6,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.9005311,
+                52.3706132
+              ],
+              [
+                4.8991148,
+                52.3709931
+              ],
+              [
+                4.8989646,
+                52.3708752
+              ],
+              [
+                4.9004023,
+                52.3704953
+              ],
+              [
+                4.9005311,
+                52.3706132
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Nieuwe Hoogstraat",
+          "coordinates": [
+            52.37067,
+            4.89982
+          ]
+        }
+      },
+      {
+        "id": 13,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8949864,
+                52.3772484
+              ],
+              [
+                4.8939135,
+                52.3766786
+              ],
+              [
+                4.8925831,
+                52.3757747
+              ],
+              [
+                4.8913922,
+                52.3748119
+              ],
+              [
+                4.8903515,
+                52.3733381
+              ],
+              [
+                4.8907592,
+                52.3731613
+              ],
+              [
+                4.8918107,
+                52.3747005
+              ],
+              [
+                4.8933771,
+                52.3758337
+              ],
+              [
+                4.8952439,
+                52.3770191
+              ],
+              [
+                4.8949864,
+                52.3772484
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Nieuwezijds Voorburgwal",
+          "coordinates": [
+            52.37362,
+            4.89046
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.9010943,
+                52.3729753
+              ],
+              [
+                4.9004238,
+                52.3730866
+              ],
+              [
+                4.9001395,
+                52.3730833
+              ],
+              [
+                4.8996191,
+                52.3723104
+              ],
+              [
+                4.9003969,
+                52.372091
+              ],
+              [
+                4.9005525,
+                52.3721336
+              ],
+              [
+                4.9010943,
+                52.3729753
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Nieuwmarkt",
+          "coordinates": [
+            52.37264,
+            4.89988
+          ]
+        }
+      },
+      {
+        "id": 24,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Noorderkerk",
+          "coordinates": [
+            52.37975,
+            4.88619
+          ]
+        }
+      },
+      {
+        "id": 41,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Oosterpark",
+          "coordinates": [
+            52.35992,
+            4.920544
+          ]
+        }
+      },
+      {
+        "id": 2,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8984454,
+                52.3748132
+              ],
+              [
+                4.8976085,
+                52.3746887
+              ],
+              [
+                4.8972008,
+                52.3743285
+              ],
+              [
+                4.8974261,
+                52.3740272
+              ],
+              [
+                4.8980591,
+                52.3738962
+              ],
+              [
+                4.8985527,
+                52.3741648
+              ],
+              [
+                4.8988638,
+                52.3744399
+              ],
+              [
+                4.8984454,
+                52.3748132
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Oudekerksplein",
+          "coordinates": [
+            52.37464,
+            4.89793
+          ]
+        }
+      },
+      {
+        "id": 8,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8925477,
+                52.3691668
+              ],
+              [
+                4.8928481,
+                52.3685576
+              ],
+              [
+                4.8933953,
+                52.3680892
+              ],
+              [
+                4.8938352,
+                52.3677126
+              ],
+              [
+                4.8940605,
+                52.3677682
+              ],
+              [
+                4.8932236,
+                52.3684856
+              ],
+              [
+                4.892891,
+                52.3689048
+              ],
+              [
+                4.8927516,
+                52.3691734
+              ],
+              [
+                4.8925477,
+                52.3691668
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Oude Turfmarkt",
+          "coordinates": [
+            52.36848,
+            4.89302
+          ]
+        }
+      },
+      {
+        "id": 5,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.900353,
+                52.3749311
+              ],
+              [
+                4.898808,
+                52.3735163
+              ],
+              [
+                4.8974347,
+                52.3722325
+              ],
+              [
+                4.8961258,
+                52.3709748
+              ],
+              [
+                4.8963404,
+                52.3708438
+              ],
+              [
+                4.8983788,
+                52.3727565
+              ],
+              [
+                4.8994303,
+                52.373739
+              ],
+              [
+                4.9005246,
+                52.3748394
+              ],
+              [
+                4.900353,
+                52.3749311
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Oudezijds Achterburgwal",
+          "coordinates": [
+            52.37207,
+            4.89763
+          ]
+        }
+      },
+      {
+        "id": 15,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Overhoeksplein",
+          "coordinates": [
+            52.38413,
+            4.90273
+          ]
+        }
+      },
+      {
+        "id": 16,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Passenger Terminal Amsterdam",
+          "coordinates": [
+            52.37786,
+            4.9152
+          ]
+        }
+      },
+      {
+        "id": 11,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8976788,
+                52.3663827
+              ],
+              [
+                4.8962948,
+                52.3663516
+              ],
+              [
+                4.8956886,
+                52.3663598
+              ],
+              [
+                4.895643,
+                52.3656752
+              ],
+              [
+                4.8959729,
+                52.3656424
+              ],
+              [
+                4.8970163,
+                52.3657767
+              ],
+              [
+                4.8976681,
+                52.3658389
+              ],
+              [
+                4.8976788,
+                52.3663827
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Rembrandtplein",
+          "coordinates": [
+            52.36628,
+            4.89661
+          ]
+        }
+      },
+      {
+        "id": 40,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Sarphatipark",
+          "coordinates": [
+            52.354322,
+            4.895821
+          ]
+        }
+      },
+      {
+        "id": 17,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Scheepvaartmuseum",
+          "coordinates": [
+            52.3717,
+            4.91487
+          ]
+        }
+      },
+      {
+        "id": 42,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Sloterpark",
+          "coordinates": [
+            52.370507,
+            4.813934
+          ]
+        }
+      },
+      {
+        "id": 9,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.8987865,
+                52.3682235
+              ],
+              [
+                4.8978317,
+                52.368289
+              ],
+              [
+                4.896571,
+                52.3683807
+              ],
+              [
+                4.8964584,
+                52.3682759
+              ],
+              [
+                4.8974669,
+                52.3682104
+              ],
+              [
+                4.8987114,
+                52.3681253
+              ],
+              [
+                4.8987865,
+                52.3682235
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Staalstraat",
+          "coordinates": [
+            52.36824,
+            4.89751
+          ]
+        }
+      },
+      {
+        "id": 36,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Ten Kate markt",
+          "coordinates": [
+            52.36687,
+            4.8669
+          ]
+        }
+      },
+      {
+        "id": 19,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Utrechtsestraat",
+          "coordinates": [
+            52.36358,
+            4.89838
+          ]
+        }
+      },
+      {
+        "id": 35,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Vondelpark",
+          "coordinates": [
+            52.35799,
+            4.86864
+          ]
+        }
+      },
+      {
+        "id": 10,
+        "type": "Feature",
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                4.9011791,
+                52.3694747
+              ],
+              [
+                4.9007928,
+                52.3691144
+              ],
+              [
+                4.9002457,
+                52.3687672
+              ],
+              [
+                4.8990226,
+                52.3676798
+              ],
+              [
+                4.9012434,
+                52.3667037
+              ],
+              [
+                4.9028099,
+                52.3678698
+              ],
+              [
+                4.903357,
+                52.3680466
+              ],
+              [
+                4.9037004,
+                52.3684594
+              ],
+              [
+                4.9011791,
+                52.3694747
+              ]
+            ]
+          ]
+        },
+        "properties": {
+          "hotspot": "Waterlooplein",
+          "coordinates": [
+            52.36805,
+            4.9022
+          ]
+        }
+      },
+      {
+        "id": 27,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Weesperplein",
+          "coordinates": [
+            52.36184,
+            4.90804
+          ]
+        }
+      },
+      {
+        "id": 43,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Wertheimpark",
+          "coordinates": [
+            52.367935,
+            4.908986
+          ]
+        }
+      },
+      {
+        "id": 23,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Westerkerk",
+          "coordinates": [
+            52.37453,
+            4.88396
+          ]
+        }
+      },
+      {
+        "id": 28,
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            52.35402,
+            4.91232
+          ]
+        },
+        "properties": {
+          "hotspot": "Weteringcircuit",
+          "coordinates": [
+            52.3597,
+            4.89083
+          ]
+        }
+      }
+    ]
+  }
+}

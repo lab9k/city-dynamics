@@ -1,18 +1,26 @@
 // map & layers
 var map;
 var theme_layer;
-var circles = [];
-var circles_d3 = [];
-var circles_layer;
+// var circles = [];
+// var circles_d3 = [];
+// var circles_layer;
 var markers = [];
-var geojson;
+// var geojson;
 var traffic_layer;
 var districts_d3 = [];
+var hotspots_d3 = [];
+var hotspots_layer;
+var districts_layer;
+var districtsIndexJson;
+var districtsJson;
+var hotspotsIndexJson;
+var hotspotsJson;
+var realtimeJson;
 
 // global arrays
 var control_array = ['search','logo','dlogo','m_more','m_menu','beta','controls','themas','mapswitch','info','leftbox']
-var buurtcode_prop_array = [];
-var hotspot_array = [];
+var districts_array = [];
+var hotspots_array = [];
 var realtime_array = [];
 
 // states
@@ -36,8 +44,8 @@ var geomap2 = 'https://t1.data.amsterdam.nl/topo_wm_zw/{z}/{x}/{y}.png';
 var geomap3 = 'https://t1.data.amsterdam.nl/topo_wm_light/{z}/{x}/{y}.png';
 
 // Initially assume we have the API running locally.
-var origin = 'http://127.0.0.1:8117/api';
-// var origin = 'https://acc.drukteradar.amsterdam.nl/api';
+// var origin = 'http://127.0.0.1:8117/api';
+var origin = 'https://acc.drukteradar.amsterdam.nl/api';
 
 
 if(window.location.href.indexOf('drukteradar.amsterdam.nl') > -1)
@@ -53,11 +61,12 @@ if(window.location.href.indexOf('acc.drukteradar.amsterdam.nl') > -1)
 
 
 var base_api = origin + '/';
-var dindex_api = base_api + 'drukteindex/?format=json&op=';
 var hotspotsJsonUrl = base_api + 'hotspots/?format=json';
+var hotspotsIndexJsonUrl = base_api + 'hotspots_drukteindex/?format=json';
+var districtJsonUrl = base_api + 'buurtcombinatie/?format=json';
+var districtIndexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
 var realtimeUrl = base_api + 'realtime/?format=json';
-var geoJsonUrl = base_api + 'buurtcombinatie/?format=json';
-var dindexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
+
 
 // theme api
 var trafficJsonUrl = origin + '/apiproxy?api=traveltime&format=json';
@@ -66,12 +75,15 @@ var fietsJsonUrl = origin + '/apiproxy?api=ovfiets&format=json';
 var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 
 // temp local api
-// hotspotsJsonUrl = 'data/hotspots_fallback.json';
-// geoJsonUrl = 'data/buurtcombinaties.json';
-// dindexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
+// hotspotsJsonUrl = 'data/hotspots.json';
+// hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
+// districtJsonUrl = 'data/buurtcombinaties.json';
+// districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
 // realtimeUrl = 'data/realtime.json';
+//
 // trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 // parkJsonUrl = 'data/parkjson.json';
+// fietsJsonUrl = 'data/ovfiets.json';
 // eventsJsonUrl = 'data/events.js';
 
 // specific
@@ -87,6 +99,9 @@ var amsterdam = {
 // ######### onload init sequence ###############
 $(document).ready(function(){
 
+	// set page tag
+	setTag('main');
+
 	// check device resolution
 	mobile = ($( document ).width()<=750);
 
@@ -100,50 +115,53 @@ $(document).ready(function(){
 
 	if(debug) {
 		console.log('Do mandatory api calls:');
-		console.log(dindexJsonUrl);
-		console.log(geoJsonUrl);
+		console.log(districtIndexJsonUrl);
+		console.log(districtJsonUrl);
+		console.log(hotspotsIndexJsonUrl);
 		console.log(hotspotsJsonUrl);
 		console.log(realtimeUrl);
 	}
 
 	// first promise chain
-	$.when($.getJSON(dindexJsonUrl),$.getJSON(geoJsonUrl),$.getJSON(hotspotsJsonUrl),$.getJSON(realtimeUrl)).done(
-		function(dindexJson,geoJson,hotspotsJson,realtimeJson){
+	$.when($.getJSON(districtIndexJsonUrl),$.getJSON(districtJsonUrl),$.getJSON(hotspotsJsonUrl), $.getJSON(hotspotsIndexJsonUrl),$.getJSON(realtimeUrl)).done(
+		function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
 
-					if(debug) {
-						console.log('Districts index api:');
-						console.log(dindexJson);
-						console.log('Districts geo api:');
-						console.log(geoJson);
-						console.log('Hotspots api:');
-						console.log(hotspotsJson);
-						console.log('Realtime api:');
-						console.log(realtimeJson);
-					}
+		districtsIndexJson = districtsIndexJson_t[0];
+		districtsJson = districtsJson_t[0];
+		hotspotsIndexJson = hotspotsIndexJson_t[0];
+		hotspotsJson = hotspotsJson_t[0];
+		realtimeJson = realtimeJson_t[0];
 
-					getDistrictIndex(dindexJson[0]);
+		if(debug) {
+			console.log('Districts index json:');
+			console.log(districtsIndexJson);
+			console.log('Districts geo json:');
+			console.log(districtsJson);
+			console.log('Hotspots index json:');
+			console.log(hotspotsIndexJson);
+			console.log('Hotspots geo json:');
+			console.log(hotspotsJson);
+			console.log('Realtime json:');
+			console.log(realtimeJson);
+		}
 
-					getDistricts(geoJson[0]);
+		getDistrictIndex();
 
-					getHotspots(hotspotsJson[0]);
+		getDistricts();
 
-					getRealtime(realtimeJson[0]);
+		getHotspotsIndex();
 
-					if(debug) {
-						console.log('buurtcode_prop_array:');
-						console.log(buurtcode_prop_array);
-						console.log('hotspot_array:');
-						console.log(hotspot_array);
-					}
+		getHotspots();
 
-					initLineGraph();
+		getRealtime();
 
-					initAutoComplete();
+		initLineGraph();
 
-					initEventMapping();
+		initAutoComplete();
 
-				}
-	).fail(function(dindexJson,geoJson,hotspotsJson,realtimeJson){
+		initEventMapping();
+
+	}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
 		console.error('One or more apis failed.');
 		if(dindexJson[1]!='success')
 		{
@@ -188,9 +206,9 @@ function initMap()
 	}).addTo(map);
 }
 
-function getDistrictIndex(dindexJson) {
+function getDistrictIndex() {
 
-		$.each(dindexJson.results, function (key, value) {
+		$.each(districtsIndexJson.results, function (key, value) {
 
 			var buurtcode = this.vollcode;
 
@@ -202,44 +220,50 @@ function getDistrictIndex(dindexJson) {
 				dataset.index.push({h:24,d:dataset.index[0].d});
 			}
 
-			buurtcode_prop_array[buurtcode] = dataset;
+			districts_array[buurtcode] = dataset;
 		});
 
 		if(debug) { console.log('getDistrictIndex: Done') }
 }
 
-function getDistricts(geoJson)
+function getDistricts()
 {
-	geojson = L.geoJSON(geoJson.results, {style: style, onEachFeature: onEachFeature}).addTo(map);
+	districts_layer = L.geoJSON(districtsJson.results, {style: styleDistrict, onEachFeature: onEachFeatureDistrict}).addTo(map);
 
-	geojson.eachLayer(function (layer) {
+	districts_layer.eachLayer(function (layer) {
 
 		layer._path.id = 'feature-' + layer.feature.properties.vollcode;
 		districts_d3[layer.feature.properties.vollcode] = d3.select('#feature-' + layer.feature.properties.vollcode);
 	});
 
 	// hide map by default
-	map.removeLayer(geojson);
+	map.removeLayer(districts_layer);
 
 	if(debug) { console.log('getDistricts: Done') }
+
+
+	if(debug) {
+		console.log('districts_array:');
+		console.log(districts_array);
+	}
 
 }
 
 function addDistrictLayer()
 {
-	geojson.addTo(map);
+	districts_layer.addTo(map);
 
-	geojson.eachLayer(function (layer) {
+	districts_layer.eachLayer(function (layer) {
 		layer._path.id = 'feature-' + layer.feature.properties.vollcode;
 		districts_d3[layer.feature.properties.vollcode] = d3.select('#feature-' + layer.feature.properties.vollcode);
 	});
 }
 
-function style(feature) {
+function styleDistrict(feature) {
 
-	if(buurtcode_prop_array[feature.properties.vollcode].index.length)
+	if(districts_array[feature.properties.vollcode].index.length)
 	{
-		var dindex = buurtcode_prop_array[feature.properties.vollcode].index[0].d * 10;
+		var dindex = districts_array[feature.properties.vollcode].index[0].d * 10;
 		if(dindex>1) { dindex=1;}
 	}
 	else
@@ -257,10 +281,10 @@ function style(feature) {
 	};
 }
 
-function onEachFeature(feature, layer) {
+function onEachFeatureDistrict(feature, layer) {
 
-	buurtcode_prop_array[feature.properties.vollcode].layer = layer;
-	buurtcode_prop_array[feature.properties.vollcode].buurt = feature.properties.naam;
+	districts_array[feature.properties.vollcode].layer = layer;
+	districts_array[feature.properties.vollcode].buurt = feature.properties.naam;
 
 	layer.on({
 		mouseover: highlightFeature,
@@ -277,7 +301,106 @@ function onEachFeature(feature, layer) {
 	});
 }
 
-function getHotspots(hotspotsJson) {
+function getHotspotsIndex() {
+
+	$.each(hotspotsIndexJson.results, function (key, value) {
+
+		var hotspotcode = this.index;
+
+		var dataset = {};
+
+		dataset.hotspot = this.hotspot;
+		dataset.index = this.druktecijfers;
+		if(dataset.index.length>0)
+		{
+			dataset.index.push({h:24,d:dataset.index[0].d});
+		}
+
+		hotspots_array[hotspotcode] = dataset;
+	});
+
+	if(debug) { console.log('getHotspotsIndex: Done') }
+
+}
+
+
+function getHotspots()
+{
+	hotspots_layer = L.geoJSON(hotspotsJson.results, {style: styleHotspots, onEachFeature: onEachFeatureHotspots}).addTo(map);
+console.log(hotspots_layer);
+	hotspots_layer.eachLayer(function (layer) {
+
+		layer._path.id = 'feature-' + layer.feature.properties.index;
+		hotspots_d3[layer.feature.properties.index] = d3.select('#feature-' + layer.feature.properties.index);
+	});
+
+	// hide map by default
+	map.removeLayer(hotspots_layer);
+
+	if(debug) { console.log('getHotspots: Done') }
+
+
+	if(debug) {
+		console.log('hotspots_array:');
+		console.log(hotspots_array);
+	}
+
+}
+
+function addHotspotsLayer()
+{
+	hotspots_layer.addTo(map);
+
+	hotspots_layer.eachLayer(function (layer) {
+		layer._path.id = 'feature-' + layer.feature.id;
+		hotspots_d3[layer.feature.id] = d3.select('#feature-' + layer.feature.id);
+	});
+}
+
+function styleHotspots(feature) {
+
+	console.log(feature);
+	if(hotspots_array[feature.id].index.length)
+	{
+		var dindex = hotspots_array[feature.id].index[0].d * 10;
+		if(dindex>1) { dindex=1;}
+	}
+	else
+	{
+		var dindex = 0;
+	}
+
+
+	return {
+		fillColor: getColor(dindex),
+		weight: 1,
+		opacity: 0.6,
+		color: '#fff',
+		fillOpacity: 0.7
+	};
+}
+
+function onEachFeatureHotspots(feature, layer) {
+
+	hotspots_array[feature.id].layer = layer;
+	hotspots_array[feature.id].hotspot = feature.properties.hotspot;
+
+	layer.on({
+		mouseover: highlightFeature,
+		mouseout: resetHighlight,
+		click: zoomToFeature
+	});
+	layer.bindPopup('<div class="popup_district"><i class="material-icons">fiber_manual_record</i><h3>' + layer.feature.properties.hotspot + '</h3></div>', {autoClose: false});
+
+	layer.on('mouseover', function (e) {
+		this.openPopup();
+	});
+	layer.on('mouseout', function (e) {
+		this.closePopup();
+	});
+}
+
+function getHotspotsOld(hotspotsJson) {
 
 	var hotspot_count = 0;
 	$.each(hotspotsJson.results, function (key, value) {
@@ -302,8 +425,6 @@ function getHotspots(hotspotsJson) {
 		if (this.druktecijfers.length < 1) {
 			this.druktecijfers = '[{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0}];'
 		}
-
-
 
 		hotspot_count++;
 		hotspot_array.push(dataset);
@@ -367,7 +488,7 @@ function getHotspots(hotspotsJson) {
 }
 
 
-function getRealtime(realtimeJson)
+function getRealtime()
 {
 	var hotspots_match_array = [];
 	hotspots_match_array[18] = 'ARTIS';
@@ -489,10 +610,10 @@ function setLocationMarker(address,label)
 			alert('Geef een huisnummer op voor de exacte locatie.');
 		}
 
-		var active_layer = buurtcode_prop_array[data._buurtcombinatie.vollcode].layer;
+		var active_layer = districts_array[data._buurtcombinatie.vollcode].layer;
 		setLayerActive(active_layer);
 
-		$('.detail h2').html(buurtcode_prop_array[data._buurtcombinatie.vollcode].buurt);
+		$('.detail h2').html(districts_array[data._buurtcombinatie.vollcode].buurt);
 		$('.detail').show();
 		$('.details_graph').show();
 
@@ -518,7 +639,6 @@ function initEventMapping()
 	});
 
 	$( document).on('click', ".feedback",function () {
-		console.log('feedback');
 		window.usabilla_live('trigger', 'feedback');
 	});
 
@@ -896,7 +1016,7 @@ function startAnimation()
 		// });
 
 		// buurtcombinaties
-		// $.each(buurtcode_prop_array, function (key, value) {
+		// $.each(districts_array, function (key, value) {
 		//
 		// 	var start_index = this['index'][0].d * 10;
 		//
@@ -915,25 +1035,49 @@ function startAnimation()
 			var hour = Math.ceil(elapsed_time);
 
 			// hotspots
-			$.each(hotspot_array, function (key, value) {
+			// $.each(hotspot_array, function (key, value) {
+			//
+			// 	// if(key==10)
+			// 	// {
+			// 	// 	console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
+			// 	// }
+			//
+			// 	circles_d3[key]
+			// 		.attr('stroke-opacity', 0.6)
+			// 		.attr('stroke-width', 3)
+			// 		// .transition()
+			// 		// .duration(1000)
+			// 		.attr('fill', getColorBucket(this.druktecijfers[hour].d))
+			// 		.attr('stroke', '#4a4a4a');
+			// });
 
-				// if(key==10)
-				// {
-				// 	console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
-				// }
+			// hotspots
+			for (i in hotspots_array) {
+				buurt_obj = hotspots_array[i];
 
-				circles_d3[key]
-					.attr('stroke-opacity', 0.6)
-					.attr('stroke-width', 3)
-					// .transition()
-					// .duration(1000)
-					.attr('fill', getColorBucket(this.druktecijfers[hour].d))
-					.attr('stroke', '#4a4a4a');
-			});
 
-			// buurtcombinaties
-			for (i in buurtcode_prop_array) {
-				buurt_obj = buurtcode_prop_array[i];
+				var dindex = 0;
+				if(buurt_obj.index.length==25) {
+					dindex = buurt_obj.index[hour].d;
+				}
+
+				if(dindex>1){dindex=1;}
+
+				hotspots_d3[i]
+					.transition()
+					.duration(1000)
+					.attr('fill', getColor(dindex));
+
+				// $('#feature-'+ i).attr('fill', getColorBucket(dindex));
+				// $('#feature-'+ i).remove();
+
+
+				// console.log(hotspots_d3[i]);
+			};
+
+			// districts
+			for (i in districts_array) {
+				buurt_obj = districts_array[i];
 
 
 				var dindex = 0;
@@ -980,8 +1124,8 @@ function dragAnimation() {
 	});
 
 	// buurtcombinaties
-	for (i in buurtcode_prop_array) {
-		buurt_obj = buurtcode_prop_array[i];
+	for (i in districts_array) {
+		buurt_obj = districts_array[i];
 
 		var dindex = 0;
 		if(buurt_obj.index.length) {
@@ -1008,8 +1152,8 @@ function setToCurrentTime()
 	});
 
 	// buurtcombinaties
-	for (i in buurtcode_prop_array) {
-		buurt_obj = buurtcode_prop_array[i];
+	for (i in districts_array) {
+		buurt_obj = districts_array[i];
 
 		var dindex = 0;
 		if(buurt_obj.index.length) {
@@ -1037,8 +1181,8 @@ function getLatLang(point) {
 function highlightFeature(e) {
 	var layer = e.target;
 
-	var dindex = buurtcode_prop_array[layer.feature.properties.vollcode].index;
-	var buurt = buurtcode_prop_array[layer.feature.properties.vollcode].buurt;
+	var dindex = districts_array[layer.feature.properties.vollcode].index;
+	var buurt = districts_array[layer.feature.properties.vollcode].buurt;
 }
 
 function resetHighlight(e) {
@@ -1063,8 +1207,8 @@ function setLayerActive(layer)
 
 	vollcode = layer.feature.properties.vollcode;
 
-	var buurt = buurtcode_prop_array[vollcode].buurt;
-	var dindex = buurtcode_prop_array[vollcode].index;
+	var buurt = districts_array[vollcode].buurt;
+	var dindex = districts_array[vollcode].index;
 
 	updateLineGraph(vollcode,'district');
 
@@ -1128,7 +1272,7 @@ function updateLineGraph(key,type)
 	}
 	else
 	{
-		var point_array =  buurtcode_prop_array[key].index;
+		var point_array =  districts_array[key].index;
 	}
 
 
