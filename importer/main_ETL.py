@@ -175,7 +175,8 @@ def main(args):
     execute_download_from_objectstore()
 
     # Get list of all data files.
-    files = os.listdir(os.getcwd() + '/data')
+    # files = os.listdir(os.getcwd() + '/data')
+    files = os.listdir('/data')
 
     # Create regex to find Quantillion dump files.
     dumps_filter = re.compile("database\.production.*\.dump")

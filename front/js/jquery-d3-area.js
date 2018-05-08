@@ -84,11 +84,16 @@
 				.attr("class", "axis")
 				.attr("transform", "translate(0," + graph.height + ")")
 				.call(d3.axisBottom(x).tickFormat( function(d) {
-					var text = (d < 10) ? "0"+ d : d;
-					if(text==00 || text==24)
+					if(d==0 || d==24)
 					{
-						text='';
+						return '';
 					}
+					d=d+5;
+					if(d>23)
+					{
+						d=d-23;
+					}
+					var text = (d < 10) ? "0"+ d : d;
 					return text;
 				} ).ticks(graph.hours+1, ",f"))
 				.selectAll("text")

@@ -1,9 +1,9 @@
 // map & layers
 var map;
 var theme_layer;
-// var circles = [];
-// var circles_d3 = [];
-// var circles_layer;
+var circles = [];
+var circles_d3 = [];
+var circles_layer;
 var markers = [];
 // var geojson;
 var traffic_layer;
@@ -91,7 +91,7 @@ var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.99
 var proj4RD = proj4('WGS84', def);
 var amsterdam = {
 	coordinates: [52.368, 4.897],
-	druktecijfers: [{h:0,d:0},{h:1,d:0},{h:2,d:0},{h:3,d:0},{h:4,d:0},{h:5,d:0},{h:6,d:0},{h:7,d:0},{h:8,d:0},{h:9,d:0},{h:10,d:0},{h:11,d:0},{h:12,d:0},{h:13,d:0},{h:14,d:0},{h:15,d:0},{h:16,d:0},{h:17,d:0},{h:18,d:0},{h:19,d:0},{h:20,d:0},{h:21,d:0},{h:22,d:0},{h:23,d:0},{h:24,d:0}],
+	druktecijfers: [{h:0,d:0,i:0},{h:1,d:0,i:0},{h:2,d:0,i:0},{h:3,d:0,i:0},{h:4,d:0,i:0},{h:5,d:0,i:0},{h:6,d:0,i:0},{h:7,d:0,i:0},{h:8,d:0,i:0},{h:9,d:0,i:0},{h:10,d:0,i:0},{h:11,d:0,i:0},{h:12,d:0,i:0},{h:13,d:0,i:0},{h:14,d:0,i:0},{h:15,d:0,i:0},{h:16,d:0,i:0},{h:17,d:0,i:0},{h:18,d:0,i:0},{h:19,d:0,i:0},{h:20,d:0,i:0},{h:21,d:0,i:0},{h:22,d:0,i:0},{h:23,d:0,i:0},{h:24,d:0,i:0}],
 	hotspot: "Amsterdam",
 	index: -1
 }
@@ -152,6 +152,8 @@ $(document).ready(function(){
 		getHotspotsIndex();
 
 		getHotspots();
+
+		calcAmsAverage();
 
 		getRealtime();
 
@@ -310,31 +312,151 @@ function getHotspotsIndex() {
 		var dataset = {};
 
 		dataset.hotspot = this.hotspot;
-		dataset.index = this.druktecijfers;
-		if(dataset.index.length>0)
+
+		var day_array = [];
+
+		this.druktecijfers.sort(function (a, b) {
+			return a.d - b.d;
+		});
+
+		var days = [];
+		$.each(this.druktecijfers, function (key, value) {
+			if($.inArray(this.d, days)==-1)
+			{
+				days.push(this.d);
+				day = this.d;
+			}
+			if(days.length==1)
+			{
+				if(this.h>=5 && this.d == day)
+				{
+					day_array.push(this);
+				}
+			}
+			if(days.length==2)
+			{
+				if(this.h<=5 && this.d == day)
+				{
+					day_array.push(this);
+				}
+			}
+		});
+
+		day_array.sort(function (a, b) {
+			return a.d - b.d;
+		});
+
+		dataset.druktecijfers = day_array;
+
+		if(dataset.druktecijfers.length==25)
 		{
-			dataset.index.push({h:24,d:dataset.index[0].d});
+			hotspots_array[hotspotcode] = dataset;
 		}
 
-		hotspots_array[hotspotcode] = dataset;
 	});
 
 	if(debug) { console.log('getHotspotsIndex: Done') }
 
 }
 
+function calcAmsAverage()
+{
+	var hotspot_count = 0;
+	$.each(hotspots_array, function (key, value) {
+
+		// used for ams average todo: calc average in backend
+		$.each(this.druktecijfers, function (key, value) {
+			amsterdam.druktecijfers[this.h].i += this.i
+		});
+
+		hotspot_count++;
+	});
+
+	// used for ams average todo: calc average in backend
+	$.each(amsterdam.druktecijfers, function (key, value) {
+		amsterdam.druktecijfers[this.h].i = amsterdam.druktecijfers[this.h].i / hotspot_count;
+	});
+
+	if(debug) {
+		console.log('AMS average:');
+		console.log(amsterdam.druktecijfers);
+	}
+
+}
+
 
 function getHotspots()
 {
+	$.each(hotspotsJson.results.features, function (key, value) {
+
+		hotspots_array[this.id].coordinates = this.geometry.coordinates;
+	});
+
+	circles_layer = L.layerGroup();
+	$.each(hotspots_array, function (key, value) {
+
+		var hh = getHourDigit();
+		var dindex = this.druktecijfers[hh].i;
+
+		circles[key] = L.circleMarker(this.coordinates.reverse(), {
+			color      : getColorBucket(dindex),
+			fillColor  : getColorBucket(dindex),
+			fillOpacity: 1,
+			radius     : (12),
+			name       : this.hotspot
+		});
+		circles[key].addTo(map);
+		$(circles[key]._path).attr('stroke-opacity', 0.6);
+		$(circles[key]._path).attr('stroke', '#4a4a4a');
+		$(circles[key]._path).attr('hotspot', key);
+		$(circles[key]._path).addClass('hotspot_' + key);
+		circles[key].bindPopup('<div class="popup_hotspot"><i class="material-icons">fiber_manual_record</i><h3>' + this.hotspot + '</h3></div>', {autoClose: false});
+		circles[key].on("click", function (e) {
+			var clickedCircle = e.target;
+
+			var hotspot_id = $(clickedCircle._path).attr('hotspot');
+
+			updateLineGraph(hotspot_id,'hotspot');
+
+			clearInterval(popup_interval);
+
+			popup_interval = setInterval(function () {
+				var current_fill = $('[hotspot=' + hotspot_id + ']').css('fill');
+				$('.popup_hotspot .material-icons').css('color', current_fill);
+			}, 100);
+
+			// do something, like:
+			$('.graphbar_title h2').text(clickedCircle.options.name);
+		});
+		circles[key].addTo(circles_layer);
+
+		circles_d3[key] = d3.select('path.hotspot_' + key);
+
+	});
+
+	if(debug) { console.log('getHotspots: Done') }
+
+
+	if(debug) {
+		console.log('hotspots_array:');
+		console.log(hotspots_array);
+		console.log('circles_array:');
+		console.log(circles_d3);
+	}
+
+}
+
+function getHotspotsNeW()
+{
 	hotspots_layer = L.geoJSON(hotspotsJson.results, {style: styleHotspots, onEachFeature: onEachFeatureHotspots}).addTo(map);
-console.log(hotspots_layer);
+
 	hotspots_layer.eachLayer(function (layer) {
 
 		layer._path.id = 'feature-' + layer.feature.properties.index;
 		hotspots_d3[layer.feature.properties.index] = d3.select('#feature-' + layer.feature.properties.index);
 	});
 
-	// hide map by default
+	//hide map by default
 	map.removeLayer(hotspots_layer);
 
 	if(debug) { console.log('getHotspots: Done') }
@@ -990,7 +1112,7 @@ function stopAnimation()
 {
 	clearInterval(interval);
 
-	$.each(hotspot_array, function (key, value) {
+	$.each(hotspots_array, function (key, value) {
 
 		circles_d3[key]
 			.transition()
@@ -1035,45 +1157,40 @@ function startAnimation()
 			var hour = Math.ceil(elapsed_time);
 
 			// hotspots
-			// $.each(hotspot_array, function (key, value) {
-			//
-			// 	// if(key==10)
-			// 	// {
-			// 	// 	console.log(key + ' - ' + hour + ' - ' + this.druktecijfers[hour].d );
-			// 	// }
-			//
-			// 	circles_d3[key]
-			// 		.attr('stroke-opacity', 0.6)
-			// 		.attr('stroke-width', 3)
-			// 		// .transition()
-			// 		// .duration(1000)
-			// 		.attr('fill', getColorBucket(this.druktecijfers[hour].d))
-			// 		.attr('stroke', '#4a4a4a');
-			// });
+			$.each(hotspots_array, function (key, value) {
+				circles_d3[key]
+					.attr('stroke-opacity', 0.6)
+					.attr('stroke-width', 3)
+					// .transition()
+					// .duration(1000)
+					.attr('fill', getColorBucket(this.druktecijfers[hour].i))
+					.attr('stroke', '#4a4a4a');
+			});
 
 			// hotspots
-			for (i in hotspots_array) {
-				buurt_obj = hotspots_array[i];
-
-
-				var dindex = 0;
-				if(buurt_obj.index.length==25) {
-					dindex = buurt_obj.index[hour].d;
-				}
-
-				if(dindex>1){dindex=1;}
-
-				hotspots_d3[i]
-					.transition()
-					.duration(1000)
-					.attr('fill', getColor(dindex));
-
-				// $('#feature-'+ i).attr('fill', getColorBucket(dindex));
-				// $('#feature-'+ i).remove();
-
-
-				// console.log(hotspots_d3[i]);
-			};
+			// for (i in hotspots_array) {
+			// 	buurt_obj = hotspots_array[i];
+			// 	console.log(i);
+			// 	console.log(buurt_obj);
+			//
+			// 	var dindex = 0;
+			// 	if(buurt_obj.druktecijfers==25) {
+			// 		dindex = buurt_obj.druktecijfers[hour].i;
+			// 	}
+			//
+			// 	if(dindex>1){dindex=1;}
+			//
+			// 	hotspots_d3[i]
+			// 		.transition()
+			// 		.duration(1000)
+			// 		.attr('fill', getColor(dindex));
+			//
+			// 	// $('#feature-'+ i).attr('fill', getColorBucket(dindex));
+			// 	// $('#feature-'+ i).remove();
+			//
+			//
+			// 	// console.log(hotspots_d3[i]);
+			// };
 
 			// districts
 			for (i in districts_array) {
@@ -1115,7 +1232,7 @@ function dragAnimation() {
 	elapsed_time = $('.line-group').attr('time');
 	var hour = Math.ceil(elapsed_time);
 
-	$.each(hotspot_array, function (key, value) {
+	$.each(hotspots_array, function (key, value) {
 		circles_d3[key]
 			.attr('stroke-opacity', 0.6)
 			.attr('stroke-width', 3)
@@ -1201,7 +1318,7 @@ function zoomToFeature(e) {
 function setLayerActive(layer)
 {
 	if(lastClickedLayer){
-		geojson.resetStyle(lastClickedLayer);
+		districts_layer.resetStyle(lastClickedLayer);
 		$(lastClickedLayer.getElement()).removeClass("active_path");
 	}
 
@@ -1240,7 +1357,7 @@ function initLineGraph()
 	$.each(amsterdam.druktecijfers, function (key, value) {
 
 		var dataset = {};
-		dataset.y = Math.round(this.d * 100);
+		dataset.y = Math.round(this.i * 100);
 		dataset.x = parseInt(this.h);
 
 		data.push(dataset);
@@ -1267,7 +1384,7 @@ function updateLineGraph(key,type)
 	}
 	else if(type == 'hotspot')
 	{
-		var point_array = hotspot_array[key].druktecijfers;
+		var point_array = hotspots_array[key].druktecijfers;
 		realtime = realtime_array[key];
 	}
 	else
@@ -1275,12 +1392,11 @@ function updateLineGraph(key,type)
 		var point_array =  districts_array[key].index;
 	}
 
-
 	$.each(point_array, function (key, value) {
 
 		var dataset = {};
-		dataset.y = Math.round(this.d * 100);
-		dataset.x = parseInt(this.h);
+		dataset.y = Math.round(this.i * 100);
+		dataset.x = parseInt(key);
 
 		data.push(dataset);
 	});
