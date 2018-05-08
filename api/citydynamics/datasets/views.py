@@ -161,7 +161,6 @@ class HistorianViewset(rest.DatapuntViewSet):
     filter_class = HistorianFilter
 
 
-
 PROXY_URLS = {
     # 'events': 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today',  # noqa
     'events': 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req8.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today&startDate=&endDate=&hidelongterm=1',  # noqa
