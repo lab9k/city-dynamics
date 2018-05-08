@@ -10,6 +10,8 @@ dc() {
     docker-compose -p cityd${ENVIRONMENT} -f ${DIR}/docker-compose.yml $*
 }
 
+trap 'dc down; dc kill ; dc rm -f -v' EXIT
+
 rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups
 
@@ -22,6 +24,8 @@ dc build
 dc up -d database
 
 dc run --rm importer bash /app/deploy/docker-wait.sh
+dc run --rm importer python /app/main_ETL.py /data --download
+dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics  /data/alpahlatest.dump
 dc run --rm importer bash /app/run_import.sh
 dc run --rm api python manage.py migrate
 dc run --rm analyzer

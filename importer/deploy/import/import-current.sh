@@ -6,13 +6,11 @@ set -x
 
 DIR="$(dirname $0)"
 
-
-trap 'dc down; dc kill ; dc rm -f -v' EXIT
-
-
 dc() {
     docker-compose -p qa_current${ENVIRONMENT} -f ${DIR}/docker-compose.yml $*
 }
+
+trap 'dc down; dc kill ; dc rm -f -v' EXIT
 
 rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups

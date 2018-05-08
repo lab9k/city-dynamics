@@ -13,6 +13,7 @@ import logging
 import configparser
 import argparse
 import os
+import os.path
 import re
 
 import download_from_objectstore
@@ -42,6 +43,8 @@ def execute_download_from_objectstore():
     use_local = True if os.environ.get(ENV_VAR, '') == 'TRUE' else False
 
     if not use_local:
+        if not LOCAL_DATA_DIRECTORY:
+            raise ValueError("data dir missing")
         download_from_objectstore.main(objectstore_containers, LOCAL_DATA_DIRECTORY)
     else:
         logger.info('No download from datastore requested, quitting.')
@@ -120,6 +123,7 @@ def modify_tables():
         ModifyTables.convert_to_geometry())
 
     for dataset in datasets:
+        logger.debug('Working on %s', dataset)
         if config_src.get(dataset, 'CREATE_GEOMETRY') == 'YES':
             table_name = config_src.get(dataset, 'TABLE_NAME')
             conn.execute(ModifyTables.create_geometry_column(table_name))
@@ -139,9 +143,11 @@ def modify_tables():
     logger.info('... done')
 
 
-# This global dictionary is created to allow quick starting of ETL functions from the command line.
+# This global dictionary is created to allow quick starting
+# of ETL functions from the command line.
 TASKS = {
-    'areas': load_areas
+    'areas': load_areas,
+    'download': execute_download_from_objectstore
 }
 
 
@@ -155,9 +161,9 @@ def config_parser():
         'dataset', nargs='?', help="Upload specific dataset")
 
     # add options to parser
-    for k in TASKS.keys():
+    for k, v in TASKS.items():
         parser.add_argument(
-            f'--{k}', action='store_true', help="Download gebieden")
+            f'--{k}', action='store_true', default=False, help=repr(v))
 
     return parser
 
@@ -172,7 +178,7 @@ def main(args):
             return
 
     # 2. Download data from objectstore.
-    execute_download_from_objectstore()
+    # execute_download_from_objectstore()
 
     # Get list of all data files.
     # files = os.listdir(os.getcwd() + '/data')
@@ -187,8 +193,12 @@ def main(args):
     most_recent_dump = selected_files[-1]
 
     # Restore the most recent Quantillion dump to the database.
-    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/' + most_recent_dump
-    os.system(cmd)
+    # cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/' + most_recent_dump
+
+    newest_target = '/data/alpahlatest.dump'
+    if os.path.isfile(newest_target):
+        os.remove(newest_target)
+    os.rename(f'/data/{most_recent_dump}', newest_target)
 
     # 4. Parse the data and write to postgresql database.
     parse_and_write()

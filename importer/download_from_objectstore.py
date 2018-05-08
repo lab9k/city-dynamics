@@ -77,6 +77,7 @@ def download_container(conn, container, targetdir):
         if file_exists(target_filename):
             # Certain files have to be replaced in any case (due to possible updates)
             if "hotspots.csv" in target_filename or "hotspots_dev.csv" in target_filename:
+                logger.debug('Downloading %s', target_filename)
                 os.remove(target_filename)
             # For other files, the existing local copy should be used.
             else:
