@@ -186,7 +186,7 @@ def main(args):
     most_recent_dump = selected_files[-1]
 
     # Restore the most recent Quantillion dump to the database.
-    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean ./data/' + most_recent_dump
+    cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/' + most_recent_dump
     os.system(cmd)
 
     # 4. Parse the data and write to postgresql database.
