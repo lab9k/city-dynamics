@@ -49,6 +49,8 @@ def execute_download_from_objectstore():
     else:
         logger.info('No download from datastore requested, quitting.')
 
+    rename_quantillion_dump()
+
 
 def load_areas():
     """Load 'stadsdeel' and 'buurtcombinatie' tables into database."""
@@ -168,6 +170,28 @@ def config_parser():
     return parser
 
 
+def rename_quantillion_dump():
+
+    # Get list of all data files.
+    # files = os.listdir(os.getcwd() + '/data')
+    files = os.listdir('/data')
+
+    # Create regex to find Quantillion dump files.
+    dumps_filter = re.compile("database\.production.*\.dump")
+
+    # Filter all Quantillion dump files, sort them on filename
+    selected_files = list(filter(dumps_filter.search, files))
+    selected_files.sort()
+    most_recent_dump = selected_files[-1]
+
+    # Rename the most recent Quantillion dump to the database.
+    newest_target = '/data/alpahlatest.dump'
+    if os.path.isfile(newest_target):
+        os.remove(newest_target)
+    os.rename(f'/data/{most_recent_dump}', newest_target)
+    logger.debug('renamed %s to %s', most_recent_dump, newest_target)
+
+
 def main(args):
     """This is the main function of this module. Starts the ETL process."""
 
@@ -177,30 +201,7 @@ def main(args):
             task()
             return
 
-    # 2. Download data from objectstore.
-    # execute_download_from_objectstore()
-
-    # Get list of all data files.
-    # files = os.listdir(os.getcwd() + '/data')
-    files = os.listdir('/data')
-
-    # Create regex to find Quantillion dump files.
-    dumps_filter = re.compile("database\.production.*\.dump")
-
-    # Filter all Quantillion dump files, sort them on filename (so implicitly on date), and get the most recent dump.
-    selected_files = list(filter(dumps_filter.search, files))
-    selected_files.sort()
-    most_recent_dump = selected_files[-1]
-
-    # Restore the most recent Quantillion dump to the database.
-    # cmd = 'pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean /data/' + most_recent_dump
-
-    newest_target = '/data/alpahlatest.dump'
-    if os.path.isfile(newest_target):
-        os.remove(newest_target)
-    os.rename(f'/data/{most_recent_dump}', newest_target)
-
-    # 4. Parse the data and write to postgresql database.
+    # Parse the data and write to postgresql database.
     parse_and_write()
 
     # 5. Modify (pre-process) the tables in the database.
