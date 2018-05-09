@@ -464,7 +464,7 @@ VALUES(
 #             logger.debug('row %d', id_counter)
 
 
-# HACK: onderstaande parser heeft betrekking op oude dump 'google_raw_feb.dump'. Deze aplpha parser is opgeschoond (zie code hierboven),
+# HOTFIX: onderstaande parser heeft betrekking op oude dump 'google_raw_feb.dump'. Deze aplpha parser is opgeschoond (zie code hierboven),
 # maar die is niet werkend voor de oude dump. In de nieuwe dumps zit geen data.
 def parse_alpha(datadir):
     """Parser for ALPHA data."""
