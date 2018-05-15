@@ -178,15 +178,15 @@ class ModifyTables(DatabaseInteractions):
     @staticmethod
     def add_hotspot_names(table_name):
         return """
-        ALTER table "{0}"
-        DROP COLUMN IF EXISTS hotspot;
-
-        ALTER TABLE "{0}" add hotspot varchar;
-
-        UPDATE "{0}"
-        SET hotspot = hotspots."hotspot"
-        FROM hotspots
-        WHERE st_intersects(ST_Buffer( CAST(hotspots.polygon AS geography), 50.0), alpha_locations_expected.geom);
+            ALTER table "{0}"
+            DROP COLUMN IF EXISTS hotspot;
+    
+            ALTER TABLE "{0}" add hotspot varchar;
+    
+            UPDATE "{0}"
+            SET hotspot = hotspots."hotspot"
+            FROM hotspots
+            WHERE st_intersects(ST_Buffer( CAST(hotspots.polygon AS geography), 50.0), alpha_locations_expected.geom);
         """.format(table_name)
 
     @staticmethod
@@ -195,20 +195,22 @@ class ModifyTables(DatabaseInteractions):
         DROP TABLE IF EXISTS  public.alpha_locations_expected;
 
         CREATE TABLE  public.alpha_locations_expected(
-            id              INTEGER,
-            place_id        VARCHAR,
-            name            TEXT,
-            url             TEXT,
-            weekday         INT4,
-            hour            INT4,
-            expected        FLOAT8,
-            lat             FLOAT8,
-            lon             FLOAT8,
-            address         TEXT,
-            location_type   TEXT,
-            visit_duration  TEXT,
-            types           TEXT,
-            category        INT4);
+            id                      INTEGER,
+            place_id                VARCHAR,
+            name                    TEXT,
+            url                     TEXT,
+            weekday                 INT4,
+            hour                    INT4,
+            expected                FLOAT8,
+            lat                     FLOAT8,
+            lon                     FLOAT8,
+            address                 TEXT,
+            location_type           TEXT,
+            main_category           VARCHAR,
+            main_category_weight    VARCHAR,
+            visit_duration          TEXT,
+            types                   TEXT,
+            category                INT4);
         """
 
 

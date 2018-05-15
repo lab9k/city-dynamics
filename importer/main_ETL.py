@@ -149,7 +149,8 @@ def modify_tables():
 # of ETL functions from the command line.
 TASKS = {
     'areas': load_areas,
-    'download': execute_download_from_objectstore
+    'download': execute_download_from_objectstore,
+    'parse': parse_and_write
 }
 
 
