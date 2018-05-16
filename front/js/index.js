@@ -208,7 +208,7 @@ function initMap()
 	}).addTo(map);
 }
 
-function getDistrictIndex() {
+function getDistrictIndexOld() {
 
 		$.each(districtsIndexJson.results, function (key, value) {
 
@@ -226,6 +226,60 @@ function getDistrictIndex() {
 		});
 
 		if(debug) { console.log('getDistrictIndex: Done') }
+}
+
+function getDistrictIndex() {
+
+	$.each(districtsIndexJson.results, function (key, value) {
+
+		var buurtcode = this.vollcode;
+
+		var dataset = {};
+
+		var day_array = [];
+
+		this.druktecijfers_bc.sort(function (a, b) {
+			return a.d - b.d;
+		});
+
+		var days = [];
+		$.each(this.druktecijfers_bc, function (key, value) {
+			if($.inArray(this.d, days)==-1)
+			{
+				days.push(this.d);
+				day = this.d;
+			}
+			if(days.length==1)
+			{
+				if(this.h>=5 && this.d == day)
+				{
+					day_array.push(this);
+				}
+			}
+			if(days.length==2)
+			{
+				if(this.h<=5 && this.d == day)
+				{
+					day_array.push(this);
+				}
+			}
+		});
+
+		day_array.sort(function (a, b) {
+			return a.d - b.d;
+		});
+
+		dataset.index = day_array;
+
+		//if(dataset.index.length==25)
+		//{
+			districts_array[buurtcode] = dataset;
+		//}
+
+	});
+
+	if(debug) { console.log('getDistrictIndex: Done') }
+
 }
 
 function getDistricts()
@@ -1152,12 +1206,26 @@ function startAnimation()
 	var counter = 0;
 	interval = setInterval(function() {
 		elapsed_time = $('.line-group').attr('time');
+		//console.log(elapsed_time+ '' + counter);
 		if(elapsed_time > counter)
 		{
 			var hour = Math.ceil(elapsed_time);
 
+			if(hour > 5 && hour < 24)
+			{
+				hour = hour -5;
+			}
+			else {
+				hour = hour + 19;
+			}
+
 			// hotspots
 			$.each(hotspots_array, function (key, value) {
+				if(key==0)
+				{
+					// console.log(this.druktecijfers);
+					// console.log(key + ' ' +hour + ' ' + this.druktecijfers[hour].i);
+				}
 				circles_d3[key]
 					.attr('stroke-opacity', 0.6)
 					.attr('stroke-width', 3)
@@ -1199,7 +1267,7 @@ function startAnimation()
 
 				var dindex = 0;
 				if(buurt_obj.index.length==25) {
-					dindex = buurt_obj.index[hour].d;
+					dindex = buurt_obj.index[hour].i;
 				}
 
 				if(dindex>1){dindex=1;}
@@ -1392,11 +1460,17 @@ function updateLineGraph(key,type)
 		var point_array =  districts_array[key].index;
 	}
 
-	$.each(point_array, function (key, value) {
+	// console.log(hotspots_array[key]);
+	// console.log(point_array);
 
+	$.each(point_array, function (key, value) {
+		// console.log(key);
+		// console.log(this);
 		var dataset = {};
 		dataset.y = Math.round(this.i * 100);
 		dataset.x = parseInt(key);
+
+		// console.log(dataset);
 
 		data.push(dataset);
 	});
