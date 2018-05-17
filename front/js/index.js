@@ -397,8 +397,9 @@ function getHotspotsIndex() {
 		});
 
 		day_array.sort(function (a, b) {
-			return a.d - b.d;
+			return a.d - b.d || a.h - b.h;
 		});
+
 
 		dataset.druktecijfers = day_array;
 
