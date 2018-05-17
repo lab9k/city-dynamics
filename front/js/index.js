@@ -686,34 +686,30 @@ function getHotspotsOld(hotspotsJson) {
 
 function getRealtime()
 {
-	var hotspots_match_array = [];
-	hotspots_match_array[18] = 'ARTIS';
-	hotspots_match_array[34] = 'Museumplein';
-	hotspots_match_array[0] = 'Amsterdam Centraal';
-	hotspots_match_array[3] = 'Madame Tussauds Amsterdam'; //dam
-	hotspots_match_array[33] = 'Dappermarkt';
-	hotspots_match_array[15] = 'Tolhuistuin'; // overhoeksplein
-	hotspots_match_array[5] = 'Mata Hari'; // Oudezijds Achterburgwal
-	hotspots_match_array[13] = 'de Bijenkorf'; // Nieuwerzijdse voorburgwal
-	hotspots_match_array[16] = 'Abraxas'; // Passenger terminal
-	hotspots_match_array[24] = 'Winkel 43'; // Passenger terminal
 
-	if(debug) { console.log(hotspots_match_array) }
-
-	$.each(realtimeJson.results, function (key, value) {
-		var name = this.name;
-		var exists = $.inArray(name, hotspots_match_array );
-		if(exists > -1)
-		{
-			// console.log(name + ' - ' + this.data.place_id + ' - ' + this.data['Real-time']);
-			realtime_array[exists] = this.data['Real-time'];
-		}
-
+	$.getJSON('data/hotspot_realtime_mapping.json').done(function(realtimeMapping){
+		$.each(realtimeMapping, function (key, place_id_array) {
+			var place_id_count = place_id_array.length;
+			var hotspot_cum = 0;
+			$.each(place_id_array, function (key, place_id) {
+				$.each(realtimeJson.results, function (key, value) {
+					if(this.place_id == place_id)
+					{
+						// console.log(place_id + ' - ' + this.data['Real-time']);
+						hotspot_cum += this.data['Real-time'];
+					}
+				});
+			});
+			realtime_array[key] = hotspot_cum / place_id_count;
+		});
 	});
 
-	if(debug) { console.log(realtime_array) }
-
 	if(debug) { console.log('getRealtime: Done') }
+
+	if(debug) {
+		console.log('realtime arrray:')
+		console.log(realtime_array)
+	}
 }
 
 function initAutoComplete()
@@ -1129,7 +1125,6 @@ function setTag(tag) {
 
 	if (url_array.length > 1) {
 		var group = url_array[1]
-		console.log(group);
 		// google
 		ga('set', 'page', '/'+tag+'_'+group+'.html');
 	}
