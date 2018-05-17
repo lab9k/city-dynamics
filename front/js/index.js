@@ -312,6 +312,25 @@ function addDistrictLayer()
 	districts_layer.eachLayer(function (layer) {
 		layer._path.id = 'feature-' + layer.feature.properties.vollcode;
 		districts_d3[layer.feature.properties.vollcode] = d3.select('#feature-' + layer.feature.properties.vollcode);
+
+
+		// var elapsed_time = $('.line-group').attr('time');
+		//
+		// var hour = Math.ceil(elapsed_time);
+		//
+		// if(hour > 5 && hour < 24)
+		// {
+		// 	hour = hour -5;
+		// }
+		// else {
+		// 	hour = hour + 19;
+		// }
+
+		if(districts_array[layer.feature.properties.vollcode].index.length)
+		{
+			districts_d3[layer.feature.properties.vollcode]
+				.attr('fill', getColorBucket(districts_array[layer.feature.properties.vollcode].index[0].i));
+		}
 	});
 }
 
@@ -887,7 +906,7 @@ function initEventMapping()
 			// reset map
 			resetMap();
 			// hide district
-			map.removeLayer(geojson);
+			map.removeLayer(districts_layer);
 			// show hotspots
 			$('path[hotspot]').show();
 			// set latlong & zoom
