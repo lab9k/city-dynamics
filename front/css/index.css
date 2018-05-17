@@ -178,11 +178,10 @@ div {box-sizing: border-box;}
 	fill: none;
 	stroke: none;
 }
-
 .indexgraph .axis text {font-size:12px;fill:#fff;}
-
-
 .indexgraph .line-group,.graph-play,.graph-pause {cursor:pointer;}
+
+.realtime_bar {filter: url(#shadow);}
 
 /*legend*/
 .legend {
