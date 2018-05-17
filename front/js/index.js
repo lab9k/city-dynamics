@@ -1359,7 +1359,7 @@ function setToCurrentTime()
 		circles_d3[key]
 			.attr('stroke-opacity', 0.6)
 			.attr('stroke-width', 3)
-			.attr('fill', getColorBucket(this.druktecijfers[hour].d))
+			.attr('fill', getColorBucket(this.druktecijfers[hour].i))
 			.attr('stroke', '#4a4a4a');
 	});
 
@@ -1369,7 +1369,7 @@ function setToCurrentTime()
 
 		var dindex = 0;
 		if(buurt_obj.index.length) {
-			dindex = buurt_obj.index[hour].d;
+			dindex = buurt_obj.index[hour].i;
 		}
 
 		if(dindex>1){dindex=1;}
