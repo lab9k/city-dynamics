@@ -11,6 +11,5 @@ set -u
 set -e
 
 # Calculate crowdedness index
-python main.py docker
-#python main_fallback.py docker
+#python main.py docker
 python hotspots_drukteindex.py

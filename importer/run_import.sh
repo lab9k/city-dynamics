@@ -10,4 +10,5 @@ set -u
 set -e
 
 python scrape_api/models.py
+pg_restore --host=database --username=citydynamics --dbname=citydynamics data/google_raw_feb.dump
 python main_ETL.py /data

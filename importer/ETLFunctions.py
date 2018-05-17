@@ -206,8 +206,8 @@ class ModifyTables(DatabaseInteractions):
             lon                     FLOAT8,
             address                 TEXT,
             location_type           TEXT,
-            main_category           VARCHAR,
-            main_category_weight    VARCHAR,
+            main_category           TEXT,
+            main_category_weight    FLOAT8,
             visit_duration          TEXT,
             types                   TEXT,
             category                INT4);

@@ -118,6 +118,8 @@ def main():
                 alpha_hotspots[(alpha_hotspots.hotspot == hotspot) & (alpha_hotspots.name != alpha_hotspot_name)].index,
                 inplace=True)
 
+    alpha_hotspots['expected'] *= alpha_hotspots['main_category_weight']
+
     # historical weekpatroon
     # first calculate the average weekpatroon per location
     alpha_week_location = alpha_hotspots.groupby([
