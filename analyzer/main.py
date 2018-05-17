@@ -72,9 +72,6 @@ def linear_model(drukte):
     drukte.normalize_acreage_city('gvb_stad')
     drukte.normalize_acreage('gvb_buurt')
 
-    # Weight Alpha locations based on the main location category weight.
-    drukte.data['alpha'] *= drukte.data['main_category_weight']
-
     # Normalize Alpha data to range 0-1 (not sure this is a good choice)
     drukte.normalize('alpha')
 

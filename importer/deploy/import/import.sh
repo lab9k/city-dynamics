@@ -41,7 +41,6 @@ dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics  /d
 dc run --rm importer bash /app/run_import.sh
 dc run --rm api python manage.py migrate
 dc run --rm analyzer
-#
 dc exec -T database backup-db.sh citydynamics
 
 dc stop

@@ -263,6 +263,9 @@ class Process_alpha_locations_expected(Process):
     def dataset_specific(self, aggregation_level):
         area_mapping = self.data[[aggregation_level, 'stadsdeelcode']].drop_duplicates()
 
+        # Weight Alpha locations based on the main location category weight.
+        self.data['expected'] *= self.data['main_category_weight']
+
         # historical weekpatroon
         # first calculate the average weekpatroon per location
         google_week_location = self.data.groupby([
@@ -276,6 +279,14 @@ class Process_alpha_locations_expected(Process):
         # also calculate the average weekpatroon per stadsdeel
         google_week_stadsdeel = google_week_location.groupby([
             'stadsdeelcode', 'weekday', 'hour'])['expected'].mean().reset_index()
+
+        # # Merge the main_category and main_category_weights columns back into the dataframes
+        # google_week = google_week.merge(self.data.loc[:, [aggregation_level, 'weekday', 'hour', 'main_category',
+        #                                                'main_category_weight']], how='left',
+        #                                                 on=[aggregation_level, 'weekday', 'hour'])
+        # google_week_stadsdeel = google_week_stadsdeel.merge(self.data.loc[:, ['stadsdeelcode', 'weekday', 'hour',
+        #                                                 'main_category', 'main_category_weight']], how='left',
+        #                                                 on=['stadsdeelcode', 'weekday', 'hour'])
 
         # set arbitrary threshold on how many out of 168 hours in a week need to contain measurements, per vollcode.
         # in case of sparse data, take the stadsdeelcode aggregation
@@ -356,9 +367,9 @@ class Process_drukte(Process):
         #     self.data, alp_hist.data[cols],
         #     on=['weekday', 'hour', 'vollcode'], how='left')
 
-        cols = ['vollcode', 'weekday', 'hour', 'alpha']
+        # cols = ['vollcode', 'weekday', 'hour', 'alpha']
         self.data = pd.merge(
-            self.data, alp_vollcode.data[cols],
+            self.data, alp_vollcode.data,
             on=['weekday', 'hour', 'vollcode'], how='left')
 
         self.data = pd.merge(
