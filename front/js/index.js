@@ -1124,10 +1124,22 @@ function initEventMapping()
 }
 
 // ######### map / animation functions ###############
-function setTag(tag)
-{
+function setTag(tag) {
+	var url_array = window.location.href.split('#');
+
+	if (url_array.length > 1) {
+		var group = url_array[1]
+		console.log(group);
+		// google
+		ga('set', 'page', '/'+tag+'_'+group+'.html');
+	}
+	else
+	{
+		// google
+		ga('set', 'page', '/'+tag+'.html');
+	}
+
 	// google
-	ga('set', 'page', '/'+tag+'.html');
 	ga('send', 'pageview');
 }
 
