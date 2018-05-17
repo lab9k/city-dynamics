@@ -6,7 +6,7 @@
 			graph.container = $(this);
 			graph.data = data;
 			graph.time = 24000;
-			graph.currentHour = getTimeInt();
+
 			graph.hours = 24;
 
 			// set the dimensions and margins of the graph
@@ -17,6 +17,24 @@
 				// graph.width = graph.width - 16;
 			}
 			graph.height = graph.container.height() - graph.margin.top - graph.margin.bottom;
+			graph.unit = graph.width/graph.hours;
+
+			graph.setCurrentState = function()
+			{
+				graph.currentHour = getTimeInt();
+
+
+				if(graph.currentHour >5 && graph.currentHour <24)
+				{
+					graph.currentPoint = Math.round(graph.currentHour * graph.unit - (5 * graph.unit));
+				}
+				else {
+					graph.currentPoint = Math.round(graph.currentHour * graph.unit + (19 * graph.unit)) ;
+				}
+			}
+
+			graph.setCurrentState();
+
 
 			// set the ranges
 			var x = d3.scaleLinear().rangeRound([0, graph.width]);
@@ -91,7 +109,7 @@
 					d=d+5;
 					if(d>23)
 					{
-						d=d-23;
+						d=d-24;
 					}
 					var text = (d < 10) ? "0"+ d : d;
 					return text;
@@ -102,7 +120,7 @@
 				.attr("dy", ".15em");
 
 			graph.lineGroupCurrent = graph.svg.append("g")
-				.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
+				.attr("transform", 'translate(' + graph.currentPoint + ',0)')
 				.attr("class", "line-group-current");
 
 
@@ -121,7 +139,7 @@
 				.attr('state','play')
 				.attr('width','20px')
 				// .attr("mask",'url(#cut-middle-line)')
-				.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
+				.attr("transform", 'translate(' + graph.currentPoint + ',0)')
 				.attr("time", graph.currentHour)
 				.call(d3.drag()
 					.on("start", dragstarted)
@@ -176,7 +194,16 @@
 			function dragged() {
 				if(graph.width>d3.event.x && d3.event.x>=0) {
 					d3.select(this).attr("transform", 'translate(' + d3.event.x + ',0)');
-					d3.select(this).attr("time", d3.event.x * graph.hours/graph.width );
+					if(d3.event.x < 19*graph.unit)
+					{
+						var dragTime = d3.event.x * graph.hours/graph.width + 5;
+					}
+					else
+					{
+						var dragTime = d3.event.x * graph.hours/graph.width - 19;
+					}
+
+					d3.select(this).attr("time", dragTime );
 					dragAnimation();
 				}
 			}
@@ -185,31 +212,8 @@
 				d3.select(this).classed("active", false);
 			}
 
-
-
-
-
-			// graph.svg.append("text")
-			// 	.attr("x", '10px')
-			// 	.attr('y','100%')
-			// 	.attr("dy", "-30px")
-			// 	.attr("text-anchor", "start")
-			// 	.attr("fill",'#fff')
-			// 	.attr("font-size",'12px')
-			// 	.text('Rustig');
-			//
-			// graph.svg.append("text")
-			// 	.attr("x", '10px')
-			// 	.attr('y','0')
-			// 	.attr("dy", "20px")
-			// 	.attr("text-anchor", "start")
-			// 	.attr("fill",'#fff')
-			// 	.attr("font-size",'12px')
-			// 	.text('Druk');
-
 			//add realtime
 			graph.realtime_bar = graph.svg.append("rect");
-
 
 			graph.update = function(newData,realtime){
 
@@ -240,8 +244,6 @@
 				graph.realtime_bar.attr("height",0);
 				if(realtime>0)
 				{
-
-
 					var y = Math.round(graph.height - (realtime*100));
 					var height =  Math.round(realtime * graph.height);
 
@@ -250,7 +252,7 @@
 						.attr('width', '20px')
 						.attr('y', y)
 						.attr('x', -10)
-						.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
+						.attr("transform", 'translate(' + graph.currentPoint + ',0)')
 						// .attr('rx', 5)
 						// .attr('ry', 5)
 						.attr("style", "stroke-width:5;")
@@ -265,22 +267,23 @@
 			}
 
 			graph.updateTime = function(){
+
 				// set new time
-				graph.currentHour = getTimeInt();
+				graph.setCurrentState();
 
 				// update time indicator
-				graph.lineGroupCurrent.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)');
+				graph.lineGroupCurrent.attr("transform", 'translate(' + graph.currentPoint + ',0)');
 			}
 
 			graph.setToTime = function(){
 				//stop
 				graph.stop();
 				// set new time
-				graph.currentHour = getTimeInt();
+				graph.setCurrentState();
 
 				// update time indicator
 				setTimeout(function(){
-					graph.lineGroup.attr("transform", 'translate(' + Math.round(graph.currentHour * graph.width/graph.hours) + ',0)')
+					graph.lineGroup.attr("transform", 'translate(' + graph.currentPoint + ',0)')
 						.attr('time',graph.currentHour);
 				},100);
 
@@ -294,34 +297,57 @@
 
 				function repeat() {
 
-
-
-					var time = graph.time;
 					var elapsedTime = graph.lineGroup.attr("time");
-
-					if(elapsedTime > 0 )
-					{
-						time = graph.time - (graph.time * (elapsedTime/24));
-					}
 
 					// start hotspots animation
 					startAnimation();
 
-					// console.log(time);
-					// console.log(elapsedTime);
+					if(elapsedTime >= 5 && elapsedTime < 24)
+					{
+						var duration_day1 =  24000 - (graph.lineGroup.attr("time") * 1000);
+						var duration_day2 =  5000;
 
-					graph.lineGroup
-						.transition()
-						.ease(d3.easeLinear)
-						.duration(time)
-						.attr("transform", "translate("+ graph.width +", 0)")
-						.attr("time",24)
-						.transition()
-						.duration(0)
-						.attr("time",0)
-						.attr("transform", "translate(0, 0)")
-						.on("end", repeat);
+						graph.lineGroup
+							.transition()
+							.ease(d3.easeLinear)
+							.duration(duration_day1)
+							.attr("transform", "translate("+ ((graph.width / 24) * 19) +", 0)")
+							.attr("time",23)
+							.transition()
+							.duration(0)
+							.attr("time",0)
+							.attr("day",2)
+							.transition()
+							.duration(duration_day2)
+							.attr("transform", "translate("+ graph.width +", 0)")
+							.attr("time",5)
+							.transition()
+							.duration(0)
+							.attr("day",1)
+							.attr("transform", "translate(0, 0)")
+							.on("end", repeat);
 
+					}
+					else
+					{
+						var duration_day1 = 19000;
+						var duration_day2 = 5000 - (graph.lineGroup.attr("time") * 1000);
+
+						graph.lineGroup
+							.transition()
+							.ease(d3.easeLinear)
+							.attr("time",0)
+							.attr("day",2)
+							.transition()
+							.duration(duration_day2)
+							.attr("transform", "translate("+ graph.width +", 0)")
+							.attr("time",5)
+							.transition()
+							.duration(0)
+							.attr("day",1)
+							.attr("transform", "translate(0, 0)")
+							.on("end", repeat);
+					}
 				};
 			}
 
