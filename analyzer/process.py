@@ -252,7 +252,8 @@ class Process_alpha_locations_expected(Process):
         super().__init__(dbconfig)
         self.name = 'alpha_locations_expected'
         self.import_data(['alpha_locations_expected'],
-                         ['name', 'weekday', 'hour', 'expected', 'vollcode', 'hotspot', 'stadsdeelcode'])
+                         ['name', 'weekday', 'hour', 'expected', 'vollcode', 'hotspot', 'stadsdeelcode',
+                          'main_category', 'main_category_weight'])
         self.dataset_specific(aggregation_level)
         self.rename({'expected': 'alpha'})
 
