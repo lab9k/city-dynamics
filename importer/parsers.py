@@ -419,7 +419,7 @@ def evaluate_tags(tags_to_evaluate):
 
 def parse_alpha_item(conn, i, id_counter, raw):
 
-    # Lambda function to double up quotation marks for sql writing.
+    # Function to double up quotation marks for sql writing.
     def fix_quotes(x):
         return re.sub("'", "''", x)
 
