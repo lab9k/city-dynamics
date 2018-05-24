@@ -13,6 +13,7 @@
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="js/jquery-d3-area.js"></script>
+	<script src="js/jquery-d3-arc-gauge.js"></script>
 	<script src="js/index.js"></script>
 
 	<link rel="stylesheet" href="css/leaflet.css">
@@ -132,27 +133,64 @@
 </div>
 
 <div class="graphbar">
-	<div class="graphbar_left">
-		<!--<div class="feedback"><span>Wat vind u er van?</span></div>-->
-		<div class="legend">
-			<span class="crowded">Drukker</span>
-			<div class="linear"></div>
-			<span class="quiet">Rustiger</span>
-		</div>
 
-	</div>
-		<div class="graphbar_center">
-			<div class="graphbar_title"><i class="material-icons reset_icon">replay</i><h2>Amsterdam</h2><i class="material-icons info_icon">info</i><span></span></div>
-			<div class="graphbar_graph">
+	<div class="graphbar_top">
+		<div class="graphbar_topleft">&nbsp;
+		</div>
+		<div class="graphbar_title">
+			<i class="material-icons reset_icon">replay</i><h2>Amsterdam</h2><i class="material-icons info_icon">info</i><span></span>
+		</div>
+		<div class="graphbar_topright">
+			<div class="dropup">
+				<button class="dropbtn">Info</button>
+				<div class="dropup-content">
+					<a href="#">Link 1</a>
+					<a href="#">Link 2</a>
+					<a href="#">Link 3</a>
+				</div>
+			</div>
+			<div class="dropup">
+				<button class="dropbtn">Meer</button>
+				<div class="dropup-content">
+					<a href="#">Link 1</a>
+					<a href="#">Link 2</a>
+					<a href="#">Link 3</a>
+				</div>
 			</div>
 		</div>
-	<div class="graphbar_right">
-		<div class="meldlinks">
-			<a class="meld_link1" target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast:</a>
-			<a class="meld_link2" target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>
+	</div>
+
+	<div class="graphbar_bottom">
+		<div class="graphbar_left">
+			<!--<div class="feedback"><span>Wat vind u er van?</span></div>-->
+
+			<!--<div class="meldlinks">-->
+				<!--<a class="meld_link1" target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast:</a>-->
+				<!--<a class="meld_link2" target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>-->
+			<!--</div>-->
+			<div class="legend">
+				<span class="crowded">Drukker</span>
+				<div class="linear"></div>
+				<span class="quiet">Rustiger</span>
+			</div>
+
 		</div>
-		<div class="weather_widget">
-			<iframe id="widget-frame" src="//www.weeronline.nl/Go/ExternalWidgetsNew/OneDayCitySmall?gid=4058223&temperatureScale=Celsius&defaultSettings=False" width="125" height="60" frameborder="0" scrolling="no" style="border: none;" allowtransparency="true"></iframe>
+			<div class="graphbar_center">
+				<div class="graphbar_graph">
+				</div>
+			</div>
+		<div class="graphbar_right">
+			<!--<div class="gauge_top"><span class="value">0</span> Actuele drukte</div>-->
+			<div class="gauge_top">Amsterdam Actueel</div>
+			<div class="gauge" data-width="150" data-height="150">
+				<div class="gauge-text">
+					<span class="value">0</span> / <span class="value2">0</span>
+				</div>
+			</div>
+			<!--<div class="gauge_bottom"><span class="value2">0</span> Normale drukte</div>-->
+			<!--<div class="weather_widget">-->
+				<!--<iframe id="widget-frame" src="//www.weeronline.nl/Go/ExternalWidgetsNew/OneDayCitySmall?gid=4058223&temperatureScale=Celsius&defaultSettings=False" width="125" height="60" frameborder="0" scrolling="no" style="border: none;" allowtransparency="true"></iframe>-->
+			<!--</div>-->
 		</div>
 	</div>
 </div>
