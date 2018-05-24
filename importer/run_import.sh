@@ -12,11 +12,18 @@ set -e
 # Wait until database is running
 bash deploy/docker-wait.sh
 
-# Restore Quantillion dump to database
-pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --clean data/google_raw_feb.dump
+# Testing!
+docker-compose run --rm api python manage.py migrate
+
+#######################################################
+# THE ACTUAL HOTFIX. Should be commented out when Quantillion dump is correct.
+pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --if-exists --clean data/google_raw_feb.dump
+
+# Restore alpha_latest instead of fallback (google_raw_feb) when the Quantillion scraper works correctly.
+#pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydynamics --no-password --if-exists --clean data/alpha_latest.dump
+#######################################################
 
 # Run importer code and migrate database
 python scrape_api/models.py
-pg_restore --host=database --username=citydynamics --dbname=citydynamics data/google_raw_feb.dump
 python main_ETL.py /data
-docker-compose run --rm api python manage.py migrate
+docker-compose -f docker-compose.yml run --rm api python manage.py migrate

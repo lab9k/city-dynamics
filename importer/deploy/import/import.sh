@@ -31,11 +31,11 @@ dc run --rm importer python /app/main_ETL.py /data --download
 
 
 #######################################################
-# HOTFIX: Using old Alpha dump. The uncommented line below this one should be reactivated when Quantillion dump is correct.
-#dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics  /data/alpahlatest.dump
+# THE ACTUAL HOTFIX. Should be commented out when Quantillion dump is correct.
+dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/google_raw_feb.dump
 
-# THE ACTUAL HOTFIX IS BELOW. Should be removed after Quantillion dump is correct.
-dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics  /data/google_raw_feb.dump
+# Restore alpha_latest instead of fallback (google_raw_feb) when the Quantillion scraper works correctly.
+#dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/alpha_latest.dump
 #######################################################
 
 dc run --rm importer bash /app/run_import.sh

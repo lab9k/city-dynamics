@@ -464,8 +464,8 @@ def parse_alpha_item(conn, i, id_counter, raw):
         expected = interval['ExpectedValue']
 
         # Create sql query to write data to database
-        row_sql = create_row_sql(id_counter, place_id, name, url, weekday, hour, expected,
-                        lat, lon, address, location_type, visit_duration, types, category)
+        row_sql = create_row_sql(id_counter, place_id, name, url, weekday, hour, expected, lat, lon, address,
+                                 location_type, main_category, main_category_weight, visit_duration, types, category)
 
         # Write data to database
         conn.execute(row_sql)
@@ -507,107 +507,29 @@ VALUES(
     return row_sql
 
 
-# def parse_alpha(datadir):
-#     """Parser for ALPHA data."""
-#
-#     # Create database connection
-#     db_int = DatabaseInteractions()
-#     conn = db_int.get_sqlalchemy_connection()
-#
-#     # Load raw Alpha data dump from table
-#     raw = pd.read_sql_table(f'google_raw_locations_expected_production', conn)  # << old table name
-#     # raw = pd.read_sql_table('google_raw_locations_expected_production', conn)    # << new table name (all tables of new Alpha dump are empty)
-#     logger.debug('alpha data %s', raw.shape)
-#
-#     # Create table for modified Alpha data
-#     conn.execute(ModifyTables.create_alpha_table())
-#     # Iterate over raw entries to fill new table
-#     id_counter = 0
-#     for i in range(0, len(raw)):
-#         id_counter = parse_alpha_item(conn, i, id_counter, raw)
-#         if i % 100 == 0:
-#             logger.debug('row %d', id_counter)
-
-
-# HOTFIX: onderstaande parser heeft betrekking op oude dump 'google_raw_feb.dump'. Deze aplpha parser is opgeschoond (zie code hierboven),
-# maar die is niet werkend voor de oude dump. In de nieuwe dumps zit geen data.
 def parse_alpha(datadir):
     """Parser for ALPHA data."""
 
-    # def create_row_sql(id, place_id, name, url, weekday, hour, expected, lat, lon,
-    #                    address, location_type, main_category, main_category_weight, visit_duration, types, category):
-    #
-    #     row_sql = '''INSERT INTO public.alpha_locations_expected(id, \
-    #     place_id, name, url, weekday, hour, expected, lat, lon, address, \
-    #     location_type, main_category, main_category_weight, visit_duration, types, category)
-    #     VALUES('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
-    #     ''' % (id, place_id, name, url, weekday, hour, expected, lat, lon, address,
-    #            location_type, main_category, main_category_weight, visit_duration, types, category)
-    #
-    #     return row_sql
+    # Toggle to use the old file "google_raw_feb.dump". This is our fallback when Quantillion scraper fails.
+    # Also change pg_restore line in files "run_index.sh" and "deploy/import/import.sh".
+    use_old_dump = True
 
     # Create database connection
     db_int = DatabaseInteractions()
     conn = db_int.get_sqlalchemy_connection()
 
     # Load raw Alpha data dump from table
-    raw = pd.read_sql_table('google_raw_locations_expected_acceptance', conn)  # << old table name
-    # raw = pd.read_sql_table('google_raw_locations_expected_production', conn)    # << new table name (all tables of new Alpha dump are empty)
+    tablename = "google_raw_locations_expected_production"
+    if use_old_dump:
+        tablename = "google_raw_locations_expected_acceptance"
+    raw = pd.read_sql_table(tablename, conn)
+    logger.debug('alpha data %s', raw.shape)
 
     # Create table for modified Alpha data
     conn.execute(ModifyTables.create_alpha_table())
-
-    # Lambda function to double up quotation marks for sql writing.
-    fix_quotes = lambda x: re.sub("'", "''", x)
-
     # Iterate over raw entries to fill new table
     id_counter = 0
     for i in range(0, len(raw)):
-        place_id = raw.place_id[i]
-        name = raw.name[i]
-        url = raw.data[i]['url']
-        weekday = raw.scraped_at[i].weekday()
-        lat = raw.data[i]['location']['coordinates'][1]
-        lon = raw.data[i]['location']['coordinates'][0]
-        address = raw.data[i]['formatted_address']
-        location_type = raw.data[i]['location']['type']
-        main_category, main_category_weight = evaluate_tags(raw.data[i]['types'])
-        visit_duration = raw.data[i]['VisitDuration']
-        types = str(raw.data[i]['types'])
-        category = raw.data[i]['Category']
-
-        # Fix quotes for sql writing
-        name = fix_quotes(name)
-        url = fix_quotes(url)
-        address = fix_quotes(address)
-        location_type = fix_quotes(location_type)
-        visit_duration = fix_quotes(visit_duration)
-        types = fix_quotes(types)
-
-        # Loop over all expected hour intervals for each location and scrape day
-        for interval in raw.data[i]['Expected']:
-
-            # Truncate time interval to first hour of the interval
-            hour = interval['TimeInterval'][0:2]
-            hour = int(re.sub("[^0-9]", "", hour))
-            ampm = interval['TimeInterval'][1:4]
-            ampm = re.sub('[^a-zA-Z]+', '', ampm)
-            if ampm == 'pm':
-                if hour == 12:
-                    pass
-                else:
-                    hour += 12
-
-            # Get the expected crowdedness value for this hour (relative value)
-            expected = interval['ExpectedValue']
-
-            # Create sql query to write data to database
-            row_sql = create_row_sql(id_counter, place_id, name, url, weekday, hour, expected, lat, lon, address,
-                                     location_type, main_category, main_category_weight, visit_duration,
-                                     types, category)
-
-            # Write data to database
-            conn.execute(row_sql)
-
-            # Update id counter so all rows have a unique id
-            id_counter += 1
+        id_counter = parse_alpha_item(conn, i, id_counter, raw)
+        if i % 100 == 0:
+            logger.debug('row %d', id_counter)
