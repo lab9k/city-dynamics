@@ -1,5 +1,6 @@
 // map & layers
 var map;
+var gauge;
 var theme_layer;
 var circles = [];
 var circles_d3 = [];
@@ -28,6 +29,8 @@ var debug = false;
 var vollcode;
 var mobile = false;
 var active_layer = 'hotspots';
+var ams_realtime = 0;
+var ams_expected = 0;
 
 // global vars
 var marker; // used by search
@@ -156,6 +159,8 @@ $(document).ready(function(){
 		calcAmsAverage();
 
 		getRealtime();
+
+		initGauge();
 
 		initLineGraph();
 
@@ -441,6 +446,7 @@ function calcAmsAverage()
 		// used for ams average todo: calc average in backend
 		$.each(this.druktecijfers, function (key, value) {
 			amsterdam.druktecijfers[this.h].i += this.i
+			amsterdam.druktecijfers[this.h].d = this.d
 		});
 
 		hotspot_count++;
@@ -449,6 +455,10 @@ function calcAmsAverage()
 	// used for ams average todo: calc average in backend
 	$.each(amsterdam.druktecijfers, function (key, value) {
 		amsterdam.druktecijfers[this.h].i = amsterdam.druktecijfers[this.h].i / hotspot_count;
+	});
+
+	amsterdam.druktecijfers.sort(function (a, b) {
+		return a.d - b.d || a.h - b.h;
 	});
 
 	if(debug) {
@@ -491,6 +501,8 @@ function getHotspots()
 			var hotspot_id = $(clickedCircle._path).attr('hotspot');
 
 			updateLineGraph(hotspot_id,'hotspot');
+
+			// updateGauge(hotspot_id,'hotspot');
 
 			clearInterval(popup_interval);
 
@@ -1117,6 +1129,10 @@ function initEventMapping()
 	$('.controls').on('click',function(){
 		map.setView([52.36, 4.95], 12);
 	});
+
+	$( document).on('click', ".water_b",function () {
+	});
+
 }
 
 // ######### map / animation functions ###############
@@ -1187,6 +1203,7 @@ function resetMap() {
 	map.closePopup();
 	$('.graphbar_title h2').text(amsterdam.hotspot);
 	updateLineGraph('ams','ams');
+	// updateGauge('ams','ams');
 }
 
 function stopAnimation()
@@ -1236,15 +1253,7 @@ function startAnimation()
 		//console.log(elapsed_time+ '' + counter);
 		if(elapsed_time > counter)
 		{
-			var hour = Math.ceil(elapsed_time);
-
-			if(hour > 5 && hour < 24)
-			{
-				hour = hour -5;
-			}
-			else {
-				hour = hour + 19;
-			}
+			var hour = convertHour(Math.ceil(elapsed_time));
 
 			// hotspots
 			$.each(hotspots_array, function (key, value) {
@@ -1453,12 +1462,14 @@ function initLineGraph()
 
 		var dataset = {};
 		dataset.y = Math.round(this.i * 100);
-		dataset.x = parseInt(this.h);
+		dataset.x = parseInt(key);
 
 		data.push(dataset);
 	});
 
-	areaGraph = $('.graphbar_graph').areaGraph(data);
+	// console.log(data);
+
+	areaGraph = $('.graphbar_graph').areaGraph(data,ams_realtime);
 
 	areaGraph[0].startCount();
 
@@ -1508,6 +1519,77 @@ function updateLineGraph(key,type)
 
 	areaGraph[0].update(data,realtime);
 }
+
+// ######### gauge functions ###############
+function initGauge()
+{
+	var counter = 0;
+	$.each(realtimeJson.results, function (key, value) {
+
+		if(this.data['Real-time']>0)
+		{
+			// console.log('real: ' + this.data['Real-time']);
+			// console.log('expected: ' + this.data['Expected']);
+			ams_realtime = ams_realtime + this.data['Real-time'];
+			ams_expected = ams_expected + this.data['Expected'];
+			counter++;
+		}
+	});
+
+	ams_realtime = ams_realtime  / counter;
+	ams_expected = ams_expected  / counter;
+
+	// todo check expected in real time feed.
+	var hour = getHourDigit();
+	ams_expected = amsterdam.druktecijfers[hour].i;
+
+	console.log('real: ' + ams_realtime);
+	console.log('expected: ' + ams_expected);
+
+	gauge = $('.gauge').arcGauge({
+		value     :  Math.round(ams_realtime*100),
+		value2     : Math.round(ams_expected*100),
+		colors    : getColorBucket(ams_realtime),
+		colors2    : getColorBucket(ams_expected),
+		transition: 500,
+		thickness : 10,
+		onchange  : function (value) {
+			$('.gauge-text .value').text(value[0]);
+			$('.gauge-text .value2').text(value[1]);
+		}
+	});
+	$('.graphbar_right .value').text(Math.round(ams_realtime*100)).css('color',getColorBucket(ams_realtime));
+	$('.graphbar_right .value2').text(Math.round(ams_expected*100)).css('color',getColorBucket(ams_expected));
+
+
+}
+
+function updateGauge(key,type)
+{
+	var hour = convertHour(getHourDigit());
+
+	if(type=='ams')
+	{
+		gauge[0].set([Math.round(ams_realtime*100),Math.round(ams_expected*100)]);
+	}
+	else if(type == 'hotspot')
+	{
+		var point_array = hotspots_array[key].druktecijfers;
+		var realtime = realtime_array[key];
+		var expected =  point_array[hour].i;
+
+		gauge[0].set([Math.round(realtime*100),Math.round(expected*100)]);
+		$('.graphbar_right .value').text(Math.round(realtime*100)).css('color',getColorBucket(realtime));
+		$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColorBucket(expected));
+	}
+	else
+	{
+		gauge[0].set([0,0]);
+	}
+
+
+}
+
 
 // ######### date functions ###############
 function setView()
@@ -1602,6 +1684,19 @@ function getTimeInt()
 	mm =  Math.round(mm / 60 * 100);
 
 	return hh+'.'+mm;
+}
+
+function convertHour(hour)
+{
+	if(hour > 5 && hour < 24)
+	{
+		hour = hour -5;
+	}
+	else {
+		hour = hour + 19;
+	}
+
+	return hour;
 }
 
 function getNowDate()
