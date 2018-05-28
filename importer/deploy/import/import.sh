@@ -41,10 +41,10 @@ dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --i
 #dc run --rm importer bash /app/run_import.sh
 
 # Create new tables in database.
-python scrape_api/models.py
+dc run --rm importer python scrape_api/models.py
 
 # Process data files, and write results to new tables in database.
-python main_ETL.py /data
+dc run --rm importer python main_ETL.py /data
 
 # Migrate the database.
 dc run --rm api python manage.py migrate
