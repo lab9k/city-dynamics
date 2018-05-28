@@ -171,7 +171,7 @@ class ModifyTables(DatabaseInteractions):
     #     UPDATE "{0}"
     #     SET hotspot = hotspots."hotspot"
     #     FROM hotspots
-    #     WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), alpha_locations_expected.geom);
+    #     WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), "{0}".geom);
     #     """.format(table_name)
 
     @staticmethod
@@ -185,32 +185,8 @@ class ModifyTables(DatabaseInteractions):
             UPDATE "{0}"
             SET hotspot = hotspots."hotspot"
             FROM hotspots
-            WHERE st_intersects(ST_Buffer( CAST(hotspots.polygon AS geography), 50.0), alpha_locations_expected.geom);
+            WHERE st_intersects(ST_Buffer( CAST(hotspots.polygon AS geography), 50.0), "{0}".geom);
         """.format(table_name)
-
-    @staticmethod
-    def create_alpha_table():
-        return """
-        DROP TABLE IF EXISTS  public.alpha_locations_expected;
-
-        CREATE TABLE  public.alpha_locations_expected(
-            id                      INTEGER,
-            place_id                VARCHAR,
-            name                    TEXT,
-            url                     TEXT,
-            weekday                 INT4,
-            hour                    INT4,
-            expected                FLOAT8,
-            lat                     FLOAT8,
-            lon                     FLOAT8,
-            address                 TEXT,
-            location_type           TEXT,
-            main_category           TEXT,
-            main_category_weight    FLOAT8,
-            visit_duration          TEXT,
-            types                   TEXT,
-            category                INT4);
-        """
 
 
 class LoadLayers:
