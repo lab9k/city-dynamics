@@ -338,20 +338,18 @@ def parse_afval(datadir, filename='WEEGGEGEVENS(1-10_30-11_2017).csv'):
 def parse_parkeren(datadir):
     """Parser for PARKEER data."""
 
-    allfiles = glob.glob(datadir + "/2017-10*.csv")
-    df_parkeer = pd.DataFrame()
-    list_ = []
-    for file_ in allfiles:
-        df = pd.read_csv(file_, index_col=None, header=0, delimiter=';')
-        list_.append(df)
-    df_parkeer = pd.concat(list_)
-    df_parkeer['DateTime'] = pd.to_datetime(
-        df_parkeer['timestamp'], format="%Y-%m-%d %H:%M:%S")
-    df_parkeer['weekday'] = df_parkeer.apply(
-        lambda x: x['DateTime'].weekday(), axis=1)
-    df_parkeer['hour'] = df_parkeer.apply(lambda x: x['DateTime'].hour, axis=1)
-    df_parkeer = df_parkeer.replace(0.000000, np.nan)
-    df_parkeer = df_parkeer.drop(['timestamp', 'DateTime'], axis=1)
+    files = os.listdir(datadir)
+
+    # do this with the right regex..
+    filenames = []
+
+    for filename in files:
+        if '2018_w16' in filename:
+            if 'BETAALDP.csv' in filename:
+                if 'Ma_Fr' not in filename:
+                    if 'Sa_Su' not in filename:
+                        filenames.append(filename)
+
 
     return df_parkeer
 

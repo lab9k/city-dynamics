@@ -174,7 +174,6 @@ class ModifyTables(DatabaseInteractions):
     #     WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), alpha_locations_expected.geom);
     #     """.format(table_name)
 
-    ### TODO: visually check the mapping between google locations and hotspots (preferably with OpenJump)
     @staticmethod
     def add_hotspot_names(table_name):
         return """
