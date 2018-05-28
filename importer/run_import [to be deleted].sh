@@ -12,8 +12,10 @@ set -e
 # Wait until database is running
 bash deploy/docker-wait.sh
 
-# Testing!
-docker-compose run --rm api python manage.py migrate
+# TODO: MAKE THE MIGRATE STEP WORK HERE FOR LOCAL DEVELOPMENT!!
+echo $PATH
+docker-compose -f docker-compose.yml run --rm api python manage.py migrate
+
 
 #######################################################
 # THE ACTUAL HOTFIX. Should be commented out when Quantillion dump is correct.
@@ -26,4 +28,4 @@ pg_restore --host=database --port=5432 --username=citydynamics --dbname=citydyna
 # Run importer code and migrate database
 python scrape_api/models.py
 python main_ETL.py /data
-docker-compose -f docker-compose.yml run --rm api python manage.py migrate
+
