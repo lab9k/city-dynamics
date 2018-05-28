@@ -88,8 +88,8 @@
 				// console.log(data);
 				// animate chart
 
-				gauge.settings.colors = getColorBucket(data[0]/100);
-				gauge.settings.colors2 = getColorBucket(data[1]/100);
+				gauge.settings.colors = getColor(data[0]/100);
+				gauge.settings.colors2 = getColor(data[1]/100);
 
 				gauge.svg.selectAll('path.arc-value')
 					.data(gauge.getData(data[0]))

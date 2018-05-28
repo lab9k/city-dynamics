@@ -181,6 +181,18 @@ $(document).ready(function(){
 		$('.controls').addClass('chrome');
 	}
 
+	$('.index0').css('color',getColor(0));
+	$('.index10').css('color',getColor(0.1));
+	$('.index20').css('color',getColor(0.2));
+	$('.index30').css('color',getColor(0.3));
+	$('.index40').css('color',getColor(0.4));
+	$('.index50').css('color',getColor(0.5));
+	$('.index60').css('color',getColor(0.6));
+	$('.index70').css('color',getColor(0.7));
+	$('.index80').css('color',getColor(0.8));
+	$('.index90').css('color',getColor(0.9));
+	$('.index100').css('color',getColor(1));
+
 });
 
 // ######### general init and get functions ###############
@@ -502,7 +514,7 @@ function getHotspots()
 
 			updateLineGraph(hotspot_id,'hotspot');
 
-			// updateGauge(hotspot_id,'hotspot');
+			updateGauge(hotspot_id,'hotspot');
 
 			clearInterval(popup_interval);
 
@@ -1203,7 +1215,7 @@ function resetMap() {
 	map.closePopup();
 	$('.graphbar_title h2').text(amsterdam.hotspot);
 	updateLineGraph('ams','ams');
-	// updateGauge('ams','ams');
+	updateGauge('ams','ams');
 }
 
 function stopAnimation()
@@ -1549,8 +1561,8 @@ function initGauge()
 	gauge = $('.gauge').arcGauge({
 		value     :  Math.round(ams_realtime*100),
 		value2     : Math.round(ams_expected*100),
-		colors    : getColorBucket(ams_realtime),
-		colors2    : getColorBucket(ams_expected),
+		colors    : getColor(ams_realtime),
+		colors2    : getColor(ams_expected),
 		transition: 500,
 		thickness : 10,
 		onchange  : function (value) {
@@ -1558,8 +1570,8 @@ function initGauge()
 			$('.gauge-text .value2').text(value[1]);
 		}
 	});
-	$('.graphbar_right .value').text(Math.round(ams_realtime*100)).css('color',getColorBucket(ams_realtime));
-	$('.graphbar_right .value2').text(Math.round(ams_expected*100)).css('color',getColorBucket(ams_expected));
+	$('.graphbar_right .value').text(Math.round(ams_realtime*100)).css('color',getColor(ams_realtime));
+	$('.graphbar_right .value2').text(Math.round(ams_expected*100)).css('color',getColor(ams_expected));
 
 
 }
@@ -1579,8 +1591,8 @@ function updateGauge(key,type)
 		var expected =  point_array[hour].i;
 
 		gauge[0].set([Math.round(realtime*100),Math.round(expected*100)]);
-		$('.graphbar_right .value').text(Math.round(realtime*100)).css('color',getColorBucket(realtime));
-		$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColorBucket(expected));
+		$('.graphbar_right .value').text(Math.round(realtime*100)).css('color',getColor(realtime));
+		$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColor(expected));
 	}
 	else
 	{
