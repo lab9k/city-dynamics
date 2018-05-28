@@ -186,7 +186,7 @@ def rename_quantillion_dump():
     most_recent_dump = selected_files[-1]
 
     # Rename the most recent Quantillion dump to the database.
-    newest_target = '/data/alpahlatest.dump'
+    newest_target = '/data/alpha_latest.dump'
     if os.path.isfile(newest_target):
         os.remove(newest_target)
     os.rename(f'/data/{most_recent_dump}', newest_target)

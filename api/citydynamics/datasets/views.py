@@ -205,8 +205,8 @@ def get_latest(api_source):
     try:
         latest = (
             models.RealtimeHistorian.objects
-            .order_by('scraped_at')
-            .get(source=api_source).first()
+            .order_by('-scraped_at')
+            .filter(source=api_source).first()
         )
     except models.RealtimeHistorian.DoesNotExist:
         return None
@@ -214,7 +214,10 @@ def get_latest(api_source):
     if not latest:
         return None
 
-    if (datetime.now - latest.scraped_at) > 300:
+    delta_seconds = (datetime.datetime.now() - latest.scraped_at).seconds
+    log.debug(delta_seconds)
+
+    if delta_seconds > 300:
         return None
 
     return latest.data

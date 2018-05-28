@@ -15,7 +15,4 @@ COPY . /app/
 
 COPY ./deploy /deploy/
 
-
 WORKDIR /app/
-
-CMD ./run_import.sh

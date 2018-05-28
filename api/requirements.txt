@@ -26,6 +26,7 @@ Faker==0.8.8
 first==2.0.1
 flake8==3.5.0
 frosted==1.4.1
+graypy==0.3
 idna==2.6
 iso8601==0.1.12
 jsonschema==2.6.0

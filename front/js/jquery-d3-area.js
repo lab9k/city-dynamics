@@ -1,22 +1,23 @@
 (function ($) {
-	$.fn.areaGraph = function (data) {
+	$.fn.areaGraph = function (data,realtime) {
 		this.each(function () {
 			var graph = {};
 
 			graph.container = $(this);
 			graph.data = data;
 			graph.time = 24000;
-
+			graph.realtime = realtime;
 			graph.hours = 24;
 
 			// set the dimensions and margins of the graph
-			graph.margin = {top: 0, right: 0, bottom: 20, left: 0};
+			graph.margin = {top: 20, right: 0, bottom: 20, left: 0};
 			graph.width = graph.container.width() - graph.margin.left - graph.margin.right;
 			if(graph.width > 750)
 			{
-				// graph.width = graph.width - 16;
+				graph.width = graph.width - 16;
 			}
 			graph.height = graph.container.height() - graph.margin.top - graph.margin.bottom;
+
 			graph.unit = graph.width/graph.hours;
 
 			graph.setCurrentState = function()
@@ -32,6 +33,10 @@
 					graph.currentPoint = Math.round(graph.currentHour * graph.unit + (19 * graph.unit)) ;
 				}
 			}
+
+			// console.log(graph.width);
+			// console.log(graph.height);
+			// console.log(graph.unit);
 
 			graph.setCurrentState();
 
@@ -72,6 +77,22 @@
 				return d.x;
 			}));
 			y.domain([0, 100]);
+
+			// add background lines
+			var lineCount = 0;
+			do {
+
+				graph.svg.append("line")
+					.attr("class", "nowline")
+					.attr("x1", lineCount*graph.unit)
+					.attr("x2", lineCount*graph.unit)
+					.attr("y1",'0')
+					.attr("y2",graph.height)
+					.attr("style",'stroke:rgba(150,150,150,0.5);stroke-width:1');
+				lineCount++
+			}
+			while(lineCount<=24)
+
 
 
 			// Add the valueline path.
@@ -131,7 +152,7 @@
 				.attr("y1",'0')
 				.attr("y2",graph.height)
 				.attr("stroke-dasharray",'5, 5')
-				.attr("style",'stroke:rgba(219, 50, 42, 0.8);stroke-width:3');
+				.attr("style",'stroke:rgba(255, 255, 255, 0.8);stroke-width:3');
 
 			graph.lineGroup = graph.svg.append("g")
 				.attr("class", "line-group")
@@ -212,8 +233,54 @@
 				d3.select(this).classed("active", false);
 			}
 
+
+
+			graph.unsetRealtime = function() {
+				graph.realtime_bar.attr("height",0);
+				graph.realtime_bar_top.remove();
+				// graph.realtime_bar_text.remove();
+			}
+
+			graph.setRealtime = function(){
+				var bar_height =  Math.round(graph.realtime * graph.height);
+				var bar_y =  graph.height - bar_height;
+
+				graph.realtime_bar
+					.attr("height", bar_height+2 )
+					.attr('width', '20px')
+					.attr('y', bar_y-2)
+					.attr('x', -10)
+					.attr("transform", 'translate(' + graph.currentPoint + ',0)')
+					.attr('rx', 2)
+					.attr('ry', 2)
+					.attr("fill", 'rgba(66,66,66,0.6)')
+					.attr("class", "realtime_bar");
+
+				graph.realtime_bar_top = graph.svg.append("rect")
+					.attr("height", bar_height)
+					.attr('width', '16px')
+					.attr('y', bar_y)
+					.attr('x', -8)
+					.attr("transform", 'translate(' + graph.currentPoint + ',0)')
+					// .attr('rx', 5)
+					// .attr('ry', 5)
+					.attr("fill", getColorBucket(graph.realtime))
+					.attr("class", "realtime_bar_top");
+
+				// graph.realtime_bar_text = graph.svg.append("text")
+				// 	.attr("transform", 'translate(' + (graph.currentPoint-10) + ','+ (bar_y  - 4)+')')
+				// 	.attr("fill", "#ffffff")
+				// 	.attr("class", "realtime_bar_text")
+				// 	.text(Math.round(graph.realtime*100));
+			}
+
 			//add realtime
 			graph.realtime_bar = graph.svg.append("rect");
+			if(graph.realtime>0)
+			{
+				graph.setRealtime();
+			}
+
 
 			graph.update = function(newData,realtime){
 
@@ -241,25 +308,12 @@
 						}
 					});
 
-				graph.realtime_bar.attr("height",0);
+
+				graph.unsetRealtime();
 				if(realtime>0)
 				{
-					var y = Math.round(graph.height - (realtime*100));
-					var height =  Math.round(realtime * graph.height);
-
-					graph.realtime_bar
-						.attr("height", height )
-						.attr('width', '20px')
-						.attr('y', y)
-						.attr('x', -10)
-						.attr("transform", 'translate(' + graph.currentPoint + ',0)')
-						// .attr('rx', 5)
-						// .attr('ry', 5)
-						.attr("style", "stroke-width:5;")
-						.attr("stroke-dasharray", "20,"+((2*height)+20))
-						.attr("stroke", getColorBucket(height/100))
-						.attr("fill", "rgba(126,126,126,0.7)")
-						.attr("class", "realtime_bar");
+					graph.realtime = realtime;
+					graph.setRealtime();
 				}
 
 				setTimeout(function(){graph.data = newData},1001);
@@ -373,7 +427,6 @@
 					graph.startCount();
 				}
 
-
 			}
 			graph.stop = function(){
 
@@ -388,8 +441,6 @@
 					.attr('state','pause')
 					.transition()
 					.duration( 0 );
-
-
 			}
 
 			// update time indicator every x seconds
