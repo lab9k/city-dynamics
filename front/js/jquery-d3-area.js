@@ -48,8 +48,8 @@
 			// define line
 			graph.topline = d3.line()
 				.x(function(d) { return x(d.x); })
-				.y(function(d) { return y(d.y); });
-				// .curve(d3.curveBasis);
+				.y(function(d) { return y(d.y); })
+				.curve(d3.curveBasis);
 
 			// define area
 			graph.area = d3.area()

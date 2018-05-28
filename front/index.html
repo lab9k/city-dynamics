@@ -145,17 +145,15 @@
 			<div class="dropup">
 				<button class="dropbtn">Info</button>
 				<div class="dropup-content">
-					<a href="#">Link 1</a>
-					<a href="#">Link 2</a>
-					<a href="#">Link 3</a>
+					<a href="javascript:void(0);" class="infolink2">Testversie</a>
+					<a href="javascript:void(0);" class="infolink1">Drukteradar uitleg</a>
 				</div>
 			</div>
 			<div class="dropup">
 				<button class="dropbtn">Meer</button>
 				<div class="dropup-content">
-					<a href="#">Link 1</a>
-					<a href="#">Link 2</a>
-					<a href="#">Link 3</a>
+					<a target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast:</a>
+					<a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>
 				</div>
 			</div>
 		</div>
@@ -180,10 +178,19 @@
 				<!--<a class="meld_link1" target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast:</a>-->
 				<!--<a class="meld_link2" target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>-->
 			<!--</div>-->
+			<div class="weather">
+				<img src="">
+				<div><span class="temp"></span></div>
+			</div>
+
 			<div class="legend">
-				<span class="crowded">Drukker</span>
+				<span class="crowded">Drukker</span><i class="material-icons crowded">arrow_right_alt</i>
+				<span class="normal">Normaal</span><i class="material-icons normal">arrow_right_alt</i>
+				<span class="quiet">Rustiger</span><i class="material-icons quiet">arrow_right_alt</i>
+				<span class="max">100</span>
+				<span class="min">0</span>
 				<div class="linear"></div>
-				<span class="quiet">Rustiger</span>
+
 			</div>
 
 		</div>
@@ -192,14 +199,18 @@
 				</div>
 			</div>
 		<div class="graphbar_right">
-			<div class="gauge_top"><span class="value">0</span> Actuele drukte</div>
-			<!--<div class="gauge_top">Amsterdam Actueel</div>-->
-			<div class="gauge" data-width="150" data-height="150">
-				<div class="gauge-text">
-					<span class="value">0</span> / <span class="value2">0</span>
+			<div class="gauge_c">
+				<div class="gauge_top"><span class="value">0</span> <span class="gauge_top_text">Live drukte</span> @ <span class="time">0</span></div>
+				<div class="line1"></div>
+				<div class="line2"></div>
+				<!--<div class="gauge_top">Amsterdam Actueel</div>-->
+				<div class="gauge" data-width="150" data-height="150">
+					<div class="gauge-text">
+						<span class="value">0</span> / <span class="value2">0</span>
+					</div>
 				</div>
+				<div class="gauge_bottom"><span class="value2">0</span> <span class="gauge_bottom_text">Normale drukte</span></div>
 			</div>
-			<div class="gauge_bottom"><span class="value2">0</span> Normale drukte</div>
 			<!--<div class="weather_widget">-->
 				<!--<iframe id="widget-frame" src="//www.weeronline.nl/Go/ExternalWidgetsNew/OneDayCitySmall?gid=4058223&temperatureScale=Celsius&defaultSettings=False" width="125" height="60" frameborder="0" scrolling="no" style="border: none;" allowtransparency="true"></iframe>-->
 			<!--</div>-->
