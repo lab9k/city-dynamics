@@ -61,13 +61,6 @@ def load_areas():
 def parse_and_write():
     """This function parses the data downloaded from the objectstore and writes it to the database (Docker container)"""
 
-    # Remove dependent tables created by the Analyzer (only necessary when developing locally)
-    drop_query = """
-    DROP TABLE IF EXISTS public.datasets_buurtcombinatiedrukteindex;
-    DROP TABLE IF EXISTS public.datasets_hotspotsdrukteindex;
-    """
-    conn.execute(drop_query)
-
     # Parse raw data from objectstore and place result into database (in Docker container).
     for dataset in datasets:
         logger.info(f'Parsing and writing {dataset} data...')
@@ -82,13 +75,10 @@ def parse_and_write():
         else:
             df = getattr(parsers, 'parse_' + dataset)(
                     datadir=LOCAL_DATA_DIRECTORY)
+
             df.to_sql(
                 name=config_src.get(dataset, 'TABLE_NAME'),
-                con=conn, index=True, if_exists='replace')
-
-            conn.execute(
-                ModifyTables.set_primary_key(
-                    config_src.get(dataset, 'TABLE_NAME')))
+                con=conn, index=True, if_exists='append')
 
             logger.info('... done')
 

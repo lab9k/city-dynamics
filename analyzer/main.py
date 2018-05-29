@@ -258,16 +258,22 @@ def fill_table_in_db(org_table_name, fill_table_name, columns):
 
     dbconfig = args.dbConfig[0]
     connection = process.connect_database(dbconfig)
-
+    # datasets_buurtcombinatiedrukteindex
     insert_into_api_table = """
-    TRUNCATE TABLE datasets_buurtcombinatiedrukteindex;
-    insert into datasets_buurtcombinatiedrukteindex (
+    TRUNCATE TABLE "datasets_buurtcombinatiedrukteindex";
+    insert into "datasets_buurtcombinatiedrukteindex" (
     index,
     hour,
     weekday,
     drukteindex,
     vollcode_id
-    ) select c.index, hour, weekday, drukteindex, b.ogc_fid from buurtcombinatie b, drukteindex_buurtcombinaties c
+    ) SELECT
+      c.index,
+      hour,
+      weekday,
+      drukteindex,
+      b.ogc_fid from buurtcombinatie b,
+      drukteindex_buurtcombinaties c
     where  b."vollcode" = c."vollcode";
 
     """

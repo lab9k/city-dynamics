@@ -37,6 +37,9 @@ dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --i
 #dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/alpha_latest.dump
 #######################################################
 
+# Migrate/Create target tables the database.
+dc run --rm api python manage.py migrate
+
 # Tagged for removal
 #dc run --rm importer bash /app/run_import.sh
 
@@ -46,16 +49,16 @@ dc run --rm importer python scrape_api/models.py
 # Process data files, and write results to new tables in database.
 dc run --rm importer python main_ETL.py /data
 
-# Migrate the database.
-dc run --rm api python manage.py migrate
-
 # Run the analyzer.
 dc run --rm analyzer
 
 # Create a local database backup.
-dc exec -T database backup-db.sh citydynamics
+# dc exec -T database backup-db.sh citydynamics
+dc exec -T database ./backup-analyzer.sh citydynamics
 
+dc run --rm importer python -m objectstore.databasedumps /backups/analyzer.dump analyzer_dump --upload-db
 
+# all ready. cleanup.
 dc stop
 dc rm --force
 dc down
