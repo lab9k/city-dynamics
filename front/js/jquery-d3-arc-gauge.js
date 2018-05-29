@@ -30,7 +30,7 @@
 			};
 			// setup radius
 			gauge.settings.radius = Math.min(gauge.settings.width, gauge.settings.height) / 2;
-			gauge.settings.radius2 = Math.min(gauge.settings.width-30, gauge.settings.height-30) / 2;
+			gauge.settings.radius2 = Math.min(gauge.settings.width-50, gauge.settings.height-50) / 2;
 
 			// convenience method to map data to start/end angles
 			gauge.pie = d3.pie()
@@ -88,8 +88,8 @@
 				// console.log(data);
 				// animate chart
 
-				gauge.settings.colors = getColorBucket(data[0]/100);
-				gauge.settings.colors2 = getColorBucket(data[1]/100);
+				gauge.settings.colors = getColor(data[0]/100);
+				gauge.settings.colors2 = getColor(data[1]/100);
 
 				gauge.svg.selectAll('path.arc-value')
 					.data(gauge.getData(data[0]))

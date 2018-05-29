@@ -1,5 +1,16 @@
 /*general*/
-html,body {width:100%;height:100%;padding:0;margin:0;color:#fff;font-family:Arial,Helvetica,sans-serif;}
+
+/*fonts*/
+/*
+Avenir 55 Roman = Avenir LT W01 55 Roman
+Avenir 55 Roman Oblique = AvenirLTW01-55Oblique
+Avenir 85 Heavy = Avenir LT W01 85 Heavy
+Avenir 85 Heavy Oblique = AvenirLTW01-85HeavyObli
+Avenir 95 Black = Avenir LT W01 95 Black
+Avenir 95 Black Oblique = AvenirLTW01-95BlackObli
+*/
+
+html,body {width:100%;height:100%;padding:0;margin:0;color:#fff;font-family:'Avenir LT W01 55 Roman',Arial,Helvetica,sans-serif;}
 h1 {cursor:pointer;}
 #mapid {width:100%;height:calc(100% - 240px);position:relative;}
 .clearfix:after {
@@ -163,7 +174,7 @@ div {box-sizing: border-box;}
 .area {fill:url(#gradient);fill-opacity:0.8;stroke:1px;}
 .area-line {fill :none;stroke : #616161;stroke-width :1;}
 
-.graphbar_right .value, .graphbar_right .value2 {display:none;}
+
 .realtime_bar {filter: url(#shadow);}
 
 
@@ -200,22 +211,41 @@ div {box-sizing: border-box;}
 
 
 	/*gauge*/
+.gauge_c {position: relative; }
 .gauge { position: relative; margin:10px auto;width:150px;height:150px;}
 .gauge .gauge-text {display:none; font-size: 20px; font-weight: 100; position: absolute; width: 150px; text-align: center; top: 60px; }
 .gauge_bottom{margin-top:-30px;}
-.arc-background2, .arc-value2 {display:none}
+.gauge_c .line1,.gauge_c .line2 {position:absolute;border-left:1px solid #fff;}
+.gauge_c .line1 {top:18px;left:188px;height:8px;display:none;}
+.gauge_c .line2 {top:68px;left:188px;height:92px;display:none;}
+/*.arc-background2, .arc-value2 {display:none}*/
+.gauge_c .value, .gauge_c .value2 {}
 
+/*legend*/
+.weather{float:left;margin:20px 0 0 50px;text-align:center;}
 
 /*legend*/
 .legend {
-	margin-right:20px;
+	position:relative;
+	margin:10px 20px 0 0;
 	float:right;
 	text-align:center;
+	width:106px;
 }
-.legend span {font-size:12px;line-height:12px;}
+.legend span {position:absolute;font-size:12px;line-height:12px;left:0;}
+.legend i {position:absolute;left:48px;display:none;}
+.legend span.min {top:144px;left:78px;color:#333;}
+.legend span.max {top:6px;left:70px;color:#333;}
+.legend span.crowded {top:14px;}
+.legend span.normal {top:72px;}
+.legend span.quiet {top:130px;}
+.legend i.crowded {top:10px;}
+.legend i.normal {top:68px;}
+.legend i.quiet {top:126px;}
 .legend .linear {
+	float:right;
 	width:50px;
-	height:140px;
+	height:160px;
 	border-radius:25px;
 	/*background: #db322a; !* Old browsers *!*/
 	/*background: -moz-linear-gradient(top, #db322a 2%, #50e6db 100%); !* FF3.6-15 *!*/
@@ -235,10 +265,10 @@ div {box-sizing: border-box;}
 .feedback {cursor:pointer;}
 
 
-.meldlinks {float:left;margin-top:20px;margin-left:30px;}
-.meld_link1,.meld_link2{display:block;width:140px;line-height:20px;background:#F9F9F9;border-radius: 5px;font-size:12px;text-align:center;text-decoration:none;color:#444;margin-bottom:20px;}
-.weather_widget {float:right;margin-right:20px;width:140px;height:140px;background:#fff;border-radius: 30px;}
-.weather_widget iframe {margin:40px 0 0 15px;}
+/*.meldlinks {float:left;margin-top:20px;margin-left:30px;}*/
+/*.meld_link1,.meld_link2{display:block;width:140px;line-height:20px;background:#F9F9F9;border-radius: 5px;font-size:12px;text-align:center;text-decoration:none;color:#444;margin-bottom:20px;}*/
+/*.weather_widget {float:right;margin-right:20px;width:140px;height:140px;background:#fff;border-radius: 30px;}*/
+/*.weather_widget iframe {margin:40px 0 0 15px;}*/
 
 /*desktop resets*/
 .m_more {display:none;}

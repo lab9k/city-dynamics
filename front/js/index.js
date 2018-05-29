@@ -76,6 +76,7 @@ var trafficJsonUrl = origin + '/apiproxy?api=traveltime&format=json';
 var parkJsonUrl = origin + '/apiproxy?api=parking_garages&format=json';
 var fietsJsonUrl = origin + '/apiproxy?api=ovfiets&format=json';
 var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
+var weatherJsonUrl = 'https://weerlive.nl/api/json-data-10min.php?key=demo&locatie=Amsterdam';
 
 // temp local api
 // hotspotsJsonUrl = 'data/hotspots.json';
@@ -166,6 +167,8 @@ $(document).ready(function(){
 
 		initAutoComplete();
 
+		initWeerWidget();
+
 		initEventMapping();
 
 	}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
@@ -180,6 +183,18 @@ $(document).ready(function(){
 	if (navigator.appVersion.indexOf("Chrome/") != -1) {
 		$('.controls').addClass('chrome');
 	}
+
+	// $('.index0').css('color',getColorChroma(0));
+	// $('.index10').css('color',getColorChroma(0.1));
+	// $('.index20').css('color',getColorChroma(0.2));
+	// $('.index30').css('color',getColorChroma(0.3));
+	// $('.index40').css('color',getColorChroma(0.4));
+	// $('.index50').css('color',getColorChroma(0.5));
+	// $('.index60').css('color',getColorChroma(0.6));
+	// $('.index70').css('color',getColorChroma(0.7));
+	// $('.index80').css('color',getColorChroma(0.8));
+	// $('.index90').css('color',getColorChroma(0.9));
+	// $('.index100').css('color',getColorChroma(1));
 
 });
 
@@ -483,8 +498,8 @@ function getHotspots()
 		var dindex = this.druktecijfers[hh].i;
 
 		circles[key] = L.circleMarker(this.coordinates.reverse(), {
-			color      : getColorBucket(dindex),
-			fillColor  : getColorBucket(dindex),
+			color      : getColor(dindex),
+			fillColor  : getColor(dindex),
 			fillOpacity: 1,
 			radius     : (12),
 			name       : this.hotspot
@@ -502,7 +517,7 @@ function getHotspots()
 
 			updateLineGraph(hotspot_id,'hotspot');
 
-			// updateGauge(hotspot_id,'hotspot');
+			updateGauge(hotspot_id,'hotspot');
 
 			clearInterval(popup_interval);
 
@@ -857,11 +872,11 @@ function initEventMapping()
 		}
 	});
 
-	$( document).on('click', ".dlogo",function () {
+	$( document).on('click', ".dlogo,.infolink1",function () {
 		showInfo('	<h2>De Amsterdam DrukteRadar</h2> <p>De Amsterdam Drukte Radar toont drukte in de openbare ruimte van Amsterdam over tijd met een drukte-score. De drukte-score geeft de relatieve drukte in een bepaald gebied weer ten opzichte van historische ‘normaalwaarden’ van dit gebied.</p> <p>De drukte-score is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Momenteel bevat de drukte-score data van wegverkeer, openbaar vervoer, parkeren, en bezoeken aan openbare plekken.  Sommigen van deze bronnen geven de data ‘realtime’ weer, terwijl anderen gemiddelden over een bepaalde periode weergeven.</p>')
 	});
 
-	$( document).on('click', ".beta",function () {
+	$( document).on('click', ".beta,.infolink2",function () {
 		showInfo('<h2 style="color:red;">Beta</h2><p>De Drukte Radar is in de beta fase, wat inhoudt dat er continue verbeteringen aan gemaakt worden en dat we feedback aan het verzamelen zijn. <br><a href="mailto:@">Heb je feedback dan horen we graag van je.</a></p>')
 	});
 
@@ -1135,7 +1150,18 @@ function initEventMapping()
 
 }
 
-// ######### map / animation functions ###############
+// ######### widget functions ###############
+function initWeerWidget()
+{
+	$.getJSON(weatherJsonUrl).done(function(weatherJson)
+	{
+		var weather_img_url = 'images/'+weatherJson.liveweer[0].image+'.svg';
+		$('.weather img').attr('src',weather_img_url);
+		$('.weather span').html(weatherJson.liveweer[0].temp + ' &#8451');
+	});
+}
+
+// ######### google functions ###############
 function setTag(tag) {
 	var url_array = window.location.href.split('#');
 
@@ -1156,16 +1182,40 @@ function setTag(tag) {
 
 
 // ######### map / animation functions ###############
+function getColorChroma(dindex) {
+
+	if(dindex<0.5)
+	{
+		var a = '#50E6DB'; //50E6DB 63c6e6
+		var b = '#F5A623';
+		dindex = dindex * 2;
+	}
+	else {
+		var a = '#F5A623';
+		var b = '#DB322A';
+		dindex = (dindex-0.5) * 2;
+	}
+
+
+	var color = chroma.mix(a,b,dindex).hex();
+	console.log(color);
+
+	return color;
+}
+
+
 function getColor(dindex)
 {
 	if(dindex<0.5)
 	{
 		var a = '#50E6DB'; //50E6DB 63c6e6
 		var b = '#F5A623';
+		dindex = dindex * 2;
 	}
 	else {
 		var a = '#F5A623';
 		var b = '#DB322A';
+		dindex = (dindex-0.5) * 2;
 	}
 
 	// var a = '#50E6DB'; //50E6DB 63c6e6
@@ -1179,7 +1229,9 @@ function getColor(dindex)
 		rg = ag + dindex * (bg - ag),
 		rb = ab + dindex * (bb - ab);
 
-	return '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+	var color = '#' + ((1 << 24) + (rr << 16) + (rg << 8) + rb | 0).toString(16).slice(1);
+
+	return color;
 }
 
 function getColorBucket(dindex)
@@ -1203,7 +1255,7 @@ function resetMap() {
 	map.closePopup();
 	$('.graphbar_title h2').text(amsterdam.hotspot);
 	updateLineGraph('ams','ams');
-	// updateGauge('ams','ams');
+	updateGauge('ams','ams');
 }
 
 function stopAnimation()
@@ -1267,7 +1319,7 @@ function startAnimation()
 					.attr('stroke-width', 3)
 					// .transition()
 					// .duration(1000)
-					.attr('fill', getColorBucket(this.druktecijfers[hour].i))
+					.attr('fill', getColor(this.druktecijfers[hour].i))
 					.attr('stroke', '#4a4a4a');
 			});
 
@@ -1340,7 +1392,7 @@ function dragAnimation() {
 		circles_d3[key]
 			.attr('stroke-opacity', 0.6)
 			.attr('stroke-width', 3)
-			.attr('fill', getColorBucket(this.druktecijfers[hour].i))
+			.attr('fill', getColor(this.druktecijfers[hour].i))
 			.attr('stroke', '#4a4a4a');
 	});
 
@@ -1368,7 +1420,7 @@ function setToCurrentTime()
 		circles_d3[key]
 			.attr('stroke-opacity', 0.6)
 			.attr('stroke-width', 3)
-			.attr('fill', getColorBucket(this.druktecijfers[hour].i))
+			.attr('fill', getColor(this.druktecijfers[hour].i))
 			.attr('stroke', '#4a4a4a');
 	});
 
@@ -1543,23 +1595,24 @@ function initGauge()
 	var hour = getHourDigit();
 	ams_expected = amsterdam.druktecijfers[hour].i;
 
-	console.log('real: ' + ams_realtime);
-	console.log('expected: ' + ams_expected);
+	// console.log('real: ' + ams_realtime);
+	// console.log('expected: ' + ams_expected);
 
 	gauge = $('.gauge').arcGauge({
 		value     :  Math.round(ams_realtime*100),
 		value2     : Math.round(ams_expected*100),
-		colors    : getColorBucket(ams_realtime),
-		colors2    : getColorBucket(ams_expected),
+		colors    : getColor(ams_realtime),
+		colors2    : getColor(ams_expected),
 		transition: 500,
-		thickness : 10,
+		thickness : 12,
 		onchange  : function (value) {
 			$('.gauge-text .value').text(value[0]);
 			$('.gauge-text .value2').text(value[1]);
 		}
 	});
-	$('.graphbar_right .value').text(Math.round(ams_realtime*100)).css('color',getColorBucket(ams_realtime));
-	$('.graphbar_right .value2').text(Math.round(ams_expected*100)).css('color',getColorBucket(ams_expected));
+	$('.graphbar_right .time').text(getHours());
+	$('.graphbar_right .value').text(Math.round(ams_realtime*100)).css('color',getColor(ams_realtime));
+	$('.graphbar_right .value2').text(Math.round(ams_expected*100)).css('color',getColor(ams_expected));
 
 
 }
@@ -1577,10 +1630,21 @@ function updateGauge(key,type)
 		var point_array = hotspots_array[key].druktecijfers;
 		var realtime = realtime_array[key];
 		var expected =  point_array[hour].i;
+		if(realtime > 0 )
+		{
+			gauge[0].set([Math.round(realtime*100),Math.round(expected*100)]);
+			$('.graphbar_right .gauge_top_text').text('Live drukte');
+			$('.graphbar_right .value').text(Math.round(realtime*100)).css('color',getColor(realtime));
+			$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColor(expected));
+		}
+		else
+		{
+			gauge[0].set([0,Math.round(expected*100)]);
+			$('.graphbar_right .gauge_top_text').text('Geen live data');
+			$('.graphbar_right .value').text('').css('color','#fff');
+			$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColor(expected));
+		}
 
-		gauge[0].set([Math.round(realtime*100),Math.round(expected*100)]);
-		$('.graphbar_right .value').text(Math.round(realtime*100)).css('color',getColorBucket(realtime));
-		$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColorBucket(expected));
 	}
 	else
 	{

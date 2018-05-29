@@ -264,7 +264,7 @@
 					.attr("transform", 'translate(' + graph.currentPoint + ',0)')
 					// .attr('rx', 5)
 					// .attr('ry', 5)
-					.attr("fill", getColorBucket(graph.realtime))
+					.attr("fill", getColor(graph.realtime))
 					.attr("class", "realtime_bar_top");
 
 				// graph.realtime_bar_text = graph.svg.append("text")
