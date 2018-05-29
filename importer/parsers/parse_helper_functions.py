@@ -62,7 +62,7 @@ class DatabaseInteractions:
         return conn
 
 
-class ModifyTables(DatabaseInteractions):
+class GeometryQueries:
     """The functions in this class allow the modification of tables
 
     Modification steps the functions in this class can conduct:
@@ -75,8 +75,6 @@ class ModifyTables(DatabaseInteractions):
     - Adding hotspots column
     - Simplifying polygons in polygon column
     """
-
-    # TODO: refactor this class into separate functions
 
     def __init__(self):
         GEOMETRY_POINT_NAME = "geom"  # name of our point geometry on table
@@ -101,7 +99,7 @@ class ModifyTables(DatabaseInteractions):
         return bool(result)
 
     @staticmethod
-    def create_geometry_column(table_name):
+    def lon_lat_to_geom(table_name):
         return """
         ALTER TABLE "{0}"
         DROP COLUMN IF EXISTS geom;
@@ -132,7 +130,7 @@ class ModifyTables(DatabaseInteractions):
         """.format(table_name, original_column, simplified_column)
 
     @staticmethod
-    def add_vollcodes(table_name):
+    def join_vollcodes(table_name):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   vollcode;
@@ -145,7 +143,7 @@ class ModifyTables(DatabaseInteractions):
         """.format(table_name)
 
     @staticmethod
-    def add_stadsdeelcodes(table_name):
+    def join_stadsdeelcodes(table_name):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   stadsdeelcode;
@@ -175,7 +173,7 @@ class ModifyTables(DatabaseInteractions):
     #     """.format(table_name)
 
     @staticmethod
-    def add_hotspot_names(table_name):
+    def join_hotspot_names(table_name):
         return """
             ALTER table "{0}"
             DROP COLUMN IF EXISTS hotspot;

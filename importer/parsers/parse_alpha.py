@@ -183,16 +183,12 @@ VALUES(
     return row_sql
 
 
-def main():
+def main(conn):
     """Parser for ALPHA data."""
 
     # Toggle to use the old file "google_raw_feb.dump". This is our fallback when Quantillion scraper fails.
     # Also change pg_restore line in files "run_index.sh" and "deploy/import/import.sh".
     use_old_dump = True
-
-    # Create database connection
-    db_int = DatabaseInteractions()
-    conn = db_int.get_sqlalchemy_connection()
 
     # Load raw Alpha data dump from table
     tablename = "google_raw_locations_expected_production"
@@ -210,5 +206,9 @@ def main():
         if i % 100 == 0:
             logger.debug('row %d', id_counter)
 
+
 if __name__ == "__main__":
-    main()
+    # Create database connection
+    db_int = DatabaseInteractions()
+    conn = db_int.get_sqlalchemy_connection()
+    main(conn)

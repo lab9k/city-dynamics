@@ -61,7 +61,7 @@ vollcodes_m2_land = {'A00': 125858.0, 'A01': 334392.0, 'A02': 139566.0, 'A03': 1
 # TODO: ... wanneer dbconfig niet meer noodzakelijk is voor db calls:
 # dbconfig = 'dev'
 # temp = process.Process(dbconfig)
-# temp.import_data(['VERBLIJVERSINDEX'], ['vollcode', 'oppervlakte_land_m2'])
+# temp.import_data(['verblijversindex'], ['vollcode', 'oppervlakte_land_m2'])
 # vollcodes_m2_land = dict(zip(list(temp.data.vollcode), list(temp.data.oppervlakte_land_m2)))
 
 ##############################################################################

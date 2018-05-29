@@ -1,8 +1,6 @@
 """
 MAIN ETL Pipeline
 
-#REFACTOR: module needs refactoring.
-
 Module executes the import pipeline:
     - Download raw data sources from objectstore, guided by the sources.conf file.
     - Store this data in a local data directory.
@@ -10,22 +8,22 @@ Module executes the import pipeline:
 """
 
 import logging
-import configparser
 import argparse
 import os
 import os.path
 import re
 import download_from_objectstore
+
 from parsers.parse_helper_functions import DatabaseInteractions
-#import parsers.parse_alpha
 from parsers import parse_alpha
 from parsers import parse_gvb
+from parsers import parse_hotspots
+from parsers import parse_verblijversindex
+from parsers import parse_parkeren
+from parsers import parse_gebieden
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-config_src = configparser.RawConfigParser()
-config_src.read('sources.conf')
 
 db_int = DatabaseInteractions()
 conn = db_int.get_sqlalchemy_connection()
@@ -71,38 +69,29 @@ def execute_download_from_objectstore(objectstore_containers):
     rename_quantillion_dump()
 
 
-def main(args):
+def main(LOCAL_DATA_DIRECTORY):
     """This is the main function of this module. Starts the ETL process."""
 
-    objectstore_containers = ['quantillion_dump',
+    objectstore_containers = [#'quantillion_dump',
                               'GVB',
-                              'hotspots',
+                              #'hotspots',
                               #'geo_mapping',
-                              'parkeer_occupancy/2018_w08_w17_occupancy_v2',
+                              'parkeer_occupancy',
                               #'afval',
                               #'CMSA',
                               #'tellus',
-                              'verblijversindex',
+                              #'verblijversindex',
                               #'MORA',
                               ]
 
     execute_download_from_objectstore(objectstore_containers)
 
-    #parse_alpha()
-    parse_gvb.load_parsed_file(LOCAL_DATA_DIRECTORY)
-
-    # parsers.parse_hotspots()
-
-    # parsers.parse_buurtcombinatie()
-    # parse_stadsdeel_buurtcombinatie()
-    # parsers.parse_parkeren()
-    # parsers.parse_afval()
-    # parsers.parse_cmsa()
-    # parsers.parse_tellus()
-    # parsers.parse_verblijversindex
-    # parsers.parse_mora()
-    # parsers.parse_functiekaart()
-    # parsers.parse_geomapping()
+    parse_alpha(conn=conn)
+    parse_gvb.load_parsed_file(LOCAL_DATA_DIRECTORY, conn=conn)
+    parse_hotspots.main(LOCAL_DATA_DIRECTORY, conn=conn)
+    parse_verblijversindex.main(LOCAL_DATA_DIRECTORY, conn=conn)
+    # parse_parkeren.main(LOCAL_DATA_DIRECTORY, conn=conn)
+    parse_gebieden.main()
 
 
 if __name__ == "__main__":

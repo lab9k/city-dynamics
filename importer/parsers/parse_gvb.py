@@ -1,17 +1,12 @@
 import os
 import datetime
 import pandas as pd
-from .parse_helper_functions import DatabaseInteractions
 import logging
 
 logger = logging.getLogger(__name__)
 
-# Create database connection
-db_int = DatabaseInteractions()
-conn = db_int.get_sqlalchemy_connection()
 
-
-def main(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv',
+def main(datadir, folder='GVB', rittenpath='Ritten GVB 24jun2017-7okt2017.csv',
          locationspath='Ortnr - coordinaten (ingangsdatum dec 2015) met LAT LONG.xlsx'):
 
     """Parser for GVB data."""
@@ -33,6 +28,7 @@ def main(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv',
         return dt
 
     # read raw ritten
+    datadir = os.path.join(datadir, folder)
     rittenpath = os.path.join(datadir, rittenpath)
     ritten = pd.read_csv(rittenpath, skiprows=2, header=None)
     ritten.columns = ['weekdag', 'tijdstip', 'ortnr_start',
@@ -121,11 +117,11 @@ def main(datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv',
 
     return inout
 
-def load_parsed_file(datadir):
+def load_parsed_file(datadir, conn):
     logger.debug('Parsing GVB data..')
     # main(datadir)
     df = pd.read_csv(os.path.join(datadir, 'gvb_parsed.csv'))
-    df.to_sql('gvb2', conn)
+    df.to_sql('gvb', con=conn, if_exists='replace')
     logger.debug('.. done')
 
 

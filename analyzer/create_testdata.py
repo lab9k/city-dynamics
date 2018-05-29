@@ -32,8 +32,8 @@ def main():
 
     target_dir = 'deploy/testdata/'
 
-    df = pd.read_sql(sql='SELECT * FROM "VERBLIJVERSINDEX"', con=conn)
-    df.to_csv(target_dir + 'VERBLIJVERSINDEX.csv')
+    df = pd.read_sql(sql='SELECT * FROM "verblijversindex"', con=conn)
+    df.to_csv(target_dir + 'verblijversindex.csv')
 
     df = pd.read_sql(sql="SELECT * FROM alpha_locations_expected WHERE hotspot = 'Central Station'", con=conn)
     df.to_csv(target_dir + 'alpha_locations_expected.csv')
