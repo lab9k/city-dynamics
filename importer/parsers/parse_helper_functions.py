@@ -111,12 +111,12 @@ class GeometryQueries:
         """.format(table_name, 'geom_' + table_name)
 
     @staticmethod
-    def convert_to_geometry():
+    def convert_str_polygon_to_geometry(table_name):
         return """
-        ALTER TABLE hotspots
+        ALTER TABLE "{0}"
         ALTER COLUMN polygon
         TYPE Geometry USING polygon::Geometry;
-        """
+        """.format(table_name)
 
     @staticmethod
     def simplify_polygon(table_name, original_column, simplified_column):

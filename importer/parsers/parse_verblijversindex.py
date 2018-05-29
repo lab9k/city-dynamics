@@ -6,12 +6,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def main(datadir, conn, filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
+def main(datadir, conn, folder='verblijversindex', filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
     """Parser for verblijversindex data."""
 
     logger.debug('Parsing verblijversindex...')
 
-    path = os.path.join(datadir, filename)
+    folder_path = os.join(datadir, folder)
+    path = os.path.join(folder_path, filename)
     df = pd.read_excel(path, sheet_name=3)
 
     cols = ['wijk',

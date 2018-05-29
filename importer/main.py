@@ -66,32 +66,39 @@ def execute_download_from_objectstore(objectstore_containers):
     else:
         logger.info('No download from datastore requested, quitting.')
 
-    rename_quantillion_dump()
+    # rename quantillion dump if it's there
+    try:
+        rename_quantillion_dump()
+    except:
+        pass
 
 
 def main(LOCAL_DATA_DIRECTORY):
     """This is the main function of this module. Starts the ETL process."""
 
-    objectstore_containers = [#'quantillion_dump',
+    objectstore_containers = ['quantillion_dump',
                               'GVB',
-                              #'hotspots',
+                              'hotspots',
                               #'geo_mapping',
                               'parkeer_occupancy',
                               #'afval',
                               #'CMSA',
                               #'tellus',
-                              #'verblijversindex',
+                              'verblijversindex',
                               #'MORA',
                               ]
 
     execute_download_from_objectstore(objectstore_containers)
 
-    parse_alpha(conn=conn)
-    parse_gvb.load_parsed_file(LOCAL_DATA_DIRECTORY, conn=conn)
+    # order is important; 'gebieden' and 'hotspots' need to run first,
+    # since they contain geo-information for other sources
+    parse_gebieden.main()
     parse_hotspots.main(LOCAL_DATA_DIRECTORY, conn=conn)
+
+    parse_alpha.main(conn=conn)
+    parse_gvb.load_parsed_file(LOCAL_DATA_DIRECTORY, conn=conn)
     parse_verblijversindex.main(LOCAL_DATA_DIRECTORY, conn=conn)
     # parse_parkeren.main(LOCAL_DATA_DIRECTORY, conn=conn)
-    parse_gebieden.main()
 
 
 if __name__ == "__main__":

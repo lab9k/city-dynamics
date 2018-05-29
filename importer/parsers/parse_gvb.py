@@ -2,6 +2,7 @@ import os
 import datetime
 import pandas as pd
 import logging
+from .parse_helper_functions import GeometryQueries
 
 logger = logging.getLogger(__name__)
 
@@ -117,11 +118,22 @@ def main(datadir, folder='GVB', rittenpath='Ritten GVB 24jun2017-7okt2017.csv',
 
     return inout
 
+def add_geometries(table_name):
+    logger.debug('Adding geometries...')
+    GeometryQueries.lon_lat_to_geom(table_name)
+    GeometryQueries.join_vollcodes(table_name)
+    GeometryQueries.join_stadsdeelcodes(table_name)
+    GeometryQueries.join_hotspot_names(table_name)
+    logger.debug('...done')
+
+
 def load_parsed_file(datadir, conn):
     logger.debug('Parsing GVB data..')
     # main(datadir)
-    df = pd.read_csv(os.path.join(datadir, 'gvb_parsed.csv'))
-    df.to_sql('gvb', con=conn, if_exists='replace')
+    df = pd.read_csv(os.path.join(datadir, 'GVB/gvb_parsed.csv'))
+    table_name = 'GVB'
+    df.to_sql(table_name, con=conn, if_exists='replace')
+    add_geometries(table_name)
     logger.debug('.. done')
 
 
