@@ -22,6 +22,7 @@ dc up -d database
 
 dc run --rm importer /app/deploy/docker-wait.sh
 dc run --rm importer pytest
+dc run --rm importer /app/deploy/test/codequality.sh
 
 
 dc stop
