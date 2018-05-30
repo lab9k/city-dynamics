@@ -35,7 +35,10 @@ def main():
     df = pd.read_sql(sql='SELECT * FROM "VERBLIJVERSINDEX"', con=conn)
     df.to_csv(target_dir + 'VERBLIJVERSINDEX.csv')
 
-    df = pd.read_sql(sql="SELECT * FROM alpha_locations_expected WHERE hotspot = 'Central Station'", con=conn)
+    sql = """
+    SELECT * FROM alpha_locations_expected WHERE hotspot = 'Central Station'"
+    """
+    df = pd.read_sql(sql=sql, con=conn)
     df.to_csv(target_dir + 'alpha_locations_expected.csv')
 
     df = pd.read_sql(sql="SELECT * FROM gvb WHERE vollcode = 'A01'", con=conn)
