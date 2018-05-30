@@ -12,6 +12,11 @@ dc() {
 
 trap 'dc down; dc kill ; dc rm -f -v' EXIT
 
+# make sure we have anvironment variables
+# and set them
+export OBJECTSTORE_PASSWORD=$STADSWERKEN_OBJECTSTORE_PASSWORD
+export OBJECTSTORE_USER=druktemeter
+
 rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups
 
@@ -19,8 +24,8 @@ mkdir -p ${DIR}/backups
 # Start database container.
 dc stop
 dc rm --force
-dc down
-# dc pull
+# dc down
+dc pull
 dc build
 dc up -d database
 
@@ -39,9 +44,6 @@ dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --i
 
 # Migrate/Create target tables the database.
 dc run --rm api python manage.py migrate
-
-# Tagged for removal
-#dc run --rm importer bash /app/run_import.sh
 
 # Create new tables in database.
 dc run --rm importer python scrape_api/models.py

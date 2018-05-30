@@ -1,12 +1,12 @@
 """
-MAIN ETL Pipeline
-
-#REFACTOR: module needs refactoring.
+main ETL Pipeline
 
 Module executes the import pipeline:
-    - Download raw data sources from objectstore, guided by the sources.conf file.
+    - Download raw data sources from objectstore,
+      guided by the sources.conf file.
     - Store this data in a local data directory.
-    - Parse the raw data and write the results to postgresql database (in Docker container).
+    - Parse the raw data and write the results to
+      postgresql database (in Docker container).
 """
 
 import logging
@@ -17,8 +17,13 @@ import os.path
 import re
 
 import download_from_objectstore
-import objectstore
 import parsers
+from datasets import gvb
+from datasets import mora
+from datasets import alpha
+from datasets import tellus
+from datasets import verblijversindex
+
 from ETLFunctions import DatabaseInteractions
 from ETLFunctions import ModifyTables
 from ETLFunctions import LoadLayers
@@ -33,10 +38,14 @@ db_int = DatabaseInteractions()
 conn = db_int.get_sqlalchemy_connection()
 
 
-# TODO Use this structure to refactor the main function
 def execute_download_from_objectstore():
-    """This function downloads data for all ENABLED containers in importer/sources.conf from the objectstore."""
-    objectstore_containers = [config_src.get(x, 'OBJSTORE_CONTAINER') for x in datasets]
+    """Downloads data for all ENABLED containers
+
+    config in importer/sources.conf
+    downloads files from from the objectstore.
+    """
+    objectstore_containers = [
+        config_src.get(x, 'OBJSTORE_CONTAINER') for x in source_datasets]
 
     # Check whether locally cached downloads should be used.
     ENV_VAR = 'EXTERNAL_DATASERVICES_USE_LOCAL'
@@ -45,7 +54,8 @@ def execute_download_from_objectstore():
     if not use_local:
         if not LOCAL_DATA_DIRECTORY:
             raise ValueError("data dir missing")
-        download_from_objectstore.main(objectstore_containers, LOCAL_DATA_DIRECTORY)
+        download_from_objectstore.main(
+            objectstore_containers, LOCAL_DATA_DIRECTORY)
     else:
         logger.info('No download from datastore requested, quitting.')
 
@@ -58,29 +68,40 @@ def load_areas():
     LoadLayers.load_layers(pg_str)
 
 
-def parse_and_write():
-    """This function parses the data downloaded from the objectstore and writes it to the database (Docker container)"""
+parser_mapper = {
+    'gvb': gvb.parse,
+    'mora': mora.parse,
+    'alpha': alpha.parse,
+    'tellus': tellus.parse,
+    'gebieden': parsers.parse_gebieden,
+    'functiekaart': parsers.parse_functiekaart,
+    'afval': parsers.parse_afval,
+    'verblijversindex': verblijversindex.parse,
+    'cmsa': parsers.parse_cmsa,
+    'hotspots': parsers.parse_hotspots,
+}
 
-    # Parse raw data from objectstore and place result into database (in Docker container).
-    for dataset in datasets:
-        logger.info(f'Parsing and writing {dataset} data...')
 
-        # if statement below is needed because alpha's parser writes
-        # directly to database, whereas other parsers
-        # return a dataframe. #TODO refactor?
-        if dataset == 'alpha':
-            getattr(parsers, 'parse_' + dataset)(
-                datadir=LOCAL_DATA_DIRECTORY)
+def store_datasets():
+    """
+    This function parses the data downloaded from the
+    objectstore and writes it to the
+    database (Docker container)
+    """
 
-        else:
-            df = getattr(parsers, 'parse_' + dataset)(
-                    datadir=LOCAL_DATA_DIRECTORY)
+    for dataset in source_datasets:
+        logger.info(f'Loading {dataset} data...')
 
-            df.to_sql(
-                name=config_src.get(dataset, 'TABLE_NAME'),
-                con=conn, index=True, if_exists='append')
+        df = parser_mapper[dataset](datadir=LOCAL_DATA_DIRECTORY)
 
-            logger.info('... done')
+        if df is None:
+            continue
+
+        df.to_sql(
+            name=config_src.get(dataset, 'TABLE_NAME'),
+            con=conn, index=True, if_exists='append')
+
+        logger.info('... done')
 
     logger.info('Loading and writing area codes to database')
     load_areas()
@@ -101,7 +122,8 @@ def modify_tables():
     - Adding hotspots column
     - Simplifying polygons in polygon column
     """
-    # TODO: Refactor task: divide this function into multiple separate table modification functions.
+    # TODO: Refactor task:
+    # divide this function into multiple separate table modification functions.
 
     # simplify the polygon of the
     # buurtcombinaties: limits data traffic to the front end.
@@ -114,7 +136,7 @@ def modify_tables():
     conn.execute(
         ModifyTables.convert_to_geometry())
 
-    for dataset in datasets:
+    for dataset in source_datasets:
         logger.debug('Working on %s', dataset)
         if config_src.get(dataset, 'CREATE_GEOMETRY') == 'YES':
             table_name = config_src.get(dataset, 'TABLE_NAME')
@@ -140,7 +162,7 @@ def modify_tables():
 TASKS = {
     'areas': load_areas,
     'download': execute_download_from_objectstore,
-    'parse': parse_and_write
+    'parse': store_datasets
 }
 
 
@@ -193,7 +215,7 @@ def main(args):
             return
 
     # Parse the data and write to postgresql database.
-    parse_and_write()
+    store_datasets()
 
     # 5. Modify (pre-process) the tables in the database.
     modify_tables()
@@ -213,15 +235,15 @@ if __name__ == "__main__":
     # 1. Determine which data sources are used
     p_datasets = config_src.sections()
 
-    datasets = []
+    source_datasets = []
 
     for x in p_datasets:
         if config_src.get(x, 'ENABLE') == 'YES':
-            datasets.append(x)
+            source_datasets.append(x)
 
     # overwrite datasets, if a specific dataset is
     # given via a command line argument
     if args.dataset:
-        datasets = [args.dataset]
+        source_datasets = [args.dataset]
 
     main(args)
