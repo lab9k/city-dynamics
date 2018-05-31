@@ -124,12 +124,12 @@ def download_containers(conn, objectstore_containers, targetdir):
 
     resp_headers, containers = conn.get_account()
 
-    logger.debug('Downloading datasets from objectstore')
+    logger.info('Downloading datasets from objectstore...\n')
     for container in containers:
         if container['name'] in objectstore_containers:
             logger.debug(container['name'])
             download_container(conn, container, targetdir)
-
+    logger.info('... downloading finished!\n\n')
 
 def main(objectstore_containers, targetdir):
     """Main function to download all data from objectstore containers"""

@@ -32,12 +32,12 @@ def parse_parkeer_timeslot(path_to_dir, file):
     return df_temp_all_hours
 
 
-def main(datadir, conn, folder='2018_w08_w17_occupancy_v2'):
+def run(conn, data_root, **config):
     """Parser for PARKEER data."""
 
-    logger.debug('Parsing parkeer data..')
+    logger.info('Parsing parkeer data...')
 
-    files = os.listdir(os.path.join(datadir, folder))
+    files = os.listdir(os.path.join(data_root, config['OBJSTORE_CONTAINER']))
 
     week_number = 16
     files_in_week_number = []
@@ -55,7 +55,9 @@ def main(datadir, conn, folder='2018_w08_w17_occupancy_v2'):
         df_timeslot = parse_parkeer_timeslot(file)
         df_week = pd.concat([df_week, df_timeslot])
 
-    df_week['occupancy_times_vakken'] = df_week['occupancy'] * df_week['vakken']
+    # print(df_week.columns.tolist())
+    df_week['occupancy_times_vakken'] = df_week['occupancy'] * \
+                                        df_week['vakken']
     df_week['vollcode'] = df_week.code.str[0:3]
 
     df_week.to_sql('parkeren', con=conn, if_exists='replace')
@@ -76,10 +78,4 @@ def main(datadir, conn, folder='2018_w08_w17_occupancy_v2'):
     # # SET
     # # longitude = ST_X(ST_Centroid(geom)), Latitude = ST_Y(ST_Centroid(geom));
 
-    logger.debug('.. done')
-
-if __name__ == "__main__":
-    # Create database connection
-    db_int = DatabaseInteractions()
-    conn = db_int.get_sqlalchemy_connection()
-    main(conn)
+    logger.info('.. done!')

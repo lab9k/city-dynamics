@@ -184,43 +184,37 @@ VALUES(
     return row_sql
 
 def add_geometries_alpha(table_name):
-    logger.debug('Adding geometries...')
+    logger.info('Adding geometries...')
     conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
     conn.execute(GeometryQueries.join_vollcodes(table_name))
     conn.execute(GeometryQueries.join_stadsdeelcodes(table_name))
     conn.execute(GeometryQueries.join_hotspot_names(table_name))
-    logger.debug('...done')
+    logger.info('...done!')
 
 
-def main(conn):
+def run(conn, *_, **config):
     """Parser for ALPHA data."""
 
-    # Toggle to use the old file "google_raw_feb.dump". This is our fallback when Quantillion scraper fails.
-    # Also change pg_restore line in files "run_index.sh" and "deploy/import/import.sh".
-    use_old_dump = True
+    logger.info('Parsing Alpha data...')
 
     # Load raw Alpha data dump from table
-    source_table = "google_raw_locations_expected_production"
-    if use_old_dump:
-        source_table = "google_raw_locations_expected_acceptance"
+    source_table = config['SOURCE_TABLE']
     raw = pd.read_sql_table(source_table, conn)
-    logger.debug('alpha data %s', raw.shape)
 
     # Create table for modified Alpha data
-    target_table = 'alpha_locations_expected'
+    target_table = config['TABLE_NAME']
     conn.execute(create_alpha_table(target_table))
+
     # Iterate over raw entries to fill new table
     id_counter = 0
     for i in range(0, len(raw)):
         id_counter = parse_alpha_item(conn, i, id_counter, raw)
-        if i % 100 == 0:
-            logger.debug('row %d', id_counter)
 
-    add_geometries_alpha(target_table)
+    logger.info('...done!')
 
 
 if __name__ == "__main__":
     # Create database connection
     db_int = DatabaseInteractions()
     conn = db_int.get_sqlalchemy_connection()
-    main(conn)
+    run(conn, None, None)

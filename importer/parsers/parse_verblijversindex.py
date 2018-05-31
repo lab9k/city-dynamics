@@ -6,13 +6,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def main(datadir, conn, folder='verblijversindex', filename='Samenvoegingverblijvers2016_Tamas.xlsx'):
+def main(conn, data_root, **config):
     """Parser for verblijversindex data."""
 
     logger.debug('Parsing verblijversindex...')
 
-    folder_path = os.path.join(datadir, folder)
-    path = os.path.join(folder_path, filename)
+    folder_path = os.path.join(data_root, config['OBJECTSTORE_CONTAINER'])
+    path = os.path.join(folder_path, config['FILENAME'])
     df = pd.read_excel(path, sheet_name=3)
 
     cols = ['wijk',
@@ -43,9 +43,3 @@ def main(datadir, conn, folder='verblijversindex', filename='Samenvoegingverblij
     df.to_sql('verblijversindex', con=conn, if_exists='replace')
 
     logger.debug('... done')
-
-if __name__ == "__main__":
-    # Create database connection
-    db_int = DatabaseInteractions()
-    conn = db_int.get_sqlalchemy_connection()
-    main(conn)
