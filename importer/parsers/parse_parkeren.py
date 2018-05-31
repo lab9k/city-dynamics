@@ -23,7 +23,7 @@ def parse_parkeer_timeslot(path_to_dir, file):
     end_hour = int(file[15:17])
     hour_range = list(range(start_hour, end_hour + 1))
     df_temp_all_hours = pd.DataFrame()
-    df_temp = pd.read_csv(path_to_dir + file)
+    df_temp = pd.read_csv(os.path.join(path_to_dir, file))
     df_temp['weekday'] = day_nr
     for hour in hour_range:
         df_temp['hour'] = hour
@@ -37,11 +37,14 @@ def run(conn, data_root, **config):
 
     logger.info('Parsing parkeer data...')
 
-    files = os.listdir(os.path.join(data_root, config['OBJSTORE_CONTAINER']))
+    path_to_dir = os.path.join(data_root, config['OBJSTORE_CONTAINER'],
+                                    config['DATA_FOLDER'])
+    files = os.listdir(path_to_dir)
 
     week_number = 16
     files_in_week_number = []
 
+    # TODO: Turn into regex to create "files_in_week_number" list
     for filename in files:
         if '2018_w{}'.format(week_number) in filename:
             if 'BETAALDP.csv' in filename:
@@ -52,15 +55,19 @@ def run(conn, data_root, **config):
     df_week = pd.DataFrame()
 
     for file in files_in_week_number:
-        df_timeslot = parse_parkeer_timeslot(file)
+        df_timeslot = parse_parkeer_timeslot(path_to_dir, file)
         df_week = pd.concat([df_week, df_timeslot])
+
 
     # print(df_week.columns.tolist())
     df_week['occupancy_times_vakken'] = df_week['occupancy'] * \
                                         df_week['vakken']
     df_week['vollcode'] = df_week.code.str[0:3]
 
-    df_week.to_sql('parkeren', con=conn, if_exists='replace')
+    logger.info('Writing data to database...')
+    table_name = config['TABLE_NAME']
+    df_week.to_sql(table_name, con=conn, if_exists='replace')
+    logger.info('...done')
 
 
     # determine_centroid_query = """
