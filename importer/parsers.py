@@ -1,5 +1,7 @@
 """
-This module contains a parser to pre-process data from every datasource.
+This module contains a parser to pre-process data
+some small datasource. BIG ones get their own code
+in datasets
 """
 
 import os
@@ -7,10 +9,6 @@ import datetime
 import numpy as np
 import pandas as pd
 import re
-import glob
-from ETLFunctions import DatabaseInteractions
-from ETLFunctions import ModifyTables
-
 import logging
 
 logger = logging.getLogger(__name__)
@@ -114,8 +112,7 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
 
     return df
 
-
-def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
+def parse_gebieden(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
     """Parser for geomapping data."""
 
     path = os.path.join(datadir, filename)
@@ -189,4 +186,3 @@ def parse_afval(datadir, filename='WEEGGEGEVENS(1-10_30-11_2017).csv'):
     df = df.loc[indx, :]
 
     return df
-

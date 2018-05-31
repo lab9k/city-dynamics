@@ -7,7 +7,7 @@ the layout there matches the layout expected by our data loading scripts.
 delivery of new data for this project.)
 """
 import os
-import argparse
+# import argparse
 import logging
 import configparser
 import objectstore
@@ -53,8 +53,14 @@ def file_exists(target):
     return target.is_file()
 
 
+replace_files = [
+    "hotspots.csv",
+    "hotspots_dev.csv"
+]
+
+
 def download_container(conn, container, targetdir):
-    """Download data from a container (folder) on the objectstore into local targetdirectory."""
+    """Download data from a container (folder) on the objectstore"""
 
     # list of container's content
     content = objectstore.get_full_container_list(conn, container['name'])
@@ -64,7 +70,6 @@ def download_container(conn, container, targetdir):
     if not os.path.exists(container_dir):
         os.makedirs(container_dir)
 
-    # loop over files
     for obj in content:
         # check if object type is not application or dir, or a "part" file
         if obj['content_type'] == 'application/directory':
@@ -84,16 +89,16 @@ def download_container(conn, container, targetdir):
 
         target_filename = os.path.join(container_dir, obj['name'])
 
-        # Check whether a local copy of the file already exists.
         if file_exists(target_filename):
-            # Certain files have to be replaced in any case (due to possible updates)
-            if "hotspots.csv" in target_filename or "hotspots_dev.csv" in target_filename:
+
+            # Certain files have to be replaced in any
+            if target_filename in replace_files:
                 logger.debug('Downloading %s', target_filename)
                 os.remove(target_filename)
-            # For other files, the existing local copy should be used.
-            else:
-                logger.debug('skipping %s, file already exists', target_filename)
                 continue
+
+            logger.debug('skipping %s, file already exists', target_filename)
+            continue
 
         # write object in target file
         with open(target_filename, 'wb') as new_file:
@@ -103,7 +108,8 @@ def download_container(conn, container, targetdir):
 
 def download_containers(conn, objectstore_containers, targetdir):
     """
-    Download the citydynamics datasets, located in containers/folders on the objectstore, into local target directories.
+    Download the citydynamics datasets, located in containers/
+    folders on the objectstore, into local target directories.
 
     Simplifying assumptions:
     * layout on data store matches intended layout of local data directory
@@ -118,7 +124,7 @@ def download_containers(conn, objectstore_containers, targetdir):
 
     resp_headers, containers = conn.get_account()
 
-    logger.debug('Downloading datasets from objectstore folders into local directories...')
+    logger.debug('Downloading datasets from objectstore')
     for container in containers:
         if container['name'] in objectstore_containers:
             logger.debug(container['name'])
@@ -126,6 +132,6 @@ def download_containers(conn, objectstore_containers, targetdir):
 
 
 def main(objectstore_containers, targetdir):
-    """Main function to download all data from objectstore containers to local target directory."""
+    """Main function to download all data from objectstore containers"""
     conn = Connection(**OS_CONNECT)
     download_containers(conn, objectstore_containers, targetdir)

@@ -91,16 +91,35 @@ def fill_hotspot_tables(conn=None):
     log.debug('done.')
 
 
+def cleanup_something_ugly(alpha_hotspots, hotspots_df):
+    notnull = ~ hotspots_df.alpha_hotspot_name.isnull()
+    masked_hotspots_df = hotspots_df[notnull]
+    singular_hotspots_df = masked_hotspots_df[
+        ['hotspot', 'alpha_hotspot_name']]
+
+    singular_hotspots = pd.Series(
+        singular_hotspots_df.alpha_hotspot_name.values,
+        index=singular_hotspots_df.hotspot).to_dict()
+
+    for hotspot, alpha_hotspot_name in singular_hotspots.items():
+        matched = (alpha_hotspots.hotspot == hotspot)
+        notname = (alpha_hotspots.name != alpha_hotspot_name)
+        alpha_hotspots.drop(
+            alpha_hotspots[matched & notname].index, inplace=True)
+
+
 def main():
     """
-    Processes all the hotspots: it finds all relevant locations in a 200m radius
-    around each hotspot and computes a prediction value for the hotspot for each hour of the week.
-    When no data is available from locations around the hotspot, the data from the vollcode area
-    of the hotspot is used as fallback.
+    Processes all the hotspots: it finds all relevant locations in a 200m
+    radius around each hotspot and computes a prediction value for the hotspot
+    for each hour of the week.  When no data is available from locations
+    around the hotspot, the data from the vollcode area of the hotspot
+    is used as fallback.
     """
     conn = get_conn()
 
-    alpha_hotspots = pd.read_sql(sql="SELECT * FROM alpha_locations_expected", con=conn)
+    sql = "SELECT * FROM alpha_locations_expected"
+    alpha_hotspots = pd.read_sql(sql=sql, con=conn)
 
     hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)
 
@@ -108,15 +127,7 @@ def main():
     # we have to remove the other alpha locations related to that hotspot
     use_singular_filter = True
     if use_singular_filter:
-        singular_hotspots_df = hotspots_df[~ hotspots_df.alpha_hotspot_name.isnull()][['hotspot', 'alpha_hotspot_name']]
-
-        singular_hotspots = pd.Series(singular_hotspots_df.alpha_hotspot_name.values,
-                                      index=singular_hotspots_df.hotspot).to_dict()
-
-        for hotspot, alpha_hotspot_name in singular_hotspots.items():
-            alpha_hotspots.drop(
-                alpha_hotspots[(alpha_hotspots.hotspot == hotspot) & (alpha_hotspots.name != alpha_hotspot_name)].index,
-                inplace=True)
+        cleanup_something_ugly(alpha_hotspots, hotspots_df)
 
     alpha_hotspots['expected'] *= alpha_hotspots['main_category_weight']
 
@@ -132,14 +143,23 @@ def main():
     alpha_week_hotspots.rename(columns={'expected': 'alpha'}, inplace=True)
 
     # fill the dataframe with all missing hotspot-hour combinations
-    x = {"weekday": np.arange(7), "hour": np.arange(24), "hotspot": hotspots_df['hotspot'].unique().tolist()}
-    hs_hour_combinations = pd.DataFrame(list(itertools.product(*x.values())), columns=x.keys())
-    alpha_week_hotspots = alpha_week_hotspots.merge(hs_hour_combinations, on=['hour', 'hotspot'], how='outer')
+    x = {
+        "weekday": np.arange(7),
+        "hour": np.arange(24),
+        "hotspot": hotspots_df['hotspot'].unique().tolist()
+    }
+
+    hs_hour_combinations = pd.DataFrame(
+        list(itertools.product(*x.values())), columns=x.keys())
+    alpha_week_hotspots = alpha_week_hotspots.merge(
+        hs_hour_combinations, on=['hour', 'hotspot'], how='outer')
     alpha_week_hotspots['alpha'].fillna(value=0, inplace=True)
 
-    alpha_week_hotspots = alpha_week_hotspots.merge(hotspots_df[['hotspot', 'vollcode']], on='hotspot')
+    alpha_week_hotspots = alpha_week_hotspots.merge(
+        hotspots_df[['hotspot', 'vollcode']], on='hotspot')
 
-    di = pd.read_sql(sql="SELECT * FROM drukteindex_buurtcombinaties", con=conn)
+    sql = "SELECT * FROM drukteindex_buurtcombinaties"
+    di = pd.read_sql(sql=sql, con=conn)
 
     drukteindex_hotspots = alpha_week_hotspots.merge(
         di[['index',
@@ -151,12 +171,16 @@ def main():
 
     drukteindex_hotspots = linear_model(drukteindex_hotspots)
 
-    drukteindex_hotspots = drukteindex_hotspots[['hotspot', 'hour', 'weekday', 'drukte_index']]
+    drukteindex_hotspots = drukteindex_hotspots[
+        ['hotspot', 'hour', 'weekday', 'drukte_index']]
 
-    drukteindex_hotspots.rename(columns={'drukte_index': 'drukteindex'}, inplace=True)
+    drukteindex_hotspots.rename(
+        columns={'drukte_index': 'drukteindex'}, inplace=True)
 
     log.debug('Writing to db..')
-    drukteindex_hotspots.to_sql(name='drukteindex_hotspots', con=conn, if_exists='replace')
+
+    drukteindex_hotspots.to_sql(
+        name='drukteindex_hotspots', con=conn, if_exists='replace')
 
     fill_hotspot_tables(conn=conn)
 
