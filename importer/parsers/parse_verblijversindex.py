@@ -11,7 +11,7 @@ def main(datadir, conn, folder='verblijversindex', filename='Samenvoegingverblij
 
     logger.debug('Parsing verblijversindex...')
 
-    folder_path = os.join(datadir, folder)
+    folder_path = os.path.join(datadir, folder)
     path = os.path.join(folder_path, filename)
     df = pd.read_excel(path, sheet_name=3)
 

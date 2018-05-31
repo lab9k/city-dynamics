@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 from .parse_helper_functions import DatabaseInteractions
+from .parse_helper_functions import GeometryQueries
 
 import logging
 
@@ -8,9 +9,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def create_alpha_table():
+def create_alpha_table(table_name):
     return """
-    DROP TABLE IF EXISTS  public.alpha_locations_expected;
+    DROP TABLE IF EXISTS  public."{0}";
 
     CREATE TABLE  public.alpha_locations_expected(
         id                      INTEGER,
@@ -29,7 +30,7 @@ def create_alpha_table():
         visit_duration          TEXT,
         types                   TEXT,
         category                INT4);
-    """
+    """.format(table_name)
 
 
 categories_tags_mapping = {'default': ['alles_wat_geen_andere_tag_heeft', 'storage', 'synagogue', 'church', 'place_of_worship',
@@ -182,6 +183,14 @@ VALUES(
 
     return row_sql
 
+def add_geometries_alpha(table_name):
+    logger.debug('Adding geometries...')
+    conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
+    conn.execute(GeometryQueries.join_vollcodes(table_name))
+    conn.execute(GeometryQueries.join_stadsdeelcodes(table_name))
+    conn.execute(GeometryQueries.join_hotspot_names(table_name))
+    logger.debug('...done')
+
 
 def main(conn):
     """Parser for ALPHA data."""
@@ -191,20 +200,23 @@ def main(conn):
     use_old_dump = True
 
     # Load raw Alpha data dump from table
-    tablename = "google_raw_locations_expected_production"
+    source_table = "google_raw_locations_expected_production"
     if use_old_dump:
-        tablename = "google_raw_locations_expected_acceptance"
-    raw = pd.read_sql_table(tablename, conn)
+        source_table = "google_raw_locations_expected_acceptance"
+    raw = pd.read_sql_table(source_table, conn)
     logger.debug('alpha data %s', raw.shape)
 
     # Create table for modified Alpha data
-    conn.execute(create_alpha_table())
+    target_table = 'alpha_locations_expected'
+    conn.execute(create_alpha_table(target_table))
     # Iterate over raw entries to fill new table
     id_counter = 0
     for i in range(0, len(raw)):
         id_counter = parse_alpha_item(conn, i, id_counter, raw)
         if i % 100 == 0:
             logger.debug('row %d', id_counter)
+
+    add_geometries_alpha(target_table)
 
 
 if __name__ == "__main__":

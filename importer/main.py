@@ -88,16 +88,16 @@ def main(LOCAL_DATA_DIRECTORY):
                               #'MORA',
                               ]
 
-    execute_download_from_objectstore(objectstore_containers)
+    # execute_download_from_objectstore(objectstore_containers)
 
     # order is important; 'gebieden' and 'hotspots' need to run first,
     # since they contain geo-information for other sources
     parse_gebieden.main()
     parse_hotspots.main(LOCAL_DATA_DIRECTORY, conn=conn)
 
-    parse_alpha.main(conn=conn)
     parse_gvb.load_parsed_file(LOCAL_DATA_DIRECTORY, conn=conn)
     parse_verblijversindex.main(LOCAL_DATA_DIRECTORY, conn=conn)
+    parse_alpha.main(conn=conn)
     # parse_parkeren.main(LOCAL_DATA_DIRECTORY, conn=conn)
 
 

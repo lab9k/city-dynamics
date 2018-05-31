@@ -118,14 +118,13 @@ def main(datadir, folder='GVB', rittenpath='Ritten GVB 24jun2017-7okt2017.csv',
 
     return inout
 
-def add_geometries(table_name):
+def add_geometries_gvb(table_name, conn):
     logger.debug('Adding geometries...')
-    GeometryQueries.lon_lat_to_geom(table_name)
-    GeometryQueries.join_vollcodes(table_name)
-    GeometryQueries.join_stadsdeelcodes(table_name)
-    GeometryQueries.join_hotspot_names(table_name)
+    conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
+    conn.execute(GeometryQueries.join_vollcodes(table_name))
+    conn.execute(GeometryQueries.join_stadsdeelcodes(table_name))
+    conn.execute(GeometryQueries.join_hotspot_names(table_name))
     logger.debug('...done')
-
 
 def load_parsed_file(datadir, conn):
     logger.debug('Parsing GVB data..')
@@ -133,7 +132,7 @@ def load_parsed_file(datadir, conn):
     df = pd.read_csv(os.path.join(datadir, 'GVB/gvb_parsed.csv'))
     table_name = 'GVB'
     df.to_sql(table_name, con=conn, if_exists='replace')
-    add_geometries(table_name)
+    add_geometries_gvb(table_name, conn)
     logger.debug('.. done')
 
 
