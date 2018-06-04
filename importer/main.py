@@ -18,7 +18,6 @@ import re
 # Import own modules.
 import download_from_objectstore
 from parsers.parse_helper_functions import DatabaseInteractions
-# from parsers import *
 from parsers import parse_alpha
 from parsers import parse_gvb
 from parsers import parse_hotspots
@@ -100,9 +99,6 @@ def parse_datasets():
         logger.info(f'Parsing the \"{dataset}\" dataset...\n')
 
         # Get parser for dataset based on the dataset identifier/name.
-        # parser = eval("parsers.parse_" + dataset)
-        # df = parser.run(conn=conn, data_root=DATA_ROOT, **config)
-
         run_parser = getattr(eval("parse_" + dataset), "run")
         df = run_parser(conn=conn, data_root=DATA_ROOT, **config)
 
@@ -111,6 +107,15 @@ def parse_datasets():
             continue
 
         logger.info('... done')
+
+def add_geometries():
+    """
+    This function calls the geometry methods from the parsers. They can
+    - convert lat-lon coordinates into postgis geometry objects
+    - add vollcodes
+    - add hotspots
+    """
+        
 
 
 
@@ -123,10 +128,7 @@ def main():
 
     # Parse all source data and write results to database (@ Docker container).
     parse_datasets()
-
-    # Order is important; 'gebieden' and 'hotspots' need to run first,
-    # since they contain geo-information for other sources.
-    # parse_parkeren.main(LOCAL_DATA_DIRECTORY, conn=conn)
+    add_geometries()
 
 
 def parse_commandine_args():

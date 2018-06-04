@@ -1,15 +1,14 @@
 import os
 import pandas as pd
 import logging
-from .parse_helper_functions import DatabaseInteractions
 from .parse_helper_functions import GeometryQueries
 
 logger = logging.getLogger(__name__)
 
 
-def create_geometries():
-    pass
-    # conn.execute(GeometryQueries.convert_str_polygon_to_geometry(table_name))
+def handle_geometries(conn, **config):
+    table_name = config['TABLE_NAME']
+    conn.execute(GeometryQueries.convert_str_polygon_to_geometry(table_name))
 
 
 def run(conn, data_root, **config):
