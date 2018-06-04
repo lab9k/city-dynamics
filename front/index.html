@@ -26,17 +26,48 @@
 <body id="overwrite">
 
 
+<div class="topbar">
+	<div class="topbar_left"><h2>DrukteRadar</h2><span>BETA</span></div>
+	<div class="topbar_center">
+		<ul class="themas_buttons_top">
+			<li class="fiets_b" title="OV fietsen beschikbaarheid"></li>
+			<li class="park_b" title="Parkeergarage beschikbaarheid"></li>
+			<li class="events_b" title="Evenementen vandaag"></li>
+			<li class="traffic_b" title="Verkeersdrukte"></li>
+			<!--<li class="water_b" title="Drukte op het water"></li>-->
+		</ul>
+		<div class="search_top"><i class="material-icons">search</i><input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam"></div>
+	</div>
+	<div class="topbar_right">
+		<ul>
+			<li class="dropdown">
+				<a href="javascript:void(0)" class="dropbtn">Info</a>
+				<div class="dropdown-content">
+					<a href="#">Link 1</a>
+					<a href="#">Link 2</a>
+				</div>
+			</li>
+			<li class="dropdown">
+				<a href="javascript:void(0)" class="dropbtn">Meer</a>
+				<div class="dropdown-content">
+					<a href="#">Link 1</a>
+					<a href="#">Link 2</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
 
 <div id="mapid">
-	<div class="search" id="search">
-		<a href="javascript:void(0);" ><i class="material-icons">search</i></a>
-		<input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam">
-		<i class="material-icons searchclose">close</i>
-	</div>
+	<!--<div class="search" id="search">-->
+		<!--<a href="javascript:void(0);" ><i class="material-icons">search</i></a>-->
+		<!--<input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam">-->
+		<!--<i class="material-icons searchclose">close</i>-->
+	<!--</div>-->
 
-	<div class="logo" id="logo"></div>
-	<div class="dlogo" id="dlogo"><h2>DrukteRadar</h2></div>
-	<div class="beta" id="beta"><span>BETA</span></div>
+	<!--<div class="logo" id="logo"></div>-->
+	<!--<div class="dlogo" id="dlogo"><h2>DrukteRadar</h2></div>-->
+	<!--<div class="beta" id="beta"><span>BETA</span></div>-->
 
 	<div class="m_more" id="m_more">
 		<a href="javascript:void(0);"><i class="material-icons">more_vert</i></a>
@@ -49,36 +80,36 @@
 		</ul>
 	</div>
 
-	<div class="controls" id="controls">
-		<a href="javascript:void(0);"><i class="material-icons">all_out</i></a>
-	</div>
+	<!--<div class="controls" id="controls">-->
+		<!--<a href="javascript:void(0);"><i class="material-icons">all_out</i></a>-->
+	<!--</div>-->
 
-	<div class="themas" id="themas">
-		<ul class="themas_buttons">
-			<li class="fiets_b" title="OV fietsen beschikbaarheid"></li>
-			<li class="park_b" title="Parkeergarage beschikbaarheid"></li>
-			<!--<li class="hotspots_b" title="Hotspots"></li>-->
-			<!--<li class="google_b"></li>-->
-			<li class="events_b" title="Evenementen vandaag"></li>
-			<li class="traffic_b" title="Verkeersdrukte"></li>
-			<li class="cam_b" title="Webcams"></li>
-			<li class="water_b" title="Drukte op het water"></li>
-		</ul>
-		<div class="themas_content">
-			<div class="hotspots_content">
-				<h3>Hotspots</h3>
-				<ul class="hotspot_list">
-					<li class="option_museum">Museums</li>
-					<li class="option_parc">Public parcs</li>
-					<li class="option_market">Markets</li>
-				</ul>
-			</div>
-			<div class="water_content">
-				<h3>Boot tellingen Prinsegracht</h3>
-				<img src="content/waterdrukte.png" />
-			</div>
-		</div>
-	</div>
+	<!--<div class="themas" id="themas">-->
+		<!--<ul class="themas_buttons">-->
+			<!--<li class="fiets_b" title="OV fietsen beschikbaarheid"></li>-->
+			<!--<li class="park_b" title="Parkeergarage beschikbaarheid"></li>-->
+			<!--&lt;!&ndash;<li class="hotspots_b" title="Hotspots"></li>&ndash;&gt;-->
+			<!--&lt;!&ndash;<li class="google_b"></li>&ndash;&gt;-->
+			<!--<li class="events_b" title="Evenementen vandaag"></li>-->
+			<!--<li class="traffic_b" title="Verkeersdrukte"></li>-->
+			<!--<li class="cam_b" title="Webcams"></li>-->
+			<!--<li class="water_b" title="Drukte op het water"></li>-->
+		<!--</ul>-->
+		<!--<div class="themas_content">-->
+			<!--<div class="hotspots_content">-->
+				<!--<h3>Hotspots</h3>-->
+				<!--<ul class="hotspot_list">-->
+					<!--<li class="option_museum">Museums</li>-->
+					<!--<li class="option_parc">Public parcs</li>-->
+					<!--<li class="option_market">Markets</li>-->
+				<!--</ul>-->
+			<!--</div>-->
+			<!--<div class="water_content">-->
+				<!--<h3>Boot tellingen Prinsegracht</h3>-->
+				<!--<img src="content/waterdrukte.png" />-->
+			<!--</div>-->
+		<!--</div>-->
+	<!--</div>-->
 
 	<div class="mapswitch" id="mapswitch">
 		<a href="javascript:void(0);" class="active"><span>Buurten</span></a>
@@ -142,20 +173,20 @@
 			<i class="material-icons reset_icon">replay</i><h2>Amsterdam</h2><i class="material-icons info_icon">info</i><span></span>
 		</div>
 		<div class="graphbar_topright">
-			<div class="dropup">
-				<button class="dropbtn">Info</button>
-				<div class="dropup-content">
-					<a href="javascript:void(0);" class="infolink2">Testversie</a>
-					<a href="javascript:void(0);" class="infolink1">Drukteradar uitleg</a>
-				</div>
-			</div>
-			<div class="dropup">
-				<button class="dropbtn">Meer</button>
-				<div class="dropup-content">
-					<a target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast:</a>
-					<a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>
-				</div>
-			</div>
+			<!--<div class="dropup">-->
+				<!--<button class="dropbtn">Info</button>-->
+				<!--<div class="dropup-content">-->
+					<!--<a href="javascript:void(0);" class="infolink2">Testversie</a>-->
+					<!--<a href="javascript:void(0);" class="infolink1">Drukteradar uitleg</a>-->
+				<!--</div>-->
+			<!--</div>-->
+			<!--<div class="dropup">-->
+				<!--<button class="dropbtn">Meer</button>-->
+				<!--<div class="dropup-content">-->
+					<!--<a target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast:</a>-->
+					<!--<a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>-->
+				<!--</div>-->
+			<!--</div>-->
 		</div>
 	</div>
 

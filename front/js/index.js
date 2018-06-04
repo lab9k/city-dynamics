@@ -79,16 +79,16 @@ var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 var weatherJsonUrl = 'https://weerlive.nl/api/json-data-10min.php?key=demo&locatie=Amsterdam';
 
 // temp local api
-// hotspotsJsonUrl = 'data/hotspots.json';
-// hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
-// districtJsonUrl = 'data/buurtcombinaties.json';
-// districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
-// realtimeUrl = 'data/realtime.json';
-//
-// trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-// parkJsonUrl = 'data/parkjson.json';
-// fietsJsonUrl = 'data/ovfiets.json';
-// eventsJsonUrl = 'data/events.js';
+hotspotsJsonUrl = 'data/hotspots.json';
+hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
+districtJsonUrl = 'data/buurtcombinaties.json';
+districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
+realtimeUrl = 'data/realtime.json';
+
+trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+parkJsonUrl = 'data/parkjson.json';
+fietsJsonUrl = 'data/ovfiets.json';
+eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -109,10 +109,10 @@ $(document).ready(function(){
 	// check device resolution
 	mobile = ($( document ).width()<=750);
 
-	$.each(control_array, function (key, value) {
-		var controlDiv = L.DomUtil.get(value);
-		L.DomEvent.disableClickPropagation(controlDiv);
-	});
+	// $.each(control_array, function (key, value) {
+	// 	var controlDiv = L.DomUtil.get(value);
+	// 	L.DomEvent.disableClickPropagation(controlDiv);
+	// });
 
 
 	initMap();
@@ -1891,7 +1891,7 @@ function hideLeftBox()
 function resetTheme()
 {
 	// remove buttons acitve state
-	$('.themas_buttons li').removeClass('active');
+	$('.themas_buttons_top li').removeClass('active');
 
 	// close the theme if its open
 	closeThemaDetails();
@@ -2287,7 +2287,6 @@ function addTrafficLayer()
 			$.each(this.geometry.coordinates, function(key,value) {
 				coordinates.push([this[1],this[0]]);
 			});
-
 			var traffic_line = L.polyline(coordinates, {color: speedToColor(this.properties.Type, this.properties.Velocity)}).addTo(map);
 			traffic_line.bringToBack();
 			markers.push(traffic_line);
@@ -2298,6 +2297,21 @@ function addTrafficLayer()
 }
 
 function speedToColor(type, speed){
+	if(type == "H"){
+		//Snelweg
+		var speedColors = {0: getColor(1), 1: getColor(0.9), 30: getColor(0.75), 50: getColor(0.6), 70: getColor(0.4), 90: getColor(0.2),120: getColor(0)};
+	} else {
+		//Overige wegen
+		var speedColors = {0: getColor(1), 1: getColor(0.9), 10: getColor(0.75), 20: getColor(0.6), 30: getColor(0.4), 40: getColor(0.2), 70: getColor(0)};
+	}
+	var currentColor = "#D0D0D0";
+	for(var i in speedColors){
+		if(speed >= i) currentColor = speedColors[i];
+	}
+	return currentColor;
+}
+
+function speedToColorOrg(type, speed){
 	if(type == "H"){
 		//Snelweg
 		var speedColors = {0: "#D0D0D0", 1: "#BE0000", 30: "#FF0000", 50: "#FF9E00", 70: "#FFFF00", 90: "#AAFF00",120: "#00B22D"};
