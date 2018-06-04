@@ -31,7 +31,7 @@ dc up -d database
 
 # Wait until database container runs, and download data from objectstore.
 dc run --rm importer bash /app/deploy/docker-wait.sh
-dc run --rm importer python /app/main_ETL.py /data --download
+dc run --rm importer python /app/main.py /data --download
 
 # Import Alpha database dump.
 #######################################################

@@ -102,6 +102,9 @@ def parse_alpha_item(conn, i, id_counter, raw):
 
     place_id = raw.place_id[i]
     name = raw.name[i]
+    print(raw.columns.tolist())
+    import q
+    q.d()
     url = raw.data[i]['url']
     weekday = raw.scraped_at[i].weekday()
     lat = raw.data[i]['location']['coordinates'][1]

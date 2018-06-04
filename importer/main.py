@@ -135,7 +135,7 @@ def main():
 
     # Get objectstore container names from config file and download their data.
     objectstore_containers = [v['OBJSTORE_CONTAINER'] for v in CONFIG.values()]
-    # execute_download_from_objectstore(objectstore_containers)
+    execute_download_from_objectstore(objectstore_containers)
 
     # Parse all source data and write results to database (@ Docker container).
     parse_datasets(conn)
