@@ -63,7 +63,7 @@ class DatabaseInteractions:
             port=self.port,
             database=self.database
         )
-        conn = create_engine(postgres_url)
+        conn = create_engine(postgres_url).connect()
         return conn
 
 
@@ -174,14 +174,7 @@ class GeometryQueries:
             UPDATE "{0}"
             SET hotspot = hotspots."hotspot"
             FROM hotspots
-<<<<<<< HEAD:importer/parsers/parse_helper_functions.py
             WHERE st_intersects(ST_Buffer( CAST(hotspots.polygon AS geography), 50.0), "{0}".geom);
-=======
-            WHERE st_intersects(
-                ST_Buffer(
-                    CAST(hotspots.polygon AS geography), 50.0),
-                    alpha_locations_expected.geom);
->>>>>>> 838848fc440a4f614b392a60c462730f5d3445f6:importer/ETLFunctions.py
         """.format(table_name)
 
 

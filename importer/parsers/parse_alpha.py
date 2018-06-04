@@ -121,7 +121,6 @@ def parse_alpha_item(conn, i, id_counter, raw):
     visit_duration = fix_quotes(visit_duration)
     types = fix_quotes(types)
 
-    logging.debug(raw.data[i]['Expected'])
 
     # Loop over all expected hour intervals for each location and scrape day
     for interval in raw.data[i]['Expected']:
@@ -183,22 +182,20 @@ VALUES(
 
     return row_sql
 
-def add_geometries_alpha(table_name):
-    logger.info('Adding geometries...')
+
+def add_geometries(conn, **config):
+    table_name = config['TABLE_NAME']
     conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
     conn.execute(GeometryQueries.join_vollcodes(table_name))
     conn.execute(GeometryQueries.join_stadsdeelcodes(table_name))
     conn.execute(GeometryQueries.join_hotspot_names(table_name))
-    logger.info('...done!')
 
 
 def run(conn, *_, **config):
     """Parser for ALPHA data."""
 
-    logger.info('Parsing Alpha data...')
-
     # Load raw Alpha data dump from table
-    source_table = config['SOURCE_TABLE']
+    source_table = config['TABLE_NAME']
     raw = pd.read_sql_table(source_table, conn)
 
     # Create table for modified Alpha data
@@ -209,8 +206,6 @@ def run(conn, *_, **config):
     id_counter = 0
     for i in range(0, len(raw)):
         id_counter = parse_alpha_item(conn, i, id_counter, raw)
-
-    logger.info('...done!')
 
 
 if __name__ == "__main__":
