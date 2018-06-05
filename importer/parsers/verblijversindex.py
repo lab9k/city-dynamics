@@ -1,13 +1,15 @@
-import os
 import pandas as pd
+import os
+import logging
 
-source_file = 'Samenvoegingverblijvers2016_Tamas.xlsx'
+logger = logging.getLogger(__name__)
 
 
-def parse(datadir, filename=source_file):
+def run(conn, data_root, **config):
     """Parser for verblijversindex data."""
 
-    path = os.path.join(datadir, filename)
+    folder_path = os.path.join(data_root, config['OBJSTORE_CONTAINER'])
+    path = os.path.join(folder_path, config['FILENAME'])
     df = pd.read_excel(path, sheet_name=3)
 
     cols = ['wijk',
@@ -29,12 +31,13 @@ def parse(datadir, filename=source_file):
             'aantal inwoners': 'inwoners',
             'aantal werkzame personen': 'werkzame_personen',
             'aantal studenten': 'studenten',
-            'aantal  bezoekers (met correctie voor onderlinge overlap)': 'bezoekers',     # noqa
+            'aantal  bezoekers (met correctie voor onderlinge overlap)': 'bezoekers',
             'som alle verblijvers': 'verblijvers',
             'oppervlakte land in vierkante meters': 'oppervlakte_land_m2',
-            'oppervlakte land en water in vierkante meter': 'oppervlakte_land_water_m2',   # noqa
+            'oppervlakte land en water in vierkante meter': 'oppervlakte_land_water_m2',
             'verbl. Per HA (land) 2016': 'verblijvers_ha_2016'},
         inplace=True)
 
     df = df.head(98)  # Remove last two rows (no relevant data there)
-    return df
+
+    df.to_sql('verblijversindex', con=conn, if_exists='append')

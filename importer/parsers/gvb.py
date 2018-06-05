@@ -1,16 +1,13 @@
-"""
-Load gvb data. Refactor this shit.
-"""
-import datetime
 import os
+import datetime
 import pandas as pd
+import logging
+from .helper_functions import GeometryQueries
 
-xlsx_file = 'Ortnr - coordinaten (ingangsdatum dec 2015) met LAT LONG.xlsx'
+logger = logging.getLogger(__name__)
 
 
-def parse(
-        datadir, rittenpath='Ritten GVB 24jun2017-7okt2017.csv',
-        locationspath=xlsx_file):
+def run_parser(conn, data_root, **config):
     """Parser for GVB data."""
 
     def fix_times(t, d):
@@ -30,14 +27,17 @@ def parse(
         return dt
 
     # read raw ritten
-    rittenpath = os.path.join(datadir, rittenpath)
+
+    datadir = os.path.join(data_root, config['OBJECTSTORE_CONTAINER'])
+    rittenpath = os.path.join(datadir, config['RITTEN'])
+
     ritten = pd.read_csv(rittenpath, skiprows=2, header=None)
     ritten.columns = ['weekdag', 'tijdstip', 'ortnr_start',
                       'haltenaam_start', 'ortnr_eind', 'tot_ritten']
     ritten.drop('haltenaam_start', axis=1, inplace=True)
 
     # read locations
-    locationspath = os.path.join(datadir, locationspath)
+    locationspath = os.path.join(datadir, config['LOCATIONS'])
     locations = pd.read_excel(locationspath)
     locations.drop(['X_COORDINAAT', 'Y_COORDINAAT'], axis=1, inplace=True)
 
@@ -117,3 +117,21 @@ def parse(
     inout.drop(['tijd_numeric', 'tijd', 'date'], axis=1, inplace=True)
 
     return inout
+
+
+def add_geometries(conn, *_, **config):
+    table_name = config['TABLE_NAME']
+    conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
+    conn.execute(GeometryQueries.join_vollcodes(table_name))
+    conn.execute(GeometryQueries.join_stadsdeelcodes(table_name))
+    conn.execute(GeometryQueries.join_hotspot_names(table_name))
+
+
+def run(conn, data_root, **config):
+    """Loading previously parsed GVB data."""
+    df = pd.read_csv(os.path.join(data_root, config['OBJSTORE_CONTAINER'],
+                                  config['PARSED_FILE']))
+    df.to_sql(config['TABLE_NAME'], con=conn, if_exists='append')
+
+    # Currently, no new GVB data is being parsed (take losts of time).
+    # If we want to parse a new GVB data file, we have to enable 'run_parser'.

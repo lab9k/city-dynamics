@@ -12,6 +12,7 @@ services:
       - ./deploy/backup-db.sh:/backup-db.sh
       - ./deploy/backup:/backup
       - "~/.ssh/datapunt.key:/root/.ssh/datapunt.key"
+      - data-volume:/data
 
   api:
     build: .
@@ -45,7 +46,9 @@ services:
       # export STADSWERKEN_OBJECTSTORE_PASSWORD="mypassword"
       STADSWERKEN_OBJECTSTORE_PASSWORD:
     volumes:
-      - /app/data:/data
+      - data-volume:/data
+      #- ~/data:/data
+
 
   analyzer:
     build: ./analyzer
@@ -58,3 +61,6 @@ services:
     build: ./front
     #links:
     #  - api:api
+
+volumes:
+  data-volume:
