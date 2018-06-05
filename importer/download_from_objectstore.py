@@ -80,9 +80,10 @@ def download_container(conn, container, targetdir):
             logger.debug('skipping part')
             continue
 
-        #check for subfolders
+        # check for subfolders
         obj_name_split = obj['name'].rsplit('/', 1)
-        if len(obj_name_split) > 1: # if there are subfolder(s), they have to be created in targetdir.
+        # if there are subfolder(s), they have to be created in targetdir.
+        if len(obj_name_split) > 1:
             subfolder_dir = os.path.join(container_dir, obj_name_split[0])
             if not os.path.exists(subfolder_dir):
                 os.makedirs(subfolder_dir)
@@ -130,6 +131,7 @@ def download_containers(conn, objectstore_containers, targetdir):
             logger.debug(container['name'])
             download_container(conn, container, targetdir)
     logger.info('... downloading finished!\n\n')
+
 
 def main(objectstore_containers, targetdir):
     """Main function to download all data from objectstore containers"""
