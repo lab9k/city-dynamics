@@ -340,6 +340,7 @@ class Process_verblijversindex(Process):
                           'bezoekers', 'verblijvers', 'oppervlakte_land_m2',
                           'oppervlakte_land_water_m2', 'verblijvers_ha_2016'])
 
+
 class Process_tellus(Process):
     """deal with tellus datasource."""
 
