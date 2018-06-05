@@ -32,10 +32,17 @@ def parse_parkeer_timeslot(path_to_dir, file):
     return df_temp_all_hours
 
 
+def add_geometries(conn, **config):
+    pass
+    # table_name = config['TABLE_NAME']
+    # conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
+    # conn.execute(GeometryQueries.join_vollcodes(table_name))
+    # conn.execute(GeometryQueries.join_stadsdeelcodes(table_name))
+    # conn.execute(GeometryQueries.join_hotspot_names(table_name))
+
+
 def run(conn, data_root, **config):
     """Parser for PARKEER data."""
-
-    logger.info('Parsing parkeer data...')
 
     path_to_dir = os.path.join(data_root, config['OBJSTORE_CONTAINER'],
                                     config['DATA_FOLDER'])
@@ -84,5 +91,3 @@ def run(conn, data_root, **config):
     # # polygon_layer
     # # SET
     # # longitude = ST_X(ST_Centroid(geom)), Latitude = ST_Y(ST_Centroid(geom));
-
-    logger.info('.. done!')

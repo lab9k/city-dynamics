@@ -118,13 +118,12 @@ def run_parser(conn, data_root, **config):
 
     return inout
 
-def add_geometries_gvb(table_name, conn):
-    logger.debug('Adding geometries...')
+def add_geometries(conn, **config):
+    table_name = config['TABLE_NAME']
     conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
     conn.execute(GeometryQueries.join_vollcodes(table_name))
     conn.execute(GeometryQueries.join_stadsdeelcodes(table_name))
     conn.execute(GeometryQueries.join_hotspot_names(table_name))
-    logger.debug('...done')
 
 
 def run(conn, data_root, **config):

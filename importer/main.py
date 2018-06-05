@@ -29,17 +29,22 @@ from parsers import parse_gebieden
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Parse the sources.conf file. Result: a 'CONFIG' dict of all enabled sources.
+################################################################
+# Parse sources.conf. Result: a 'CONFIG' OrderedDict for all enabled sources.
 CONFIG_SRC = configparser.ConfigParser()
 CONFIG_SRC.optionxform = str
 CONFIG_SRC.read('sources.conf')
-CONFIG_ALL = {s: dict(CONFIG_SRC.items(s)) for s in CONFIG_SRC.sections()}
-CONFIG = {k: v for k, v in CONFIG_ALL.items() if v['ENABLE']=='YES'}
+CONFIG = CONFIG_SRC._sections  # Only use the OrderedDict element.
 
+# Remove all disabled sources entries from CONFIG.
+for k in list(CONFIG.keys()):
+    if CONFIG[k]['ENABLE'] == "NO":
+        del CONFIG[k]
 
-# Create database connection.
-db_int = DatabaseInteractions()
-conn = db_int.get_sqlalchemy_connection()
+# Convert internal OrderedDicts to normal dictionaries.
+for k in list(CONFIG.keys()):
+    CONFIG[k] = dict(CONFIG[k])
+################################################################
 
 def rename_quantillion_dump():
 
@@ -89,46 +94,53 @@ def execute_download_from_objectstore(objectstore_containers):
         pass
 
 
-def parse_datasets():
+def parse_datasets(conn):
     """
     This function parses the data downloaded from the objectstore
     and writes it to the database (Docker container).
     """
 
     for dataset, config in CONFIG.items():
-        logger.info(f'Parsing the \"{dataset}\" dataset...\n')
+        logger.info(f'Parsing the \"{dataset}\" dataset...')
 
         # Get parser for dataset based on the dataset identifier/name.
         run_parser = getattr(eval("parse_" + dataset), "run")
-        df = run_parser(conn=conn, data_root=DATA_ROOT, **config)
+        run_parser(conn=conn, data_root=DATA_ROOT, **config)
 
-        # If parser does not return a dataframe, continue to next dataset.
-        if df is None:
-            continue
+        logger.info('Done!\n\n')
 
-        logger.info('... done')
 
-def add_geometries():
-    """
-    This function calls the geometry methods from the parsers. They can
-    - convert lat-lon coordinates into postgis geometry objects
-    - add vollcodes
-    - add hotspots
-    """
-        
+def add_geometries(conn):
+    """ This function calls the geometry methods from the parsers. """
 
+    for dataset, config in CONFIG.items():
+        logger.info(f'Adding geometry columns to \"{dataset}\" table...')
+
+        # Run add_geometries function for dataset (if it exists).
+        try:
+            add_geometries = getattr(eval("parse_" + dataset),
+                                     "add_geometries")
+            add_geometries(conn=conn, **config)
+        except:
+            pass
+
+        logger.info('Done!\n\n')
 
 
 def main():
     """This is the main function of this module. Starts the ETL process."""
 
+    # Create database connection.
+    conn = DatabaseInteractions().get_sqlalchemy_connection()
+
     # Get objectstore container names from config file and download their data.
     objectstore_containers = [v['OBJSTORE_CONTAINER'] for v in CONFIG.values()]
-    # execute_download_from_objectstore(objectstore_containers)
+    execute_download_from_objectstore(objectstore_containers)
 
     # Parse all source data and write results to database (@ Docker container).
-    parse_datasets()
-    add_geometries()
+    parse_datasets(conn)
+    add_geometries(conn)
+    conn.close()
 
 
 def parse_commandine_args():

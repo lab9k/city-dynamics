@@ -6,12 +6,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def main(conn, data_root, **config):
+def run(conn, data_root, **config):
     """Parser for verblijversindex data."""
 
-    logger.debug('Parsing verblijversindex...')
-
-    folder_path = os.path.join(data_root, config['OBJECTSTORE_CONTAINER'])
+    folder_path = os.path.join(data_root, config['OBJSTORE_CONTAINER'])
     path = os.path.join(folder_path, config['FILENAME'])
     df = pd.read_excel(path, sheet_name=3)
 
@@ -41,5 +39,3 @@ def main(conn, data_root, **config):
     df = df.head(98)  # Remove last two rows (no relevant data there)
 
     df.to_sql('verblijversindex', con=conn, if_exists='replace')
-
-    logger.debug('... done')
