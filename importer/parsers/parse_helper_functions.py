@@ -1,5 +1,6 @@
 """
-This module contains functions which are used a lot in the ETL process of the importer.
+Contains commonly used functions which are used a lot
+in the ETL process of the importer.
 (ETL = Extraction, Transformation, Load)
 
 #REFACTOR: module needs refactoring.
@@ -23,7 +24,9 @@ logger = logging.getLogger(__name__)
 
 
 class DatabaseInteractions:
-    """This class implements several interactions with the database (inside the Docker container)."""
+    """
+    Implements several common interactions with the database
+    """
 
     def __init__(self):
         """Initialization of a database interaction class instance."""
@@ -38,7 +41,8 @@ class DatabaseInteractions:
         self.password = config_auth.get(config_section, 'password')
 
     def get_postgresql_string(self):
-        """Create and return a generic string to use as (commandline-)arguments to connect with database."""
+        """Create and return a generic string to use as
+        (commandline-)arguments to connect with database."""
         return 'PG:host={} port={} user={} dbname={} password={}'.format(
             self.host, self.port, self.user, self.database, self.password)
 
@@ -49,7 +53,8 @@ class DatabaseInteractions:
                 cursor.execute(sql)
 
     def get_sqlalchemy_connection(self):
-        """Create a SQL database connection using the credentials provided in the class instance properties."""
+        """Create a SQL database connection using the
+        credentials provided in the class instance properties."""
         postgres_url = URL(
             drivername='postgresql',
             username=self.user,
@@ -77,8 +82,10 @@ class GeometryQueries:
     """
 
     def __init__(self):
-        GEOMETRY_POINT_NAME = "geom"  # name of our point geometry on table
-        GEOMETRY_POLY_NAME = "polygon"  # name of our poly geometry on table
+        # not used?
+        pass
+        # GEOMETRY_POINT_NAME = "geom"    # name of our point geometry on table
+        # GEOMETRY_POLY_NAME = "polygon"  # name of our poly geometry on table
 
     @staticmethod
     def set_primary_key(table_name):
@@ -106,9 +113,10 @@ class GeometryQueries:
         ALTER TABLE "{0}"
         ADD COLUMN geom geometry;
         UPDATE "{0}"
-        SET geom = ST_PointFromText('POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
+        SET geom = ST_PointFromText(
+            'POINT('||"lon"::double precision||' '||"lat"::double precision||')', 4326);
         CREATE INDEX {1} ON "{0}" USING GIST(geom);
-        """.format(table_name, 'geom_' + table_name)
+        """.format(table_name, 'geom_' + table_name)   # noqa
 
     @staticmethod
     def convert_str_polygon_to_geometry(table_name):
@@ -127,7 +135,7 @@ class GeometryQueries:
         ADD COLUMN              "{simplified_column}" geometry;
         UPDATE                  "{table_name}"
         SET wkb_geometry_simplified = ST_SimplifyPreserveTopology("{original_column}", 0.0001);
-        """.format(table_name, original_column, simplified_column)
+        """.format(table_name, original_column, simplified_column)    # noqa
 
     @staticmethod
     def join_vollcodes(table_name):
@@ -177,19 +185,23 @@ class GeometryQueries:
         return """
             ALTER table "{0}"
             DROP COLUMN IF EXISTS hotspot;
-    
+
             ALTER TABLE "{0}" add hotspot varchar;
-    
+
             UPDATE "{0}"
             SET hotspot = hotspots."hotspot"
             FROM hotspots
-            WHERE st_intersects(ST_Buffer( CAST(hotspots.polygon AS geography), 50.0), "{0}".geom);
+            WHERE st_intersects(
+                ST_Buffer(
+                    CAST(hotspots.polygon AS geography), 50.0),
+                    alpha_locations_expected.geom);
         """.format(table_name)
 
 
 class LoadLayers:
     """
-    This class contains functionality to read geometrical information on areas in Amsterdam from a webservice.
+    This class contains functionality to read geometrical
+    information on areas in Amsterdam from a webservice.
 
     The following tables are requested and stored in the database:
         - stadsdeel
@@ -214,11 +226,16 @@ class LoadLayers:
     @classmethod
     def run_command_sync(self, cmd, allow_fail=False):
         """
-        Run a string in the command line. Auto-retry up to 5 times when execution fails.
+        Run a string in the command line. Auto-retry up
+        to 5 times when execution fails.
+
         Args:
             1. cmd: command line code formatted as a list::
-                ['ogr2ogr', '-overwrite', '-t_srs', 'EPSG:28992','-nln',layer_name,'-F' ,'PostgreSQL' ,pg_str ,url]
+                ['ogr2ogr', '-overwrite', '-t_srs',
+                'EPSG:28992','-nln',layer_name,'-F' ,
+                'PostgreSQL' ,pg_str ,url]
             2. Optional: allow_fail: True or false to return error code
+
         Returns:
             Excuted program or error message.
         """
@@ -255,7 +272,8 @@ class LoadLayers:
     @staticmethod
     def load_layers(pg_str):
         """
-        Load layers into Postgres using a list of titles of each layer within the WFS service.
+        Load layers into Postgres using a list of titles of
+        each layer within the WFS service.
         Args:
             pg_str: psycopg2 connection string::
             'PG:host= port= user= dbname= password='

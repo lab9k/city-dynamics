@@ -89,8 +89,8 @@ api_config = {
     'password': os.getenv('QUANTILLION_PASSWORD'),
     'hosts': {
         'production': 'http://apis.quantillion.io',
-        'acceptance': 'http://apis.quantillion.io',
-        # 'acceptance': 'http://apis.development.quantillion.io',
+        # 'acceptance': 'http://apis.quantillion.io',
+        'acceptance': 'http://apis.development.quantillion.io',
     },
     'port': 3001,
     'username': 'gemeenteAmsterdam',
@@ -98,6 +98,23 @@ api_config = {
 
 
 AUTH = (api_config['username'], api_config.get('password'))
+
+
+def log_status_code(response, url):
+    if response.status_code == 200:
+        log.debug(f' OK  {response.status_code}:{url}')
+    elif response.status_code == 401:
+        log.error(f' AUTH {response.status_code}:{url}')
+    elif response.status_code == 500:
+        log.debug(f'FAIL {response.status_code}:{url}')
+
+    # we did WRONG requests. crash hard!
+    elif response.status_code == 400:
+        log.error(f' 400 {response.status_code}:{url}')
+        raise ValueError('400. wrong request.')
+    elif response.status_code == 404:
+        log.error(f' 404 {response.status_code}:{url}')
+        raise ValueError('404. NOT FOUND wrong request.')
 
 
 def get_the_json(endpoint, params={'limit': 1000}) -> list:
@@ -123,20 +140,8 @@ def get_the_json(endpoint, params={'limit': 1000}) -> list:
     if response is None:
         log.error('RESPONSE NONE %s %s', url, params)
         return []
-    elif response.status_code == 200:
-        log.debug(f' OK  {response.status_code}:{url}')
-    elif response.status_code == 401:
-        log.error(f' AUTH {response.status_code}:{url}')
-    elif response.status_code == 500:
-        log.debug(f'FAIL {response.status_code}:{url}')
 
-    # we did WRONG requests. crash hard!
-    elif response.status_code == 400:
-        log.error(f' 400 {response.status_code}:{url}')
-        raise ValueError('400. wrong request.')
-    elif response.status_code == 404:
-        log.error(f' 404 {response.status_code}:{url}')
-        raise ValueError('404. NOT FOUND wrong request.')
+    log_status_code(response, url)
 
     if response:
         json = response.json()

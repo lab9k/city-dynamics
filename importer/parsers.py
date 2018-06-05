@@ -1,5 +1,7 @@
 """
-This module contains a parser to pre-process data from every datasource.
+This module contains a parser to pre-process data
+some small datasource. BIG ones get their own code
+in datasets
 """
 
 import os
@@ -7,15 +9,12 @@ import datetime
 import numpy as np
 import pandas as pd
 import re
-import glob
-from ETLFunctions import DatabaseInteractions
-from ETLFunctions import ModifyTables
-
 import logging
 
 logger = logging.getLogger(__name__)
 
 
+<<<<<<< HEAD
 def parse_mora(datadir, filename='MORA_data_data.csv'):
     """Parser for MORA data."""
 
@@ -116,6 +115,9 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
 
 
 def parse_geomapping(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
+=======
+def parse_gebieden(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
+>>>>>>> a5861b03a7411d931fe14d6daa8dcf2be60c226f
     """Parser for geomapping data."""
 
     path = os.path.join(datadir, filename)
@@ -190,3 +192,23 @@ def parse_afval(datadir, filename='WEEGGEGEVENS(1-10_30-11_2017).csv'):
 
     return df
 
+<<<<<<< HEAD
+=======
+
+def parse_parkeren(datadir):
+    """Parser for PARKEER data."""
+
+    files = os.listdir(datadir)
+
+    # do this with the right regex..
+    filenames = []
+
+    for filename in files:
+        if '2018_w16' in filename:
+            if 'BETAALDP.csv' in filename:
+                if 'Ma_Fr' not in filename:
+                    if 'Sa_Su' not in filename:
+                        filenames.append(filename)
+    # BORKED.
+    # return df_parkeer
+>>>>>>> a5861b03a7411d931fe14d6daa8dcf2be60c226f

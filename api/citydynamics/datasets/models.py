@@ -19,7 +19,6 @@ class Buurtcombinatie(models.Model):
 
     class Meta:
         db_table = 'buurtcombinatie'
-        managed = False
 
 
 class BuurtCombinatieDrukteindex(models.Model):
@@ -60,7 +59,6 @@ class Hotspots(models.Model):
     stadsdeelcode = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'hotspots'
 
 
@@ -82,7 +80,6 @@ class RealtimeGoogle(models.Model):
 
     class Meta:
         db_table = f'google_raw_locations_realtime_current_{settings.ENVIRONMENT}'   # noqa
-        managed = False
 
 
 class RealtimeHistorian(models.Model):
@@ -96,6 +93,3 @@ class RealtimeHistorian(models.Model):
     name = models.TextField(null=True)
     source = models.CharField(max_length=40, null=False)
     data = JSONField()
-
-    class Meta:
-        managed = True
