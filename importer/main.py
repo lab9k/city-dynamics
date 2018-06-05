@@ -81,7 +81,7 @@ def execute_download_from_objectstore(objectstore_containers):
     else:
         logger.info('No download from datastore requested, quitting.')
 
-    # rename quantillion dump if it's there
+    # rename quantillion dump, if it's there.
     try:
         rename_quantillion_dump()
     except:
