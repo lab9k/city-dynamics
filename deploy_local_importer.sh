@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-# Wait until database container runs, and download data from objectstore.
+# Wait until database container runs.
 docker-compose run --rm importer bash /app/deploy/docker-wait.sh
+
+# Migrate the database.
+docker-compose run --rm api python manage.py migrate
+
+# Import datasets.
 docker-compose run --rm importer python /app/main.py /data
 
 # Restore Alpha database.
@@ -12,6 +17,3 @@ python ./importer/scrape_api/models.py
 
 # Process data files, and write results to new tables in database.
 python ./importer/main.py ./data
-
-# Migrate the database.
-docker-compose run --rm api python manage.py migrate
