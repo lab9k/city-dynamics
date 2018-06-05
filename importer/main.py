@@ -17,7 +17,7 @@ import re
 
 # Import own modules.
 import download_from_objectstore
-from parsers.parse_helper_functions import DatabaseInteractions
+from parsers.helper_functions import DatabaseInteractions
 
 # Enable logging.
 logging.basicConfig(level=logging.INFO)
@@ -38,15 +38,16 @@ for k in list(CONFIG.keys()):
 # Convert internal OrderedDicts to normal dictionaries.
 for k in list(CONFIG.keys()):
     CONFIG[k] = dict(CONFIG[k])
+
+
 ################################################################
 
 def rename_quantillion_dump():
-
     # Get list of all data files.
     # LOCAL:
     files = os.listdir(os.getcwd() + '/data')
     # DOCKER:
-    #files = os.listdir('/data')
+    # files = os.listdir('/data')
 
     # Create regex to find Quantillion dump files.
     dumps_filter = re.compile("database\.production.*\.dump")
@@ -84,12 +85,11 @@ def execute_download_from_objectstore(objectstore_containers):
     # rename quantillion dump, if it's there.
     try:
         rename_quantillion_dump()
-    except:
+    except Exception:
         pass
 
 
 def parse_datasets(conn, action="run"):
-
     for dataset, config in CONFIG.items():
         logger.info(f'Parsing the "{dataset}" dataset with action "{action}"...')
 
@@ -112,7 +112,10 @@ def main():
     conn = DatabaseInteractions().get_sqlalchemy_connection()
 
     # Get objectstore container names from config file and download their data.
-    objectstore_containers = [v['OBJSTORE_CONTAINER'] for v in CONFIG.values()]
+    objectstore_containers = [v['OBJSTORE_CONTAINER'] for v in CONFIG.values()
+                              if 'OBJSTORE_CONTAINER' in v]
+
+    # objectstore_containers = [v['OBJSTORE_CONTAINER'] for v in CONFIG.values()]
     execute_download_from_objectstore(objectstore_containers)
 
     # Parse all source data and write results to database (@ Docker container).

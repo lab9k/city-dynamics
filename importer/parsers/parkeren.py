@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import logging
-from .parse_helper_functions import DatabaseInteractions
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +44,7 @@ def run(conn, data_root, **config):
     """Parser for PARKEER data."""
 
     path_to_dir = os.path.join(data_root, config['OBJSTORE_CONTAINER'],
-                                    config['DATA_FOLDER'])
+                               config['DATA_FOLDER'])
     files = os.listdir(path_to_dir)
 
     week_number = 16
@@ -65,17 +64,14 @@ def run(conn, data_root, **config):
         df_timeslot = parse_parkeer_timeslot(path_to_dir, file)
         df_week = pd.concat([df_week, df_timeslot])
 
-
     # print(df_week.columns.tolist())
-    df_week['occupancy_times_vakken'] = df_week['occupancy'] * \
-                                        df_week['vakken']
+    df_week['occupancy_times_vakken'] = df_week['occupancy'] * df_week['vakken']
     df_week['vollcode'] = df_week.code.str[0:3]
 
     logger.info('Writing data to database...')
     table_name = config['TABLE_NAME']
-    df_week.to_sql(table_name, con=conn, if_exists='replace')
+    df_week.to_sql(table_name, con=conn, if_exists='append')
     logger.info('...done')
-
 
     # determine_centroid_query = """
     #     ALTER

@@ -112,31 +112,6 @@ def parse_tellus(datadir, filename='tellus2017.csv'):
 
     return df
 
-def parse_gebieden(datadir, filename='GEBIED_BUURTCOMBINATIES.csv'):
-    """Parser for geomapping data."""
-
-    path = os.path.join(datadir, filename)
-    df = pd.read_csv(path, sep=';')
-    df.drop('Unnamed: 8', axis=1, inplace=True)
-
-    return df
-
-
-def parse_hotspots(datadir, filename='hotspots_dev.csv'):
-    """Parser for hotspots definition file."""
-    path = os.path.join(datadir, filename)
-    df = pd.read_csv(path)
-
-    return df
-
-
-def parse_functiekaart(datadir, filename='FUNCTIEKAART.csv'):
-    """Parser for funciekaart data."""
-
-    path = os.path.join(datadir, filename)
-    df = pd.read_csv(path, sep=';')
-    return df
-
 
 def parse_cmsa(datadir):
     """Parser for CMSA data."""

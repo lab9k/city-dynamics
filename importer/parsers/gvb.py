@@ -2,7 +2,7 @@ import os
 import datetime
 import pandas as pd
 import logging
-from .parse_helper_functions import GeometryQueries
+from .helper_functions import GeometryQueries
 
 logger = logging.getLogger(__name__)
 
@@ -118,6 +118,7 @@ def run_parser(conn, data_root, **config):
 
     return inout
 
+
 def add_geometries(conn, *_, **config):
     table_name = config['TABLE_NAME']
     conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
@@ -130,7 +131,7 @@ def run(conn, data_root, **config):
     """Loading previously parsed GVB data."""
     df = pd.read_csv(os.path.join(data_root, config['OBJSTORE_CONTAINER'],
                                   config['PARSED_FILE']))
-    df.to_sql(config['TABLE_NAME'], con=conn, if_exists='replace')
+    df.to_sql(config['TABLE_NAME'], con=conn, if_exists='append')
 
     # Currently, no new GVB data is being parsed (take losts of time).
     # If we want to parse a new GVB data file, we have to enable 'run_parser'.

@@ -1,6 +1,6 @@
-from .parse_helper_functions import DatabaseInteractions
-from .parse_helper_functions import LoadLayers
-from .parse_helper_functions import GeometryQueries
+from .helper_functions import DatabaseInteractions
+from .helper_functions import LoadLayers
+from .helper_functions import GeometryQueries
 import logging
 
 logger = logging.getLogger(__name__)

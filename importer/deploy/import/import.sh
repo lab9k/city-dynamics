@@ -10,7 +10,7 @@ dc() {
     docker-compose -p cityd${ENVIRONMENT} -f ${DIR}/docker-compose.yml $*
 }
 
-trap 'dc down; dc kill ; dc rm -f -v' EXIT
+#trap 'dc down; dc kill ; dc rm -f -v' EXIT
 
 # make sure we have anvironment variables
 # and set them

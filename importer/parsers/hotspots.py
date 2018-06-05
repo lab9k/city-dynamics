@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import logging
-from .parse_helper_functions import GeometryQueries
+from .helper_functions import GeometryQueries
 
 logger = logging.getLogger(__name__)
 
@@ -20,4 +20,4 @@ def run(conn, data_root, **config):
     df = pd.read_csv(path)
 
     # Write dataframe table to database (in Docker container).
-    df.to_sql(config['TABLE_NAME'], con=conn, if_exists='replace')
+    df.to_sql(config['TABLE_NAME'], con=conn, if_exists='append')
