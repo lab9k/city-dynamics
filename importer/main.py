@@ -18,12 +18,6 @@ import re
 # Import own modules.
 import download_from_objectstore
 from parsers.parse_helper_functions import DatabaseInteractions
-from parsers import parse_alpha
-from parsers import parse_gvb
-from parsers import parse_hotspots
-from parsers import parse_verblijversindex
-from parsers import parse_parkeren
-from parsers import parse_gebieden
 
 # Enable logging.
 logging.basicConfig(level=logging.INFO)
@@ -94,34 +88,18 @@ def execute_download_from_objectstore(objectstore_containers):
         pass
 
 
-def parse_datasets(conn):
-    """
-    This function parses the data downloaded from the objectstore
-    and writes it to the database (Docker container).
-    """
+def parse_datasets(conn, action="run"):
 
     for dataset, config in CONFIG.items():
-        logger.info(f'Parsing the \"{dataset}\" dataset...')
+        logger.info(f'Parsing the "{dataset}" dataset with action "{action}"...')
 
         # Get parser for dataset based on the dataset identifier/name.
-        run_parser = getattr(eval("parse_" + dataset), "run")
-        run_parser(conn=conn, data_root=DATA_ROOT, **config)
-
-        logger.info('Done!\n\n')
-
-
-def add_geometries(conn):
-    """ This function calls the geometry methods from the parsers. """
-
-    for dataset, config in CONFIG.items():
-        logger.info(f'Adding geometry columns to \"{dataset}\" table...')
-
-        # Run add_geometries function for dataset (if it exists).
         try:
-            add_geometries = getattr(eval("parse_" + dataset),
-                                     "add_geometries")
-            add_geometries(conn=conn, **config)
-        except:
+            module = "parsers.parse_" + dataset
+            exec(f'import {module}')
+            run_parser = getattr(eval(module), action)
+            run_parser(conn=conn, data_root=DATA_ROOT, **config)
+        except AttributeError:
             pass
 
         logger.info('Done!\n\n')
@@ -138,8 +116,8 @@ def main():
     execute_download_from_objectstore(objectstore_containers)
 
     # Parse all source data and write results to database (@ Docker container).
-    parse_datasets(conn)
-    add_geometries(conn)
+    parse_datasets(conn, 'run')
+    parse_datasets(conn, 'add_geometries')
     conn.close()
 
 

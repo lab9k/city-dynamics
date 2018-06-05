@@ -32,7 +32,7 @@ def parse_parkeer_timeslot(path_to_dir, file):
     return df_temp_all_hours
 
 
-def add_geometries(conn, **config):
+def add_geometries(conn, *_, **config):
     pass
     # table_name = config['TABLE_NAME']
     # conn.execute(GeometryQueries.lon_lat_to_geom(table_name))

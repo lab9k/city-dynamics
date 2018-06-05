@@ -6,7 +6,7 @@ from .parse_helper_functions import GeometryQueries
 logger = logging.getLogger(__name__)
 
 
-def add_geometries(conn, **config):
+def add_geometries(conn, *_, **config):
     table_name = config['TABLE_NAME']
     conn.execute(GeometryQueries.convert_str_polygon_to_geometry(table_name))
 
