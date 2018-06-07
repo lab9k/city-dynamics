@@ -163,8 +163,8 @@ class GeometryQueries:
         WHERE st_intersects("{0}".geom, stadsdeel.wkb_geometry)
         """.format(table_name)
 
-    # One of below add_'hotspot_names' functions should be switched on. The top one is the old query, which maps google locations
-    # to hotspots based on a buffer around the hotspot's lat-long centre.
+    # One of below add_'hotspot_names' functions should be switched on. The top one is the old query,
+    # which maps google locations to hotspots based on a buffer around the hotspot's lat-long centre.
     # The bottom one is the new query, using a buffer around the hotspot's polygon for mapping.
     # @staticmethod
     # def add_hotspot_names(table_name):
