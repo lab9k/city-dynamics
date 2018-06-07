@@ -27,8 +27,19 @@
 
 
 <div class="topbar">
-	<div class="topbar_left"><h2>DrukteRadar</h2><span>BETA</span></div>
+	<div class="topbar_left">
+		<h2>DrukteRadar</h2><span>BETA</span>
+		<div class="m_more" id="m_more">
+			<a href="javascript:void(0);"><i class="material-icons">more_vert</i></a>
+		</div>
+	</div>
 	<div class="topbar_center">
+		<div class="search">
+			<a href="javascript:void(0);" ><i class="material-icons">search</i></a>
+			<input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam">
+			<i class="material-icons searchclose">close</i>
+		</div>
+		<div class="divider">&nbsp;</div>
 		<ul class="themas_buttons_top">
 			<li class="fiets_b" title="OV fietsen beschikbaarheid"></li>
 			<li class="park_b" title="Parkeergarage beschikbaarheid"></li>
@@ -36,25 +47,29 @@
 			<li class="traffic_b" title="Verkeersdrukte"></li>
 			<!--<li class="water_b" title="Drukte op het water"></li>-->
 		</ul>
-		<div class="search_top"><i class="material-icons">search</i><input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam"></div>
+		<!--<div class="search_top"><i class="material-icons">search</i><input type="text" id="loc_i" class="loc_i" value="" placeholder="Amsterdam"></div>-->
 	</div>
 	<div class="topbar_right">
-		<ul>
+		<ul class="d_menu">
 			<li class="dropdown">
 				<a href="javascript:void(0)" class="dropbtn">Info</a>
 				<div class="dropdown-content">
-					<a href="#">Link 1</a>
-					<a href="#">Link 2</a>
+					<div class="invisible"></div>
+					<a href="javascript:void(0);" class="infolink2">Testversie</a>
+					<a href="javascript:void(0);" class="infolink1">Drukteradar uitleg</a>
 				</div>
 			</li>
 			<li class="dropdown">
 				<a href="javascript:void(0)" class="dropbtn">Meer</a>
 				<div class="dropdown-content">
-					<a href="#">Link 1</a>
-					<a href="#">Link 2</a>
+					<div class="invisible"></div>
+					<a target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast</a>
+					<a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>
 				</div>
 			</li>
 		</ul>
+
+
 	</div>
 </div>
 
@@ -69,9 +84,9 @@
 	<!--<div class="dlogo" id="dlogo"><h2>DrukteRadar</h2></div>-->
 	<!--<div class="beta" id="beta"><span>BETA</span></div>-->
 
-	<div class="m_more" id="m_more">
-		<a href="javascript:void(0);"><i class="material-icons">more_vert</i></a>
-	</div>
+	<!--<div class="m_more" id="m_more">-->
+		<!--<a href="javascript:void(0);"><i class="material-icons">more_vert</i></a>-->
+	<!--</div>-->
 
 	<div class="m_menu" id="m_menu">
 		<ul>
@@ -205,10 +220,7 @@
 			<!--<i class="material-icons index100">fiber_manual_record</i>-->
 			<!--<div class="feedback"><span>Wat vind u er van?</span></div>-->
 
-			<!--<div class="meldlinks">-->
-				<!--<a class="meld_link1" target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast:</a>-->
-				<!--<a class="meld_link2" target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>-->
-			<!--</div>-->
+
 			<div class="weather">
 				<img src="">
 				<div><span class="temp"></span></div>

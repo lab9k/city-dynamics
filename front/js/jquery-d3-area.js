@@ -16,6 +16,10 @@
 			{
 				graph.width = graph.width - 16;
 			}
+			else
+			{
+				graph.margin = {top: 10, right: 0, bottom: 10, left: 0};
+			}
 			graph.height = graph.container.height() - graph.margin.top - graph.margin.bottom;
 
 			graph.unit = graph.width/graph.hours;
