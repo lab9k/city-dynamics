@@ -194,7 +194,7 @@ class GeometryQueries:
             WHERE st_intersects(
                 ST_Buffer(
                     CAST(hotspots.polygon AS geography), 50.0),
-                    alpha_locations_expected.geom);
+                    "{0}".geom);
         """.format(table_name)
 
 
