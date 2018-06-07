@@ -24,6 +24,14 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 
+# TODO: harcoded variable hierboven vervangen met code hieronder...
+# TODO: ... wanneer dbconfig niet meer noodzakelijk is voor db calls:
+# dbconfig = 'dev'
+# temp = process.Process(dbconfig)
+# temp.import_data(['verblijversindex'], ['vollcode', 'oppervlakte_land_m2'])
+# vollcodes_m2_land = dict(zip(list(temp.data.vollcode), list(temp.data.oppervlakte_land_m2)))
+
+##############################################################################
 # Helper Functions
 
 def connect_database(dbconfig):

@@ -64,19 +64,32 @@ def download_container(conn, container, targetdir):
 
     # list of container's content
     content = objectstore.get_full_container_list(conn, container['name'])
+    container_dir = os.path.join(targetdir, container['name'])
+
+    if not os.path.exists(container_dir):
+        os.makedirs(container_dir)
+
+    # loop over files
 
     for obj in content:
         # check if object type is not application or dir, or a "part" file
         if obj['content_type'] == 'application/directory':
-            logger.debug('skipping dir')
+            logger.debug('skipping dir; is application/directory..')
             continue
 
         if 'part' in obj['name']:
             logger.debug('skipping part')
             continue
 
-        # target filename of object
-        target_filename = os.path.join(targetdir, obj['name'])
+        # check for subfolders
+        obj_name_split = obj['name'].rsplit('/', 1)
+        # if there are subfolder(s), they have to be created in targetdir.
+        if len(obj_name_split) > 1:
+            subfolder_dir = os.path.join(container_dir, obj_name_split[0])
+            if not os.path.exists(subfolder_dir):
+                os.makedirs(subfolder_dir)
+
+        target_filename = os.path.join(container_dir, obj['name'])
 
         if file_exists(target_filename):
 
@@ -113,11 +126,12 @@ def download_containers(conn, objectstore_containers, targetdir):
 
     resp_headers, containers = conn.get_account()
 
-    logger.debug('Downloading datasets from objectstore')
+    logger.info('Downloading datasets from objectstore...\n')
     for container in containers:
         if container['name'] in objectstore_containers:
             logger.debug(container['name'])
             download_container(conn, container, targetdir)
+    logger.info('... downloading finished!\n\n')
 
 
 def main(objectstore_containers, targetdir):

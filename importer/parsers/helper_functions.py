@@ -63,11 +63,11 @@ class DatabaseInteractions:
             port=self.port,
             database=self.database
         )
-        conn = create_engine(postgres_url)
+        conn = create_engine(postgres_url).connect()
         return conn
 
 
-class ModifyTables(DatabaseInteractions):
+class GeometryQueries:
     """The functions in this class allow the modification of tables
 
     Modification steps the functions in this class can conduct:
@@ -80,8 +80,6 @@ class ModifyTables(DatabaseInteractions):
     - Adding hotspots column
     - Simplifying polygons in polygon column
     """
-
-    # TODO: refactor this class into separate functions
 
     def __init__(self):
         # not used?
@@ -108,7 +106,7 @@ class ModifyTables(DatabaseInteractions):
         return bool(result)
 
     @staticmethod
-    def create_geometry_column(table_name):
+    def lon_lat_to_geom(table_name):
         return """
         ALTER TABLE "{0}"
         DROP COLUMN IF EXISTS geom;
@@ -121,12 +119,12 @@ class ModifyTables(DatabaseInteractions):
         """.format(table_name, 'geom_' + table_name)   # noqa
 
     @staticmethod
-    def convert_to_geometry():
+    def convert_str_polygon_to_geometry(table_name):
         return """
-        ALTER TABLE hotspots
+        ALTER TABLE "{0}"
         ALTER COLUMN polygon
         TYPE Geometry USING polygon::Geometry;
-        """
+        """.format(table_name)
 
     @staticmethod
     def simplify_polygon(table_name, original_column, simplified_column):
@@ -140,7 +138,7 @@ class ModifyTables(DatabaseInteractions):
         """.format(table_name, original_column, simplified_column)    # noqa
 
     @staticmethod
-    def add_vollcodes(table_name):
+    def join_vollcodes(table_name):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   vollcode;
@@ -153,7 +151,7 @@ class ModifyTables(DatabaseInteractions):
         """.format(table_name)
 
     @staticmethod
-    def add_stadsdeelcodes(table_name):
+    def join_stadsdeelcodes(table_name):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   stadsdeelcode;
@@ -165,8 +163,25 @@ class ModifyTables(DatabaseInteractions):
         WHERE st_intersects("{0}".geom, stadsdeel.wkb_geometry)
         """.format(table_name)
 
+    # One of below add_'hotspot_names' functions should be switched on. The top one is the old query,
+    # which maps google locations to hotspots based on a buffer around the hotspot's lat-long centre.
+    # The bottom one is the new query, using a buffer around the hotspot's polygon for mapping.
+    # @staticmethod
+    # def add_hotspot_names(table_name):
+    #     return """
+    #     ALTER table "{0}"
+    #     DROP COLUMN IF EXISTS hotspot;
+    #
+    #     ALTER TABLE "{0}" add hotspot varchar;
+    #
+    #     UPDATE "{0}"
+    #     SET hotspot = hotspots."hotspot"
+    #     FROM hotspots
+    #     WHERE st_intersects(ST_Buffer( CAST(hotspots.geom AS geography), 200.0), "{0}".geom);
+    #     """.format(table_name)
+
     @staticmethod
-    def add_hotspot_names(table_name):
+    def join_hotspot_names(table_name):
         return """
             ALTER table "{0}"
             DROP COLUMN IF EXISTS hotspot;
@@ -179,32 +194,8 @@ class ModifyTables(DatabaseInteractions):
             WHERE st_intersects(
                 ST_Buffer(
                     CAST(hotspots.polygon AS geography), 50.0),
-                    alpha_locations_expected.geom);
+                    "{0}".geom);
         """.format(table_name)
-
-    @staticmethod
-    def create_alpha_table():
-        return """
-        DROP TABLE IF EXISTS  public.alpha_locations_expected;
-
-        CREATE TABLE  public.alpha_locations_expected(
-            id                      INTEGER,
-            place_id                VARCHAR,
-            name                    TEXT,
-            url                     TEXT,
-            weekday                 INT4,
-            hour                    INT4,
-            expected                FLOAT8,
-            lat                     FLOAT8,
-            lon                     FLOAT8,
-            address                 TEXT,
-            location_type           TEXT,
-            main_category           TEXT,
-            main_category_weight    FLOAT8,
-            visit_duration          TEXT,
-            types                   TEXT,
-            category                INT4);
-        """
 
 
 class LoadLayers:
