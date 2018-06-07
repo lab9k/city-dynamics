@@ -118,6 +118,13 @@ def main():
     # objectstore_containers = [v['OBJSTORE_CONTAINER'] for v in CONFIG.values()]
     execute_download_from_objectstore(objectstore_containers)
 
+    # if --download is set, stop here.
+    print('aap')
+    if args.download is not None:
+        print('aap2')
+        conn.close()
+        return
+
     # Parse all source data and write results to database (@ Docker container).
     parse_datasets(conn, 'run')
     parse_datasets(conn, 'add_geometries')
@@ -131,7 +138,11 @@ def parse_commandine_args():
         'targetdir', type=str, help='Local data directory.', nargs=1)
     parser.add_argument(
         'dataset', nargs='?', help="Upload specific dataset")
+
+    parser.add_argument('--download', action='store_true', default=False)
+
     args = parser.parse_args()
+
     return args
 
 

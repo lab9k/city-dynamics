@@ -18,6 +18,9 @@ dc run --rm importer bash /app/deploy/docker-wait.sh
 # Migrate the database.
 dc run --rm api python manage.py migrate
 
+# Download the data
+dc run --rm importer python /app/main.py /data --download
+
 # Restore Alpha database.
 dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/quantillion_dump/google_raw_feb.dump
 
