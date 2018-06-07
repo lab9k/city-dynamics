@@ -64,7 +64,6 @@ def download_container(conn, container, targetdir):
 
     # list of container's content
     content = objectstore.get_full_container_list(conn, container['name'])
-
     container_dir = os.path.join(targetdir, container['name'])
 
     if not os.path.exists(container_dir):

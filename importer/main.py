@@ -95,7 +95,7 @@ def parse_datasets(conn, action="run"):
 
         # Get parser for dataset based on the dataset identifier/name.
         try:
-            module = "parsers" + dataset
+            module = "parsers." + dataset
             exec(f'import {module}')
             run_parser = getattr(eval(module), action)
             run_parser(conn=conn, data_root=DATA_ROOT, **config)
@@ -119,9 +119,7 @@ def main():
     execute_download_from_objectstore(objectstore_containers)
 
     # if --download is set, stop here.
-    print('aap')
-    if args.download is not None:
-        print('aap2')
+    if args.download is True:
         conn.close()
         return
 
