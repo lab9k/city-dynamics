@@ -70,6 +70,8 @@ def download_container(conn, container, targetdir):
     if not os.path.exists(container_dir):
         os.makedirs(container_dir)
 
+    # loop over files
+
     for obj in content:
         # check if object type is not application or dir, or a "part" file
         if obj['content_type'] == 'application/directory':

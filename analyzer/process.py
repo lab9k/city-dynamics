@@ -32,7 +32,6 @@ log = logging.getLogger(__name__)
 # vollcodes_m2_land = dict(zip(list(temp.data.vollcode), list(temp.data.oppervlakte_land_m2)))
 
 ##############################################################################
-
 # Helper Functions
 
 def connect_database(dbconfig):
@@ -335,10 +334,11 @@ class Process_verblijversindex(Process):
     def __init__(self, dbconfig):
         super().__init__(dbconfig)
         self.name = 'verblijversindex'
-        self.import_data(['verblijversindex'],
-                         ['vollcode', 'inwoners', 'werkzame_personen', 'studenten',
-                          'bezoekers', 'verblijvers', 'oppervlakte_land_m2',
-                          'oppervlakte_land_water_m2', 'verblijvers_ha_2016'])
+        self.import_data(
+            ['VERBLIJVERSINDEX'],
+            ['vollcode', 'inwoners', 'werkzame_personen', 'studenten',
+             'bezoekers', 'verblijvers', 'oppervlakte_land_m2',
+             'oppervlakte_land_water_m2', 'verblijvers_ha_2016'])
 
 
 class Process_tellus(Process):
