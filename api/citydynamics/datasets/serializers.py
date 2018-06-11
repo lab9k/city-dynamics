@@ -114,7 +114,7 @@ class RealtimeGoogleSerializer(ModelSerializer):
             'scraped_at',
             'name',
             'place_id',
-            'data'
+            'data',
         )
 
 
@@ -128,6 +128,7 @@ class HistorianSerializerList(ModelSerializer):
             'scraped_at',
             'name',
             'source',
+            'data',
         )
 
 
@@ -143,5 +144,5 @@ class HistorianSerializer(ModelSerializer):
             'name',
             'source',
             'place_id',
-            'data'
+            'data',
         )
