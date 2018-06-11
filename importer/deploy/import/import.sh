@@ -33,6 +33,9 @@ dc up -d database
 dc run --rm importer bash /app/deploy/docker-wait.sh
 dc run --rm importer python /app/main.py /data --download
 
+# Migrate/Create target tables the database.
+dc run --rm api python manage.py migrate
+
 # Import Alpha database dump.
 #######################################################
 # THE ACTUAL HOTFIX. Should be commented out when Quantillion dump is correct.
@@ -41,9 +44,6 @@ dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --i
 # Restore alpha_latest instead of fallback (google_raw_feb) when the Quantillion scraper works correctly.
 #dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/quantillion_dump/alpha_latest.dump
 #######################################################
-
-# Migrate/Create target tables the database.
-dc run --rm api python manage.py migrate
 
 # Create new tables in database.
 dc run --rm importer python scrape_api/models.py
