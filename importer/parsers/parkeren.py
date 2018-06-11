@@ -36,7 +36,6 @@ def add_geometries(conn, *_, **config):
     table_name = config['TABLE_NAME']
     conn.execute(GeometryQueries.convert_str_polygon_to_geometry(table_name, 'st_astext'))
     conn.execute(GeometryQueries.determine_centroid(table_name, geometry_column='st_astext'))
-    conn.execute(GeometryQueries.join_hotspot_names(table_name, 'centroid'))
 
 
 def run(conn, data_root, **config):
