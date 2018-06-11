@@ -323,7 +323,7 @@ class Process_alpha_locations_expected(Process):
         google_week_stadsdeel = google_week_stadsdeel[
             google_week_stadsdeel.vollcode.isin(sparse_agglevels)]
 
-        self.data = pd.concat([google_week, google_week_stadsdeel])
+        self.data = pd.concat([google_week, google_week_stadsdeel], sort=True)
 
 
 class Process_verblijversindex(Process):
