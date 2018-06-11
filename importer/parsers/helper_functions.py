@@ -119,12 +119,12 @@ class GeometryQueries:
         """.format(table_name, 'geom_' + table_name)   # noqa
 
     @staticmethod
-    def convert_str_polygon_to_geometry(table_name):
+    def convert_str_polygon_to_geometry(table_name, column_to_convert='polygon'):
         return """
         ALTER TABLE "{0}"
-        ALTER COLUMN polygon
-        TYPE Geometry USING polygon::Geometry;
-        """.format(table_name)
+        ALTER COLUMN "{1}"
+        TYPE Geometry USING "{1}"::Geometry;
+        """.format(table_name, column_to_convert)
 
     @staticmethod
     def simplify_polygon(table_name, original_column, simplified_column):
@@ -138,7 +138,7 @@ class GeometryQueries:
         """.format(table_name, original_column, simplified_column)    # noqa
 
     @staticmethod
-    def join_vollcodes(table_name):
+    def join_vollcodes(table_name, geometry_column='geom'):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   vollcode;
@@ -147,11 +147,11 @@ class GeometryQueries:
 
         UPDATE "{0}" SET vollcode = buurtcombinatie.vollcode
         FROM buurtcombinatie
-        WHERE st_intersects("{0}".geom, buurtcombinatie.wkb_geometry)
-        """.format(table_name)
+        WHERE st_intersects("{0}"."{1}", buurtcombinatie.wkb_geometry)
+        """.format(table_name, geometry_column)
 
     @staticmethod
-    def join_stadsdeelcodes(table_name):
+    def join_stadsdeelcodes(table_name, geometry_column='geom'):
         return """
         ALTER TABLE             "{0}"
         DROP COLUMN IF EXISTS   stadsdeelcode;
@@ -160,8 +160,16 @@ class GeometryQueries:
 
         UPDATE "{0}" SET stadsdeelcode = stadsdeel.code
         FROM stadsdeel
-        WHERE st_intersects("{0}".geom, stadsdeel.wkb_geometry)
-        """.format(table_name)
+        WHERE st_intersects("{0}"."{1}", stadsdeel.wkb_geometry)
+        """.format(table_name, geometry_column)
+
+    def determine_centroid(table_name, geometry_column='geom', centroid_column='centroid'):
+        return """
+        ALTER TABLE "{0}"
+        ADD COLUMN "{2}" geometry;
+        update "{0}"
+        set "{2}" = ST_Centroid("{1}");
+        """.format(table_name, geometry_column, centroid_column)
 
     # One of below add_'hotspot_names' functions should be switched on. The top one is the old query,
     # which maps google locations to hotspots based on a buffer around the hotspot's lat-long centre.
@@ -181,7 +189,7 @@ class GeometryQueries:
     #     """.format(table_name)
 
     @staticmethod
-    def join_hotspot_names(table_name):
+    def join_hotspot_names(table_name, geometry_column='geom'):
         return """
             ALTER table "{0}"
             DROP COLUMN IF EXISTS hotspot;
@@ -194,8 +202,8 @@ class GeometryQueries:
             WHERE st_intersects(
                 ST_Buffer(
                     CAST(hotspots.polygon AS geography), 50.0),
-                    "{0}".geom);
-        """.format(table_name)
+                    "{0}"."{1}");
+        """.format(table_name, geometry_column)
 
 
 class LoadLayers:

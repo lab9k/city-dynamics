@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import logging
+from .helper_functions import GeometryQueries
 
 logger = logging.getLogger(__name__)
 
@@ -32,12 +33,10 @@ def parse_parkeer_timeslot(path_to_dir, file):
 
 
 def add_geometries(conn, *_, **config):
-    pass
-    # table_name = config['TABLE_NAME']
-    # conn.execute(GeometryQueries.lon_lat_to_geom(table_name))
-    # conn.execute(GeometryQueries.join_vollcodes(table_name))
-    # conn.execute(GeometryQueries.join_stadsdeelcodes(table_name))
-    # conn.execute(GeometryQueries.join_hotspot_names(table_name))
+    table_name = config['TABLE_NAME']
+    conn.execute(GeometryQueries.convert_str_polygon_to_geometry(table_name, 'st_astext'))
+    conn.execute(GeometryQueries.determine_centroid(table_name, geometry_column='st_astext'))
+    conn.execute(GeometryQueries.join_hotspot_names(table_name, 'centroid'))
 
 
 def run(conn, data_root, **config):
@@ -72,18 +71,3 @@ def run(conn, data_root, **config):
     table_name = config['TABLE_NAME']
     df_week.to_sql(table_name, con=conn, if_exists='append')
     logger.info('...done')
-
-    # determine_centroid_query = """
-    #     ALTER
-    #     geometry
-    #     ST_Centroid(geometry
-    #     g1);
-    # """
-    #
-    # conn.execute(determine_centroid_query)
-    #
-    #
-    # # UPDATE
-    # # polygon_layer
-    # # SET
-    # # longitude = ST_X(ST_Centroid(geom)), Latitude = ST_Y(ST_Centroid(geom));
