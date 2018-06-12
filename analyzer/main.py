@@ -74,6 +74,8 @@ def linear_model(drukte):
     # Normalize Alpha data to range 0-1 (not sure this is a good choice)
     drukte.normalize('alpha')
 
+    drukte.normalize('mean_occupancy')
+
     # Mean gvb
     drukte.data['gvb'] = drukte.data[['gvb_buurt', 'gvb_stad']].mean(axis=1)
 
@@ -86,7 +88,7 @@ def linear_model(drukte):
 
     # Make sure the sum of the weights != 0
     linear_weigths_vollcode = {
-        'verblijvers_ha_2016': 15, 'gvb': 70, 'alpha': 15}
+        'verblijvers_ha_2016': 15, 'gvb': 55, 'mean_occupancy': 30}
     lw_vollcode_normalize = sum(linear_weigths_vollcode.values())
 
     for col, weight in linear_weigths_vollcode.items():
