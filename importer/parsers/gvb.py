@@ -131,6 +131,7 @@ def run(conn, data_root, **config):
     """Loading previously parsed GVB data."""
     df = pd.read_csv(os.path.join(data_root, config['OBJSTORE_CONTAINER'],
                                   config['PARSED_FILE']))
+    df.timestamp = pd.to_datetime(df['timestamp'])
     df.to_sql(config['TABLE_NAME'], con=conn, if_exists='append')
 
     # Currently, no new GVB data is being parsed (take losts of time).

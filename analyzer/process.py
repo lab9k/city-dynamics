@@ -323,7 +323,7 @@ class Process_alpha_locations_expected(Process):
         google_week_stadsdeel = google_week_stadsdeel[
             google_week_stadsdeel.vollcode.isin(sparse_agglevels)]
 
-        self.data = pd.concat([google_week, google_week_stadsdeel])
+        self.data = pd.concat([google_week, google_week_stadsdeel], sort=True)
 
 
 class Process_verblijversindex(Process):
@@ -335,7 +335,7 @@ class Process_verblijversindex(Process):
         super().__init__(dbconfig)
         self.name = 'verblijversindex'
         self.import_data(
-            ['VERBLIJVERSINDEX'],
+            ['verblijversindex'],
             ['vollcode', 'inwoners', 'werkzame_personen', 'studenten',
              'bezoekers', 'verblijvers', 'oppervlakte_land_m2',
              'oppervlakte_land_water_m2', 'verblijvers_ha_2016'])
