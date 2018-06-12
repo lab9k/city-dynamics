@@ -63,7 +63,7 @@ def run(conn, data_root, **config):
         df_week = pd.concat([df_week, df_timeslot])
 
     # print(df_week.columns.tolist())
-    df_week['occupancy_times_vakken'] = df_week['occupancy'] * df_week['vakken']
+    df_week['occupancy_times_vakken'] = df_week['occupancy'] * df_week['vakken'] / 100
     df_week['vollcode'] = df_week.code.str[0:3]
 
     logger.info('Writing data to database...')
