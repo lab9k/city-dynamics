@@ -28,7 +28,7 @@ div {box-sizing: border-box;}
 .topbar{background:#666;height:76px;border-bottom:4px solid #a1a1a1;}
 .topbar_left,.topbar_center,.topbar_right {float:left;}
 .topbar_left {width:400px;}
-.topbar_left h2 {float:left;margin:0;line-height:70px;text-indent:20px;font-size:34px;}
+.topbar_left h2 {float:left;margin:0;line-height:70px;text-indent:20px;font-size:34px;cursor:pointer;}
 .topbar_left span {display:inline-block;color:red;font-size:16px;font-weight:bold;margin:0;line-height:20px;cursor:pointer;margin:20px 0 0 10px;}
 .topbar_center {width:calc(100% - 800px);}
 .topbar_center .search_top {float:right;position:relative;}
@@ -256,13 +256,13 @@ div {box-sizing: border-box;}
 	/*gauge*/
 .gauge_c {position: relative; }
 .gauge { position: relative; margin:10px auto;width:150px;height:150px;}
-.gauge .gauge-text {display:none; font-size: 20px; font-weight: 100; position: absolute; width: 150px; text-align: center; top: 60px; }
+.gauge .gauge-text {font-size: 20px; font-weight: 100; position: absolute; width: 150px; text-align: center; top: 60px; }
 .gauge_bottom{margin-top:-30px;}
 .gauge_c .line1,.gauge_c .line2 {position:absolute;border-left:1px solid #fff;}
 .gauge_c .line1 {top:18px;left:188px;height:8px;display:none;}
 .gauge_c .line2 {top:68px;left:188px;height:92px;display:none;}
-/*.arc-background2, .arc-value2 {display:none}*/
-.gauge_c .value, .gauge_c .value2 {}
+.arc-background2, .arc-value2 {display:none}
+.gauge_top .value,.gauge_c .value2,  .gauge_c .gauge_bottom_text {display:none;}
 
 /*legend*/
 .weather{float:left;margin:20px 0 0 50px;text-align:center;}
