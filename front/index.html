@@ -41,9 +41,9 @@
 		</div>
 		<div class="divider">&nbsp;</div>
 		<ul class="themas_buttons_top">
-			<li class="fiets_b" title="OV fietsen beschikbaarheid"></li>
-			<li class="park_b" title="Parkeergarage beschikbaarheid"></li>
-			<li class="events_b" title="Evenementen vandaag"></li>
+			<li class="fiets_b" title="OV-fietsen"></li>
+			<li class="park_b" title="Parkeer locaties"></li>
+			<li class="events_b" title="Evenementen"></li>
 			<li class="traffic_b" title="Verkeersdrukte"></li>
 			<!--<li class="water_b" title="Drukte op het water"></li>-->
 		</ul>
@@ -64,7 +64,7 @@
 				<div class="dropdown-content">
 					<div class="invisible"></div>
 					<a target="blank" href="https://www.amsterdam.nl/veelgevraagd/?productid=%7BD5F9EF09-0F3A-4E59-8435-4873EB7CD609%7D#">Maak een melding van overlast</a>
-					<a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/">Wat doet de gemeente aan drukte</a>
+					<a target="blank" href="https://www.amsterdam.nl/bestuur-organisatie/volg-beleid/stad-in-balans/maatregelen/" title="De Drukteradar is een product uit het programma Stad in Balans. Lees hier meer over dit programma en wat de gemeente nog meer doet aan drukte in de stad.">Wat doet de gemeente Amsterdam aan drukte in de stad?</a>
 				</div>
 			</li>
 		</ul>
@@ -133,9 +133,9 @@
 	<div class="info" id="info">
 		<i class="material-icons info_icon">info</i>
 		<div class="info_content">
-			<h2>De Amsterdam DrukteRadar</h2>
-			<p>De Amsterdam Drukte Radar toont drukte in de openbare ruimte van Amsterdam over tijd met een drukte-score. De drukte-score geeft de relatieve drukte in een bepaald gebied weer ten opzichte van historische ‘normaalwaarden’ van dit gebied.</p>
-			<p>De drukte-score is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Momenteel bevat de drukte-score data van wegverkeer, openbaar vervoer, parkeren, en bezoeken aan openbare plekken.  Sommigen van deze bronnen geven de data ‘realtime’ weer, terwijl anderen gemiddelden over een bepaalde periode weergeven.</p>
+			<h2>De DrukteRadar</h2>
+			<p>De Drukteradar is een interactieve kaart van Amsterdam die per locatie laat zien wat de verwachte drukte van vandaag is. De drukte score vergelijkt de drukte in een bepaald gebied  met de gemiddelde drukte.</p>
+			<p>Deze drukte-score is samengesteld uit verschillende databronnen die allemaal iets zeggen over drukte in de stad. Momenteel bevat de drukte-score data over wegverkeer, openbaar vervoer, OV fietsen, parkeren, en bezoeken aan openbare plekken. Waar mogelijk worden actuele databronnen gebruikt. In andere gevallen zijn historische gemiddelden beschikbaar.</p>
 		</div>
 		<i class="material-icons close">close</i>
 	</div>
@@ -243,13 +243,14 @@
 			</div>
 		<div class="graphbar_right">
 			<div class="gauge_c">
-				<div class="gauge_top"><span class="value">0</span> <span class="gauge_top_text">Live drukte</span> @ <span class="time">0</span></div>
+				<div class="gauge_top"><span class="value">0</span> <span class="gauge_top_text">Normale drukte</span> @ <span class="time">0</span></div>
 				<div class="line1"></div>
 				<div class="line2"></div>
 				<!--<div class="gauge_top">Amsterdam Actueel</div>-->
-				<div class="gauge" data-width="150" data-height="150">
+				<div class="gauge" data-width="150" data-height="150" title="De verwachte drukte van dit moment voor de locatie die geselecteerd is.">
 					<div class="gauge-text">
-						<span class="value">0</span> / <span class="value2">0</span>
+						<!--<span class="value">0</span> / <span class="value2">0</span>-->
+						<span class="value">0</span>
 					</div>
 				</div>
 				<div class="gauge_bottom"><span class="value2">0</span> <span class="gauge_bottom_text">Normale drukte</span></div>

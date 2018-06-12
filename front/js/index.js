@@ -20,6 +20,7 @@ var realtimeJson;
 
 // global arrays
 var control_array = ['search','logo','dlogo','m_more','m_menu','beta','controls','themas','mapswitch','info','leftbox']
+var control_array = ['info']
 var districts_array = [];
 var hotspots_array = [];
 var realtime_array = [];
@@ -79,16 +80,16 @@ var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 var weatherJsonUrl = 'https://weerlive.nl/api/json-data-10min.php?key=demo&locatie=Amsterdam';
 
 // temp local api
-// hotspotsJsonUrl = 'data/hotspots.json';
-// hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
-// districtJsonUrl = 'data/buurtcombinaties.json';
-// districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
-// realtimeUrl = 'data/realtime.json';
-//
-// trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-// parkJsonUrl = 'data/parkjson.json';
-// fietsJsonUrl = 'data/ovfiets.json';
-// eventsJsonUrl = 'data/events.js';
+hotspotsJsonUrl = 'data/hotspots.json';
+hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
+districtJsonUrl = 'data/buurtcombinaties.json';
+districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
+realtimeUrl = 'data/realtime.json';
+
+trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+parkJsonUrl = 'data/parkjson.json';
+fietsJsonUrl = 'data/ovfiets.json';
+eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -109,10 +110,10 @@ $(document).ready(function(){
 	// check device resolution
 	mobile = ($( document ).width()<=750);
 
-	// $.each(control_array, function (key, value) {
-	// 	var controlDiv = L.DomUtil.get(value);
-	// 	L.DomEvent.disableClickPropagation(controlDiv);
-	// });
+	$.each(control_array, function (key, value) {
+		var controlDiv = L.DomUtil.get(value);
+		L.DomEvent.disableClickPropagation(controlDiv);
+	});
 
 
 	initMap();
@@ -170,6 +171,14 @@ $(document).ready(function(){
 		initWeerWidget();
 
 		initEventMapping();
+
+		// start with traffic
+		hideActiveLayer();
+		resetTheme();
+		// showInfo('Verkeersdrukte in en rondom de stad.', 0);
+		addTrafficLayer();
+		$('.traffic_b').addClass('active');
+		setTag('traffic');
 
 	}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
 		console.error('One or more apis failed.');
@@ -872,12 +881,12 @@ function initEventMapping()
 		}
 	});
 
-	$( document).on('click', ".dlogo,.infolink1",function () {
-		showInfo('	<h2>De Amsterdam DrukteRadar</h2> <p>De Amsterdam Drukte Radar toont drukte in de openbare ruimte van Amsterdam over tijd met een drukte-score. De drukte-score geeft de relatieve drukte in een bepaald gebied weer ten opzichte van historische ‘normaalwaarden’ van dit gebied.</p> <p>De drukte-score is een gewogen waarde samengesteld uit verschillende databronnen en met de Verblijvers Dichtheid Index als basis. Momenteel bevat de drukte-score data van wegverkeer, openbaar vervoer, parkeren, en bezoeken aan openbare plekken.  Sommigen van deze bronnen geven de data ‘realtime’ weer, terwijl anderen gemiddelden over een bepaalde periode weergeven.</p>')
+	$( document).on('click', ".dlogo,.infolink1,.topbar_left h2",function () {
+		showInfo('	<h2>De DrukteRadar</h2><p>De Drukteradar is een interactieve kaart van Amsterdam die per locatie laat zien wat de verwachte drukte van vandaag is. De drukte score vergelijkt de drukte in een bepaald gebied  met de gemiddelde drukte.</p><p>Deze drukte-score is samengesteld uit verschillende databronnen die allemaal iets zeggen over drukte in de stad. Momenteel bevat de drukte-score data over wegverkeer, openbaar vervoer, OV fietsen, parkeren, en bezoeken aan openbare plekken. Waar mogelijk worden actuele databronnen gebruikt. In andere gevallen zijn historische gemiddelden beschikbaar.</p>')
 	});
 
 	$( document).on('click', ".beta,.infolink2",function () {
-		showInfo('<h2 style="color:red;">Beta</h2><p>De Drukte Radar is in de beta fase, wat inhoudt dat er continue verbeteringen aan gemaakt worden en dat we feedback aan het verzamelen zijn. <br><a href="mailto:@">Heb je feedback dan horen we graag van je.</a></p>')
+		showInfo('<h2 style="color:red;">Beta</h2><p>De Drukteradar is in de ‘beta fase’. Dit houdt in dat we aan het testen zijn en er continue verbeteringen gemaakt worden. Heb je feedback dan horen we graag van je. Hierbij worden geen persoonsgegevens verzameld.</p>')
 	});
 
 	$( document).on('click', ".searchclose",function () {
@@ -892,8 +901,8 @@ function initEventMapping()
 		resetMap();
 	});
 
-	$( document).on('click', ".graphbar_title .info_icon",function () {
-		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De lijn van de grafiek toont de verwachte drukte in een gebied / hotspot relatief aan de drukte in de andere gebieden / hotspots. De witte balk die verschijnt bij het selecteren van een gebied / hotspot toont de actuele drukte van nu.</p>');
+	$(document).on('click', ".graphbar_title .info_icon", function () {
+		showInfo('<h2>Verklaring legenda / grafiek</h2><p>De grafiek toont de verwachte drukte van vandaag. Rood wil zeggen dat het op een locatie drukker is dan normaal gesproken op dit tijdstip, groen betekent dat het rustiger is dan normaal.</p><p>De animatie op de kaart is gekoppeld aan de grafiek: als je een locatie of buurt op de kaart selecteert zal de grafiek de drukte van die locatie tonen. Je kunt de animatie pauzeren met de ‘play/pause’ knop. De witte stippellijn geeft het huidige tijdstip aan. Je kunt de grafiek ook weer terugzetten met de ververs-knop: deze toont dan de verwachte drukte voor de hele stad.</p>');
 	});
 
 	$( document).on('click', ".mapswitch a",function () {
@@ -958,7 +967,7 @@ function initEventMapping()
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('De beschikbaarheid van de OV fietsen over de verschillende locaties.', 0);
+			showInfo('De beschikbaarheid van de OV-fietsen op de verschillende locaties.', 0);
 			showOvFiets();
 			$(this).addClass('active');
 			setTag('ovfiets');
@@ -998,7 +1007,7 @@ function initEventMapping()
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('Geplande evenementen van vandaag.', 0);
+			showInfo('Geplande evenementen van vandaag en het aantal bezoekers aanmeldingen op Facebook.', 0);
 			showEvents();
 			$(this).addClass('active');
 			setTag('events');
@@ -1063,7 +1072,7 @@ function initEventMapping()
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('Verkeersdrukte in en rond de stad.', 0);
+			showInfo('Verkeersdrukte in en rondom de stad.', 0);
 			addTrafficLayer();
 			$(this).addClass('active');
 			setTag('traffic');
@@ -1115,7 +1124,7 @@ function initEventMapping()
 		{
 			hideActiveLayer();
 			resetTheme();
-			showInfo('De capaciteit en het aantal beschikbare plekken in de parkeergarages.', 0);
+			showInfo('Het aantal beschikbare plekken in parkeergarages en park & ride locaties.', 0);
 			addParkLayer();
 			$(this).addClass('active');
 			setTag('parking');
@@ -1157,6 +1166,7 @@ function initWeerWidget()
 	{
 		var weather_img_url = 'images/'+weatherJson.liveweer[0].image+'.svg';
 		$('.weather img').attr('src',weather_img_url);
+		$('.weather img').attr('title',weatherJson.liveweer[0].verw);
 		$('.weather span').html(weatherJson.liveweer[0].temp + ' &#8451');
 	});
 }
@@ -1386,7 +1396,7 @@ function startAnimation()
 
 function dragAnimation() {
 	elapsed_time = $('.line-group').attr('time');
-	var hour = Math.ceil(elapsed_time);
+	var hour = convertHour(Math.ceil(elapsed_time));
 
 	$.each(hotspots_array, function (key, value) {
 		circles_d3[key]
@@ -1599,9 +1609,11 @@ function initGauge()
 	// console.log('expected: ' + ams_expected);
 
 	gauge = $('.gauge').arcGauge({
-		value     :  Math.round(ams_realtime*100),
+		// value     :  Math.round(ams_realtime*100),
+		value     : Math.round(ams_expected*100),
 		value2     : Math.round(ams_expected*100),
-		colors    : getColor(ams_realtime),
+		// colors    : getColor(ams_realtime),
+		colors    : getColor(ams_expected),
 		colors2    : getColor(ams_expected),
 		transition: 500,
 		thickness : 12,
@@ -1611,7 +1623,8 @@ function initGauge()
 		}
 	});
 	$('.graphbar_right .time').text(getHours());
-	$('.graphbar_right .value').text(Math.round(ams_realtime*100)).css('color',getColor(ams_realtime));
+	$('.graphbar_right .value').text(Math.round(ams_expected*100)).css('color',getColor(ams_expected));
+	// $('.graphbar_right .value').text(Math.round(ams_realtime*100)).css('color',getColor(ams_realtime));
 	$('.graphbar_right .value2').text(Math.round(ams_expected*100)).css('color',getColor(ams_expected));
 
 
@@ -1630,20 +1643,26 @@ function updateGauge(key,type)
 		var point_array = hotspots_array[key].druktecijfers;
 		var realtime = realtime_array[key];
 		var expected =  point_array[hour].i;
-		if(realtime > 0 )
-		{
-			gauge[0].set([Math.round(realtime*100),Math.round(expected*100)]);
-			$('.graphbar_right .gauge_top_text').text('Live drukte');
-			$('.graphbar_right .value').text(Math.round(realtime*100)).css('color',getColor(realtime));
-			$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColor(expected));
-		}
-		else
-		{
-			gauge[0].set([0,Math.round(expected*100)]);
-			$('.graphbar_right .gauge_top_text').text('Geen live data');
-			$('.graphbar_right .value').text('').css('color','#fff');
-			$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColor(expected));
-		}
+
+		gauge[0].set([Math.round(expected*100),0]);
+		$('.graphbar_right .gauge_top_text').text('Normale drukte');
+		$('.graphbar_right .value').text(Math.round(expected*100)).css('color',getColor(expected));
+
+
+		// if(realtime > 0 )
+		// {
+		// 	gauge[0].set([Math.round(realtime*100),Math.round(expected*100)]);
+		// 	$('.graphbar_right .gauge_top_text').text('Live drukte');
+		// 	$('.graphbar_right .value').text(Math.round(realtime*100)).css('color',getColor(realtime));
+		// 	$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColor(expected));
+		// }
+		// else
+		// {
+		// 	gauge[0].set([0,Math.round(expected*100)]);
+		// 	$('.graphbar_right .gauge_top_text').text('Geen live data');
+		// 	$('.graphbar_right .value').text('').css('color','#fff');
+		// 	$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColor(expected));
+		// }
 
 	}
 	else

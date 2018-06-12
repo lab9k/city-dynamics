@@ -280,6 +280,7 @@
 
 			//add realtime
 			graph.realtime_bar = graph.svg.append("rect");
+			graph.realtime = 0;
 			if(graph.realtime>0)
 			{
 				graph.setRealtime();
@@ -313,7 +314,8 @@
 					});
 
 
-				graph.unsetRealtime();
+				// graph.unsetRealtime();
+				realtime = 0;
 				if(realtime>0)
 				{
 					graph.realtime = realtime;
