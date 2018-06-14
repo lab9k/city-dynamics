@@ -80,16 +80,16 @@ var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 var weatherJsonUrl = 'https://weerlive.nl/api/json-data-10min.php?key=demo&locatie=Amsterdam';
 
 // temp local api
-hotspotsJsonUrl = 'data/hotspots.json';
-hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
-districtJsonUrl = 'data/buurtcombinaties.json';
-districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
-realtimeUrl = 'data/realtime.json';
-
-trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-parkJsonUrl = 'data/parkjson.json';
-fietsJsonUrl = 'data/ovfiets.json';
-eventsJsonUrl = 'data/events.js';
+// hotspotsJsonUrl = 'data/hotspots.json';
+// hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
+// districtJsonUrl = 'data/buurtcombinaties.json';
+// districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
+// realtimeUrl = 'data/realtime.json';
+//
+// trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+// parkJsonUrl = 'data/parkjson.json';
+// fietsJsonUrl = 'data/ovfiets.json';
+// eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -885,7 +885,7 @@ function initEventMapping()
 		showInfo('	<h2>De DrukteRadar</h2><p>De Drukteradar is een interactieve kaart van Amsterdam die per locatie laat zien wat de verwachte drukte van vandaag is. De drukte score vergelijkt de drukte in een bepaald gebied  met de gemiddelde drukte.</p><p>Deze drukte-score is samengesteld uit verschillende databronnen die allemaal iets zeggen over drukte in de stad. Momenteel bevat de drukte-score data over wegverkeer, openbaar vervoer, OV fietsen, parkeren, en bezoeken aan openbare plekken. Waar mogelijk worden actuele databronnen gebruikt. In andere gevallen zijn historische gemiddelden beschikbaar.</p>')
 	});
 
-	$( document).on('click', ".beta,.infolink2",function () {
+	$( document).on('click', ".beta,.infolink2, .topbar_left span",function () {
 		showInfo('<h2 style="color:red;">Beta</h2><p>De Drukteradar is in de ‘beta fase’. Dit houdt in dat we aan het testen zijn en er continue verbeteringen gemaakt worden. Heb je feedback dan horen we graag van je. Hierbij worden geen persoonsgegevens verzameld.</p>')
 	});
 
