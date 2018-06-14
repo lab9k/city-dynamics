@@ -36,6 +36,7 @@ def add_geometries(conn, *_, **config):
     table_name = config['TABLE_NAME']
     conn.execute(GeometryQueries.convert_str_polygon_to_geometry(table_name, 'st_astext'))
     conn.execute(GeometryQueries.determine_centroid(table_name, geometry_column='st_astext'))
+    conn.execute(GeometryQueries.join_hotspot_names(table_name, geometry_column='centroid'))
 
 
 def run(conn, data_root, **config):
@@ -63,7 +64,7 @@ def run(conn, data_root, **config):
         df_week = pd.concat([df_week, df_timeslot])
 
     # print(df_week.columns.tolist())
-    df_week['occupancy_times_vakken'] = df_week['occupancy'] * df_week['vakken']
+    df_week['occupancy_times_vakken'] = df_week['occupancy'] * df_week['vakken'] / 100
     df_week['vollcode'] = df_week.code.str[0:3]
 
     logger.info('Writing data to database...')

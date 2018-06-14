@@ -55,13 +55,10 @@ vollcodes_m2_land = {
     'T95': 739520.0, 'T96': 807588.0, 'T97': 527617.0, 'T98': 2310156.0
 }
 
-# TODO: harcoded variable hierboven vervangen met code hieronder...
-# TODO: ... wanneer dbconfig niet meer noodzakelijk is voor db calls:
-# dbconfig = 'dev'
+# dbconfig = 'docker'
 # temp = process.Process(dbconfig)
-# temp.import_data(['VERBLIJVERSINDEX'], ['vollcode', 'oppervlakte_land_m2'])
-# vollcodes_m2_land = dict(zip(list(temp.data.vollcode),
-# list(temp.data.oppervlakte_land_m2)))
+# temp.import_data(['verblijversindex'], ['vollcode', 'oppervlakte_land_m2'])
+# vollcodes_m2_land = dict(zip(list(temp.data.vollcode), list(temp.data.oppervlakte_land_m2)))
 
 
 def linear_model(drukte):
@@ -73,6 +70,8 @@ def linear_model(drukte):
 
     # Normalize Alpha data to range 0-1 (not sure this is a good choice)
     drukte.normalize('alpha')
+
+    drukte.normalize('mean_occupancy')
 
     # Mean gvb
     drukte.data['gvb'] = drukte.data[['gvb_buurt', 'gvb_stad']].mean(axis=1)
@@ -86,7 +85,7 @@ def linear_model(drukte):
 
     # Make sure the sum of the weights != 0
     linear_weigths_vollcode = {
-        'verblijvers_ha_2016': 15, 'gvb': 70, 'alpha': 15}
+        'verblijvers_ha_2016': 15, 'gvb': 55, 'mean_occupancy': 30}
     lw_vollcode_normalize = sum(linear_weigths_vollcode.values())
 
     for col, weight in linear_weigths_vollcode.items():

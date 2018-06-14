@@ -323,7 +323,33 @@ class Process_alpha_locations_expected(Process):
         google_week_stadsdeel = google_week_stadsdeel[
             google_week_stadsdeel.vollcode.isin(sparse_agglevels)]
 
-        self.data = pd.concat([google_week, google_week_stadsdeel], sort=True)
+        self.data = pd.concat([google_week, google_week_stadsdeel])
+
+
+class Process_parkeren(Process):
+
+    def __init__(self, dbconfig, aggregation_level):
+        super().__init__(dbconfig)
+        self.name = 'parkeren'
+        self.import_data(['parkeren'],
+                         ['id', 'index', 'occupancy', 'vakken', 'weekday', 'hour',
+                          'occupancy_times_vakken', 'vollcode'])
+        self.dataset_specific(aggregation_level)
+
+    def dataset_specific(self, aggregation_level):
+        df = self.data
+
+        # Create a df containing the number of parking spots for every vollcode
+        vakken_per_vollcode = df.drop_duplicates('id').groupby(
+            'vollcode')['vakken'].sum().to_frame().reset_index()
+
+        # Calculate week patterns per vollcode.
+        week_patterns = df.groupby(['vollcode', 'weekday', 'hour']).agg(
+            {'occupancy_times_vakken': np.sum}).reset_index()
+        week_patterns = week_patterns.merge(vakken_per_vollcode, on='vollcode')
+        week_patterns['mean_occupancy'] = week_patterns['occupancy_times_vakken'] / week_patterns['vakken']
+
+        self.data = week_patterns
 
 
 class Process_verblijversindex(Process):
@@ -381,6 +407,7 @@ class Process_drukte(Process):
         # alp_live = Process_alpha_live(dbconfig)
         alp_vollcode = Process_alpha_locations_expected(dbconfig, 'vollcode')
         # alp_hotspots = Process_alpha_locations_expected(dbconfig, 'hotspot')
+        parkeren = Process_parkeren(dbconfig, 'vollcode')
 
         # initialize drukte dataframe
         # Start of a week: Monday at midnight
@@ -412,6 +439,10 @@ class Process_drukte(Process):
         self.data = pd.merge(
             self.data, vbi.data,
             on='vollcode', how='left')
+
+        self.data = pd.merge(
+            self.data, parkeren.data,
+            on=['weekday', 'hour', 'vollcode'], how='left')
 
         # Init drukte index
         self.data['drukteindex'] = 0
