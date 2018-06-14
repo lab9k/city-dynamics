@@ -8,7 +8,7 @@ echo 0.0.0.0:5432:citydynamics:citydynamics:insecure > ~/.pgpass
 chmod 600 ~/.pgpass
 
 # dump occupation data
-pg_dump  -t verblijversindex \
+pg_dump -t verblijversindex \
 	 -t buurtcombinatie \
 	 -t stadsdeel \
 	 -t datasets_buurtcombinatiedrukteindex \
