@@ -55,13 +55,10 @@ vollcodes_m2_land = {
     'T95': 739520.0, 'T96': 807588.0, 'T97': 527617.0, 'T98': 2310156.0
 }
 
-# TODO: harcoded variable hierboven vervangen met code hieronder...
-# TODO: ... wanneer dbconfig niet meer noodzakelijk is voor db calls:
-# dbconfig = 'dev'
+# dbconfig = 'docker'
 # temp = process.Process(dbconfig)
-# temp.import_data(['VERBLIJVERSINDEX'], ['vollcode', 'oppervlakte_land_m2'])
-# vollcodes_m2_land = dict(zip(list(temp.data.vollcode),
-# list(temp.data.oppervlakte_land_m2)))
+# temp.import_data(['verblijversindex'], ['vollcode', 'oppervlakte_land_m2'])
+# vollcodes_m2_land = dict(zip(list(temp.data.vollcode), list(temp.data.oppervlakte_land_m2)))
 
 
 def linear_model(drukte):
