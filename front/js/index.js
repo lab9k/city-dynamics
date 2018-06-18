@@ -180,6 +180,9 @@ $(document).ready(function(){
 		$('.traffic_b').addClass('active');
 		setTag('traffic');
 
+		// custom
+		$('.event_today').html(getDay());
+
 	}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
 		console.error('One or more apis failed.');
 		if(dindexJson[1]!='success')
@@ -342,23 +345,12 @@ function addDistrictLayer()
 		layer._path.id = 'feature-' + layer.feature.properties.vollcode;
 		districts_d3[layer.feature.properties.vollcode] = d3.select('#feature-' + layer.feature.properties.vollcode);
 
-
-		// var elapsed_time = $('.line-group').attr('time');
-		//
-		// var hour = Math.ceil(elapsed_time);
-		//
-		// if(hour > 5 && hour < 24)
-		// {
-		// 	hour = hour -5;
-		// }
-		// else {
-		// 	hour = hour + 19;
-		// }
+		var elapsed_time = $('.line-group').attr('time');
+		var hour = convertHour(Math.ceil(elapsed_time));
 
 		if(districts_array[layer.feature.properties.vollcode].index.length)
 		{
-			districts_d3[layer.feature.properties.vollcode]
-				.attr('fill', getColorBucket(districts_array[layer.feature.properties.vollcode].index[0].i));
+			districts_d3[layer.feature.properties.vollcode].attr('fill', getColor(districts_array[layer.feature.properties.vollcode].index[hour].i));
 		}
 	});
 }
@@ -515,7 +507,7 @@ function getHotspots()
 		});
 		circles[key].addTo(map);
 		$(circles[key]._path).attr('stroke-opacity', 0.6);
-		$(circles[key]._path).attr('stroke', '#4a4a4a');
+		$(circles[key]._path).attr('stroke', '#666666');
 		$(circles[key]._path).attr('hotspot', key);
 		$(circles[key]._path).addClass('hotspot_' + key);
 		circles[key].bindPopup('<div class="popup_hotspot"><i class="material-icons">fiber_manual_record</i><h3>' + this.hotspot + '</h3></div>', {autoClose: false});
@@ -687,7 +679,7 @@ function getHotspotsOld(hotspotsJson) {
 		});
 		circles[key].addTo(map);
 		$(circles[key]._path).attr('stroke-opacity', 0.6);
-		$(circles[key]._path).attr('stroke', '#4a4a4a');
+		$(circles[key]._path).attr('stroke', '#666666');
 		$(circles[key]._path).attr('hotspot', this.index);
 		$(circles[key]._path).addClass('hotspot_' + this.index);
 		circles[key].bindPopup('<div class="popup_hotspot"><i class="material-icons">fiber_manual_record</i><h3>' + this.hotspot + '</h3></div>', {autoClose: false});
@@ -1294,7 +1286,7 @@ function startAnimation()
 		// 		// .transition()
 		// 		// .duration(1000)
 		// 		.attr('fill', getColorBucket(this.druktecijfers[0].d))
-		// 		.attr('stroke', '#4a4a4a');
+		// 		.attr('stroke', '#666666');
 		// });
 
 		// buurtcombinaties
@@ -1330,7 +1322,7 @@ function startAnimation()
 					// .transition()
 					// .duration(1000)
 					.attr('fill', getColor(this.druktecijfers[hour].i))
-					.attr('stroke', '#4a4a4a');
+					.attr('stroke', '#666666');
 			});
 
 			// hotspots
@@ -1403,7 +1395,7 @@ function dragAnimation() {
 			.attr('stroke-opacity', 0.6)
 			.attr('stroke-width', 3)
 			.attr('fill', getColor(this.druktecijfers[hour].i))
-			.attr('stroke', '#4a4a4a');
+			.attr('stroke', '#666666');
 	});
 
 	// buurtcombinaties
@@ -1431,7 +1423,7 @@ function setToCurrentTime()
 			.attr('stroke-opacity', 0.6)
 			.attr('stroke-width', 3)
 			.attr('fill', getColor(this.druktecijfers[hour].i))
-			.attr('stroke', '#4a4a4a');
+			.attr('stroke', '#666666');
 	});
 
 	// buurtcombinaties
@@ -1636,7 +1628,9 @@ function updateGauge(key,type)
 
 	if(type=='ams')
 	{
-		gauge[0].set([Math.round(ams_realtime*100),Math.round(ams_expected*100)]);
+		// gauge[0].set([Math.round(ams_realtime*100),Math.round(ams_expected*100)]);
+		gauge[0].set([Math.round(ams_expected*100),0]);
+		$('.graphbar_right .value').text(Math.round(ams_expected*100)).css('color',getColor(ams_expected));
 	}
 	else if(type == 'hotspot')
 	{
@@ -1735,6 +1729,14 @@ function getDate()
 	var today = dd+'/'+mm+'/'+yyyy;
 
 	return today;
+}
+
+function getDay()
+{
+	var today = new Date();
+	var dd = today.getDate();
+
+	return dd;
 }
 
 function getHours()

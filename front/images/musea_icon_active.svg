@@ -8,15 +8,15 @@
         <g id="Museum-Icon">
             <g transform="translate(5.000000, 9.000000)" id="Museum">
                 <g>
-                    <path d="M1,22 L24,22" id="Line-10" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="square"></path>
-                    <path d="M2.5,20.5 L22.5,20.5" id="Line" stroke="#4a4a4a" stroke-linecap="square"></path>
-                    <path d="M4.16666667,9.45410628 L4.16666667,18.5120773" id="Line-11" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="square"></path>
-                    <path d="M8.FFFFFF33,9.45410628 L8.FFFFFF33,18.5120773" id="Line-11" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="square"></path>
-                    <path d="M12.5,9.45410628 L12.5,18.5120773" id="Line-11" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="square"></path>
-                    <path d="M16.6666667,9.45410628 L16.6666667,18.5120773" id="Line-11" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="square"></path>
-                    <path d="M20.8FFFFFF,9.45410628 L20.8FFFFFF,18.5120773" id="Line-11" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="square"></path>
-                    <path d="M2.5,7.5 L22.5,7.5" id="Line-2" stroke="#4a4a4a" stroke-linecap="square"></path>
-                    <polygon id="Triangle-4" fill="#4a4a4a" points="12.5 0.25 25 6.59057971 0 6.59057971"></polygon>
+                    <path d="M1,22 L24,22" id="Line-10" stroke="#666666" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M2.5,20.5 L22.5,20.5" id="Line" stroke="#666666" stroke-linecap="square"></path>
+                    <path d="M4.16666667,9.45410628 L4.16666667,18.5120773" id="Line-11" stroke="#666666" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M8.FFFFFF33,9.45410628 L8.FFFFFF33,18.5120773" id="Line-11" stroke="#666666" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M12.5,9.45410628 L12.5,18.5120773" id="Line-11" stroke="#666666" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M16.6666667,9.45410628 L16.6666667,18.5120773" id="Line-11" stroke="#666666" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M20.8FFFFFF,9.45410628 L20.8FFFFFF,18.5120773" id="Line-11" stroke="#666666" stroke-width="1.5" stroke-linecap="square"></path>
+                    <path d="M2.5,7.5 L22.5,7.5" id="Line-2" stroke="#666666" stroke-linecap="square"></path>
+                    <polygon id="Triangle-4" fill="#666666" points="12.5 0.25 25 6.59057971 0 6.59057971"></polygon>
                 </g>
             </g>
         </g>

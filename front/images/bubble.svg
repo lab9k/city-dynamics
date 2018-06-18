@@ -20,7 +20,7 @@
                     <circle id="Oval" fill="#50E6DB" cx="55.5" cy="63.5" r="3.5"></circle>
                 </g>
             </g>
-            <rect id="Rectangle-43" stroke="#4A4A4A" stroke-width="2" x="1" y="1" width="98" height="98" rx="2"></rect>
+            <rect id="Rectangle-43" stroke="#666666" stroke-width="2" x="1" y="1" width="98" height="98" rx="2"></rect>
         </g>
     </g>
 </svg>
