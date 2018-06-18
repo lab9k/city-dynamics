@@ -3,7 +3,7 @@
 ############
 
 ##############################################################################################################
-## This script combines datasources to create a realtime global crowdedness-score for the city of Amsterdam.
+# This script combines datasources to create a realtime global crowdedness-score for the city of Amsterdam.
 #
 # Realtime sources:
 #
@@ -31,22 +31,27 @@
 
 
 ##############################################################################################################
-## Imports and settings
-
-import urllib.request, json, datetime, requests, http.cookiejar, re, logging, os
+# Imports and settings
+import urllib.request
+import json
+import datetime
+import requests
+import re
+import logging
+import os
 from bs4 import BeautifulSoup
 
-## Load password for Drukteradar
+# Load password for Drukteradar
 DRUKTERADAR_PASSWORD = os.environ['DRUKTERADAR_PASSWORD']
 
-## Set loggerr
+# Set loggerr
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 ##############################################################################################################
 
 
 ##############################################################################################################
-## Helper functions
+# Helper functions
 
 def clamp(val, range_min=0, range_max=1):
     return max(min(range_max, val), range_min)
@@ -54,7 +59,7 @@ def clamp(val, range_min=0, range_max=1):
 
 
 ##############################################################################################################
-## OV Fiets
+# OV Fiets
 
 def ov_fiets():
 
@@ -94,7 +99,7 @@ def ov_fiets():
 
 
 ##############################################################################################################
-## NDW
+# NDW
 
 def ndw():
 
@@ -114,7 +119,6 @@ def ndw():
     H_count = 0
     O_sum = 0
     O_count = 0
-
     for road_type, velocity in ndw_velocity:
         if road_type == "H":
             H_sum += velocity
@@ -123,15 +127,19 @@ def ndw():
             O_sum += velocity
             O_count += 1
 
-    # Compute speed differences based on road type
-    H_avg = 100  # average 1:00 in the night of 2018-06-13 was 101.03 km/h.
+    # Set reaot type speed assumptions
     O_avg = 40   # average 1:00 in the night of 2018-06-13 was 41.68 km/h.
+    H_avg = 100  # average 1:00 in the night of 2018-06-13 was 101.03 km/h.
     min_speed = 0.4  # assumed minimum speed (percentage of avg)
+
+    # Compute speed differences based on road type
     diffs = []
     underflows = []
-
     for road_type, velocity in ndw_velocity:
-        avg = eval(f"{road_type}_avg")
+        if road_type == "O":
+            avg = O_avg
+        if road_type == "H":
+            avg = H_avg
         d = avg - velocity  # raw difference from avg
         d_norm = 100 * d / (avg * min_speed)  # normalized difference, including minimum speed assumption.
         if road_type == "O":
@@ -157,7 +165,7 @@ def ndw():
 
 
 ##############################################################################################################
-## P+R
+# P+R
 
 def pr():
 
@@ -181,7 +189,7 @@ def pr():
 
     # Heuristic: P+R crowdedness score. Range: [0-1]
     assumed_default_filling = 0.1  # Assume 10% of short stay parking spots is always filled.
-    pr_crowdedness_score = 1 - ((total_free + total_free * assumed_default_filling) / total_capacity )
+    pr_crowdedness_score = 1 - ((total_free + total_free * assumed_default_filling) / total_capacity)
     pr_crowdedness_score = clamp(pr_crowdedness_score)
 
     # [DEBUG] Log statistics info
@@ -194,7 +202,7 @@ def pr():
 
 
 ##############################################################################################################
-## Weercijfer
+# Weercijfer
 
 def weer():
 
@@ -218,8 +226,9 @@ def weer():
     return weercijfer
 ##############################################################################################################
 
+
 ##############################################################################################################
-## KNMI
+# KNMI
 
 def knmi():
 
@@ -262,7 +271,7 @@ def knmi():
 
 
 ##############################################################################################################
-## Alpha realtime score (only used for validation)
+# Alpha realtime score (only used for validation)
 
 def alp():
 
@@ -298,7 +307,7 @@ def alp():
 
 
 ##############################################################################################################
-## Main routine
+# Main routine
 
 def main():
     '''Compute crowdedness score by combining multiple realtime datasources.'''
@@ -306,7 +315,7 @@ def main():
     # Get crowdedness scores for all sources.
     success = False
     attempts = 0
-    while success == False and attempts < 100:
+    while success is False and attempts < 100:
         try:
             ov_fiets_crowdedness_score = ov_fiets()
             log.info(f"ov_fiets_crowdedness_score: {ov_fiets_crowdedness_score}")
@@ -323,7 +332,7 @@ def main():
             attempts += 1
 
     # If no scores have been gathered after all attempts, exit script.
-    if success == False:
+    if success is False:
         exit()
 
     # Define weights for each source.
