@@ -127,9 +127,9 @@ def ndw():
             O_sum += velocity
             O_count += 1
 
-    # Set reaot type speed assumptions
-    O_avg = 40   # average 1:00 in the night of 2018-06-13 was 41.68 km/h.
-    H_avg = 100  # average 1:00 in the night of 2018-06-13 was 101.03 km/h.
+    # Set road type speed assumptions
+    O_avg = 42   # average 1:00 in the night of 2018-06-13 was 41.68 km/h.
+    H_avg = 101  # average 1:00 in the night of 2018-06-13 was 101.03 km/h.
     min_speed = 0.4  # assumed minimum speed (percentage of avg)
 
     # Compute speed differences based on road type
