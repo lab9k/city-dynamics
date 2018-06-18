@@ -39,9 +39,9 @@ dc run --rm api python manage.py migrate
 # Import Alpha database dump.
 #######################################################
 # THE ACTUAL HOTFIX. Should be commented out when Quantillion dump is correct.
-dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/quantillion_dump/google_raw_feb.dump
+dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/validated_dump_feb.dump
 
-# Restore alpha_latest instead of fallback (google_raw_feb) when the Quantillion scraper works correctly.
+# Restore alpha_latest instead of fallback (validated_dump_feb.dump) when the Quantillion scraper works correctly.
 #dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/quantillion_dump/alpha_latest.dump
 #######################################################
 
