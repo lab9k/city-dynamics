@@ -40,13 +40,20 @@ import re
 import logging
 import os
 from bs4 import BeautifulSoup
+import configparser
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
 
 # Load password for Drukteradar
 DRUKTERADAR_PASSWORD = os.environ['DRUKTERADAR_PASSWORD']
 
-# Set loggerr
+# Set logger
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
+
+# load config file
+config_auth = configparser.RawConfigParser()
+config_auth.read('auth.conf')
 ##############################################################################################################
 
 
@@ -55,6 +62,50 @@ log = logging.getLogger(__name__)
 
 def clamp(val, range_min=0, range_max=1):
     return max(min(range_max, val), range_min)
+
+
+def get_conn():
+    """Create a connection to the database."""
+    dbconfig = 'docker'
+    postgres_url = URL(
+        drivername='postgresql',
+        username=config_auth.get(dbconfig, 'user'),
+        password=config_auth.get(dbconfig, 'password'),
+        host=config_auth.get(dbconfig, 'host'),
+        port=config_auth.get(dbconfig, 'port'),
+        database=config_auth.get(dbconfig, 'dbname')
+    )
+    conn = create_engine(postgres_url)
+    return conn
+
+
+def create_row_sql(scraped_at, ov_fiets_crowdedness_score, ndw_crowdedness_score, pr_crowdedness_score,
+                   knmi_crowdedness_score, weercijfer,
+                   combined_crowdedness_score,
+                   diff):
+    row_sql = f"""
+INSERT INTO public.datasets_realtimeanalyzer(
+    scraped_at,
+    ov_fiets_crowdedness_score,
+    ndw_crowdedness_score,
+    pr_crowdedness_score,
+    knmi_crowdedness_score,
+    weercijfer,
+    combined_crowdedness_score,
+    diff)
+VALUES(
+    '{scraped_at}',
+    '{ov_fiets_crowdedness_score}',
+    '{ndw_crowdedness_score}',
+    '{pr_crowdedness_score}',
+    '{knmi_crowdedness_score}',
+    '{weercijfer}',
+    '{combined_crowdedness_score}',
+    '{diff}');
+    """
+
+    return row_sql
+
 ##############################################################################################################
 
 
@@ -369,7 +420,18 @@ def main():
         diff = combined_crowdedness_score - alp_mean
         log.info(f"Difference (own - alp):  {diff}")
     except Exception:
+        diff = None
         pass
+
+    # write to db
+    conn = get_conn()
+    scraped_at = datetime.datetime.now()
+    row_sql = create_row_sql(scraped_at, ov_fiets_crowdedness_score, ndw_crowdedness_score, pr_crowdedness_score,
+                             knmi_crowdedness_score, weercijfer,
+                             combined_crowdedness_score,
+                             diff)
+    conn.execute(row_sql)
+
 ##############################################################################################################
 
 

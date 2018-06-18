@@ -71,6 +71,17 @@ class HotspotsDrukteIndex(models.Model):
     drukteindex = models.FloatField()
 
 
+class RealtimeAnalyzer(models.Model):
+    scraped_at = models.DateTimeField(blank=True, null=False, auto_now_add=True)
+    ov_fiets_crowdedness_score = models.FloatField(blank=True, null=True)
+    ndw_crowdedness_score = models.FloatField(blank=True, null=True)
+    pr_crowdedness_score = models.FloatField(blank=True, null=True)
+    knmi_crowdedness_score = models.FloatField(blank=True, null=True)
+    weercijfer = models.FloatField(blank=True, null=True)
+    combined_crowdedness_score = models.FloatField(blank=True, null=True)
+    diff = models.FloatField(blank=True, null=True)
+
+
 class RealtimeGoogle(models.Model):
 
     place_id = models.TextField(db_index=True)
