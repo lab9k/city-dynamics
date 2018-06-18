@@ -77,9 +77,9 @@ def ov_fiets():
     bike_count = sum([int(ov_fiets_amsterdam[x]['extra']['rentalBikes']) for x in ov_fiets_amsterdam])
 
     # Define assumptions about OV fiets bike amounts
-    assumed_rented = 0.2    # We typically assume 20% of bikes to be always rented out.
+    assumed_rented = 0.15   # We typically assume 20% of bikes to be always rented out.
     assumed_broken = 0.005  # We typically assume 0.05% of bikes to be always broken (but shown "available").
-    total_bikes = 1100      # Bike_count 2018-06-13 @ 1:00 was 898. @ 23:19: 986 bikes. @ 1:26: 1040 bikes.
+    total_bikes = 1200      # Bike_count 2018-06-13 @ 1:00 was 898. @ 23:19: 986 bikes. @ 1:26: 1040 bikes.
     total_bikes *= (1 - assumed_rented)
 
     # Heuristic: OV Fiets realtime crowdedness score. Range: [0-1]
@@ -336,18 +336,20 @@ def main():
         exit()
 
     # Define weights for each source.
-    w_fiets = 15
+    w_fiets = 10
     w_ndw = 35
     w_pr = 25
-    w_knmi = 12.5
-    w_weer = 12.5
+    w_knmi = 15
+    w_weer = 15
 
-    # Turn KNMI and weercijfer weights down at night (reduction @ hour: 2: 0%, 3: 50%, 4: 75%, 5: 50%, 6: 0%)
+    # Turn KNMI and weercijfer weights down at night.
+    # Retained percentage of weight (@ each hour): 90@1h 65@2h, 40@3h, 15@4h, 40@5h, 65@6h, 90@7h
     hour = datetime.datetime.now().hour
     if hour > 0 and hour < 8:
-        reduce_factor = 4 - abs(hour - 4)
-        w_knmi /= reduce_factor
-        w_weer /= reduce_factor
+        offset = abs(4 - hour) + 0.6
+        factor = .25 * offset
+        w_knmi *= factor
+        w_weer *= factor
 
     # Compute combined crowdedness sccore.
     combined_crowdedness_score = ((w_fiets * ov_fiets_crowdedness_score +
