@@ -8,3 +8,6 @@ sklearn
 pytest
 q
 flake8
+beautifulsoup4==4.6.0
+urllib3==1.22
+cookiejar==0.0.2

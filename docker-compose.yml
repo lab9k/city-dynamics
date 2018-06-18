@@ -54,6 +54,10 @@ services:
     build: ./analyzer
     links:
       - database:database
+    environment:
+     # Set this password in a local environment variable.
+     DRUKTERADAR_PASSWORD:
+
 
   front:
     ports:
