@@ -40,13 +40,20 @@ import re
 import logging
 import os
 from bs4 import BeautifulSoup
+import configparser
+from sqlalchemy import create_engine
+from sqlalchemy.engine.url import URL
 
 # Load password for Drukteradar
 DRUKTERADAR_PASSWORD = os.environ['DRUKTERADAR_PASSWORD']
 
-# Set loggerr
+# Set logger
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
+
+# load config file
+config_auth = configparser.RawConfigParser()
+config_auth.read('auth.conf')
 ##############################################################################################################
 
 
@@ -56,8 +63,65 @@ log = logging.getLogger(__name__)
 def clamp(val, range_min=0, range_max=1):
     return max(min(range_max, val), range_min)
 
+
 def rescale(org_val, org_min, org_max, new_min, new_max):
     return (new_max - new_min) * (org_val - org_min) / (org_max - org_min) + new_min
+
+
+def get_conn():
+    """Create a connection to the database."""
+    dbconfig = 'docker'
+    postgres_url = URL(
+        drivername='postgresql',
+        username=config_auth.get(dbconfig, 'user'),
+        password=config_auth.get(dbconfig, 'password'),
+        host=config_auth.get(dbconfig, 'host'),
+        port=config_auth.get(dbconfig, 'port'),
+        database=config_auth.get(dbconfig, 'dbname')
+    )
+    conn = create_engine(postgres_url)
+    return conn
+
+
+def create_row_sql(scraped_at, ov_fiets_crowdedness_score, ndw_crowdedness_score, pr_crowdedness_score,
+                   knmi_crowdedness_score, weercijfer, combined_crowdedness_score, alp_mean, alp_count, diff,
+                   w_fiets, w_ndw, w_pr, w_knmi, w_weer):
+    row_sql = f"""
+INSERT INTO public.datasets_realtimeanalyzer(
+    scraped_at,
+    ov_fiets_crowdedness_score,
+    ndw_crowdedness_score,
+    pr_crowdedness_score,
+    knmi_crowdedness_score,
+    weercijfer,
+    combined_crowdedness_score,
+    alp_mean,
+    alp_count,
+    diff,
+    w_fiets,
+    w_ndw,
+    w_pr,
+    w_knmi,
+    w_weer)
+VALUES(
+    '{scraped_at}',
+    '{ov_fiets_crowdedness_score}',
+    '{ndw_crowdedness_score}',
+    '{pr_crowdedness_score}',
+    '{knmi_crowdedness_score}',
+    '{weercijfer}',
+    '{combined_crowdedness_score}',
+    '{alp_mean}',
+    '{alp_count}',
+    '{diff},
+    '{w_fiets},
+    '{w_ndw},
+    '{w_pr},
+    '{w_knmi},
+    '{w_weer}');
+    """
+
+    return row_sql
 ##############################################################################################################
 
 
@@ -136,9 +200,9 @@ def ndw():
 
     # Compute speed differences based on road type
     min_perc = 0.4  # assumed minimum speed (percentage of avg)
-    H_max = 101  # average 1:00 in the night of 2018-06-13 was 101.03 km/h.
-    O_max = 42  # average 1:00 in the night of 2018-06-13 was 41.68 km/h.
-    H_min = H_max * min_perc
+    # H_max = 101     # average 1:00 in the night of 2018-06-13 was 101.03 km/h.
+    # H_min = H_max * min_perc
+    O_max = 42      # average 1:00 in the night of 2018-06-13 was 41.68 km/h.
     O_min = O_max * min_perc
 
     # Only use "O" type roads for crowdedness computation.
@@ -323,6 +387,7 @@ def main():
 
     # If no scores have been gathered after all attempts, exit script.
     if success is False:
+        log.info("Could not gather data to compute crowdedness score. Exiting.")
         exit()
 
     # Define weights for each source.
@@ -353,13 +418,38 @@ def main():
     log.info(f"combined_crowdedness_score: {combined_crowdedness_score}")
 
     # Try to get score from Alpha source, and compare with own score for validation.
+    alp_mean = 0
+    alp_count = 0
+    diff = 0
     try:
         alp_mean, alp_count = alp()
         log.info(f"alp_mean: {alp_mean} ({alp_count} locations)")
         diff = combined_crowdedness_score - alp_mean
         log.info(f"Difference (own - alp):  {diff}")
     except Exception:
+        diff = None
         pass
+
+    # write to db
+    conn = get_conn()
+    scraped_at = datetime.datetime.now()
+    row_sql = create_row_sql(scraped_at,
+                             ov_fiets_crowdedness_score,
+                             ndw_crowdedness_score,
+                             pr_crowdedness_score,
+                             knmi_crowdedness_score,
+                             weercijfer,
+                             combined_crowdedness_score,
+                             alp_mean,
+                             alp_count,
+                             diff,
+                             w_fiets,
+                             w_ndw,
+                             w_pr,
+                             w_knmi,
+                             w_weer)
+    conn.execute(row_sql)
+
 ##############################################################################################################
 
 

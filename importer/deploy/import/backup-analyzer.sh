@@ -9,12 +9,12 @@ chmod 600 ~/.pgpass
 
 # dump occupation data
 pg_dump -t verblijversindex \
-	 -t buurtcombinatie \
 	 -t stadsdeel \
 	 -t datasets_buurtcombinatiedrukteindex \
 	 -t datasets_hotspotsdrukteindex \
+	 -t buurtcombinatie \
+	 -t hotspots \
 	 -t drukte_index* \
-     -t hotspots \
      -t parkeren \
 	 -t gvb \
 	 -Fc \
