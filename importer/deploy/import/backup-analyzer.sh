@@ -12,6 +12,8 @@ pg_dump -t verblijversindex \
 	 -t stadsdeel \
 	 -t datasets_buurtcombinatiedrukteindex \
 	 -t datasets_hotspotsdrukteindex \
+	 -t buurtcombinatie \
+	 -t hotspots \
 	 -t drukte_index* \
      -t parkeren \
 	 -t gvb \
