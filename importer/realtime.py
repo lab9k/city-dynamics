@@ -113,11 +113,11 @@ VALUES(
     '{combined_crowdedness_score}',
     '{alp_mean}',
     '{alp_count}',
-    '{diff},
-    '{w_fiets},
-    '{w_ndw},
-    '{w_pr},
-    '{w_knmi},
+    '{diff}',
+    '{w_fiets}',
+    '{w_ndw}',
+    '{w_pr}',
+    '{w_knmi}',
     '{w_weer}');
     """
 
