@@ -28,7 +28,7 @@ div {box-sizing: border-box;}
 .topbar{background:#666;height:76px;border-bottom:4px solid #a1a1a1;}
 .topbar_left,.topbar_center,.topbar_right {float:left;}
 .topbar_left {width:400px;}
-.topbar_left h2 {float:left;margin:0;line-height:70px;text-indent:20px;font-size:34px;cursor:pointer;}
+.topbar_left h2 {float:left;margin:0;line-height:70px;text-indent:20px;font-size:42px;cursor:pointer;}
 .topbar_left span {display:inline-block;color:red;font-size:16px;font-weight:bold;margin:0;line-height:20px;cursor:pointer;margin:20px 0 0 10px;}
 .topbar_center {width:calc(100% - 800px);}
 .topbar_center .search_top {float:right;position:relative;}
@@ -105,7 +105,7 @@ div {box-sizing: border-box;}
 /*.themas_buttons li.active,.themas_buttons li.active:hover {background-color :rgba(255,255,255,1);}*/
 
 .themas_buttons_top {float:left;list-style:none;margin:0;padding:0;}
-.themas_buttons_top li {float:left;margin:10px 10px;padding:0;background-color :unset;background-size: 50px 50px;background-repeat:no-repeat;background-position:0 0;border-radius:5px;cursor:pointer;width:70px;height :50px;line-height :50px;border:1px dotted #A1A1A1;}
+.themas_buttons_top li {float:left;margin:10px 10px;padding:0;background-color :#777;background-size: 50px 50px;background-repeat:no-repeat;background-position:0 0;border-radius:5px;cursor:pointer;width:70px;height :50px;line-height :50px;border:1px dotted #A1A1A1;}
 .themas_buttons_top li.active,.themas_buttons li.active:hover {background-color :rgba(255,255,255,1);}
 .themas_buttons_top .fiets_b {background-image:url(../images/fiets_icon.svg);}
 .themas_buttons_top .fiets_b.active {background-image:url(../images/fiets_icon_active.svg);}
@@ -115,7 +115,9 @@ div {box-sizing: border-box;}
 .themas_buttons_top .hotspots_b.active {background-image:url(../images/hotspots_icon_active.svg);border-top-right-radius:0px;border-bottom-right-radius:0px;padding-right:10px;}
 .themas_buttons_top .google_b {background-image:url(../images/google_icon.svg);background-size: 25px 25px;}
 .themas_buttons_top .google_b.active {background-image:url(../images/google_icon_active.svg);}
-.themas_buttons_top .events_b {background-image:url(../images/event_icon.svg);}
+.themas_buttons_top .events_b {position:relative;background-image:url(../images/event_icon.svg);}
+.themas_buttons_top .events_b .event_today{position:absolute;top:3px;left:15px;}
+.themas_buttons_top .events_b.active .event_today{color:#666666;}
 .themas_buttons_top .events_b.active {background-image:url(../images/event_icon_active.svg);}
 .themas_buttons_top .traffic_b {background-image:url(../images/traffic_icon.svg);}
 .themas_buttons_top .traffic_b.active {background-image:url(../images/traffic_icon_active.svg);}
@@ -222,10 +224,10 @@ div {box-sizing: border-box;}
 .graphbar_right {float:left;height:200px;width:400px;padding:10px;text-align:center;}
 .graphbar_topright {float:left;width:400px;padding-right:40px;}
 .graphbar_title {float:left;width:calc(100% - 800px);}
-.graphbar_title h2 {float:left;line-height:40px;text-indent:10px;color:#fff;font-size:18px;margin:0;float:left;font-weight:normal;}
-.graphbar_title span {display:block;float:right;line-height:40px;margin-right:10px;}
-.graphbar_title .reset_icon {display:block;float:left;line-height:40px;margin-left:10px;cursor:pointer;}
-.graphbar_title .info_icon {display:block;float:right;line-height:40px;margin-right:10px;cursor:pointer;}
+.graphbar_title h2 {float:left;line-height:40px;text-indent:10px;color:#fff;font-size:18px;margin:0;float:left;font-weight:normal; text-shadow: 1px 1px #666;}
+.graphbar_title span {display:block;float:right;line-height:40px;margin-right:10px; text-shadow: 1px 1px #666;}
+.graphbar_title .reset_icon {display:block;float:left;line-height:40px;margin-left:10px;cursor:pointer; text-shadow: 1px 1px #666;}
+.graphbar_title .info_icon {display:block;float:right;line-height:40px;margin-right:10px;cursor:pointer; text-shadow: 1px 1px #666;}
 .graphbar_graph {float:left;width:100%;height:200px;}
 
 .indexgraph .axis line,.indexgraph .axis .domain{
@@ -248,7 +250,7 @@ div {box-sizing: border-box;}
 /*drop down menu*/
 .topbar_right ul {float:right;list-style-type: none;margin: 0;padding: 0;overflow: hidden;}
 .topbar_right li {float: left;margin:10px 20px 0 0;}
-.topbar_right a.dropbtn {min-width:60px;display: inline-block;color: white;text-align: center;padding: 14px 16px;text-decoration: none;border-radius:10px;border:1px dotted #A1A1A1;	background-color: #666;}
+.topbar_right a.dropbtn {min-width:60px;display: inline-block;color: white;text-align: center;padding: 14px 16px;font-size:18px;text-decoration: none;border-radius:10px;border:1px dotted #A1A1A1;	background-color: #666;}
 .topbar_right li a {display: inline-block;	color: white;	text-align: center;	padding: 14px 16px;	text-decoration: none;	background-color: #666;}
 .dropdown:hover .dropbtn {	background-color: #A1A1A1;	color:#FFF;}
 .topbar_right li.dropdown {	display: inline-block;}
@@ -264,6 +266,7 @@ div {box-sizing: border-box;}
 .gauge_c {position: relative; }
 .gauge { position: relative; margin:10px auto;width:150px;height:150px;}
 .gauge .gauge-text {font-size: 20px; font-weight: 100; position: absolute; width: 150px; text-align: center; top: 60px; }
+.gauge_top {font-size:18px;}
 .gauge_bottom{margin-top:-30px;}
 .gauge_c .line1,.gauge_c .line2 {position:absolute;border-left:1px solid #fff;}
 .gauge_c .line1 {top:18px;left:188px;height:8px;display:none;}
@@ -275,11 +278,11 @@ div {box-sizing: border-box;}
 .weather{float:left;margin:20px 0 0 50px;text-align:center;}
 
 /*legend*/
-.legend {position:relative;	margin:10px 20px 0 0;float:right;text-align:center;width:106px;}
-.legend span {position:absolute;font-size:12px;line-height:12px;left:0;}
+.legend {position:relative;	margin:10px 20px 0 0;float:right;text-align:center;width:110px;}
+.legend span {position:absolute;font-size:14px;line-height:14px;left:0;}
 .legend i {position:absolute;left:48px;display:none;}
-.legend span.min {top:144px;left:78px;color:#333;}
-.legend span.max {top:6px;left:70px;color:#333;}
+.legend span.min {top:144px;left:80px;color:#fff; text-shadow: 1px 1px #666;}
+.legend span.max {top:6px;left:72px;color:#fff;text-shadow: 1px 1px #666;}
 .legend span.crowded {top:14px;}
 .legend span.normal {top:72px;}
 .legend span.quiet {top:130px;}
@@ -336,6 +339,7 @@ div {box-sizing: border-box;}
 	.topbar_center{width:100%;height:50px;overflow:hidden;}
 	/*.topbar_right{float:none;}*/
 	.themas_buttons_top li {margin:5px 5px;background-size: 40px 40px;width:60px;height :40px;line-height :40px;}
+	.themas_buttons_top .events_b .event_today{left:10px;}
 	.divider {width:5px;margin:5px;height:40px;}
 	.m_more {right:5px;top:5px;display:block;position:absolute;width:30px;height :30px;}
 	.m_more a {display:block;width:30px;height :30px;line-height: 30px;text-align:center;color:#fff;}
@@ -349,7 +353,7 @@ div {box-sizing: border-box;}
 	.live {float:left;line-height:40px;font-size:8px;}
 	.livetext3 div {line-height: 9px;	font-size: 9px;	}
 
-	.info {display:none;margin:0 10px;left:inherit;width:calc(100% - 20px);top:5px;bottom:inherit;max-height:120px;}
+	.info {display:none;margin:0 10px;left:inherit;width:calc(100% - 20px);top:5px;bottom:inherit;max-height:inherit;}
 	.info .info_icon, .info .close{font-size:16px;line-height:16px;}
 	.info h2{font-size:16px;line-height:16px;}
 	.info .info_content{margin:0 24px;line-height:16px;}

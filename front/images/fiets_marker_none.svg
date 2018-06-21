@@ -8,12 +8,12 @@
         <g id="fiets_marker_none">
             <g id="OV-Fiets-marker">
                 <circle id="Oval" fill="#FF0000" cx="17.5" cy="17.5" r="15.5"></circle>
-                <g id="Marker-shape---template" fill="#4A4A4A">
+                <g id="Marker-shape---template" fill="#666666">
                     <path d="M17.5,0 C7.825,0 0,7.825 0,17.5 C0,30.625 17.5,50 17.5,50 C17.5,50 35,30.625 35,17.5 C35,7.825 27.175,0 17.5,0 L17.5,0 Z M17.5,33 C8.944,33 2,26.056 2,17.5 C2,8.944 8.944,2 17.5,2 C26.056,2 33,8.944 33,17.5 C33,26.056 26.056,33 17.5,33 L17.5,33 Z" id="Marker-shape"></path>
                 </g>
                 <g id="Markers\fiets_template" transform="translate(7.000000, 5.000000)">
                     <g id="OV-fiets-Icon" transform="translate(0.500000, 0.500000)">
-                        <g id="Fiets" transform="translate(1.600000, 10.830769)" stroke="#4A4A4A">
+                        <g id="Fiets" transform="translate(1.600000, 10.830769)" stroke="#666666">
                             <path d="M9.95480769,2.61811043 L12.0144231,2.61811043" id="Line-4" stroke-linecap="square"></path>
                             <path d="M11.0793103,2.72497208 L10.9846154,3.74015776" id="Line-3" stroke-linecap="square"></path>
                             <path d="M4.26127321,3.93607078 L4.54535809,3.93607078" id="Line-5" stroke-linecap="square"></path>
@@ -24,7 +24,7 @@
                             <ellipse id="Oval-3" cx="2.74615385" cy="9.72441016" rx="2.74615385" ry="2.9921262"></ellipse>
                             <ellipse id="Oval-3" cx="13.7307692" cy="9.72441016" rx="2.74615385" ry="2.9921262"></ellipse>
                         </g>
-                        <text id="OV" font-family="AvenirNext-DemiBold, Avenir Next" font-size="11" font-weight="500" fill="#4A4A4A">
+                        <text id="OV" font-family="AvenirNext-DemiBold, Avenir Next" font-size="11" font-weight="500" fill="#666666">
                             <tspan x="1.805" y="11">OV</tspan>
                         </text>
                     </g>
