@@ -276,7 +276,7 @@ class Process_alpha_locations_expected(Process):
     # TODO: e.g. levels = ['hotspot', 'vollcode', 'stadsdeelcode', 'stad']
     def dataset_specific(self, aggregation_level):
         area_mapping = self.data[[aggregation_level, 'stadsdeelcode']]
-        area_mapping.drop_duplicates()
+        area_mapping.drop_duplicates(inplace=True)
 
         # Weight Alpha locations based on the main location category weight.
         self.data['expected'] *= self.data['main_category_weight']
@@ -406,14 +406,15 @@ class Process_drukte(Process):
         # alp_hist = Process_alpha_historical(dbconfig)
         # alp_live = Process_alpha_live(dbconfig)
         alp_vollcode = Process_alpha_locations_expected(dbconfig, 'vollcode')
+
         # alp_hotspots = Process_alpha_locations_expected(dbconfig, 'hotspot')
         parkeren = Process_parkeren(dbconfig, 'vollcode')
-
         # initialize drukte dataframe
         # Start of a week: Monday at midnight
         start = datetime.datetime(2018, 2, 12, 0, 0)
         # End of this week: Sunday 1 hour before midnight
         end = datetime.datetime(2018, 2, 18, 23, 0)
+
         self.data = self.init_drukte_df(
             start, end, list(vollcodes_m2_land.keys()))
 
