@@ -26,7 +26,8 @@ class Migration(migrations.Migration):
                 ('type', models.CharField(blank=True, max_length=255, null=True)),
                 ('uri', models.CharField(blank=True, max_length=255, null=True)),
                 ('wkb_geometry', django.contrib.gis.db.models.fields.GeometryField(blank=True, null=True, srid=4326)),
-                ('wkb_geometry_simplified', django.contrib.gis.db.models.fields.GeometryField(blank=True, null=True, srid=0)),
+                ('wkb_geometry_simplified', django.contrib.gis.db.models.fields.GeometryField(
+                    blank=True, null=True, srid=0)),
             ],
             options={
                 'db_table': 'buurtcombinatie',
@@ -39,7 +40,8 @@ class Migration(migrations.Migration):
                 ('hour', models.IntegerField()),
                 ('weekday', models.IntegerField()),
                 ('drukteindex', models.FloatField()),
-                ('vollcode', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='druktecijfers_bc', to='datasets.Buurtcombinatie')),
+                ('vollcode', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING,
+                                               related_name='druktecijfers_bc', to='datasets.Buurtcombinatie')),
             ],
         ),
         migrations.CreateModel(
@@ -68,7 +70,22 @@ class Migration(migrations.Migration):
                 ('hour', models.IntegerField()),
                 ('weekday', models.IntegerField()),
                 ('drukteindex', models.FloatField()),
-                ('hotspot', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='druktecijfers', to='datasets.Hotspots')),
+                ('hotspot', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING,
+                                              related_name='druktecijfers', to='datasets.Hotspots')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='RealtimeAnalyzer',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('scraped_at', models.DateTimeField(auto_now_add=True)),
+                ('ov_fiets_crowdedness_score', models.FloatField(blank=True, null=True)),
+                ('ndw_crowdedness_score', models.FloatField(blank=True, null=True)),
+                ('pr_crowdedness_score', models.FloatField(blank=True, null=True)),
+                ('knmi_crowdedness_score', models.FloatField(blank=True, null=True)),
+                ('weercijfer', models.FloatField(blank=True, null=True)),
+                ('combined_crowdedness_score', models.FloatField(blank=True, null=True)),
+                ('diff', models.FloatField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(

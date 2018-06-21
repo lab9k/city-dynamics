@@ -189,7 +189,7 @@ class GeometryQueries:
     #     """.format(table_name)
 
     @staticmethod
-    def join_hotspot_names(table_name, geometry_column='geom'):
+    def join_hotspot_names(table_name, geometry_column='geom', buffer=50):
         return """
             ALTER table "{0}"
             DROP COLUMN IF EXISTS hotspot;
@@ -201,9 +201,9 @@ class GeometryQueries:
             FROM hotspots
             WHERE st_intersects(
                 ST_Buffer(
-                    CAST(hotspots.polygon AS geography), 50.0),
+                    CAST(hotspots.polygon AS geography), {2}),
                     "{0}"."{1}");
-        """.format(table_name, geometry_column)
+        """.format(table_name, geometry_column, buffer)
 
 
 class LoadLayers:

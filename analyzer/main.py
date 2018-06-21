@@ -63,7 +63,6 @@ vollcodes_m2_land = {
 
 def linear_model(drukte):
     """A linear model computing the drukte index values."""
-
     # Normalize gvb data to range 0-1 to conform with Alpha data.
     drukte.normalize_acreage_city('gvb_stad')
     drukte.normalize_acreage('gvb_buurt')
@@ -289,22 +288,24 @@ def fill_table_in_db(org_table_name, fill_table_name, columns):
     # datasets_buurtcombinatiedrukteindex
     insert_into_api_table = """
     TRUNCATE TABLE "datasets_buurtcombinatiedrukteindex";
-    insert into "datasets_buurtcombinatiedrukteindex" (
+    INSERT INTO "datasets_buurtcombinatiedrukteindex" (
     index,
     hour,
     weekday,
     drukteindex,
     vollcode_id
-    ) SELECT
+    )
+    SELECT
       c.index,
       hour,
       weekday,
       drukteindex,
-      b.ogc_fid from buurtcombinatie b,
+      b.ogc_fid
+    FROM buurtcombinatie b,
       drukteindex_buurtcombinaties c
-    where  b."vollcode" = c."vollcode";
-
+    WHERE b."vollcode" = c."vollcode";
     """
+
     connection.execute(insert_into_api_table)
 
     log.debug('done.')
@@ -316,7 +317,6 @@ def run():
     # Could be different in the future.
     dbconfig = args.dbConfig[0]
     drukte = process.Process_drukte(dbconfig)
-
     # Still use older linear model for now
     pipeline_on = False
 

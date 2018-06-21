@@ -75,16 +75,18 @@ def linear_model(drukte):
 def fill_hotspot_tables(conn=None):
     insert_into_models_hotspots = """
     TRUNCATE TABLE datasets_hotspotsdrukteindex;
-    insert into datasets_hotspotsdrukteindex (
+    INSERT INTO datasets_hotspotsdrukteindex (
     index,
     hour,
     weekday,
     drukteindex,
     hotspot_id
-    ) select c.index, hour, weekday, drukteindex, h.index from hotspots h, drukteindex_hotspots c
-    where  h."hotspot" = c."hotspot";
+    ) 
+    SELECT c.index, hour, weekday, drukteindex, h.index
+    FROM hotspots h, drukteindex_hotspots c
+    WHERE h."hotspot" = c."hotspot";
+    """
 
-    """  # noqa
     if not conn:
         conn = get_conn()
     conn.execute(insert_into_models_hotspots)

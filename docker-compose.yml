@@ -41,10 +41,11 @@ services:
       - database:database
     environment:
       PGPASSWORD: insecure
-      # Following are secret, should be provided as environment variables.
+      # Following are secrets, should be provided as environment variables.
       # E.g. by running in terminal
       # export STADSWERKEN_OBJECTSTORE_PASSWORD="mypassword"
       STADSWERKEN_OBJECTSTORE_PASSWORD:
+      DRUKTERADAR_PASSWORD:
     volumes:
       - data-volume:/data
       #- ~/data:/data
@@ -54,6 +55,7 @@ services:
     build: ./analyzer
     links:
       - database:database
+
 
   front:
     ports:
