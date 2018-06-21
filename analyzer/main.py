@@ -294,13 +294,13 @@ def fill_table_in_db(org_table_name, fill_table_name, columns):
     weekday,
     drukteindex,
     vollcode_id
-    ) 
+    )
     SELECT
       c.index,
       hour,
       weekday,
       drukteindex,
-      b.ogc_fid 
+      b.ogc_fid
     FROM buurtcombinatie b,
       drukteindex_buurtcombinaties c
     WHERE b."vollcode" = c."vollcode";
