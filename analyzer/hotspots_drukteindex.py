@@ -81,7 +81,7 @@ def fill_hotspot_tables(conn=None):
     weekday,
     drukteindex,
     hotspot_id
-    ) 
+    )
     SELECT c.index, hour, weekday, drukteindex, h.index
     FROM hotspots h, drukteindex_hotspots c
     WHERE h."hotspot" = c."hotspot";
