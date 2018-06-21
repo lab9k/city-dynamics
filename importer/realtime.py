@@ -64,6 +64,10 @@ def clamp(val, range_min=0, range_max=1):
     return max(min(range_max, val), range_min)
 
 
+def rescale(org_val, org_min, org_max, new_min, new_max):
+    return (new_max - new_min) * (org_val - org_min) / (org_max - org_min) + new_min
+
+
 def get_conn():
     """Create a connection to the database."""
     dbconfig = 'docker'
@@ -80,9 +84,8 @@ def get_conn():
 
 
 def create_row_sql(scraped_at, ov_fiets_crowdedness_score, ndw_crowdedness_score, pr_crowdedness_score,
-                   knmi_crowdedness_score, weercijfer,
-                   combined_crowdedness_score,
-                   diff):
+                   knmi_crowdedness_score, weercijfer, combined_crowdedness_score, alp_mean, alp_count, diff,
+                   w_fiets, w_ndw, w_pr, w_knmi, w_weer):
     row_sql = f"""
 INSERT INTO public.datasets_realtimeanalyzer(
     scraped_at,
@@ -92,7 +95,14 @@ INSERT INTO public.datasets_realtimeanalyzer(
     knmi_crowdedness_score,
     weercijfer,
     combined_crowdedness_score,
-    diff)
+    alp_mean,
+    alp_count,
+    diff,
+    w_fiets,
+    w_ndw,
+    w_pr,
+    w_knmi,
+    w_weer)
 VALUES(
     '{scraped_at}',
     '{ov_fiets_crowdedness_score}',
@@ -101,11 +111,17 @@ VALUES(
     '{knmi_crowdedness_score}',
     '{weercijfer}',
     '{combined_crowdedness_score}',
-    '{diff}');
+    '{alp_mean}',
+    '{alp_count}',
+    '{diff},
+    '{w_fiets},
+    '{w_ndw},
+    '{w_pr},
+    '{w_knmi},
+    '{w_weer}');
     """
 
     return row_sql
-
 ##############################################################################################################
 
 
@@ -170,6 +186,7 @@ def ndw():
     H_count = 0
     O_sum = 0
     O_count = 0
+
     for road_type, velocity in ndw_velocity:
         if road_type == "H":
             H_sum += velocity
@@ -178,37 +195,23 @@ def ndw():
             O_sum += velocity
             O_count += 1
 
-    # Set road type speed assumptions
-    O_avg = 42   # average 1:00 in the night of 2018-06-13 was 41.68 km/h.
-    H_avg = 101  # average 1:00 in the night of 2018-06-13 was 101.03 km/h.
-    min_speed = 0.4  # assumed minimum speed (percentage of avg)
+    H_mean = H_sum / H_count
+    O_mean = O_sum / O_count
 
     # Compute speed differences based on road type
-    diffs = []
-    underflows = []
-    for road_type, velocity in ndw_velocity:
-        if road_type == "O":
-            avg = O_avg
-        if road_type == "H":
-            avg = H_avg
-        d = avg - velocity  # raw difference from avg
-        d_norm = 100 * d / (avg * min_speed)  # normalized difference, including minimum speed assumption.
-        if road_type == "O":
-            diffs.append(d_norm)
-            underflows.append(clamp(d_norm, 0, 100))
+    min_perc = 0.4  # assumed minimum speed (percentage of avg)
+    # H_max = 101     # average 1:00 in the night of 2018-06-13 was 101.03 km/h.
+    # H_min = H_max * min_perc
+    O_max = 42      # average 1:00 in the night of 2018-06-13 was 41.68 km/h.
+    O_min = O_max * min_perc
 
-    mean_diff = sum(diffs) / len(diffs)
-    mean_underflow = sum(underflows) / len(underflows)
-
-    # Heuristic: NDW realtime crowdedness score. Range: [0-1]
-    ndw_crowdedness_score = 1 - (100 - mean_diff) / 100
-    ndw_crowdedness_score = clamp(ndw_crowdedness_score)
+    # Only use "O" type roads for crowdedness computation.
+    d_rescaled = rescale(O_mean, O_min, O_max, 0, 1)
+    ndw_crowdedness_score = 1 - clamp(d_rescaled)
 
     # [DEBUG] Log statistics info
-    log.debug(f"[NDW] H mean: {H_sum / H_count}")
-    log.debug(f"[NDW] O mean: {O_sum / O_count}")
-    log.debug(f"[NDW] Mean diff compared to average speed: {mean_diff}")
-    log.debug(f"[NDW] Mean underflow compared to average speed: {mean_underflow}")
+    log.debug(f"[NDW] H_mean: {H_mean}")
+    log.debug(f"[NDW] O_mean: {O_mean}")
     log.debug(f"[NDW] ndw_crowdedness_score: {ndw_crowdedness_score}")
 
     return ndw_crowdedness_score
@@ -294,21 +297,21 @@ def knmi():
     # Heuristic: compute own KNMI "weercijfer" score. Range: [0-1]
     weer_scores = {
         "onbewolkt": 100,
-        "licht bewolkt": 80,
-        "half bewolkt": 65,
-        "geheel bewolkt": 50,
-        "mist": 40,  # Deze waarde wordt niet vernoemd in de documentatie, maar komt wel voor!
-        "droog na regen": 40,
-        "droog na motregen": 40,
-        "zwaar bewolkt": 40,
-        "lichte motregen": 35,
-        "motregen": 30,
-        "af en toe lichte regen": 30,
-        "lichte regen": 25,
-        "dichte motregen": 25,
-        "lichte motregen en regen": 20,
-        "motregen en regen": 20,
-        "regen": 10}
+        "licht bewolkt": 70,
+        "half bewolkt": 50,
+        "geheel bewolkt": 35,
+        "mist": 35,  # Deze waarde wordt niet vernoemd in de documentatie, maar komt wel voor!
+        "droog na regen": 35,
+        "droog na motregen": 35,
+        "zwaar bewolkt": 35,
+        "lichte motregen": 30,
+        "motregen": 25,
+        "af en toe lichte regen": 25,
+        "lichte regen": 20,
+        "dichte motregen": 20,
+        "lichte motregen en regen": 15,
+        "motregen en regen": 15,
+        "regen": 0}
 
     # Get score for current weather
     knmi_crowdedness_score = weer_scores[knmi['samenv'].lower()] / 100
@@ -384,6 +387,7 @@ def main():
 
     # If no scores have been gathered after all attempts, exit script.
     if success is False:
+        log.info("Could not gather data to compute crowdedness score. Exiting.")
         exit()
 
     # Define weights for each source.
@@ -414,6 +418,9 @@ def main():
     log.info(f"combined_crowdedness_score: {combined_crowdedness_score}")
 
     # Try to get score from Alpha source, and compare with own score for validation.
+    alp_mean = 0
+    alp_count = 0
+    diff = 0
     try:
         alp_mean, alp_count = alp()
         log.info(f"alp_mean: {alp_mean} ({alp_count} locations)")
@@ -426,10 +433,21 @@ def main():
     # write to db
     conn = get_conn()
     scraped_at = datetime.datetime.now()
-    row_sql = create_row_sql(scraped_at, ov_fiets_crowdedness_score, ndw_crowdedness_score, pr_crowdedness_score,
-                             knmi_crowdedness_score, weercijfer,
+    row_sql = create_row_sql(scraped_at,
+                             ov_fiets_crowdedness_score,
+                             ndw_crowdedness_score,
+                             pr_crowdedness_score,
+                             knmi_crowdedness_score,
+                             weercijfer,
                              combined_crowdedness_score,
-                             diff)
+                             alp_mean,
+                             alp_count,
+                             diff,
+                             w_fiets,
+                             w_ndw,
+                             w_pr,
+                             w_knmi,
+                             w_weer)
     conn.execute(row_sql)
 
 ##############################################################################################################
