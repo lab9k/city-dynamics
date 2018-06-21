@@ -858,9 +858,14 @@ function initEventMapping()
 		}
 	});
 
-	$( document).on('click', ".feedback",function () {
+	$( document).on('click', ".techfeedback",function () {
 		// alert('feedback');
 		window.usabilla_live('trigger', 'techfeedback');
+	});
+
+	$( document).on('click', ".userfeedback",function () {
+		// alert('feedback');
+		window.usabilla_live('trigger', 'userfeedback');
 	});
 
 	$( document).on('click', ".m_more a",function () {
