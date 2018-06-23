@@ -65,7 +65,7 @@ class HotspotSerializer(GeoFeatureModelSerializer):
 
     class Meta:
         model = Hotspots
-        geo_field = 'geom'
+        geo_field = 'polygon'
         # fields = ('index', 'hotspot', 'coordinates',)
         fields = ('index', 'hotspot',)
 
