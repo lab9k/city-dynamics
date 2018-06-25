@@ -123,7 +123,15 @@ class GeometryQueries:
         return """
         ALTER TABLE "{0}"
         ALTER COLUMN "{1}"
-        TYPE Geometry USING "{1}"::Geometry;
+        TYPE geometry(Polygon, 4326) USING ST_SetSRID("{1}", 4326);;
+        """.format(table_name, column_to_convert)
+
+    @staticmethod
+    def convert_str_multipolygon_to_geometry(table_name, column_to_convert='polygon'):
+        return """
+        ALTER TABLE "{0}"
+        ALTER COLUMN "{1}"
+        TYPE geometry(MultiPolygon, 4326) USING ST_SetSRID("{1}", 4326);;
         """.format(table_name, column_to_convert)
 
     @staticmethod
@@ -165,6 +173,8 @@ class GeometryQueries:
 
     def determine_centroid(table_name, geometry_column='geom', centroid_column='centroid'):
         return """
+        ALTER TABLE             "{0}"
+        DROP COLUMN IF EXISTS   "{2}";
         ALTER TABLE "{0}"
         ADD COLUMN "{2}" geometry;
         update "{0}"
