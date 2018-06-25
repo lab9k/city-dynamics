@@ -57,6 +57,7 @@ class Hotspots(models.Model):
     geom = models.GeometryField(srid=0, blank=True, null=True)
     vollcode = models.CharField(max_length=255, blank=True, null=True)
     stadsdeelcode = models.CharField(max_length=255, blank=True, null=True)
+    centroid = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
         db_table = 'hotspots'
@@ -80,6 +81,14 @@ class RealtimeAnalyzer(models.Model):
     weercijfer = models.FloatField(blank=True, null=True)
     combined_crowdedness_score = models.FloatField(blank=True, null=True)
     diff = models.FloatField(blank=True, null=True)
+    alp_mean = models.FloatField(blank=True, null=True)
+    alp_count = models.FloatField(blank=True, null=True)
+    diff = models.FloatField(blank=True, null=True)
+    w_fiets = models.FloatField(blank=True, null=True)
+    w_ndw = models.FloatField(blank=True, null=True)
+    w_pr = models.FloatField(blank=True, null=True)
+    w_knmi = models.FloatField(blank=True, null=True)
+    w_weer = models.FloatField(blank=True, null=True)
 
 
 class RealtimeGoogle(models.Model):
