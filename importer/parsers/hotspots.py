@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 def add_geometries(conn, *_, **config):
     table_name = config['TABLE_NAME']
     conn.execute(GeometryQueries.convert_str_polygon_to_geometry(table_name))
+    conn.execute(GeometryQueries.determine_centroid(table_name, geometry_column='polygon'))
 
 
 def run(conn, data_root, **config):

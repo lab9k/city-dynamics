@@ -57,6 +57,7 @@ class Hotspots(models.Model):
     geom = models.GeometryField(srid=0, blank=True, null=True)
     vollcode = models.CharField(max_length=255, blank=True, null=True)
     stadsdeelcode = models.CharField(max_length=255, blank=True, null=True)
+    centroid = models.GeometryField(srid=0, blank=True, null=True)
 
     class Meta:
         db_table = 'hotspots'
