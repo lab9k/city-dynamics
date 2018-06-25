@@ -353,16 +353,17 @@ function addDistrictLayer()
 
 function styleDistrict(feature) {
 
+	var hh = convertHour(getHourDigit());
+
 	if(districts_array[feature.properties.vollcode].index.length)
 	{
-		var dindex = districts_array[feature.properties.vollcode].index[0].d * 10;
+		var dindex = districts_array[feature.properties.vollcode].index[hh].i;
 		if(dindex>1) { dindex=1;}
 	}
 	else
 	{
 		var dindex = 0;
 	}
-
 
 	return {
 		fillColor: getColor(dindex),
