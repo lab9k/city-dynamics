@@ -63,6 +63,8 @@ dc run --rm importer bash /app/deploy/docker-wait.sh
 dc run --rm importer python /app/main.py /data --download
 
 dc exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/dump_after_importer/20180626_dump_after_importer.dump
+
+dc run --rm importer python scrape_api/models.py
 ###
 ###
 
