@@ -185,10 +185,6 @@ $(document).ready(function(){
 
 	}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
 		console.error('One or more apis failed.');
-		if(dindexJson[1]!='success')
-		{
-			console.error('One or more apis failed.');
-		}
 	});
 
 	// chrome control button style
@@ -357,16 +353,17 @@ function addDistrictLayer()
 
 function styleDistrict(feature) {
 
+	var hh = convertHour(getHourDigit());
+
 	if(districts_array[feature.properties.vollcode].index.length)
 	{
-		var dindex = districts_array[feature.properties.vollcode].index[0].d * 10;
+		var dindex = districts_array[feature.properties.vollcode].index[hh].i;
 		if(dindex>1) { dindex=1;}
 	}
 	else
 	{
 		var dindex = 0;
 	}
-
 
 	return {
 		fillColor: getColor(dindex),
@@ -379,8 +376,9 @@ function styleDistrict(feature) {
 
 function onEachFeatureDistrict(feature, layer) {
 
-	districts_array[feature.properties.vollcode].layer = layer;
-	districts_array[feature.properties.vollcode].buurt = feature.properties.naam;
+	var vollcode = feature.properties.vollcode;
+	districts_array[vollcode].layer = layer;
+	districts_array[vollcode].buurt = feature.properties.naam;
 
 	layer.on({
 		mouseover: highlightFeature,
@@ -391,6 +389,8 @@ function onEachFeatureDistrict(feature, layer) {
 
 	layer.on('mouseover', function (e) {
 		this.openPopup();
+		var current_fill = $('#feature-' + vollcode).css('fill');
+		$('.popup_district .material-icons').css('color', current_fill);
 	});
 	layer.on('mouseout', function (e) {
 		this.closePopup();
@@ -493,9 +493,10 @@ function getHotspots()
 	});
 
 	circles_layer = L.layerGroup();
+
 	$.each(hotspots_array, function (key, value) {
 
-		var hh = getHourDigit();
+		var hh = convertHour(getHourDigit());
 		var dindex = this.druktecijfers[hh].i;
 
 		circles[key] = L.circleMarker(this.coordinates.reverse(), {
@@ -1422,7 +1423,7 @@ function dragAnimation() {
 function setToCurrentTime()
 {
 
-	var hour = getHourDigit();
+	var hour = convertHour(getHourDigit());
 
 	$.each(hotspots_array, function (key, value) {
 		circles_d3[key]
@@ -1460,10 +1461,10 @@ function getLatLang(point) {
 }
 
 function highlightFeature(e) {
-	var layer = e.target;
-
-	var dindex = districts_array[layer.feature.properties.vollcode].index;
-	var buurt = districts_array[layer.feature.properties.vollcode].buurt;
+	// var layer = e.target;
+	//
+	// var dindex = districts_array[layer.feature.properties.vollcode].index;
+	// var buurt = districts_array[layer.feature.properties.vollcode].buurt;
 }
 
 function resetHighlight(e) {
@@ -1492,6 +1493,9 @@ function setLayerActive(layer)
 	var dindex = districts_array[vollcode].index;
 
 	updateLineGraph(vollcode,'district');
+
+	updateGauge(vollcode,'district');
+
 
 	// set name
 	$('.graphbar_title h2').html(buurt);
@@ -1600,7 +1604,7 @@ function initGauge()
 	ams_expected = ams_expected  / counter;
 
 	// todo check expected in real time feed.
-	var hour = getHourDigit();
+	var hour =  convertHour(getHourDigit());
 	ams_expected = amsterdam.druktecijfers[hour].i;
 
 	// console.log('real: ' + ams_realtime);
@@ -1663,6 +1667,17 @@ function updateGauge(key,type)
 		// 	$('.graphbar_right .value').text('').css('color','#fff');
 		// 	$('.graphbar_right .value2').text(Math.round(expected*100)).css('color',getColor(expected));
 		// }
+
+	}
+	else if(type == 'district')
+	{
+		var point_array = districts_array[key].index;
+		var expected =  point_array[hour].i;
+
+		gauge[0].set([Math.round(expected*100),0]);
+		$('.graphbar_right .gauge_top_text').text('Normale drukte');
+		$('.graphbar_right .value').text(Math.round(expected*100)).css('color',getColor(expected));
+
 
 	}
 	else

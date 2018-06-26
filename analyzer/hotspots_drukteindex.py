@@ -131,10 +131,11 @@ def main():
     if use_singular_filter:
         cleanup_something_ugly(alpha_hotspots, hotspots_df)
 
-    alpha_hotspots['expected'] *= alpha_hotspots['main_category_weight']
+    # alpha_hotspots['expected'] *= alpha_hotspots['main_category_weight']
 
     # historical weekpatroon
-    # first calculate the average weekpatroon per location
+    # first calculate the average weekpatroon per location.
+    # since the data is limited, we consider daily instead of weekly patterns.
     alpha_week_location = alpha_hotspots.groupby([
         'hour', 'hotspot', 'name'])['expected'].mean().reset_index()
 
