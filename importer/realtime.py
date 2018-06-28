@@ -38,7 +38,6 @@ import datetime
 import requests
 import re
 import logging
-import os
 from bs4 import BeautifulSoup
 import configparser
 from sqlalchemy import create_engine
