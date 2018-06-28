@@ -11,6 +11,7 @@ from django_filters.rest_framework import FilterSet
 from django_filters.rest_framework import filters
 # from django.db.models import Avg
 from datapunt_api import rest
+from datapunt_api import pagination
 from . import models
 from . import serializers
 import logging
@@ -148,6 +149,11 @@ class HistorianFilter(FilterSet):
         )
 
 
+class LimitPagination(pagination.HALPagination):
+    page_size = 1
+    max_page_size = 500
+
+
 class HistorianViewset(rest.DatapuntViewSet):
     """
     Previous scraped data of external endpoints
@@ -159,6 +165,7 @@ class HistorianViewset(rest.DatapuntViewSet):
     queryset = models.RealtimeHistorian.objects.order_by('scraped_at')
 
     filter_class = HistorianFilter
+    pagination_class = LimitPagination
 
 
 PROXY_URLS = {

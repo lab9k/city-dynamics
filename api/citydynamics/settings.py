@@ -146,7 +146,7 @@ USE_TZ = False
 
 REST_FRAMEWORK = dict(
     PAGE_SIZE=500,
-    MAX_PAGINATE_BY=100,
+    MAX_PAGINATE_BY=500,
 
     DEFAULT_AUTHENTICATION_CLASSES=[],
     DEFAULT_PERMISSION_CLASSES=[],
@@ -154,7 +154,8 @@ REST_FRAMEWORK = dict(
     UNAUTHENTICATED_USER={},
     UNAUTHENTICATED_TOKEN={},
     # or allow read-only access for unauthenticated users.
-    DEFAULT_PAGINATION_CLASS='rest_framework.pagination.LimitOffsetPagination',
+    DEFAULT_PAGINATION_CLASS="datapunt_api.pagination.HALPagination",
+
     DEFAULT_FILTER_BACKENDS=(
         'django_filters.rest_framework.DjangoFilterBackend',
     ),

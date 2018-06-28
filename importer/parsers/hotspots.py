@@ -10,6 +10,8 @@ def add_geometries(conn, *_, **config):
     table_name = config['TABLE_NAME']
     conn.execute(GeometryQueries.convert_str_polygon_to_geometry(table_name))
     conn.execute(GeometryQueries.determine_centroid(table_name, geometry_column='polygon'))
+    conn.execute(GeometryQueries.join_vollcodes(table_name, geometry_column='centroid'))
+    conn.execute(GeometryQueries.join_stadsdeelcodes(table_name, geometry_column='centroid'))
 
 
 def run(conn, data_root, **config):

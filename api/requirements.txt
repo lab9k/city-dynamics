@@ -20,6 +20,7 @@ docker-pycreds==0.2.3
 dockerpty==0.4.1
 docopt==0.6.2
 drf-extensions==0.3.1
+git+https://github.com/Amsterdam/drf_amsterdam.git@4ef931ca0f92eff00fb5bfc752fb5e87daf2b3d2#egg=drf_amsterdam
 expiringdict==1.1.4
 factory-boy==2.11.1
 Faker==0.8.15
