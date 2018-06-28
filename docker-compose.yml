@@ -45,7 +45,6 @@ services:
       # E.g. by running in terminal
       # export STADSWERKEN_OBJECTSTORE_PASSWORD="mypassword"
       STADSWERKEN_OBJECTSTORE_PASSWORD:
-      DRUKTERADAR_PASSWORD:
     volumes:
       - data-volume:/data
       #- ~/data:/data

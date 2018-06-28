@@ -44,9 +44,6 @@ import configparser
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 
-# Load password for Drukteradar
-DRUKTERADAR_PASSWORD = os.environ['DRUKTERADAR_PASSWORD']
-
 # Set logger
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -331,7 +328,7 @@ def alp():
 
     # Get Alpha data
     alp_url = "https://drukteradar.amsterdam.nl/api/realtime/"
-    alp = requests.get(alp_url, auth=('pipo', DRUKTERADAR_PASSWORD)).json()
+    alp = requests.get(alp_url, auth=('pipo', 'pluto')).json()
     alp = alp['results']
 
     # Compute mean Alpha realtime value
@@ -429,7 +426,8 @@ def main():
     except Exception:
         diff = None
         pass
-
+    import q
+    q.d()
     # write to db
     conn = get_conn()
     scraped_at = datetime.datetime.now()
