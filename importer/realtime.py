@@ -425,8 +425,7 @@ def main():
     except Exception:
         diff = None
         pass
-    import q
-    q.d()
+
     # write to db
     conn = get_conn()
     scraped_at = datetime.datetime.now()
