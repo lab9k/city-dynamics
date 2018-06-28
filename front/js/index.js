@@ -162,7 +162,9 @@ $(document).ready(function(){
 
 		getRealtime();
 
-		initGauge();
+		// initGauge();
+
+		initRealtimeGraph()
 
 		initLineGraph();
 
@@ -519,7 +521,7 @@ function getHotspots()
 
 			updateLineGraph(hotspot_id,'hotspot');
 
-			updateGauge(hotspot_id,'hotspot');
+			// updateGauge(hotspot_id,'hotspot');
 
 			clearInterval(popup_interval);
 
@@ -1264,7 +1266,7 @@ function resetMap() {
 	map.closePopup();
 	$('.graphbar_title h2').text(amsterdam.hotspot);
 	updateLineGraph('ams','ams');
-	updateGauge('ams','ams');
+	// updateGauge('ams','ams');
 }
 
 function stopAnimation()
@@ -1494,7 +1496,7 @@ function setLayerActive(layer)
 
 	updateLineGraph(vollcode,'district');
 
-	updateGauge(vollcode,'district');
+	// updateGauge(vollcode,'district');
 
 
 	// set name
@@ -1582,6 +1584,93 @@ function updateLineGraph(key,type)
 
 
 	areaGraph[0].update(data,realtime);
+}
+
+// ######### Realtime graph functions ###############
+
+function initRealtimeGraph()
+{
+
+	var data = new Array;
+	data[0] = {time: "15:00", dindex: 42};
+	var rindex = data[0].dindex;
+	var rtime = data[0].time;
+
+	$('.realtime_text .time').html(rtime);
+
+	var svg = d3.select(".svg_realtime"),
+		margin = {top: 20, right: 0, bottom: 20, left: 0},
+		width = +svg.attr("width") - margin.left - margin.right,
+		height = +svg.attr("height") - margin.top - margin.bottom;
+
+	var x = d3.scaleBand().rangeRound([0, width]),
+		y = d3.scaleLinear().rangeRound([height, 0]);
+
+	var g = svg.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	x.domain(data.map(function (d) {
+		return d.time;
+	}));
+	y.domain([0, 100]);
+
+	// g.append("g")
+	// 	.attr("class", "axis")
+	// 	.attr("transform", "translate(0," + height + ")")
+	// 	.call(d3.axisBottom(x))
+	// 	.selectAll("text")
+	// 	.style("text-anchor", "end")
+	// 	.attr("dx", "5px")
+	// 	.attr("dy", ".15em");
+
+
+
+	// add background lines
+	var lineCount = 0;
+	do {
+
+		g.append("line")
+			.attr("class", "realtimeline")
+			.attr("x1", 0)
+			.attr("x2", width)
+			.attr("y1",lineCount*(height/10))
+			.attr("y2",lineCount*(height/10))
+			.attr("style",'stroke:rgba(150,150,150,0.8);stroke-width:1');
+		lineCount++
+	}
+	while(lineCount<=10)
+
+
+	g.selectAll(".bar")
+		.data(data)
+		.enter().append("rect")
+		.attr("class", "bar")
+		.attr("fill",function (d) {
+			return getColor(d.dindex/100);
+		})
+		.attr("x", function (d) {
+			return x(d.time);
+		})
+		.attr("y", function (d) {
+			return y(d.dindex);
+		})
+		.attr("width", width)
+		.attr("rx", 3)
+		.attr("height", function (d) {
+			return height - y(d.dindex);
+		});
+
+	var text_y = height - (rindex * height / 100) + 20;
+	if(text_y>156) {text_y = 156;}
+	var text_x = 17;
+	if(rindex==100){text_x = 12}
+	if(rindex<10){text_x = 20}
+
+	g.append("text")
+		.attr("transform", 'translate('+ text_x +','+ text_y +')')
+		.attr("fill", '#ffffff')
+		.attr("class", "realtime_graph_text")
+		.text(rindex);
 }
 
 // ######### gauge functions ###############

@@ -110,7 +110,7 @@
 				.attr("clip-path", "url(#graphclip)");
 
 			graph.defs = graph.svg.append("defs");
-			graph.clipPath = graph.svg.append("clipPath").attr("id", "graphclip");
+			graph.clipPath = graph.defs.append("clipPath").attr("id", "graphclip");
 
 			graph.clipPath.append("path")
 				.datum(graph.data)
