@@ -85,7 +85,7 @@ var weatherJsonUrl = 'https://weerlive.nl/api/json-data-10min.php?key=demo&locat
 // districtJsonUrl = 'data/buurtcombinaties.json';
 // districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
 // realtimeUrl = 'data/realtime.json';
-//
+
 // trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 // parkJsonUrl = 'data/parkjson.json';
 // fietsJsonUrl = 'data/ovfiets.json';
