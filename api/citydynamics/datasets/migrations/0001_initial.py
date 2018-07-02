@@ -105,15 +105,15 @@ class Migration(migrations.Migration):
                 'db_table': 'google_raw_locations_realtime_current_acceptance',
             },
         ),
-        # migrations.CreateModel(
-        #     name='RealtimeHistorian',
-        #     fields=[
-        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-        #         ('place_id', models.TextField(db_index=True)),
-        #         ('scraped_at', models.DateTimeField(auto_now_add=True)),
-        #         ('name', models.TextField(null=True)),
-        #         ('source', models.CharField(max_length=40)),
-        #         ('data', django.contrib.postgres.fields.jsonb.JSONField()),
-        #     ],
-        # ),
+        migrations.CreateModel(
+            name='RealtimeHistorian',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('place_id', models.TextField(db_index=True)),
+                ('scraped_at', models.DateTimeField(auto_now_add=True)),
+                ('name', models.TextField(null=True)),
+                ('source', models.CharField(max_length=40)),
+                ('data', django.contrib.postgres.fields.jsonb.JSONField()),
+            ],
+        ),
     ]
