@@ -9,7 +9,7 @@ a single 'Drukte Index' value.
 main.py is dependent on process.py, which streamlines the datasource import
 and transformation process.
 
-main.py is called in abalyzer/run_index.sh.
+main.py is called in analyzer/run_index.sh.
 """
 
 ##############################################################################
