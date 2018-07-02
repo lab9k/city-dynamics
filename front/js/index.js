@@ -108,7 +108,7 @@ $(document).ready(function(){
 	setTag('main');
 
 	// set full screen
-	toggleFullScreen();
+	//toggleFullScreen();
 
 	// check device resolution
 	mobile = ($( document ).width()<=750);
