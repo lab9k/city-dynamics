@@ -76,11 +76,12 @@ div {box-sizing: border-box;}
 
 
 /*info*/
-.info {display:none;position :absolute;left :50%;bottom :40px; z-index :500;width :600px;margin-left :-300px;min-height :40px;max-height :180px;overflow-y :auto;background : rgba(102, 102, 102, 0.8);color :#fff;border-radius :5px;border :0px solid #fff;box-shadow : 0 3px 14px rgba(0,0,0,0.4);padding :10px;font-size:14px;line-height:24px;}
-.info h2 {color:#fff;margin:0 0 10px 0;line-height:24px;}
-.info .info_content {margin:0 30px;}
+.info {display:none;position :absolute;left :50%;bottom :40px; z-index :500;width :600px;margin-left :-300px;min-height :40px;max-height :180px;overflow-y :auto;background : rgba(255, 255, 255, 0.8);color :#fff;border-radius :5px;border :1px solid #bbb;box-shadow : 0 3px 14px rgba(0,0,0,0.4);padding :10px;font-size:14px;line-height:24px;}
+.info h2 {color:#fff;margin:0 0 10px 0;line-height:24px; text-shadow: 1px 1px #ddd;color: #35629b;}
+.info .info_content {margin:0 30px; text-shadow: 1px 1px #ddd;color: #555;}
 .info .info_content a{color:#50E6DB;}
-.info .info_icon {position :absolute;left :10px;top :10px;}
+.info .info_icon {position :absolute;left :10px;top :10px; text-shadow: 1px 1px #ddd;color: #35629b;}
+.info .close{color:red;}
 
 /*mapswitch*/
 .mapswitch {position :absolute;left :10px;bottom :10px; z-index :500;background-color: #666666;color :#fff;border-radius :5px;border :0px solid #fff;padding :4px;}
@@ -221,7 +222,7 @@ div {box-sizing: border-box;}
 .graphbar_topleft {float:left;width:400px;}
 .graphbar_left {float:left;height:200px;width:400px;padding:10px;}
 .graphbar_center {float:left;height:200px;width:calc(100% - 800px);}
-.graphbar_right {float:left;height:200px;width:400px;padding:10px;text-align:center;}
+.graphbar_right {float:left;height:200px;width:400px;text-align:center;}
 .graphbar_topright {float:left;width:400px;padding-right:40px;}
 .graphbar_title {float:left;width:calc(100% - 800px);}
 .graphbar_title h2 {float:left;line-height:40px;text-indent:10px;color:#fff;font-size:18px;margin:0;float:left;font-weight:normal; text-shadow: 1px 1px #666;}
@@ -236,6 +237,7 @@ div {box-sizing: border-box;}
 }
 .indexgraph .axis text {font-size:12px;fill:#fff;}
 .indexgraph .line-group,.graph-play,.graph-pause {cursor:pointer;}
+/*.graph_gradient {filter:url(#gradient);}*/
 
 /*pop up menu*/
 /*.dropup_right {position: relative;display: inline-block;float:right;margin-right:30px;margin-top:-16px;}*/
@@ -273,6 +275,11 @@ div {box-sizing: border-box;}
 .gauge_c .line2 {top:68px;left:188px;height:92px;display:none;}
 .arc-background2, .arc-value2 {display:none}
 .gauge_top .value,.gauge_c .value2,  .gauge_c .gauge_bottom_text {display:none;}
+
+/*realtime*/
+.realtime_text {float:left;text-align:right;margin:40px 12px 0 90px;}
+.svg_realtime {float:left;}
+.realtime_graph_text {filter: url(#shadow);}
 
 /*legend*/
 .weather{float:left;margin:20px 0 0 50px;text-align:center;}
@@ -354,9 +361,9 @@ div {box-sizing: border-box;}
 	.livetext3 div {line-height: 9px;	font-size: 9px;	}
 
 	.info {display:none;margin:0 10px;left:inherit;width:calc(100% - 20px);top:5px;bottom:inherit;max-height:inherit;}
-	.info .info_icon, .info .close{font-size:16px;line-height:16px;}
-	.info h2{font-size:16px;line-height:16px;}
-	.info .info_content{margin:0 24px;line-height:16px;}
+	.info .info_icon, .info .close{font-size:16px;line-height:16px; text-shadow: 1px 1px #333;}
+	.info h2{font-size:16px;line-height:16px; text-shadow: 1px 1px #333;}
+	.info .info_content{margin:0 24px;line-height:16px; text-shadow: 1px 1px #333;color:#777620;}
 	/*.search {top:5px;left:5px;width:50px;height:50px;background-color: #666666;border-radius:5px;padding:5px;}*/
 	/*.search.open {width:calc(100% - 80px);}*/
 	.search {width:50px;height:50px;padding:5px;}

@@ -106,11 +106,12 @@
 				.attr("y", "0")
 				.attr("width", "100%")
 				.attr("height", graph.height)
+				.attr("class", "graph_gradient")
 				.attr("fill", "url(#gradient)")
 				.attr("clip-path", "url(#graphclip)");
 
 			graph.defs = graph.svg.append("defs");
-			graph.clipPath = graph.svg.append("clipPath").attr("id", "graphclip");
+			graph.clipPath = graph.defs.append("clipPath").attr("id", "graphclip");
 
 			graph.clipPath.append("path")
 				.datum(graph.data)
