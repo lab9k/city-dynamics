@@ -237,7 +237,7 @@ div {box-sizing: border-box;}
 }
 .indexgraph .axis text {font-size:12px;fill:#fff;}
 .indexgraph .line-group,.graph-play,.graph-pause {cursor:pointer;}
-.graph_gradient {filter:url(#gradient);}
+/*.graph_gradient {filter:url(#gradient);}*/
 
 /*pop up menu*/
 /*.dropup_right {position: relative;display: inline-block;float:right;margin-right:30px;margin-top:-16px;}*/
