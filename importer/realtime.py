@@ -326,7 +326,7 @@ def knmi():
 def alp():
 
     # Get Alpha data
-    alp_url = "https://drukteradar.amsterdam.nl/api/realtime/"
+    alp_url = "https://drukteradar.amsterdam.nl/api/realtime_quantillion/"
     alp = requests.get(alp_url, auth=('pipo', 'pluto')).json()
     alp = alp['results']
 
