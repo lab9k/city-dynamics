@@ -89,8 +89,8 @@ api_config = {
     'password': os.getenv('QUANTILLION_PASSWORD'),
     'hosts': {
         'production': 'http://apis.quantillion.io',
-        # 'acceptance': 'http://apis.quantillion.io',
-        'acceptance': 'http://apis.development.quantillion.io',
+        'acceptance': 'http://apis.quantillion.io',
+        # 'acceptance': 'http://apis.development.quantillion.io',
     },
     'port': 3001,
     'username': 'gemeenteAmsterdam',
