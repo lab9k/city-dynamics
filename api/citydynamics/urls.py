@@ -26,6 +26,7 @@ from citydynamics.datasets.views import DrukteindexHotspotViewset
 from citydynamics.datasets.views import RealtimeGoogleViewset
 from citydynamics.datasets.views import DrukteindexBuurtcombinatieViewset
 from citydynamics.datasets.views import HotspotViewset
+from citydynamics.datasets.views import RealtimeAnalyzerViewset
 from citydynamics.datasets.views import HistorianViewset
 from citydynamics.datasets.views import api_proxy
 
@@ -95,6 +96,7 @@ router.register(
 router.register('hotspots', HotspotViewset, 'hotspots')
 router.register('hotspots_drukteindex', DrukteindexHotspotViewset, 'hotspots_drukteindex')   # noqa
 router.register('realtime', RealtimeGoogleViewset, 'realtime')
+router.register('realtime', RealtimeAnalyzerViewset, 'realtime')
 router.register('historian', HistorianViewset, 'historian')
 
 router.add_api_view(
