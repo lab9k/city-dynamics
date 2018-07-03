@@ -12,6 +12,7 @@ services:
       - ./backup-google-current.sh:/backup-google-current.sh
       - ./backup-db-google.sh:/backup-db-google.sh
       - ./backup-analyzer.sh:/backup-analyzer.sh
+      - ./backup-own-realtime.sh:/backup-own-realtime.sh
       - data-volume:/data
 
   importer:
