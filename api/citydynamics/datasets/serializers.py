@@ -6,6 +6,8 @@ from citydynamics.datasets.models import BuurtCombinatieDrukteindex
 from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
 from citydynamics.datasets.models import RealtimeGoogle
 from citydynamics.datasets.models import RealtimeHistorian
+from citydynamics.datasets.models import RealtimeAnalyzer
+
 import datetime
 
 
@@ -147,3 +149,6 @@ class HistorianSerializer(ModelSerializer):
             'place_id',
             'data',
         )
+
+class RealtimeAnalyzerSerializer(ModelSerializer):
+    model = RealtimeAnalyzer
