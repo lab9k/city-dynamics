@@ -219,10 +219,10 @@ def ndw():
 
 def pr():
 
-    pr_url = "https://drukteradar.amsterdam.nl/api/apiproxy?api=parking_garages&format=json"
+    pr_url = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json"
 
     # Load json
-    pr = requests.get(pr_url, auth=('pipo', 'pluto')).json()
+    pr = requests.get(pr_url).json()
     pr = pr['features']
 
     # Filter on 'State' = 'ok'
