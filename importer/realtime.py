@@ -330,7 +330,6 @@ def alp():
     alp = requests.get(alp_url, auth=('pipo', 'pluto')).json()
     alp = alp['results']
 
-
     # Compute mean Alpha realtime value
     alp_sum = 0
     alp_count = 0
