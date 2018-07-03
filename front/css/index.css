@@ -25,12 +25,12 @@ div {box-sizing: border-box;}
 .search,.logo,.dlogo,.m_more,.m_menu,.beta,.controls,.themas,.mapswitch,.info,.leftbox{cursor:default;}
 
 /*topbar*/
-.topbar{background:#666;height:76px;border-bottom:4px solid #a1a1a1;}
+.topbar{background:#666;height:76px;border-bottom:4px solid #a1a1a1;overflow:hidden;}
 .topbar_left,.topbar_center,.topbar_right {float:left;}
 .topbar_left {width:400px;}
 .topbar_left h2 {float:left;margin:0;line-height:70px;text-indent:20px;font-size:42px;cursor:pointer;}
 .topbar_left span {display:inline-block;color:red;font-size:16px;font-weight:bold;margin:0;line-height:20px;cursor:pointer;margin:20px 0 0 10px;}
-.topbar_center {width:calc(100% - 800px);}
+.topbar_center {width:calc(100% - 800px);overflow:hidden;}
 .topbar_center .search_top {float:right;position:relative;}
 /*.topbar_center i {position:absolute;top:20px;right:10px;color:#666;font-size:34px;}*/
 /*.topbar_center .loc_i {height :50px;line-height :50px;margin :10px 0px 10px 0 ;text-indent :10px;font-size :18px;color :#666;border-radius:5px;width:400px;border:0;}*/
