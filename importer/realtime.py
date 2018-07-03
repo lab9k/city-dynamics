@@ -330,6 +330,7 @@ def alp():
     alp = requests.get(alp_url, auth=('pipo', 'pluto')).json()
     alp = alp['results']
 
+
     # Compute mean Alpha realtime value
     alp_sum = 0
     alp_count = 0
@@ -423,7 +424,7 @@ def main():
         diff = combined_crowdedness_score - alp_mean
         log.info(f"Difference (own - alp):  {diff}")
     except Exception:
-        diff = None
+        log.info("No alpha value present. Leaving the difference as 0.")
         pass
 
     # write to db
