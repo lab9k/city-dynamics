@@ -219,10 +219,10 @@ def ndw():
 
 def pr():
 
-    pr_url = "https://drukteradar.amsterdam.nl/api/apiproxy?api=parking_garages&format=json"
+    pr_url = "http://opd.it-t.nl/data/amsterdam/ParkingLocation.json"
 
     # Load json
-    pr = requests.get(pr_url, auth=('pipo', 'pluto')).json()
+    pr = requests.get(pr_url).json()
     pr = pr['features']
 
     # Filter on 'State' = 'ok'
@@ -326,7 +326,7 @@ def knmi():
 def alp():
 
     # Get Alpha data
-    alp_url = "https://drukteradar.amsterdam.nl/api/realtime/"
+    alp_url = "https://drukteradar.amsterdam.nl/api/realtime_quantillion/"
     alp = requests.get(alp_url, auth=('pipo', 'pluto')).json()
     alp = alp['results']
 
@@ -423,7 +423,7 @@ def main():
         diff = combined_crowdedness_score - alp_mean
         log.info(f"Difference (own - alp):  {diff}")
     except Exception:
-        diff = None
+        log.info("No alpha value present. Leaving the difference as 0.")
         pass
 
     # write to db

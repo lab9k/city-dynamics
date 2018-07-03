@@ -168,12 +168,21 @@ class HistorianViewset(rest.DatapuntViewSet):
     pagination_class = LimitPagination
 
 
+class RealtimeAnalyzerViewset(rest.DatapuntViewSet):
+
+    serializer_class = serializers.RealtimeAnalyzerSerializer
+    serializer_detail_class = serializers.RealtimeAnalyzerSerializer
+
+    queryset = models.RealtimeAnalyzer.objects.order_by('scraped_at')
+
+
 PROXY_URLS = {
     # 'events': 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req1.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today',  # noqa
     'events': 'http://api.simfuny.com/app/api/2_0/events?callback=__ng_jsonp__.__req8.finished&offset=0&limit=25&sort=popular&search=&types[]=unlabeled&dates[]=today&startDate=&endDate=&hidelongterm=1',  # noqa
     'parking_garages': 'http://opd.it-t.nl/data/amsterdam/ParkingLocation.json',    # noqa
     'traveltime': 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson',  # noqa
     'ovfiets': 'http://fiets.openov.nl/locaties.json',  # noqa
+    'realtime': 'drukteradar.amsterdam.nl/api/?api=realtime',  # For saving own realtime values historically.
 }
 
 PARSING_DATA = {
@@ -181,6 +190,7 @@ PARSING_DATA = {
     'traveltime': 'geojson',
     'events': 'cleanup',
     'ovfiets': 'geojson',
+    'realtime': 'json',  # For saving own realtime values historically.
 }
 
 

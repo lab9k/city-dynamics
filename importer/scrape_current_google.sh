@@ -4,10 +4,6 @@ set -x
 set -u
 set -e
 
-# Run script to compute city-wide realtime value.
-python realtime.py
-
-
 # Quantillion scraping
 cd scrape_api
 
