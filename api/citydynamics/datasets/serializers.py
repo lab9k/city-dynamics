@@ -150,5 +150,6 @@ class HistorianSerializer(ModelSerializer):
             'data',
         )
 
+
 class RealtimeAnalyzerSerializer(ModelSerializer):
     model = RealtimeAnalyzer
