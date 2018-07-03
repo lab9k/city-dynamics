@@ -152,4 +152,7 @@ class HistorianSerializer(ModelSerializer):
 
 
 class RealtimeAnalyzerSerializer(ModelSerializer):
-    model = RealtimeAnalyzer
+
+    class Meta:
+        model = RealtimeAnalyzer
+        fields = '__all__'
