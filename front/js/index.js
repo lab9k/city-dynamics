@@ -17,6 +17,7 @@ var districtsJson;
 var hotspotsIndexJson;
 var hotspotsJson;
 var realtimeJson;
+var realtimeBarJson;
 
 // global arrays
 var control_array = ['search','logo','dlogo','m_more','m_menu','beta','controls','themas','mapswitch','info','leftbox']
@@ -69,7 +70,8 @@ var hotspotsJsonUrl = base_api + 'hotspots/?format=json';
 var hotspotsIndexJsonUrl = base_api + 'hotspots_drukteindex/?format=json';
 var districtJsonUrl = base_api + 'buurtcombinatie/?format=json';
 var districtIndexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
-var realtimeUrl = base_api + 'realtime/?format=json';
+var realtimeUrl = base_api + 'realtime_quantilion/?format=json';
+var realtimeBarUrl = base_api + 'realtime/?format=json';
 
 
 // theme api
@@ -80,16 +82,17 @@ var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 var weatherJsonUrl = 'https://weerlive.nl/api/json-data-10min.php?key=demo&locatie=Amsterdam';
 
 // temp local api
-hotspotsJsonUrl = 'data/hotspots.json';
-hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
-districtJsonUrl = 'data/buurtcombinaties.json';
-districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
-realtimeUrl = 'data/realtime.json';
-
-trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-parkJsonUrl = 'data/parkjson.json';
-fietsJsonUrl = 'data/ovfiets.json';
-eventsJsonUrl = 'data/events.js';
+// hotspotsJsonUrl = 'data/hotspots.json';
+// hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
+// districtJsonUrl = 'data/buurtcombinaties.json';
+// districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
+// realtimeUrl = 'data/realtime.json';
+// realtimeBarUrl = 'data/realtime_bar.json';
+//
+// trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+// parkJsonUrl = 'data/parkjson.json';
+// fietsJsonUrl = 'data/ovfiets.json';
+// eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
@@ -131,14 +134,15 @@ $(document).ready(function(){
 	}
 
 	// first promise chain
-	$.when($.getJSON(districtIndexJsonUrl),$.getJSON(districtJsonUrl),$.getJSON(hotspotsJsonUrl), $.getJSON(hotspotsIndexJsonUrl),$.getJSON(realtimeUrl)).done(
-		function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
+	$.when($.getJSON(districtIndexJsonUrl),$.getJSON(districtJsonUrl),$.getJSON(hotspotsJsonUrl), $.getJSON(hotspotsIndexJsonUrl),$.getJSON(realtimeUrl),$.getJSON(realtimeBarUrl)).done(
+		function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t,realtimeBarJson_t){
 
 		districtsIndexJson = districtsIndexJson_t[0];
 		districtsJson = districtsJson_t[0];
 		hotspotsIndexJson = hotspotsIndexJson_t[0];
 		hotspotsJson = hotspotsJson_t[0];
 		realtimeJson = realtimeJson_t[0];
+		realtimeBarJson = realtimeBarJson_t[0];
 
 		if(debug) {
 			console.log('Districts index json:');
@@ -151,6 +155,8 @@ $(document).ready(function(){
 			console.log(hotspotsJson);
 			console.log('Realtime json:');
 			console.log(realtimeJson);
+			console.log('Realtime bar json:');
+			console.log(realtimeBarJson);
 		}
 
 		getDistrictIndex();
@@ -186,7 +192,11 @@ $(document).ready(function(){
 		setTag('traffic');
 
 		// custom
-		$('.event_today').html(getDay());
+		var today_day =  getDay();
+		if(today_day<10){
+			$('.event_today').css('left','20px')
+		}
+		$('.event_today').html(today_day);
 
 	}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
 		console.error('One or more apis failed.');
@@ -1618,9 +1628,10 @@ function updateLineGraph(key,type)
 
 function initRealtimeGraph()
 {
-
+	var dindex = Math.round(realtimeBarJson.results[0].combined_crowdedness_score * 100);
+	var time = getHours();
 	var data = new Array;
-	data[0] = {time: "15:00", dindex: 42};
+	data[0] = {time: time, dindex: dindex};
 	var rindex = data[0].dindex;
 	var rtime = data[0].time;
 
