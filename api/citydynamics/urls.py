@@ -95,7 +95,7 @@ router.register(
     DrukteindexBuurtcombinatieViewset, 'buurtcombinatie_drukteindex')
 router.register('hotspots', HotspotViewset, 'hotspots')
 router.register('hotspots_drukteindex', DrukteindexHotspotViewset, 'hotspots_drukteindex')   # noqa
-router.register('realtime', RealtimeGoogleViewset, 'realtime')
+router.register('realtime_quantillion', RealtimeGoogleViewset, 'realtime_quantillion')
 router.register('realtime', RealtimeAnalyzerViewset, 'realtime')
 router.register('historian', HistorianViewset, 'historian')
 
