@@ -41,6 +41,7 @@ services:
       - data-volume:/data
       - ./backups:/backups
       - ./backup-google-current.sh:/backup-google-current.sh
+      - ./backup-own-realtime.sh:/backup-own-realtime.sh
 
   api:
     image: build.app.amsterdam.nl:5000/stadswerken/citydynamics:${ENVIRONMENT}
