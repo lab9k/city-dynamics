@@ -70,7 +70,7 @@ var hotspotsJsonUrl = base_api + 'hotspots/?format=json';
 var hotspotsIndexJsonUrl = base_api + 'hotspots_drukteindex/?format=json';
 var districtJsonUrl = base_api + 'buurtcombinatie/?format=json';
 var districtIndexJsonUrl = base_api + 'buurtcombinatie_drukteindex/?format=json';
-var realtimeUrl = base_api + 'realtime_quantilion/?format=json';
+var realtimeUrl = base_api + 'realtime_quantillion/?format=json';
 var realtimeBarUrl = base_api + 'realtime/?format=json';
 
 
