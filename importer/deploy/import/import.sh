@@ -77,6 +77,7 @@ dc run --rm analyzer
 dc exec -T database ./backup-analyzer.sh citydynamics
 
 dc run --rm importer python -m objectstore.databasedumps /backups/analyzer.dump analyzer_dump --upload-db
+dc run --rm importer python -m objectstore.databasedumps /backups/own_realtime.dump own_realtime_dump --upload-db 
 
 # all ready. cleanup.
 dc stop
