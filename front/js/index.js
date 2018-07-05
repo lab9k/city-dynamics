@@ -198,6 +198,8 @@ $(document).ready(function(){
 		}
 		$('.event_today').html(today_day);
 
+		$('.graphbar_title span').html(getCurrentDateOnly());
+
 	}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
 		console.error('One or more apis failed.');
 	});
@@ -260,8 +262,6 @@ function initMap()
 		// var map_center = [52.36, 4.95];
 		// var zoom = 12;
 	}
-
-	$('.graphbar_title span').html(getCurrentDateOnly());
 
 	// wgs map
 	map = L.map('mapid', {zoomControl: false}).setView(map_center, zoom);
@@ -881,8 +881,24 @@ function setLocationMarker(address,label)
 	});
 }
 
+function togglePlayButton()
+{
+	if($('.play_icon').html()=='play_arrow')
+	{
+		$('.play_icon').html('pause');
+	}
+	else
+	{
+		$('.play_icon').html('play_arrow');
+	}
+}
+
 function initEventMapping()
 {
+
+	$('.play_icon').on('click',function () {
+		areaGraph[0].stopResumeCount();
+	});
 
 	$('.detail_top i').on('click',function () {
 		closeDetails();
@@ -1591,11 +1607,13 @@ function updateLineGraph(key,type)
 	if(type=='ams')
 	{
 		var point_array = amsterdam.druktecijfers;
+		realtime = ams_realtime;
 	}
 	else if(type == 'hotspot')
 	{
 		var point_array = hotspots_array[key].druktecijfers;
-		realtime = realtime_array[key];
+		// realtime = realtime_array[key];
+		realtime = 0;
 	}
 	else
 	{
@@ -1629,11 +1647,13 @@ function updateLineGraph(key,type)
 function initRealtimeGraph()
 {
 	var dindex = Math.round(realtimeBarJson.results[0].combined_crowdedness_score * 100);
-	var time = getHours();
+	var time = getTime();
 	var data = new Array;
 	data[0] = {time: time, dindex: dindex};
 	var rindex = data[0].dindex;
 	var rtime = data[0].time;
+
+	ams_realtime = rindex/100;
 
 	$('.realtime_text .time').html(rtime);
 
@@ -1907,6 +1927,20 @@ function getHourDigit()
 	var hh = today.getHours();
 
 	return hh;
+}
+
+function getTime()
+{
+	var today = new Date();
+	var hh = today.getHours();
+	var mm =today.getMinutes();
+
+	if(mm<10)
+	{
+		mm = '0'+mm;
+	}
+
+	return hh+':'+mm;
 }
 
 function getTimeInt()
