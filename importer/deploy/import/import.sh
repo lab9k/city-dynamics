@@ -75,6 +75,7 @@ dc run --rm analyzer
 # Create a local database backup.
 # dc exec -T database backup-db.sh citydynamics
 dc exec -T database ./backup-analyzer.sh citydynamics
+dc exec -T database ./backup-own-realtime.sh citydynamics
 
 dc run --rm importer python -m objectstore.databasedumps /backups/analyzer.dump analyzer_dump --upload-db
 dc run --rm importer python -m objectstore.databasedumps /backups/own_realtime.dump own_realtime_dump --upload-db 
