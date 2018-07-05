@@ -226,8 +226,9 @@ div {box-sizing: border-box;}
 .graphbar_topright {float:left;width:400px;padding-right:40px;}
 .graphbar_title {float:left;width:calc(100% - 800px);}
 .graphbar_title h2 {float:left;line-height:40px;text-indent:10px;color:#fff;font-size:18px;margin:0;float:left;font-weight:normal; text-shadow: 1px 1px #666;}
-.graphbar_title span {display:block;float:right;line-height:40px;margin-right:10px; text-shadow: 1px 1px #666;}
-.graphbar_title .reset_icon {display:block;float:left;line-height:40px;margin-left:10px;cursor:pointer; text-shadow: 1px 1px #666;}
+.graphbar_title span {display:block;float:left;margin-left:10px;line-height:40px;margin-right:10px; text-shadow: 1px 1px #666;color:#eee;font-style: italic;}
+.graphbar_title .play_icon {display:block;float:right;line-height:40px;margin-left:10px;cursor:pointer; text-shadow: 1px 1px #666;font-size:30px;}
+.graphbar_title .reset_icon {display:block;float:right;line-height:40px;margin-left:10px;cursor:pointer; text-shadow: 1px 1px #666;}
 .graphbar_title .info_icon {display:block;float:right;line-height:40px;margin-right:10px;cursor:pointer; text-shadow: 1px 1px #666;}
 .graphbar_graph {float:left;width:100%;height:200px;}
 
@@ -237,6 +238,7 @@ div {box-sizing: border-box;}
 }
 .indexgraph .axis text {font-size:12px;fill:#fff;}
 .indexgraph .line-group,.graph-play,.graph-pause {cursor:pointer;}
+.indexgraph .line-group-current {display:none;}
 /*.graph_gradient {filter:url(#gradient);}*/
 
 /*pop up menu*/
@@ -374,7 +376,7 @@ div {box-sizing: border-box;}
 	.m_more {right:5px;top:2px;display:block;position:absolute;width:30px;height :30px;}
 	.m_more a {display:block;width:30px;height :30px;line-height: 30px;text-align:center;color:#fff;}
 	.m_more a i{line-height: 30px;}
-	.m_menu{display:none;position:absolute;right:10px;top:5px;width:calc(100% - 140px);min-height:50px;z-index:500;background: #666666;border-radius :5px;}
+	.m_menu{display:none;position:absolute;right:10px;top:5px;min-width:200px;min-height:50px;max-width:calc(100% - 20px);max-height:calc(100% - 10px);overflow-y:auto;z-index:500;background: #666666;border-radius :5px;}
 	.m_menu ul{padding:0;margin:5px;}
 	.m_menu li{line-height:40px;list-style: none;text-indent:10px;margin: 0 2px;}
 	.m_menu li u{color:#fff;font-weight:bold;}
@@ -427,9 +429,10 @@ div {box-sizing: border-box;}
 	.graphbar_title {font-size:14px;line-height:30px;height:30px;width:100%;}
 	.graphbar_title h2 {line-height:30px;font-size:16px;}
 	.graphbar_title span {line-height:30px;font-size:16px;}
-	.graphbar_title .reset_icon {line-height:30px;margin-left:5px;font-size:16px;}
+	.graphbar_title .play_icon {line-height:30px;margin-left:5px;font-size:24px;}
+	.graphbar_title .reset_icon {line-height:30px;margin-left:5px;font-size:20px;}
 	.graphbar_title .info_icon  {line-height:30px;margin-left:5px;font-size:16px;}
-	.graphbar_graph {float:left;width:100%;height:90px;}
+	.graphbar_graph {float:left;width:100%;height:116px;}
 	.indexgraph .axis text {font-size:8px;}
 
 }

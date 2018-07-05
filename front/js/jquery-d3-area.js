@@ -18,7 +18,7 @@
 			}
 			else
 			{
-				graph.margin = {top: 10, right: 0, bottom: 10, left: 0};
+				 graph.margin.top =  10;
 			}
 			graph.height = graph.container.height() - graph.margin.top - graph.margin.bottom;
 
@@ -191,26 +191,26 @@
 				.attr("transform", 'translate(' + 0 + ',0)')
 				.attr("class", "control-group");
 
-			graph.pause = graph.controlGroup.append("image")
-				.on('click', function(){
-					graph.stop();
-				})
-				.attr("xlink:href","images/pause.svg")
-				.attr("width", 18)
-				.attr("height", 18)
-				.attr("x", graph.width - 30 )
-				.attr("class", 'graph-pause');
-
-			graph.play = graph.controlGroup.append("image")
-				.on('click', function(){
-					graph.startCount();
-				})
-				.attr("xlink:href","images/play.svg")
-				.attr("width", 18)
-				.attr("height", 18)
-				.attr("x", graph.width - 30 )
-				.attr("style", 'display:none;')
-				.attr("class", 'graph-play');
+			// graph.pause = graph.controlGroup.append("image")
+			// 	.on('click', function(){
+			// 		graph.stop();
+			// 	})
+			// 	.attr("xlink:href","images/pause.svg")
+			// 	.attr("width", 18)
+			// 	.attr("height", 18)
+			// 	.attr("x", graph.width - 30 )
+			// 	.attr("class", 'graph-pause');
+			//
+			// graph.play = graph.controlGroup.append("image")
+			// 	.on('click', function(){
+			// 		graph.startCount();
+			// 	})
+			// 	.attr("xlink:href","images/play.svg")
+			// 	.attr("width", 18)
+			// 	.attr("height", 18)
+			// 	.attr("x", graph.width - 30 )
+			// 	.attr("style", 'display:none;')
+			// 	.attr("class", 'graph-play');
 
 			function dragstarted() {
 				graph.stop();
@@ -243,7 +243,7 @@
 			graph.unsetRealtime = function() {
 				graph.realtime_bar.attr("height",0);
 				graph.realtime_bar_top.remove();
-				// graph.realtime_bar_text.remove();
+				graph.realtime_bar_text.remove();
 			}
 
 			graph.setRealtime = function(){
@@ -272,16 +272,16 @@
 					.attr("fill", getColor(graph.realtime))
 					.attr("class", "realtime_bar_top");
 
-				// graph.realtime_bar_text = graph.svg.append("text")
-				// 	.attr("transform", 'translate(' + (graph.currentPoint-10) + ','+ (bar_y  - 4)+')')
-				// 	.attr("fill", "#ffffff")
-				// 	.attr("class", "realtime_bar_text")
-				// 	.text(Math.round(graph.realtime*100));
+				graph.realtime_bar_text = graph.svg.append("text")
+					.attr("transform", 'translate(' + (graph.currentPoint-10) + ','+ (bar_y  - 4)+')')
+					.attr("fill", "#ffffff")
+					.attr("class", "realtime_bar_text")
+					.text(Math.round(graph.realtime*100));
 			}
 
 			//add realtime
 			graph.realtime_bar = graph.svg.append("rect");
-			graph.realtime = 0;
+			// graph.realtime = 0;
 			if(graph.realtime>0)
 			{
 				graph.setRealtime();
@@ -315,8 +315,8 @@
 					});
 
 
-				// graph.unsetRealtime();
-				realtime = 0;
+				graph.unsetRealtime();
+				// realtime = 0;
 				if(realtime>0)
 				{
 					graph.realtime = realtime;
@@ -353,8 +353,9 @@
 			graph.startCount = function(){
 
 				repeat();
-				graph.play.attr('style', 'display:none;');
-				graph.pause.attr('style', 'display:inherit;');
+				// graph.play.attr('style', 'display:none;');
+				// graph.pause.attr('style', 'display:inherit;');
+				togglePlayButton();
 
 				function repeat() {
 
@@ -417,8 +418,8 @@
 				{
 					// stop hotspots animation
 					stopAnimation();
+					togglePlayButton();
 
-					console.log('pause');
 					if(debug) { console.log('pause') };
 					graph.lineGroup
 						.attr('state','pause')
@@ -437,8 +438,8 @@
 			}
 			graph.stop = function(){
 
-				graph.pause.attr('style', 'display:none;');
-				graph.play.attr('style', 'display:inherit;');
+				// graph.pause.attr('style', 'display:none;');
+				// graph.play.attr('style', 'display:inherit;');
 
 				// stop hotspots animation
 				stopAnimation();
@@ -448,6 +449,8 @@
 					.attr('state','pause')
 					.transition()
 					.duration( 0 );
+
+				togglePlayButton();
 			}
 
 			// update time indicator every x seconds
