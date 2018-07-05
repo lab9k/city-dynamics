@@ -365,7 +365,7 @@ def main():
     # Get crowdedness scores for all sources.
     success = False
     attempts = 0
-    while success is False and attempts < 100:
+    while success is False and attempts < 10:
         try:
             ov_fiets_crowdedness_score = ov_fiets()
             log.info(f"ov_fiets_crowdedness_score: {ov_fiets_crowdedness_score}")

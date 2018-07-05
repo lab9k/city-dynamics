@@ -182,7 +182,8 @@ PROXY_URLS = {
     'parking_garages': 'http://opd.it-t.nl/data/amsterdam/ParkingLocation.json',    # noqa
     'traveltime': 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson',  # noqa
     'ovfiets': 'http://fiets.openov.nl/locaties.json',  # noqa
-    'realtime': 'drukteradar.amsterdam.nl/api/?api=realtime',  # For saving own realtime values historically.
+    # For saving own realtime values historically.
+    'realtime': 'https://drukteradar.amsterdam.nl/api/realtime/',
 }
 
 PARSING_DATA = {
@@ -283,19 +284,23 @@ def api_proxy(request):
         log.info('From cache!')
         return Response(data)
 
-    response = requests.get(PROXY_URLS[api_source])
+    if api_source == 'realtime':
+        data = requests.get(PROXY_URLS[api_source], auth=('pipo', 'pluto')).json()
 
-    if response.status_code != 200:
-        log.error('EXTERNAL API FAILED: %s', PROXY_URLS[api_source])
-        return r500
-
-    if api_source in PARSING_DATA:
-        if PARSING_DATA[api_source] == 'geojson':
-            data = response.json()
-        if PARSING_DATA[api_source] == 'cleanup':
-            data = cleanup(response.text)
     else:
-        data = response.text
+        response = requests.get(PROXY_URLS[api_source])
+
+        if response.status_code != 200:
+            log.error('EXTERNAL API FAILED: %s', PROXY_URLS[api_source])
+            return r500
+
+        if api_source in PARSING_DATA:
+            if PARSING_DATA[api_source] == 'geojson':
+                data = response.json()
+            if PARSING_DATA[api_source] == 'cleanup':
+                data = cleanup(response.text)
+        else:
+            data = response.text
 
     if not data:
         log.error('EXT API DATA MISSING %s %s', api_source, data)
