@@ -19,17 +19,18 @@ export OBJECTSTORE_USER=druktemeter
 rm -rf ${DIR}/backups
 mkdir -p ${DIR}/backups
 
-
-# Start database container.
+# Make sure any possible old database instances (in this scope) are down.
 dc stop
 dc rm --force
-# dc down
+dc down
 dc pull
 dc build
+
+# Start database container.
 dc up -d database
 
-# Wait until database container runs, and download data from objectstore.
-dc run --rm importer bash /app/deploy/docker-wait.sh
+# Wait until database container is running.
+dc run --rm importer /app/deploy/docker-wait.sh
 
 # Download from objectstore (alleen bronnen met ENABLED=YES @ sources.conf)
 dc run --rm importer python /app/main.py /data --download
@@ -43,7 +44,7 @@ dc run --rm analyzer
 # Create a local database backup.
 dc exec -T database ./backup-analyzer.sh citydynamics
 
-# all ready. cleanup.
+# All done. Remove used containers.
 dc stop
 dc rm --force
 dc down
