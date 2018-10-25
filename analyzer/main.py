@@ -83,8 +83,10 @@ def linear_model(drukte):
     # Computations on vollcode level
 
     # Make sure the sum of the weights != 0
+    # linear_weigths_vollcode = {
+    #     'verblijvers_ha_2016': 10, 'gvb': 35, 'mean_occupancy': 10, 'alpha': 45}
     linear_weigths_vollcode = {
-        'verblijvers_ha_2016': 10, 'gvb': 35, 'mean_occupancy': 10, 'alpha': 45}
+        'verblijvers_ha_2016': 10, 'gvb': 35, 'mean_occupancy': 10, 'alpha': 0}
     lw_vollcode_normalize = sum(linear_weigths_vollcode.values())
 
     for col, weight in linear_weigths_vollcode.items():
