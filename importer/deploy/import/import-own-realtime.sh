@@ -30,7 +30,6 @@ dc run --rm api python manage.py migrate
 
 # Run realtime script to compute realtime value (and write to temporary database).
 dc run --rm importer python ./realtime.py
-#dc run --rm importer ./scrape_current_google.sh
 
 # Backup realtime data to temporary file, so it can be imported into the running database server (on ACC and PROD).
 dc exec -T database ./backup-own-realtime.sh
