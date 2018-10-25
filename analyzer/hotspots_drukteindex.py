@@ -48,8 +48,8 @@ def linear_model(drukte):
     drukte['drukte_index'] = 0
 
     # Make sure the sum of the weights != 0
-    #linear_weigths = {'verblijvers_ha_2016': 15, 'gvb': 15, 'alpha': 70}
-    #linear_weigths = {'verblijvers_ha_2016': 10, 'gvb': 10, 'mean_occupancy': 30, 'alpha': 20}
+    # linear_weigths = {'verblijvers_ha_2016': 15, 'gvb': 15, 'alpha': 70}
+    # linear_weigths = {'verblijvers_ha_2016': 10, 'gvb': 10, 'mean_occupancy': 30, 'alpha': 20}
     linear_weigths = {'verblijvers_ha_2016': 10, 'gvb': 10, 'mean_occupancy': 30, 'alpha': 0}
     lw_normalize = sum(linear_weigths.values())
 
