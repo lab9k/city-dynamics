@@ -67,8 +67,8 @@ def linear_model(drukte):
     drukte.normalize_acreage_city('gvb_stad')
     drukte.normalize_acreage('gvb_buurt')
 
-    # Normalize Alpha data to range 0-1 (not sure this is a good choice)
-    drukte.normalize('alpha')
+    # # Normalize Alpha data to range 0-1 (not sure this is a good choice)
+    # drukte.normalize('alpha')
 
     drukte.normalize('mean_occupancy')
 

@@ -405,7 +405,7 @@ class Process_drukte(Process):
         gvb_bc = Process_gvb_buurt(dbconfig)
         # alp_hist = Process_alpha_historical(dbconfig)
         # alp_live = Process_alpha_live(dbconfig)
-        alp_vollcode = Process_alpha_locations_expected(dbconfig, 'vollcode')
+        # alp_vollcode = Process_alpha_locations_expected(dbconfig, 'vollcode')
 
         # alp_hotspots = Process_alpha_locations_expected(dbconfig, 'hotspot')
         parkeren = Process_parkeren(dbconfig, 'vollcode')
@@ -425,9 +425,9 @@ class Process_drukte(Process):
         #     on=['weekday', 'hour', 'vollcode'], how='left')
 
         # cols = ['vollcode', 'weekday', 'hour', 'alpha']
-        self.data = pd.merge(
-            self.data, alp_vollcode.data,
-            on=['weekday', 'hour', 'vollcode'], how='left')
+        # self.data = pd.merge(
+        #     self.data, alp_vollcode.data,
+        #     on=['weekday', 'hour', 'vollcode'], how='left')
 
         self.data = pd.merge(
             self.data, gvb_bc.data,
