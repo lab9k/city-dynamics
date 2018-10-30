@@ -122,58 +122,59 @@ def main():
     """
     conn = get_conn()
 
-    sql = "SELECT * FROM alpha_locations_expected"
-    alpha_hotspots = pd.read_sql(sql=sql, con=conn)
+    # sql = "SELECT * FROM alpha_locations_expected"
+    # alpha_hotspots = pd.read_sql(sql=sql, con=conn)
 
     hotspots_df = pd.read_sql("""SELECT * FROM hotspots""", conn)
 
-    # for hotspots for which we want to use a particular google location only,
-    # we have to remove the other alpha locations related to that hotspot
-    use_singular_filter = True
-    if use_singular_filter:
-        cleanup_something_ugly(alpha_hotspots, hotspots_df)
-
-    # alpha_hotspots['expected'] *= alpha_hotspots['main_category_weight']
-
-    # historical weekpatroon
-    # first calculate the average weekpatroon per location.
-    # since the data is limited, we consider daily instead of weekly patterns.
-    alpha_week_location = alpha_hotspots.groupby([
-        'hour', 'hotspot', 'name'])['expected'].mean().reset_index()
-
-    # and then calculate the average weekpatroon per hotspot
-    alpha_week_hotspots = alpha_week_location.groupby([
-        'hotspot', 'hour'])['expected'].mean().reset_index()
-
-    alpha_week_hotspots.rename(columns={'expected': 'alpha'}, inplace=True)
-
-    # fill the dataframe with all missing hotspot-hour combinations
-    x = {
-        "weekday": np.arange(7),
-        "hour": np.arange(24),
-        "hotspot": hotspots_df['hotspot'].unique().tolist()
-    }
-
-    hs_hour_combinations = pd.DataFrame(
-        list(itertools.product(*x.values())), columns=x.keys())
-    alpha_week_hotspots = alpha_week_hotspots.merge(
-        hs_hour_combinations, on=['hour', 'hotspot'], how='outer')
-    alpha_week_hotspots['alpha'].fillna(value=0, inplace=True)
-
-    alpha_week_hotspots = alpha_week_hotspots.merge(
-        hotspots_df[['hotspot', 'vollcode']], on='hotspot')
+    # # for hotspots for which we want to use a particular google location only,
+    # # we have to remove the other alpha locations related to that hotspot
+    # use_singular_filter = True
+    # if use_singular_filter:
+    #     cleanup_something_ugly(alpha_hotspots, hotspots_df)
+    #
+    # # alpha_hotspots['expected'] *= alpha_hotspots['main_category_weight']
+    #
+    # # historical weekpatroon
+    # # first calculate the average weekpatroon per location.
+    # # since the data is limited, we consider daily instead of weekly patterns.
+    # alpha_week_location = alpha_hotspots.groupby([
+    #     'hour', 'hotspot', 'name'])['expected'].mean().reset_index()
+    #
+    # # and then calculate the average weekpatroon per hotspot
+    # alpha_week_hotspots = alpha_week_location.groupby([
+    #     'hotspot', 'hour'])['expected'].mean().reset_index()
+    #
+    # alpha_week_hotspots.rename(columns={'expected': 'alpha'}, inplace=True)
+    #
+    # # fill the dataframe with all missing hotspot-hour combinations
+    # x = {
+    #     "weekday": np.arange(7),
+    #     "hour": np.arange(24),
+    #     "hotspot": hotspots_df['hotspot'].unique().tolist()
+    # }
+    # #
+    # hs_hour_combinations = pd.DataFrame(
+    #     list(itertools.product(*x.values())), columns=x.keys())
+    # alpha_week_hotspots = alpha_week_hotspots.merge(
+    #     hs_hour_combinations, on=['hour', 'hotspot'], how='outer')
+    # alpha_week_hotspots['alpha'].fillna(value=0, inplace=True)
+    #
+    # alpha_week_hotspots = alpha_week_hotspots.merge(
+    #     hotspots_df[['hotspot', 'vollcode']], on='hotspot')
 
     sql = "SELECT * FROM drukteindex_buurtcombinaties"
     di = pd.read_sql(sql=sql, con=conn)
 
-    drukteindex_hotspots = alpha_week_hotspots.merge(
+    # drukteindex_hotspots = alpha_week_hotspots.merge(
+    drukteindex_hotspots=hotspots_df.merge(
         di[['index',
             'vollcode',
             'weekday',
             'hour',
             'verblijvers_ha_2016',
             'gvb',
-            'mean_occupancy']], on=['vollcode', 'weekday', 'hour'], how='left')
+            'mean_occupancy']], on=['vollcode'], how='right')
 
     drukteindex_hotspots = linear_model(drukteindex_hotspots)
 
