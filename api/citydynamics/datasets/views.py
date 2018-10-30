@@ -243,7 +243,7 @@ def get_latest(api_source):
 
 def store(api_source, data):
     """
-    Store realtime suggestion
+    Store realtime suggestion to persistent database.
     """
     r = models.RealtimeHistorian.objects.create(
         scraped_at=datetime.datetime.now(),
