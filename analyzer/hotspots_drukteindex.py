@@ -8,7 +8,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 import pandas as pd
 import numpy as np
-import itertools
 
 config_auth = configparser.RawConfigParser()
 config_auth.read('auth.conf')
@@ -167,7 +166,7 @@ def main():
     di = pd.read_sql(sql=sql, con=conn)
 
     # drukteindex_hotspots = alpha_week_hotspots.merge(
-    drukteindex_hotspots=hotspots_df.merge(
+    drukteindex_hotspots = hotspots_df.merge(
         di[['index',
             'vollcode',
             'weekday',
