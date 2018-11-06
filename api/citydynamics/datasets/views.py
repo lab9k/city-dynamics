@@ -65,7 +65,11 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
 
 
 class GVBViewset(viewsets.ModelViewSet):
-    """Viewset for GVB data."""
+    """Viewset for GVB data.
+
+    Filtering on *halte* is possible.
+    Example: acc.drukteradar.amsterdam.nl/gvb/api?halte=1e Con. Huygensstraat.
+    """
 
     serializer_class = serializers.GBVSerializer
 
