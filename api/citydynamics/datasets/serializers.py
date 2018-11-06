@@ -64,6 +64,7 @@ class GBVSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = GVB
         geo_field = 'geom'
+        fields = '__all__'
 
 
 class HotspotSerializer(GeoFeatureModelSerializer):
