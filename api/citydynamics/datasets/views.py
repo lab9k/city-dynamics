@@ -64,6 +64,13 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
         return queryset
 
 
+class GVBViewset(viewsets.ModelViewSet):
+    """Viewset for GVB data."""
+
+    queryset = models.GVB.objects.order_by('-timestamp', 'halte')
+    serializer_class = serializers.GBVSerializer
+
+
 class HotspotViewset(viewsets.ModelViewSet):
     """
     ViewSet for retrieving hotspot polygons

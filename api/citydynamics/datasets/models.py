@@ -31,6 +31,24 @@ class BuurtCombinatieDrukteindex(models.Model):
     drukteindex = models.FloatField()
 
 
+class GVB(models.Model):
+    index = models.BigIntegerField(primary_key=True)
+    halte = models.TextField(blank=True, null=True)
+    incoming = models.BigIntegerField(blank=True, null=True)
+    outgoing = models.BigIntegerField(blank=True, null=True)
+    day_numeric = models.BigIntegerField(blank=True, null=True)
+    timestamp = models.DateTimeField(blank=True, null=True)
+    lat = models.FloatField(blank=True, null=True)
+    lon = models.FloatField(blank=True, null=True)
+    geom = models.GeometryField(srid=0, blank=True, null=True)
+    vollcode = models.CharField(max_length=255, blank=True, null=True)
+    stadsdeelcode = models.CharField(max_length=255, blank=True, null=True)
+    hotspot = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        db_table = 'gvb'
+
+
 class Hotspots(models.Model):
     index = models.BigIntegerField(primary_key=True)
     hotspot = models.TextField(blank=True, null=True)
