@@ -67,19 +67,18 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
 class GVBViewset(viewsets.ModelViewSet):
     """Viewset for GVB data."""
 
-    queryset = models.GVB.objects.order_by('-timestamp', 'halte')
     serializer_class = serializers.GBVSerializer
 
-    # def get_queryset(self):
-    #     queryset = (
-    #         models.Hotspots.objects
-    #             .order_by("-timestamp", 'halte')
-    #     )
-    #
-    #     halte = self.request.query_params.get('halte', None)
-    #     if halte is not None:
-    #         queryset = queryset.filter(halte=halte)
+    def get_queryset(self):
+        queryset = (
+            models.GVB.objects
+                .order_by("-timestamp", 'halte')
+        )
 
+        halte = self.request.query_params.get('halte', None)
+        if halte is not None:
+            queryset = queryset.filter(halte=halte)
+        return queryset
 
 
 class HotspotViewset(viewsets.ModelViewSet):
