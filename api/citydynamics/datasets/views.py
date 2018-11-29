@@ -200,7 +200,7 @@ PROXY_URLS = {
     'traveltime': 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson',  # noqa
     'ovfiets': 'http://fiets.openov.nl/locaties.json',  # noqa
     # For saving own realtime values historically.
-    'realtime': 'https://drukteradar.amsterdam.nl/api/realtime/',
+    'realtime': 'http://localhost:8000/api/realtime/',
 }
 
 PARSING_DATA = {
