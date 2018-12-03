@@ -80,12 +80,12 @@ var eventsJsonUrl = origin + '/apiproxy?api=events&format=json';
 var weatherJsonUrl = 'https://weerlive.nl/api/json-data-10min.php?key=demo&locatie=Amsterdam';
 
 // temp local api
-hotspotsJsonUrl = 'data/hotspots.json';
-hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
-districtJsonUrl = 'data/buurtcombinaties.json';
-districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
-realtimeUrl = 'data/realtime.json';
-realtimeBarUrl = 'data/realtime_bar.json';
+// hotspotsJsonUrl = 'data/hotspots.json';
+// hotspotsIndexJsonUrl = 'data/hotspots_drukteindex.json';
+// districtJsonUrl = 'data/buurtcombinaties.json';
+// districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
+// realtimeUrl = 'data/realtime.json';
+// realtimeBarUrl = 'data/realtime_bar.json';
 
 trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
 parkJsonUrl = 'data/parkjson.json';
@@ -183,11 +183,11 @@ $(document).ready(function(){
 
 		// start with traffic
 		hideActiveLayer();
-		// resetTheme();
-		// showInfo('Verkeersdrukte in en rondom de stad.', 0);
-		// addTrafficLayer();
-		// $('.traffic_b').addClass('active');
-		// setTag('traffic');
+		resetTheme();
+		showInfo('Verkeersdrukte in en rondom de stad.', 0);
+		addTrafficLayer();
+		$('.traffic_b').addClass('active');
+		setTag('traffic');
 
 		// custom
 		var today_day =  getDay();
@@ -199,7 +199,7 @@ $(document).ready(function(){
 		$('.graphbar_title span').html(getCurrentDateOnly());
 
 		/* test */
-		cmsaTest();
+		// cmsaTest();
 
 	}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
 		console.error('One or more apis failed.');
