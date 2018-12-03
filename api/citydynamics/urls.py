@@ -25,6 +25,7 @@ from citydynamics.datasets.views import BuurtcombinatieViewset
 from citydynamics.datasets.views import DrukteindexHotspotViewset
 from citydynamics.datasets.views import RealtimeGoogleViewset
 from citydynamics.datasets.views import DrukteindexBuurtcombinatieViewset
+from citydynamics.datasets.views import GVBViewset
 from citydynamics.datasets.views import HotspotViewset
 from citydynamics.datasets.views import RealtimeAnalyzerViewset
 from citydynamics.datasets.views import HistorianViewset
@@ -93,6 +94,7 @@ router.register('buurtcombinatie', BuurtcombinatieViewset, 'buurtcombinatie')
 router.register(
     'buurtcombinatie_drukteindex',
     DrukteindexBuurtcombinatieViewset, 'buurtcombinatie_drukteindex')
+router.register('gvb', GVBViewset, 'gvb')
 router.register('hotspots', HotspotViewset, 'hotspots')
 router.register('hotspots_drukteindex', DrukteindexHotspotViewset, 'hotspots_drukteindex')   # noqa
 router.register('realtime_quantillion', RealtimeGoogleViewset, 'realtime_quantillion')

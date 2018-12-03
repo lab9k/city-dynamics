@@ -3,6 +3,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from citydynamics.datasets.models import Buurtcombinatie
 from citydynamics.datasets.models import BuurtCombinatieDrukteindex
+from citydynamics.datasets.models import GVB
 from citydynamics.datasets.models import Hotspots, HotspotsDrukteIndex
 from citydynamics.datasets.models import RealtimeGoogle
 from citydynamics.datasets.models import RealtimeHistorian
@@ -55,6 +56,15 @@ class BCIndexSerializer(ModelSerializer):
         cijfers = obj.druktecijfers_bc.filter(weekday__in=[today_wkday, tomorrow_wkday])
 
         return BCCijferSerializer(cijfers, many=True).data
+
+
+class GBVSerializer(GeoFeatureModelSerializer):
+    """A class to serialize GVB GeoJSON data."""
+
+    class Meta:
+        model = GVB
+        geo_field = 'geom'
+        fields = '__all__'
 
 
 class HotspotSerializer(GeoFeatureModelSerializer):

@@ -64,6 +64,23 @@ class DrukteindexBuurtcombinatieViewset(rest.DatapuntViewSet):
         return queryset
 
 
+class GVBViewset(viewsets.ModelViewSet):
+    """Viewset for GVB data.
+
+    Filtering on *halte* is possible.
+    Example: acc.drukteradar.amsterdam.nl/gvb/api?halte=1e Con. Huygensstraat.
+    """
+
+    serializer_class = serializers.GBVSerializer
+
+    def get_queryset(self):
+        queryset = models.GVB.objects.order_by("-timestamp", 'halte')
+        halte = self.request.query_params.get('halte', None)
+        if halte is not None:
+            queryset = queryset.filter(halte=halte)
+        return queryset
+
+
 class HotspotViewset(viewsets.ModelViewSet):
     """
     ViewSet for retrieving hotspot polygons
@@ -183,7 +200,7 @@ PROXY_URLS = {
     'traveltime': 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson',  # noqa
     'ovfiets': 'http://fiets.openov.nl/locaties.json',  # noqa
     # For saving own realtime values historically.
-    'realtime': 'https://drukteradar.amsterdam.nl/api/realtime/',
+    'realtime': 'http://localhost:8000/api/realtime/',
 }
 
 PARSING_DATA = {
@@ -243,7 +260,7 @@ def get_latest(api_source):
 
 def store(api_source, data):
     """
-    Store realtime suggestion
+    Store realtime suggestion to persistent database.
     """
     r = models.RealtimeHistorian.objects.create(
         scraped_at=datetime.datetime.now(),
