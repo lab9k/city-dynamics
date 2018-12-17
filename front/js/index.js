@@ -709,56 +709,124 @@ function cmsaTest()
 		[	52.3795113	,	4.9024155	]
 	];
 
+	var cmsa_xml_feed = 'https://cmsa.bliptrack.net/blipzones/api/rest/display?displayId=de_wallen';
+	var cmsa_xml_feed = 'data/wallen.xml';
+
+	// var polygon_array = [];
+	// var point_array = [];
+	//
+	// $.ajax({
+	// 		type: "GET",
+	// 		url: cmsa_xml_feed,
+	// 		dataType: "xml",
+	// 		data: {"username": "amsbb2", "password" : "Volendam=Mooier"},
+	// 		error: function(xhr, status, error){
+	// 			console.log('error:');
+	// 			console.log(error);
+	// 			console.log(xhr.responseText);
+	// 		},
+	// 		success: function(xml){
+	// 			console.log('success');
+	// 			var filter_array = ['01','02','03','04','05','06','07','01R','02R','03R','04R','05R','06R','07R'];
+	// 			var count_array = {};
+	// 			var sum_array = {};
+	// 			$(xml).find("measurements").each(function () {
+	//
+	// 				var sensor_id = $(this).attr('resultId');
+	//
+	// 				if(filter_array.indexOf(sensor_id)>-1)
+	// 				{
+	// 					var count = $(this).find('count').text()
+	// 					// console.log(sensor_id);
+	// 					count_array[sensor_id] = parseInt(count);
+	// 				}
+	//
+	// 			});
+	//
+	// 			console.log(count_array);
+	//
+	// 			sum_array['gaww-01'] = count_array['01'] + count_array['01R'];
+	// 			sum_array['gaww-02'] = count_array['02'] + count_array['02R'];
+	// 			sum_array['gaww-03'] = count_array['03'] + count_array['03R'];
+	// 			sum_array['gaww-04'] = count_array['04'] + count_array['04R'];
+	// 			sum_array['gaww-05'] = count_array['05'] + count_array['05R'];
+	// 			sum_array['gaww-06'] = count_array['06'] + count_array['06R'];
+	// 			sum_array['gaww-07'] = count_array['07'] + count_array['07R'];
+	//
+	// 			console.log(sum_array);
+	//
+	//
+	//
+	//
+	//
+	// 			$.each(areas, function (key, value) {
+	// 				polygon_array[key] = L.polygon(value, {color: 'gray', fillColor: 'none', weight: 1 });
+	// 				// polygon_array[key].addTo(map);
+	// 				// console.log(key);
+	// 				// nr_of_points = values[key] * Math.floor(Math.random() * 5);
+	// 				nr_of_points = sum_array[key];
+	// 				console.log(nr_of_points);
+	// 				if(nr_of_points>0){
+	// 					for (i = 0; i < nr_of_points; i++) {
+	// 						point_array.push(randomPointInPoly(polygon_array[key]));
+	// 					}
+	// 				}
+	// 			});
+	//
+	// 		}
+	// 	});
+
+
 	// console.log(areas);
 
-	// var ratio = {};
-	// ratio["gakw-01"] = 100;
-	// ratio["gakw-02"] = 100;
-	// ratio["gakw-03"] = 100;
-	// ratio["gakw-04"] = 100;
-	// ratio["gakw-06"] = 100;
-	// ratio["gakw-05"] = 100;
-	//
-	//
-	// ratio["gaww-09"] = 100;
-	// ratio["gaww-01"] = 100;
-	// ratio["gaww-07"] = 100;
-	// ratio["gaww-01-02-l"] = 100;
-	// ratio["gaww-01-02-r"] = 100;
-	// ratio["gaww-02"] = 100;
-	// ratio["gaww-04"] = 100;
-	// ratio["gaww-03"] = 100;
-	// ratio["gaww-06"] = 100;
-	// ratio["gaww-10"] = 100;
-	// ratio["gaww-06-02"] = 100;
-	// ratio["gaww-08"] = 100;
-	// ratio["gaww-02-07"] = 100;
+	var ratio = {};
+	ratio["gakw-01"] = 100;
+	ratio["gakw-02"] = 100;
+	ratio["gakw-03"] = 100;
+	ratio["gakw-04"] = 100;
+	ratio["gakw-06"] = 100;
+	ratio["gakw-05"] = 100;
+
+
+	ratio["gaww-09"] = 100;
+	ratio["gaww-01"] = 100;
+	ratio["gaww-07"] = 100;
+	ratio["gaww-01-02-l"] = 100;
+	ratio["gaww-01-02-r"] = 100;
+	ratio["gaww-02"] = 100;
+	ratio["gaww-04"] = 100;
+	ratio["gaww-03"] = 100;
+	ratio["gaww-06"] = 100;
+	ratio["gaww-10"] = 100;
+	ratio["gaww-06-02"] = 100;
+	ratio["gaww-08"] = 100;
+	ratio["gaww-02-07"] = 100;
 
 	var values = {};
-	values["gakw-01"] = 100;
-	values["gakw-02"] = 100;
-	values["gakw-03"] = 100;
-	values["gakw-04"] = 100;
-	values["gakw-06"] = 100;
-	values["gakw-05"] = 100;
+	values["gakw-01"] = 0; //100
+	values["gakw-02"] = 0;
+	values["gakw-03"] = 0;
+	values["gakw-04"] = 0;
+	values["gakw-06"] = 0;
+	values["gakw-05"] = 0;
 
-	values["gaww-09"] = 50;
-	values["gaww-01"] = 50;
-	values["gaww-07"] = 50;
-	values["gaww-01-02-l"] = 50;
-	values["gaww-01-02-r"] = 50;
-	values["gaww-02"] = 50;
-	values["gaww-04"] = 50;
-	values["gaww-03"] = 50;
-	values["gaww-06"] = 50;
-	values["gaww-10"] = 50;
-	values["gaww-06-02"] = 50;
-	values["gaww-08"] = 50;
-	values["gaww-02-07"] = 50;
+	values["gaww-09"] = 0;
+	values["gaww-01"] = 120;
+	values["gaww-07"] = 120;
+	values["gaww-01-02-l"] = 120;
+	values["gaww-01-02-r"] = 120;
+	values["gaww-02"] = 120;
+	values["gaww-04"] = 120;
+	values["gaww-03"] = 120;
+	values["gaww-06"] = 120;
+	values["gaww-10"] = 0;
+	values["gaww-06-02"] = 120;
+	values["gaww-08"] = 0;
+	values["gaww-02-07"] = 120;
 
-	values["gawb-01-05"]  = 500;
-	values["GVCV-01-04"]  = 300;
-	values["GVCV-05"]  = 100;
+	values["gawb-01-05"]  = 0; //500
+	values["GVCV-01-04"]  = 0; //300
+	values["GVCV-05"]  = 0; //100
 
 
 	var polygon_array = [];
@@ -766,15 +834,16 @@ function cmsaTest()
 
 	$.each(areas, function (key, value) {
 		polygon_array[key] = L.polygon(value, {color: 'gray', fillColor: 'none', weight: 1 });
-		polygon_array[key].addTo(map);
+		// polygon_array[key].addTo(map);
 		// console.log(key);
 		// nr_of_points = values[key] * Math.floor(Math.random() * 5);
 		nr_of_points = values[key];
 		console.log(nr_of_points);
-		for (i = 0; i < nr_of_points; i++) {
-			point_array.push(randomPointInPoly(polygon_array[key]));
+		if(nr_of_points>0){
+			for (i = 0; i < nr_of_points; i++) {
+				point_array.push(randomPointInPoly(polygon_array[key]));
+			}
 		}
-
 	});
 
 	// console.log(polygon_array);
