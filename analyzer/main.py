@@ -157,21 +157,18 @@ def calculate_drukte_base_values(drukte, base_list):
             drukte.data[base_name] /= sum(base_list.values())
 
 
-def dosomething_with_base_values(drukte, mod_list):
+def calculate_modified_values(drukte, mod_list):
 
-    # We assume a value of 1 in the Alpha dataset (the maximum value)
-    # implies that the base value should be multiplied/flexed
-    # with the factor given below.
+    # Use a flex factor when computing the modifiers.
     flex_factor = 2
 
+    # Calculate the modified values.
     for base, mod in mod_list.items():
         base_name = 'base_' + base
         mod_name = 'base_' + base + '_mod_' + mod
-
-        watisdit = drukte.data[base_name].fillna(0)
-        geenidee = drukte.data[mod].fillna(0)
-        # TODO maak code leesbaar.
-        drukte.data[mod_name] = watisdit * (geenidee * flex_factor)
+        base_values = drukte.data[base_name].fillna(0)  # Get the base values
+        mod_values = drukte.data[mod].fillna(0)  # Get the modifier values
+        drukte.data[mod_name] = base_values * (mod_values * flex_factor)
 
 
 def calculate_drukte_index(drukte, mod_list, base_list):
