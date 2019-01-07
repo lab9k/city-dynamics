@@ -199,9 +199,8 @@ PROXY_URLS = {
     'parking_garages': 'http://opd.it-t.nl/data/amsterdam/ParkingLocation.json',    # noqa
     'traveltime': 'http://web.redant.net/~amsterdam/ndw/data/reistijdenAmsterdam.geojson',  # noqa
     'ovfiets': 'http://fiets.openov.nl/locaties.json',  # noqa
-    'cmsa_wallen': 'https://cmsa.bliptrack.net/blipzones/api/rest/display?displayId=de_wallen',
     # For saving own realtime values historically.
-    'realtime': 'http://localhost:8000/api/realtime/',
+    'realtime': 'http://localhost:8000/api/realtime/'
 }
 
 PARSING_DATA = {

@@ -5,7 +5,7 @@ def tryStep(String message, Closure block, Closure tearDown = null) {
         block();
     }
     catch (Throwable t) {
-        slackSend message: "${env.JOB_NAME}: ${message} failure ${env.BUILD_URL}", channel: '#stadinbalans', color: 'danger'
+        slackSend message: "${env.JOB_NAME}: ${message} failure ${env.BUILD_URL}", channel: '#ci-channel-app', color: 'danger'
 
         throw t;
     }
