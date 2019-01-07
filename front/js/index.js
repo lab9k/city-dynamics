@@ -86,11 +86,11 @@ var weatherJsonUrl = 'https://weerlive.nl/api/json-data-10min.php?key=demo&locat
 // districtIndexJsonUrl = 'data/buurtcombinaties_drukteindex.json';
 // realtimeUrl = 'data/realtime.json';
 // realtimeBarUrl = 'data/realtime_bar.json';
-
-trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
-parkJsonUrl = 'data/parkjson.json';
-fietsJsonUrl = 'data/ovfiets.json';
-eventsJsonUrl = 'data/events.js';
+//
+// trafficJsonUrl = 'data/reistijdenAmsterdam.geojson';
+// parkJsonUrl = 'data/parkjson.json';
+// fietsJsonUrl = 'data/ovfiets.json';
+// eventsJsonUrl = 'data/events.js';
 
 // specific
 var def = '+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,1.9342,-1.6677,9.1019,4.0725 +units=m +no_defs ';
