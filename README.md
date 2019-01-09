@@ -50,7 +50,8 @@ docker-compose build importer
 Download the data from the objectstore, store it in a folder `/data` within the Importer container, and write it to the (locally running) database.
 
 ```
-docker-compose run importer /app/run_import.sh
+docker-compose run importer python /app/main.py /data --download
+docker-compose exec -T database pg_restore --username=citydynamics --dbname=citydynamics --if-exists --clean /data/dump_after_importer/20180626_dump_after_importer.dump
 ```
 
 The database is now filled with data and can be queried.
@@ -80,7 +81,7 @@ Create a parser function in `parsers.py` and call this function 'parser_x', wher
 
 To run the entire test test. run 
 ```
-api/deploy/test/the_tests.sh
+api/deploy/test/the_test.sh
 importer/deploy/test/test.sh
 analyzer/deploy/test/test.sh
 ```

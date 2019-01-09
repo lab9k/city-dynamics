@@ -1,4 +1,4 @@
-pandas==0.22.0
+pandas==0.23.4
 numpy
 sqlalchemy
 psycopg2-binary
