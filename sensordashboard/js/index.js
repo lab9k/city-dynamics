@@ -7,12 +7,27 @@ color_array['OVFiets'] = "#4979ff";
 color_array['CMSA'] = "#87ff68";
 color_array['Parkeren'] = "#ffb13e";
 color_array['GVB'] = "#ff5348";
+color_array['GVBBus'] = "#b7daff";
+color_array['VIS'] = "#ff65c1";
 
 var icon_array = [];
 icon_array['Telling'] = 'poll';
-icon_array['Telcamera'] = 'videocam';
+icon_array['Sensor telling'] = 'poll';
+icon_array['Tel camera'] = 'videocam';
 icon_array['WiFi sensor'] = 'wifi';
-icon_array['3D sensor'] = '3d_rotation';
+icon_array['3D camera'] = '3d_rotation';
+icon_array['Fiets'] = 'directions_bike';
+icon_array['Auto'] = 'directions_car';
+icon_array['Voetganger'] = 'directions_run';
+
+var convertTypeArray = [];
+convertTypeArray['TV Camera'] = 'Tel camera';
+convertTypeArray['Kentekencamera, reistijd (MoCo)'] = 'Tel camera';
+convertTypeArray['Trigger-camera'] = 'Tel camera';
+convertTypeArray['Lustelpunt'] = 'Sensor telling';
+convertTypeArray['Telcamera'] = 'Tel camera';
+convertTypeArray['WiFi sensor'] = 'WiFi sensor';
+convertTypeArray['3D sensor'] = '3D camera';
 
 var point_layer;
 var heat_layer;
@@ -48,6 +63,7 @@ var geojson_id = 0;
 var mapLayerSensors = {};
 var mapLayerSource = {};
 var mapLayerRealtime = {};
+var mapLayerMobtype = {};
 var mapAllLayers = {};
 
 cmsaTelcamerasUrl = 'data/telcamera.json';
@@ -56,6 +72,8 @@ cmsa3densorsUrl = 'data/3dsensor.json';
 parkUrl = 'data/parkjson.json';
 fietsUrl = 'data/ovfiets.json';
 gvbUrl = 'data/gvb.json';
+gvbBusUrl = 'data/gvbbus.json';
+visUrl = 'data/verkeersensoren.json';
 
 // ######### on load init sequence ###############
 $(document).ready(function() {
@@ -63,12 +81,14 @@ $(document).ready(function() {
 	initMap();
 
 	$.when( $.getJSON(fietsUrl),
+			$.getJSON(visUrl),
 			$.getJSON(parkUrl),
 			$.getJSON(gvbUrl),
+			$.getJSON(gvbBusUrl),
 			$.getJSON(cmsaTelcamerasUrl),
 			$.getJSON(cmsaWifisensorsUrl),
 			$.getJSON(cmsa3densorsUrl)).done(
-		function(fietsJson,parkJson,gvbJson,cmsaTelcamerasJson,cmsaWifisensorJson,cmsa3densorsJson){
+		function(fietsJson,visJson,parkJson,gvbJson,gvbBusJson,cmsaTelcamerasJson,cmsaWifisensorJson,cmsa3densorsJson){
 
 			// console.log(parkJson[0]);
 			// console.log(cmsaTelcamerasJson[0]);
@@ -77,8 +97,10 @@ $(document).ready(function() {
 
 
 			fietsPreprocessor(fietsJson[0]);
+			visPreprocessor(visJson[0]);
 			parkPreprocessor(parkJson[0]);
 			gvbPreprocessor(gvbJson[0]);
+			gvbBusPreprocessor(gvbBusJson[0]);
 			cmsaPreprocessor(cmsaTelcamerasJson[0]);
 			cmsaPreprocessor(cmsaWifisensorJson[0]);
 			cmsaPreprocessor(cmsa3densorsJson[0]);
@@ -141,9 +163,25 @@ $(document).ready(function() {
 				$(this).toggleClass('active');
 			});
 
-		}).fail(function(districtsIndexJson_t,districtsJson_t,hotspotsJson_t,hotspotsIndexJson_t,realtimeJson_t){
-		console.error('One or more apis failed.');
-	});
+			$('.filter_layer_mobtype li').on('click', function(){
+
+				var layer = $(this).attr('layer');
+				if($(this).hasClass( "active" ))
+				{
+					var lg = mapLayerMobtype[layer];
+					map.removeLayer(lg);
+					doRecount();
+				}
+				else
+				{
+					var lg = mapLayerMobtype[layer];
+					map.addLayer(lg);
+					doRecount();
+				}
+				$(this).toggleClass('active');
+			});
+
+		});
 
 });
 
@@ -190,7 +228,7 @@ function pointToLayer(feature, latlng) {
 	var color = color_array[feature.properties.source];
 
 	var geojsonMarkerOptions = {
-		radius: 6,
+		radius: 4,
 		fillColor: color,
 		color: "#999999",
 		weight: 1,
@@ -204,6 +242,8 @@ function pointToLayer(feature, latlng) {
 }
 
 function onEachFeature(feature, featureLayer) {
+
+	console.log(feature.properties.mobtype);
 
 	// count the different categorie items
 	if(counter_array[feature.properties.sensor] == undefined)
@@ -231,6 +271,15 @@ function onEachFeature(feature, featureLayer) {
 	else
 	{
 		counter_array[feature.properties.realtime]++;
+	}
+
+	if(counter_array[feature.properties.mobtype] == undefined)
+	{
+		counter_array[feature.properties.mobtype] = 1;
+	}
+	else
+	{
+		counter_array[feature.properties.mobtype]++;
 	}
 
 	if(counter_array["total"] == undefined)
@@ -286,6 +335,21 @@ function onEachFeature(feature, featureLayer) {
 
 	//add the feature to the layer
 	lg.addLayer(featureLayer);
+
+	//does layerGroup already exist? if not create it and add to map
+	var lg = mapLayerMobtype[feature.properties.mobtype];
+
+	if (lg === undefined) {
+		lg = new L.layerGroup();
+		//add the layer to the map
+		lg.addTo(map);
+		//store layer
+		mapLayerMobtype[feature.properties.mobtype] = lg;
+		mapAllLayers[feature.properties.mobtype] = lg;
+	}
+
+	//add the feature to the layer
+	lg.addLayer(featureLayer);
 }
 
 
@@ -326,7 +390,7 @@ function doRecount()
 	$.each( geojson.features, function( key, item ) {
 
 		var doCount = true;
-		if(skip_layer_array.indexOf(item.properties.sensor) > -1 || skip_layer_array.indexOf(item.properties.source) > -1 || skip_layer_array.indexOf(item.properties.realtime) > -1)
+		if(skip_layer_array.indexOf(item.properties.sensor) > -1 || skip_layer_array.indexOf(item.properties.source) > -1 || skip_layer_array.indexOf(item.properties.realtime) > -1 || skip_layer_array.indexOf(item.properties.mobtype) > -1)
 		{
 			doCount = false;
 		}
@@ -359,6 +423,15 @@ function doRecount()
 			else
 			{
 				temp_counter_array[item.properties.realtime]++;
+			}
+
+			if(temp_counter_array[item.properties.mobtype] == undefined)
+			{
+				temp_counter_array[item.properties.mobtype] = 1;
+			}
+			else
+			{
+				temp_counter_array[item.properties.mobtype]++;
 			}
 
 			if(temp_counter_array["total"] == undefined)
@@ -411,6 +484,7 @@ function parkPreprocessor(data)
 		temp_item.coordinates = item.geometry.coordinates;
 		temp_item.name = item.properties.Name;
 		temp_item.sensor = "Telling";
+		temp_item.mobtype = "Auto";
 
 		temp_data.push(temp_item);
 	});
@@ -432,12 +506,37 @@ function fietsPreprocessor(data)
 			temp_item.coordinates = [item.lng, item.lat];
 			temp_item.name = item.name;
 			temp_item.sensor = "Telling";
+			temp_item.mobtype = "Fiets";
 
 			temp_data.push(temp_item);
 		}
 	});
 
 	convertData(temp_data,'OVFiets','Ja');
+}
+
+
+
+function visPreprocessor(data)
+{
+	var temp_data = [];
+	var add_array = ['TV Camera','Kentekencamera, reistijd (MoCo)','Trigger-camera','Lustelpunt'];
+
+	$.each( data.features, function( key, item ) {
+		if(add_array.indexOf(item.properties.Soort)>-1)
+		{
+			var temp_item = {};
+			temp_item.coordinates = item.geometry.coordinates;
+			temp_item.name = item.properties.Objectnummer_Amsterdam;
+			temp_item.sensor = convertTypeArray[item.properties.Soort];
+			temp_item.mobtype = "Auto";
+
+			temp_data.push(temp_item);
+		}
+	});
+
+	convertData(temp_data,'VIS','Ja');
+
 }
 
 function gvbPreprocessor(data)
@@ -449,11 +548,30 @@ function gvbPreprocessor(data)
 		temp_item.coordinates = item.geometry.coordinates;
 		temp_item.name = item.properties.Modaliteit +' '+ item.properties.Lijn;
 		temp_item.sensor = "Telling";
+		temp_item.mobtype = "Voetganger";
 
 		temp_data.push(temp_item);
 	});
 
 	convertData(temp_data,'GVB','Nee');
+
+}
+
+function gvbBusPreprocessor(data)
+{
+	var temp_data = [];
+
+	$.each( data, function( key, item ) {
+		var temp_item = {};
+		temp_item.coordinates =  [item.lng, item.lat];
+		temp_item.name = item.name;
+		temp_item.sensor = "Telling";
+		temp_item.mobtype = "Voetganger";
+
+		temp_data.push(temp_item);
+	});
+
+	convertData(temp_data,'GVBBus','Nee');
 
 }
 
@@ -465,7 +583,8 @@ function cmsaPreprocessor(data)
 		var temp_item = {};
 		temp_item.coordinates = [item.LNGMAX,item.LATMAX];
 		temp_item.name = item.LABEL;
-		temp_item.sensor = item.SELECTIE;
+		temp_item.sensor = convertTypeArray[item.SELECTIE];
+		temp_item.mobtype = "Voetganger";
 
 		temp_data.push(temp_item);
 	});
@@ -491,6 +610,7 @@ function convertData(data,source,realtime)
 		temp_feature.properties.source = source;
 		temp_feature.properties.radius = 10;
 		temp_feature.properties.realtime = realtime;
+		temp_feature.properties.mobtype = item.mobtype;
 
 
 
@@ -513,6 +633,11 @@ function populatePage()
 	$.each( mapLayerRealtime, function( key, item ) {
 		$('.filter_layer_realtime').append('<li layer="'+ key +'" class="active"><span><i style="color:#fff;" class="material-icons searchclose">timer</i> '+key+'</span> (<span class="count">'+ counter_array[key] +'</span>/'+ counter_array[key] +')</li>')
 	});
+
+	$.each( mapLayerMobtype, function( key, item ) {
+		$('.filter_layer_mobtype').append('<li layer="'+ key +'" class="active"><span><i style="color:#fff;" class="material-icons searchclose">'+ icon_array[key] +'</i> '+key+'</span> (<span class="count">'+ counter_array[key] +'</span>/'+ counter_array[key] +')</li>')
+	});
+
 
 }
 

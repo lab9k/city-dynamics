@@ -26,18 +26,23 @@ div {box-sizing: border-box;}
 /*content*/
 .content-header {margin:10px 0 20px 0;border:1px solid #999;background:#aaa;color:#666;line-height:40px;font-size:26px;border-radius:5px;text-indent:10px;}
 .content-subheader {margin:10px 0;line-height:40px;font-size:26px;}
+.filter_layer_mobtype li,
 .filter_layer_realtime li,
 .filter_layer_sensors li,
 .filter_layer_source li{list-style: none;vertical-align:middle;line-height:30px;}
+.filter_layer_mobtype li span i,
 .filter_layer_realtime li span i,
 .filter_layer_sensors li span i,
 .filter_layer_source li span i{vertical-align:middle;line-height:30px;}
+.filter_layer_mobtype li span,
 .filter_layer_realtime li span,
 .filter_layer_sensors li span,
 .filter_layer_source li span{color:#444;cursor:pointer;}
+.filter_layer_mobtype li.active span,
 .filter_layer_realtime li.active span,
 .filter_layer_sensors li.active span,
 .filter_layer_source li.active span{color:#FFF;}
+.filter_layer_mobtype li span:hover,
 .filter_layer_realtime li span:hover,
 .filter_layer_sensors li span:hover,
 .filter_layer_source li span:hover{color : #bafff5;text-decoration : none;}
