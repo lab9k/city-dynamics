@@ -47,12 +47,19 @@ div {box-sizing: border-box;}
 .filter_layer_sensors li span:hover,
 .filter_layer_source li span:hover{color : #bafff5;text-decoration : none;}
 
+/*tabs*/
+.nav-link {color:#fff;}
+.tab-content {border:1px solid #fff;border-top:0;padding:10px;border-bottom-left-radius: 10px;border-bottom-right-radius: 10px;height:260px;overflow-x:auto;}
+.tab-pane ul {margin:0;padding:0;}
+.tab-pane ul li {list-style:none;}
+
+
 /* accordion */
 .panel {border:1px solid #999;border-radius:5px;margin-bottom:2px;}
 .panel-heading {border-bottom:1px solid #999;background:#777;text-indent:10px;}
 .panel-heading h4{color:#fff;}
 .panel-heading a{color:#fff;}
-.panel-body ul{margin:10px;padding:0;}
+.panel-body ul{margin:0;padding:0;}
 
 /* map */
 .leaflet-popup-content h5 {vertical-align:bottom;line-height:30px;font-size:18px;}

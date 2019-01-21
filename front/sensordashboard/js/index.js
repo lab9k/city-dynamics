@@ -29,8 +29,13 @@ convertTypeArray['Telcamera'] = 'Tel camera';
 convertTypeArray['WiFi sensor'] = 'WiFi sensor';
 convertTypeArray['3D sensor'] = '3D camera';
 
+var function_data;
+
 var point_layer;
 var heat_layer;
+
+var custom_shape;
+var polyType;
 
 counter_array = {};
 
@@ -74,6 +79,8 @@ fietsUrl = 'data/ovfiets.json';
 gvbUrl = 'data/gvb.json';
 gvbBusUrl = 'data/gvbbus.json';
 visUrl = 'data/verkeersensoren.json';
+functieUrl = 'data/functiekaart.json';
+
 
 // ######### on load init sequence ###############
 $(document).ready(function() {
@@ -81,6 +88,7 @@ $(document).ready(function() {
 	initMap();
 
 	$.when( $.getJSON(fietsUrl),
+			$.getJSON(functieUrl),
 			$.getJSON(visUrl),
 			$.getJSON(parkUrl),
 			$.getJSON(gvbUrl),
@@ -88,7 +96,7 @@ $(document).ready(function() {
 			$.getJSON(cmsaTelcamerasUrl),
 			$.getJSON(cmsaWifisensorsUrl),
 			$.getJSON(cmsa3densorsUrl)).done(
-		function(fietsJson,visJson,parkJson,gvbJson,gvbBusJson,cmsaTelcamerasJson,cmsaWifisensorJson,cmsa3densorsJson){
+		function(fietsJson,functieJson,visJson,parkJson,gvbJson,gvbBusJson,cmsaTelcamerasJson,cmsaWifisensorJson,cmsa3densorsJson){
 
 			// console.log(parkJson[0]);
 			// console.log(cmsaTelcamerasJson[0]);
@@ -104,6 +112,10 @@ $(document).ready(function() {
 			cmsaPreprocessor(cmsaTelcamerasJson[0]);
 			cmsaPreprocessor(cmsaWifisensorJson[0]);
 			cmsaPreprocessor(cmsa3densorsJson[0]);
+
+			function_data = functieJson[0];
+
+			showFunctionData();
 
 			addGeoLayer();
 
@@ -181,9 +193,69 @@ $(document).ready(function() {
 				$(this).toggleClass('active');
 			});
 
+
+			$('.layer_both').on('click', function(){
+
+				$('.btn-group button').removeClass('active');
+
+				if($(this).hasClass( "active" ))
+				{
+
+				}
+				else
+				{
+					map.removeLayer(point_layer);
+					map.removeLayer(heat_layer);
+
+					map.addLayer(point_layer);
+					map.addLayer(heat_layer);
+					$(this).addClass('active');
+				}
+
+			});
+
+			$('.layer_heat').on('click', function(){
+
+				$('.btn-group button').removeClass('active');
+
+				if($(this).hasClass( "active" ))
+				{
+
+				}
+				else
+				{
+					map.removeLayer(point_layer);
+					map.removeLayer(heat_layer);
+
+					map.addLayer(heat_layer);
+					$(this).addClass('active');
+				}
+
+			});
+
+			$('.layer_dots').on('click', function(){
+
+				$('.btn-group button').removeClass('active');
+
+				if($(this).hasClass( "active" ))
+				{
+
+				}
+				else
+				{
+					map.removeLayer(point_layer);
+					map.removeLayer(heat_layer);
+
+					map.addLayer(point_layer);
+					$(this).addClass('active');
+				}
+
+			});
+
 		});
 
 });
+
 
 // ######### general init and get functions ###############
 function initMap()
@@ -204,6 +276,98 @@ function initMap()
 		position:'topright'
 	}).addTo(map);
 
+	// add drawing option to map
+
+	// Initialise the FeatureGroup to store editable layers
+	var editableLayers = new L.FeatureGroup();
+	map.addLayer(editableLayers);
+
+	var drawPluginOptions = {
+		position: 'topright',
+		draw: {
+			polyline: false,
+			polygon: {shapeOptions: {
+				color: '#3c3c3c',
+				fillColor: '#ffffff',
+				fillOpacity: '0'
+			}},
+			circle: {shapeOptions: {
+				color: '#3c3c3c',
+				fillColor: '#ffffff',
+				fillOpacity: '0'
+			}},
+			circlemarker: false,
+			rectangle: {shapeOptions: {
+				color: '#3c3c3c',
+				fillColor: '#ffffff',
+				fillOpacity: '0'
+			}},
+			marker: false
+		},
+		edit: false
+	};
+
+	// Initialise the draw control and pass it the FeatureGroup of editable layers
+	var drawControl = new L.Control.Draw(drawPluginOptions);
+	map.addControl(drawControl);
+
+
+	var editableLayers = new L.FeatureGroup();
+	map.addLayer(editableLayers);
+
+	map.on('draw:drawstart', function() {
+		// remove previous schape
+		editableLayers.removeLayer(custom_shape);
+		custom_shape = false;
+
+		map.removeLayer(point_layer);
+		map.removeLayer(heat_layer);
+
+		addGeoLayer();
+		doRecount();
+	});
+
+	map.on('draw:drawstop', function() {
+
+	});
+
+	map.on('draw:created', function(e) {
+
+		var type = e.layerType;
+		custom_shape = e.layer;
+console.log(type);
+		polyType = type;
+		map.removeLayer(point_layer);
+		map.removeLayer(heat_layer);
+		//point_layer = false;
+		addGeoLayer();
+		doRecount();
+		showFunctionData();
+
+		editableLayers.addLayer(custom_shape);
+	});
+
+
+
+}
+
+function clearCatagoryLayers()
+{
+	$.each( mapLayerSensors, function( key, item ) {
+		item.clearLayers();
+	});
+	$.each( mapLayerSource, function( key, item ) {
+		item.clearLayers();
+	});
+	$.each( mapLayerRealtime, function( key, item ) {
+		item.clearLayers();
+	});
+	$.each( mapLayerMobtype, function( key, item ) {
+		item.clearLayers();
+	});
+	$.each( mapAllLayers, function( key, item ) {
+		item.clearLayers();
+	});
 }
 
 function addGeoLayer()
@@ -211,7 +375,10 @@ function addGeoLayer()
 	// console.log(geojson);
 	// console.log(JSON.stringify(geojson));
 
-	point_layer = L.geoJSON(geojson,{pointToLayer: pointToLayer,onEachFeature: onEachFeature}).addTo(map);
+	// clear layers
+	clearCatagoryLayers();
+
+	point_layer = L.geoJSON(geojson,{pointToLayer: pointToLayer,onEachFeature: onEachFeature, filter: polyFilter}).addTo(map);
 
 	var point_array = [];
 	$.each( geojson.features, function( key, item ) {
@@ -241,53 +408,70 @@ function pointToLayer(feature, latlng) {
 	return marker;
 }
 
+function polyFilter(feature)
+{
+	var doCount = true;
+
+	if(custom_shape)
+	{
+		var latlng = {'lat':feature.geometry.coordinates[1],'lng':feature.geometry.coordinates[0]};
+
+
+		if(polyType=='polygon')
+		{
+			doCount = pointInPoly(custom_shape,latlng);
+		}
+		if(polyType=='rectangle')
+		{
+			doCount = custom_shape.getBounds().contains(latlng);
+		}
+		if(polyType=='circle')
+		{
+			doCount = custom_shape.getLatLng().distanceTo(latlng) < custom_shape.getRadius();
+		}
+	}
+
+	// console.log(doCount);
+	return doCount;
+}
+
 function onEachFeature(feature, featureLayer) {
 
-	console.log(feature.properties.mobtype);
+	// console.log(feature.properties.mobtype);
 
 	// count the different categorie items
-	if(counter_array[feature.properties.sensor] == undefined)
-	{
+	if (counter_array[feature.properties.sensor] == undefined) {
 		counter_array[feature.properties.sensor] = 1;
 	}
-	else
-	{
+	else {
 		counter_array[feature.properties.sensor]++;
 	}
 
-	if(counter_array[feature.properties.source] == undefined)
-	{
+	if (counter_array[feature.properties.source] == undefined) {
 		counter_array[feature.properties.source] = 1;
 	}
-	else
-	{
+	else {
 		counter_array[feature.properties.source]++;
 	}
 
-	if(counter_array[feature.properties.realtime] == undefined)
-	{
+	if (counter_array[feature.properties.realtime] == undefined) {
 		counter_array[feature.properties.realtime] = 1;
 	}
-	else
-	{
+	else {
 		counter_array[feature.properties.realtime]++;
 	}
 
-	if(counter_array[feature.properties.mobtype] == undefined)
-	{
+	if (counter_array[feature.properties.mobtype] == undefined) {
 		counter_array[feature.properties.mobtype] = 1;
 	}
-	else
-	{
+	else {
 		counter_array[feature.properties.mobtype]++;
 	}
 
-	if(counter_array["total"] == undefined)
-	{
+	if (counter_array["total"] == undefined) {
 		counter_array["total"] = 1;
 	}
-	else
-	{
+	else {
 		counter_array["total"]++;
 	}
 
@@ -367,8 +551,32 @@ function pointToLayerIcon(feature, latlng) {
 	return marker;
 }
 
+function pointInPoly(polygon,coordinates) {
+	var bounds = polygon.getBounds();
+
+	var x_min  = bounds.getEast();
+	var x_max  = bounds.getWest();
+	var y_min  = bounds.getSouth();
+	var y_max  = bounds.getNorth();
+
+	var lat = coordinates.lat;
+	var lng = coordinates.lng;
+
+	var point  = turf.point([lng, lat]);
+	var poly   = polygon.toGeoJSON();
+
+	var inside = turf.inside(point, poly);
+
+	if (inside) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function doRecount()
 {
+
 	var skip_layer_array = [];
 
 	// check active layers
@@ -390,10 +598,36 @@ function doRecount()
 	$.each( geojson.features, function( key, item ) {
 
 		var doCount = true;
+
+		// filters. in order of importance
+		if(custom_shape)
+		{
+			var latlng = {'lat':item.geometry.coordinates[1],'lng':item.geometry.coordinates[0]};
+			// console.log(latlng);
+			// console.log(item.geometry.coordinates);
+
+			if(polyType=='polygon')
+			{
+				doCount = pointInPoly(custom_shape,latlng);
+			}
+			if(polyType=='rectangle')
+			{
+				doCount = custom_shape.getBounds().contains(latlng);
+			}
+			if(polyType=='circle')
+			{
+				doCount = custom_shape.getLatLng().distanceTo(latlng) < custom_shape.getRadius();
+			}
+
+			// console.log(doCount);
+		}
+
 		if(skip_layer_array.indexOf(item.properties.sensor) > -1 || skip_layer_array.indexOf(item.properties.source) > -1 || skip_layer_array.indexOf(item.properties.realtime) > -1 || skip_layer_array.indexOf(item.properties.mobtype) > -1)
 		{
 			doCount = false;
 		}
+
+
 
 		if(doCount)
 		{
@@ -520,7 +754,7 @@ function fietsPreprocessor(data)
 function visPreprocessor(data)
 {
 	var temp_data = [];
-	var add_array = ['TV Camera','Kentekencamera, reistijd (MoCo)','Trigger-camera','Lustelpunt'];
+	var add_array = ['Kentekencamera, reistijd (MoCo)','Trigger-camera','Lustelpunt'];
 
 	$.each( data.features, function( key, item ) {
 		if(add_array.indexOf(item.properties.Soort)>-1)
@@ -593,6 +827,186 @@ function cmsaPreprocessor(data)
 
 }
 
+function showFunctionData()
+{
+	data = function_data;
+
+	// empty lists
+	$('.function0_list').html('');
+	$('.function1_list').html('');
+	$('.function2_list').html('');
+
+	var functie1_array = {};
+	var functie1_total_array = {};
+	var functie2_array = {};
+	var functie2_total_array = {};
+
+	var business_array = ['Bedrijven','Kantoren'];
+	var activity_array = ['Activiteiten en Ontmoeting','sport','Zorg','Onderwijs','Religie','Parkeren','Openbaar vervoer'];
+	var shopping_array = ['Detailhandel',]
+	var tourism_array = ['Uitgaan en Toerisme','Horeca'];
+	var other_array = ['Onduidelijk'];
+
+	var functie0_array = {'Business':0,'Activity':0,'Tourism':0,'Shopping':0,'Other':0};
+	var functie0_total_array = {'Business':0,'Activity':0,'Tourism':0,'Shopping':0,'Other':0};
+
+	var part_total = 0;
+	var total = 0;
+
+	$.each( data.features, function( key, item ) {
+
+		var doCount = true;
+
+		// filters. in order of importance
+		if(custom_shape)
+		{
+
+			if(item.geometry.type == 'MultiPolygon')
+			{
+				var coordinates = item.geometry.coordinates[0][0][0];
+			}
+			else
+			{
+				var coordinates = item.geometry.coordinates[0][0];
+			}
+
+			var latlng = {'lat':coordinates[1],'lng':coordinates[0]};
+
+
+			if(polyType=='polygon')
+			{
+				doCount = pointInPoly(custom_shape,latlng);
+			}
+			if(polyType=='rectangle')
+			{
+				doCount = custom_shape.getBounds().contains(latlng);
+			}
+			if(polyType=='circle')
+			{
+				doCount = custom_shape.getLatLng().distanceTo(latlng) < custom_shape.getRadius();
+			}
+		}
+
+		if(doCount)
+		{
+
+			if(business_array.indexOf(item.properties.FUNCTIE1_OMS) > -1 )
+			{
+				functie0_array['Business']++;
+			}
+
+			if(activity_array.indexOf(item.properties.FUNCTIE1_OMS) > -1)
+			{
+				functie0_array['Activity']++;
+			}
+
+			if(tourism_array.indexOf(item.properties.FUNCTIE1_OMS) > -1)
+			{
+				functie0_array['Tourism']++;
+			}
+
+			if(shopping_array.indexOf(item.properties.FUNCTIE1_OMS) > -1)
+			{
+				functie0_array['Shopping']++;
+			}
+
+			if(other_array.indexOf(item.properties.FUNCTIE1_OMS) > -1)
+			{
+				functie0_array['Other']++;
+			}
+
+
+			var lg = functie1_array[item.properties.FUNCTIE1_OMS];
+			if (lg === undefined)
+			{
+				functie1_array[item.properties.FUNCTIE1_OMS] = 1;
+			}
+			else
+			{
+				functie1_array[item.properties.FUNCTIE1_OMS]++;
+			}
+
+			var lg = functie2_array[item.properties.FUNCTIE2_OMS];
+			if (lg === undefined)
+			{
+				functie2_array[item.properties.FUNCTIE2_OMS] = 1;
+			}
+			else
+			{
+				functie2_array[item.properties.FUNCTIE2_OMS]++;
+			}
+
+			part_total++;
+		}
+
+
+		if(business_array.indexOf(item.properties.FUNCTIE1_OMS) > -1 )
+		{
+			functie0_total_array['Business']++;
+		}
+
+		if(activity_array.indexOf(item.properties.FUNCTIE1_OMS) > -1)
+		{
+			functie0_total_array['Activity']++;
+		}
+
+		if(tourism_array.indexOf(item.properties.FUNCTIE1_OMS) > -1)
+		{
+			functie0_total_array['Tourism']++;
+		}
+
+		if(shopping_array.indexOf(item.properties.FUNCTIE1_OMS) > -1)
+		{
+			functie0_total_array['Shopping']++;
+		}
+
+		if(other_array.indexOf(item.properties.FUNCTIE1_OMS) > -1)
+		{
+			functie0_total_array['Other']++;
+		}
+
+
+		var lg = functie1_total_array[item.properties.FUNCTIE1_OMS];
+		if (lg === undefined)
+		{
+			functie1_total_array[item.properties.FUNCTIE1_OMS] = 1;
+		}
+		else
+		{
+			functie1_total_array[item.properties.FUNCTIE1_OMS]++;
+		}
+
+		var lg = functie2_total_array[item.properties.FUNCTIE2_OMS];
+		if (lg === undefined)
+		{
+			functie2_total_array[item.properties.FUNCTIE2_OMS] = 1;
+		}
+		else
+		{
+			functie2_total_array[item.properties.FUNCTIE2_OMS]++;
+		}
+
+		total++;
+
+	});
+
+	$('.function_header .function_count').html(part_total);
+	$('.function_header .function_total').html(total);
+
+	$.each(functie0_array, function( key, item ) {
+		$('.function0_list').append('<li layer="'+ key +'" class="">'+key+'</span> (<span class="count">'+ item +'</span>/'+ functie0_total_array[key] +')</li>');
+	});
+
+	$.each(functie1_array, function( key, item ) {
+		$('.function1_list').append('<li layer="'+ key +'" class="">'+key+'</span> (<span class="count">'+ item +'</span>/'+ functie1_total_array[key] +')</li>');
+	});
+
+	$.each(functie2_array, function( key, item ) {
+		$('.function2_list').append('<li layer="'+ key +'" class="">'+key+'</span> (<span class="count">'+ item +'</span>/'+ functie2_total_array[key] +')</li>');
+	});
+
+}
+
 
 function convertData(data,source,realtime)
 {
@@ -620,7 +1034,7 @@ function convertData(data,source,realtime)
 
 function populatePage()
 {
-	$('.content-subheader span').html(counter_array["total"]);
+	$('.sensor_header span').html(counter_array["total"]);
 
 	$.each( mapLayerSensors, function( key, item ) {
 		$('.filter_layer_sensors').append('<li layer="'+ key +'" class="active"><span><i style="color:#fff;" class="material-icons searchclose">'+ icon_array[key] +'</i> '+key+'</span> (<span class="count">'+ counter_array[key] +'</span>/'+ counter_array[key] +')</li>')
@@ -637,7 +1051,6 @@ function populatePage()
 	$.each( mapLayerMobtype, function( key, item ) {
 		$('.filter_layer_mobtype').append('<li layer="'+ key +'" class="active"><span><i style="color:#fff;" class="material-icons searchclose">'+ icon_array[key] +'</i> '+key+'</span> (<span class="count">'+ counter_array[key] +'</span>/'+ counter_array[key] +')</li>')
 	});
-
 
 }
 
