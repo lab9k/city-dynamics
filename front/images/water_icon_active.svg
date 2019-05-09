@@ -1,17 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>Icon Water - selected - desktop</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Icon-Water---selected---desktop">
-            <rect id="Rectangle-49" fill="#F9F9F9" x="0" y="0" width="40" height="40"></rect>
-            <g id="Water" transform="translate(7.000000, 10.500000)" stroke-linecap="square" stroke-width="2" stroke="#4A4A4A">
-                <polyline id="Line" points="0 3 3 0 6 3 9 0 12 3 15 0 18 3 21 0 24 3 27 0"></polyline>
-                <polyline id="Line" points="0 19 3 16 6 19 9 16 12 19 15 16 18 19 21 16 24 19 27 16"></polyline>
-                <polyline id="Line" points="0 11 3 8 6 11 9 8 12 11 15 8 18 11 21 8 24 11 27 8"></polyline>
-            </g>
-        </g>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+  <g fill="none" fill-rule="evenodd" stroke="#666666" stroke-linecap="square" stroke-width="2" transform="translate(7.5 10)">
+    <polyline points="0 12.353 3.889 8.824 7.778 12.353 11.667 8.824 15.556 12.353 19.444 8.824 23.333 12.353 27.222 8.824 31.111 12.353 35 8.824"/>
+    <polyline points="0 3.529 3.889 0 7.778 3.529 11.667 0 15.556 3.529 19.444 0 23.333 3.529 27.222 0 31.111 3.529 35 0"/>
+    <polyline points="0 30 3.889 26.471 7.778 30 11.667 26.471 15.556 30 19.444 26.471 23.333 30 27.222 26.471 31.111 30 35 26.471"/>
+    <polyline points="0 21.176 3.889 17.647 7.778 21.176 11.667 17.647 15.556 21.176 19.444 17.647 23.333 21.176 27.222 17.647 31.111 21.176 35 17.647"/>
+  </g>
 </svg>

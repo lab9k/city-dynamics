@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sensor dashboard - Amsterdam</title>
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<script src="js/leaflet.js"></script>
+	<!--<script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js" integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin=""></script>-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.12/proj4.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4leaflet/1.0.2/proj4leaflet.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+	<script src="https://unpkg.com/@turf/turf"></script>
+	<script type="text/javascript" src="js/Leaflet.Icon.Glyph.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="js/index.js"></script>
+
+	<link rel="stylesheet" href="css/leaflet.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
+	<!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fast.fonts.net/cssapi/3680cf49-2b05-4b8a-af28-fa9e27d2bed0.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/index.css">
+
+</head>
+<body id="overwrite">
+	<div id="map" class="map"></div>
+	<div class="content">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+
+					<div class="content-header">
+						Databronnen overzicht
+					</div>
+
+					<div class="content-subheader sensor_header">
+						Totaal: <span class="count"></span> / <span class="total"></span>
+					</div>
+
+					<div class="btn-group" role="group">
+						<button type="button" class="layer_both btn btn-primary active">Both</button>
+						<button type="button" class="layer_heat btn btn-primary">Heat</button>
+						<button type="button" class="layer_dots btn btn-primary">Dots</button>
+					</div>
+					<p></p>
+
+					<ul id="tabsJustified" class="nav nav-tabs">
+						<li class="nav-item"><a href="" data-target="#sensor" data-toggle="tab" class="nav-link small text-uppercase active">Type sensor</a></li>
+						<li class="nav-item"><a href="" data-target="#source" data-toggle="tab" class="nav-link small text-uppercase">Databron</a></li>
+						<li class="nav-item"><a href="" data-target="#realtime" data-toggle="tab" class="nav-link small text-uppercase">Realtime</a></li>
+						<li class="nav-item"><a href="" data-target="#mobtype" data-toggle="tab" class="nav-link small text-uppercase">Mobiliteits type</a></li>
+					</ul>
+
+					<div id="tabsJustifiedContent" class="tab-content">
+						<div id="sensor" class="tab-pane fade active show">
+							<ul class="filter_layer_sensors">
+
+							</ul>
+						</div>
+						<div id="source" class="tab-pane fade">
+							<ul class="filter_layer_source">
+
+							</ul>
+						</div>
+						<div id="realtime" class="tab-pane fade">
+							<ul class="filter_layer_realtime">
+
+							</ul>
+						</div>
+						<div id="mobtype" class="tab-pane fade">
+							<ul class="filter_layer_mobtype">
+
+							</ul>
+						</div>
+					</div>
+
+
+					<!--<div class="panel-group" id="accordion">-->
+						<!--<div class="panel panel-default">-->
+							<!--<div class="panel-heading">-->
+								<!--<h4 class="panel-title">-->
+									<!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Type sensor</a>-->
+								<!--</h4>-->
+							<!--</div>-->
+							<!--<div id="collapseOne" class="panel-collapse collapse in show">-->
+								<!--<div class="panel-body">-->
+									<!--<ul class="filter_layer_sensors">-->
+
+									<!--</ul>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="panel panel-default">-->
+							<!--<div class="panel-heading">-->
+								<!--<h4 class="panel-title">-->
+									<!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Databron</a>-->
+								<!--</h4>-->
+							<!--</div>-->
+							<!--<div id="collapseTwo" class="panel-collapse collapse show">-->
+								<!--<div class="panel-body">-->
+									<!--<ul class="filter_layer_source">-->
+
+									<!--</ul>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="panel panel-default">-->
+							<!--<div class="panel-heading">-->
+								<!--<h4 class="panel-title">-->
+									<!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Realtime</a>-->
+								<!--</h4>-->
+							<!--</div>-->
+							<!--<div id="collapseThree" class="panel-collapse collapse show">-->
+								<!--<div class="panel-body">-->
+									<!--<ul class="filter_layer_realtime">-->
+
+									<!--</ul>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+						<!--<div class="panel panel-default">-->
+							<!--<div class="panel-heading">-->
+								<!--<h4 class="panel-title">-->
+									<!--<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">Mobiliteits type</a>-->
+								<!--</h4>-->
+							<!--</div>-->
+							<!--<div id="collapseFour" class="panel-collapse collapse show">-->
+								<!--<div class="panel-body">-->
+									<!--<ul class="filter_layer_mobtype">-->
+
+									<!--</ul>-->
+								<!--</div>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+					<br>
+
+					<div class="content-subheader function_header">
+						Functie totaal: <span class="function_count"></span> / <span class="function_total"></span>
+					</div>
+
+					<ul id="tabsJustified2" class="nav nav-tabs">
+						<li class="nav-item"><a href="" data-target="#function0" data-toggle="tab" class="nav-link small text-uppercase active">Cat 1</a></li>
+						<li class="nav-item"><a href="" data-target="#function1" data-toggle="tab" class="nav-link small text-uppercase">Cat 2</a></li>
+						<li class="nav-item"><a href="" data-target="#function2" data-toggle="tab" class="nav-link small text-uppercase">Cat 3</a></li>
+					</ul>
+
+					<div id="tabsJustifiedContent2" class="tab-content">
+						<div id="function0" class="tab-pane fade active show">
+							<ul class="function0_list">
+
+							</ul>
+						</div>
+						<div id="function1" class="tab-pane fade">
+							<ul class="function1_list">
+
+							</ul>
+						</div>
+						<div id="function2" class="tab-pane fade">
+							<ul class="function2_list">
+
+							</ul>
+						</div>
+					</div>
+
+					<div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

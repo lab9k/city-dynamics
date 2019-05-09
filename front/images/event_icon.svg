@@ -1,38 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>Icon Evenementen - desktop</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Icon-Evenementen---desktop">
-            <g id="Evenementen-Icon">
-                <rect id="Rectangle-43" fill="#4A4A4A" x="0" y="0" width="40" height="40"></rect>
-                <g id="Calendar" transform="translate(6.000000, 6.000000)">
-                    <path d="M3.92,3.90384615 L22.96,3.90384615" id="Line" stroke="#FFFFFF" stroke-linecap="square"></path>
-                    <g id="Date-ovals" transform="translate(3.360000, 5.405325)" fill="#FFFFFF">
-                        <ellipse id="Oval-14" cx="2.92923077" cy="2.91715976" rx="2.06769231" ry="2.0591716"></ellipse>
-                        <ellipse id="Oval-14" cx="10.1661538" cy="2.91715976" rx="2.06769231" ry="2.0591716"></ellipse>
-                        <ellipse id="Oval-14" cx="17.4030769" cy="2.91715976" rx="2.06769231" ry="2.0591716"></ellipse>
-                        <ellipse id="Oval-14" cx="2.92923077" cy="9.09467456" rx="2.06769231" ry="2.0591716"></ellipse>
-                        <ellipse id="Oval-14" cx="10.1661538" cy="9.09467456" rx="2.06769231" ry="2.0591716"></ellipse>
-                        <ellipse id="Oval-14" cx="2.92923077" cy="15.2721893" rx="2.06769231" ry="2.0591716"></ellipse>
-                        <ellipse id="Oval-14" cx="10.1661538" cy="15.2721893" rx="2.06769231" ry="2.0591716"></ellipse>
-                        <ellipse id="Oval-14" cx="17.4030769" cy="9.09467456" rx="2.06769231" ry="2.0591716"></ellipse>
-                    </g>
-                    <ellipse id="Oval-13" stroke="#F9F9F9" cx="22.0123077" cy="22.9511834" rx="5.38461538" ry="5.36242604"></ellipse>
-                    <g id="Checkmark" transform="translate(20.763077, 20.677515)" stroke="#F9F9F9" stroke-linecap="square">
-                        <path d="M1.07692308,3.21745562 L3.23076923,1.07248521" id="Line-33"></path>
-                        <polyline id="Line-32" points="0 2.14497041 1.07692308 3.21745562 2.15384615 2.14497041"></polyline>
-                    </g>
-                    <g id="Outerbox" stroke="#F9F9F9" stroke-linecap="square">
-                        <path d="M25.2,18.4038462 L25.2,1.67307692" id="Line-2"></path>
-                        <path d="M1.68,1.67307692 L25.2,1.67307692" id="Line-3"></path>
-                        <path d="M16.24,25.0961538 L1.68,25.0961538" id="Line-4"></path>
-                        <path d="M1.68,1.67307692 L1.68,25.0961538" id="Line-5"></path>
-                    </g>
-                </g>
-            </g>
-        </g>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50" height="50" viewBox="0 0 50 50">
+  <defs>
+    <rect id="event_icon-a" width="33.25" height="3.59" x=".875" y=".897"/>
+    <path id="event_icon-b" d="M1,0 L2.5,0 C3.05228475,-1.01453063e-16 3.5,0.44771525 3.5,1 L3.5,3.58974359 L0,3.58974359 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z"/>
+    <path id="event_icon-c" d="M18.5,0 L20,0 C20.5522847,-1.01453063e-16 21,0.44771525 21,1 L21,3.58974359 L17.5,3.58974359 L17.5,1 C17.5,0.44771525 17.9477153,1.01453063e-16 18.5,0 Z"/>
+  </defs>
+  <g fill="none" fill-rule="evenodd" transform="translate(7.5 7.5)">
+    <g transform="translate(0 3.59)">
+      <rect width="34" height="30.41" x=".5" y=".5" stroke="#F9F9F9"/>
+      <use fill="#F9F9F9" xlink:href="#event_icon-a"/>
+      <rect width="32.25" height="2.59" x="1.375" y="1.397" stroke="#F9F9F9"/>
     </g>
+    <g transform="translate(7)">
+      <use fill="#F9F9F9" xlink:href="#event_icon-b"/>
+      <path stroke="#F9F9F9" d="M0.5,3.08974359 L3,3.08974359 L3,1 C3,0.723857625 2.77614237,0.5 2.5,0.5 L1,0.5 C0.723857625,0.5 0.5,0.723857625 0.5,1 L0.5,3.08974359 Z"/>
+      <g>
+        <use fill="#F9F9F9" xlink:href="#event_icon-c"/>
+        <path stroke="#F9F9F9" d="M18,3.08974359 L20.5,3.08974359 L20.5,1 C20.5,0.723857625 20.2761424,0.5 20,0.5 L18.5,0.5 C18.2238576,0.5 18,0.723857625 18,1 L18,3.08974359 Z"/>
+      </g>
+    </g>
+  </g>
 </svg>

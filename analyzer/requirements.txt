@@ -1,8 +1,12 @@
-pandas
+pandas==0.22.0
 numpy
 sqlalchemy
-psycopg2
+psycopg2-binary
 requests
 scipy
 sklearn
+pytest
 q
+flake8
+beautifulsoup4==4.6.0
+urllib3==1.23

@@ -11,6 +11,9 @@ services:
       - ./backups:/tmp/backups
       - ./backup-google-current.sh:/backup-google-current.sh
       - ./backup-db-google.sh:/backup-db-google.sh
+      - ./backup-analyzer.sh:/backup-analyzer.sh
+      - ./backup-own-realtime.sh:/backup-own-realtime.sh
+      - data-volume:/data
 
   importer:
     image: build.app.amsterdam.nl:5000/stadswerken/citydynamics_importer:${ENVIRONMENT}
@@ -25,15 +28,20 @@ services:
       DATABASE_PORT_OVERRIDE: 5432
       PGPASSWORD: insecure
       STADSWERKEN_OBJECTSTORE_PASSWORD:
-      PYTHONPATH: /app/scrape_quantillion
+      PYTHONPATH: /app/scrape_api
       QUANTILLION_PASSWORD:
       ENVIRONMENT:
-      GOOGLE_DAYS: 50
+      TENANT_NAME: BGE000081_druktemeter
+      TENANT_ID: 97d77d9423fe46df8675937493b8521e
+      OBJECTSTORE_USER: druktemeter
+      OBJECTSTORE_PASSWORD:
+      GOOGLE_DAYS: 10
 
     volumes:
       - data-volume:/data
       - ./backups:/backups
       - ./backup-google-current.sh:/backup-google-current.sh
+      - ./backup-own-realtime.sh:/backup-own-realtime.sh
 
   api:
     image: build.app.amsterdam.nl:5000/stadswerken/citydynamics:${ENVIRONMENT}

@@ -4,11 +4,12 @@ set -x
 set -u
 set -e
 
-cd scrape_quantillion
+# Quantillion scraping
+cd scrape_api
 
 # completely reset database
 python models.py --drop
 
 # load data in database
-python slurp_api.py realtime/current
-python slurp_api.py expected/current
+python slurp_api.py qa_realtime/current
+python slurp_api.py qa_expected/current

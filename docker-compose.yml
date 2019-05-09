@@ -11,6 +11,8 @@ services:
     volumes:
       - ./deploy/backup-db.sh:/backup-db.sh
       - ./deploy/backup:/backup
+      - "~/.ssh/datapunt.key:/root/.ssh/datapunt.key"
+      - data-volume:/data
 
   api:
     build: .
@@ -32,7 +34,6 @@ services:
       - UWSGI_HARAKIRI=15
       - UWSGI_DIE_ON_TERM=1
       - UWSGI_MODULE=citydynamics.wsgi:application
-      # - UWSGI_MOUNT=/api=citydynamics.wsgi:application
 
   importer:
     build: ./importer
@@ -40,17 +41,20 @@ services:
       - database:database
     environment:
       PGPASSWORD: insecure
-      # Following are secret, should be provided as environment variables.
+      # Following are secrets, should be provided as environment variables.
       # E.g. by running in terminal
       # export STADSWERKEN_OBJECTSTORE_PASSWORD="mypassword"
       STADSWERKEN_OBJECTSTORE_PASSWORD:
     volumes:
-      - /app/data:/data
+      - data-volume:/data
+      #- ~/data:/data
+
 
   analyzer:
     build: ./analyzer
     links:
       - database:database
+
 
   front:
     ports:
@@ -58,3 +62,6 @@ services:
     build: ./front
     #links:
     #  - api:api
+
+volumes:
+  data-volume:

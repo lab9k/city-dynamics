@@ -122,7 +122,7 @@ DATABASES = {
     'default': DATABASE_OPTIONS[get_database_key()]
 }
 
-HEALTH_MODEL = 'datasets.Drukteindex'
+HEALTH_MODEL = 'datasets.HotspotsDrukteindex'
 
 
 # Password validation
@@ -146,7 +146,7 @@ USE_TZ = False
 
 REST_FRAMEWORK = dict(
     PAGE_SIZE=500,
-    MAX_PAGINATE_BY=100,
+    MAX_PAGINATE_BY=500,
 
     DEFAULT_AUTHENTICATION_CLASSES=[],
     DEFAULT_PERMISSION_CLASSES=[],
@@ -154,9 +154,10 @@ REST_FRAMEWORK = dict(
     UNAUTHENTICATED_USER={},
     UNAUTHENTICATED_TOKEN={},
     # or allow read-only access for unauthenticated users.
-    DEFAULT_PAGINATION_CLASS='rest_framework.pagination.LimitOffsetPagination',
+    DEFAULT_PAGINATION_CLASS="datapunt_api.pagination.HALPagination",
+
     DEFAULT_FILTER_BACKENDS=(
-        'rest_framework.filters.DjangoFilterBackend',
+        'django_filters.rest_framework.DjangoFilterBackend',
     ),
 )
 
@@ -165,6 +166,9 @@ REST_FRAMEWORK = dict(
 
 STATIC_URL = '/'
 
+if DEBUG:
+    STATIC_URL = '/static/'
+
 STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 
 # STATICFILES_DIR = (os.path.join(BASE_DIR, 'static'),)
@@ -172,6 +176,10 @@ STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '..', 'static'))
 # Upload location
 MEDIA_URL = '/blabla/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGSTASH_HOST = os.getenv('LOGSTASH_HOST', '127.0.0.1')
+LOGSTASH_PORT = int(os.getenv('LOGSTASH_GELF_UDP_PORT', 12201))
+
 
 LOGGING = {
     'version': 1,
@@ -190,6 +198,19 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'console',
         },
+
+        'graypy': {
+            'level': 'ERROR',
+            'class': 'graypy.GELFHandler',
+            'host': LOGSTASH_HOST,
+            'port': LOGSTASH_PORT,
+        },
+
+    },
+
+    'root': {
+        'handlers': ['console'],
+        'level': 'ERROR'
     },
 
     'loggers': {

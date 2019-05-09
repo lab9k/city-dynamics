@@ -1,21 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 47.1 (45422) - http://www.bohemiancoding.com/sketch -->
-    <title>Icon CCTV - desktop</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Icon-CCTV---desktop">
-            <g id="CCTV-icon">
-                <rect id="Rectangle-44" fill="#4A4A4A" x="0" y="0" width="40" height="40"></rect>
-                <g id="Camera" transform="translate(19.756820, 22.159148) rotate(-20.000000) translate(-19.756820, -22.159148) translate(8.756820, 12.159148)">
-                    <polygon id="Rectangle-2" fill="#F9F9F9" points="0.755060406 2.88374227 3.72001059 2.52869899 3.75506041 6.52869899 0.755060406 6.16104872"></polygon>
-                    <rect id="Rectangle" fill="#F9F9F9" x="4.75506041" y="0.528698988" width="15.25" height="8" rx="1"></rect>
-                    <polygon id="Rectangle-3" fill="#F9F9F9" points="13 8.38019169 14.5016634 8.07274567 14.9266003 15.6766544 13.376205 15.4624605"></polygon>
-                    <polygon id="Rectangle-4" fill="#F9F9F9" transform="translate(17.049783, 17.203639) rotate(20.000000) translate(-17.049783, -17.203639) " points="12.80223 16.3286388 21.2973361 16.3286388 21.2973361 18.0786388 13.3019421 18.0786388"></polygon>
-                    <path d="M16.5822125,8.11592957 L17.2041427,17.0944151" id="Line" stroke="#F9F9F9" stroke-width="0.5" stroke-linecap="square"></path>
-                </g>
-            </g>
-        </g>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+  <path fill="#F9F9F9" fill-rule="evenodd" d="M28.7147472,13.3075999 L28.413308,26.138024 L35.5071162,28.719959 L34.5206465,31.4302623 L21.7465033,26.7808544 L21.9317973,23.8245055 L21.3554926,13.3075999 L8.32383755,13.3075999 C7.7715528,13.3075999 7.32383755,12.8598846 7.32383755,12.3075999 L7.32383755,1.12248224 C7.32383755,0.570197494 7.7715528,0.122482243 8.32383755,0.122482243 L32.2522508,0.122482243 C32.8045355,0.122482243 33.2522508,0.570197494 33.2522508,1.12248224 L33.2522508,12.3075999 C33.2522508,12.8598846 32.8045355,13.3075999 32.2522508,13.3075999 L28.7147472,13.3075999 Z M28.0095407,13.3075999 L23.9385667,13.3075999 L24.5981889,24.7494342 L27.7796234,25.9073817 L28.0095407,13.3075999 Z M0.522942281,4.00392258 L5.5640212,3.41876166 L5.62361373,10.0113205 L0.522942281,9.40538148 L0.522942281,4.00392258 Z" transform="rotate(-20 56.53 1.206)"/>
 </svg>

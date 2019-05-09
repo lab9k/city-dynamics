@@ -1,0 +1,8252 @@
+[
+  {
+    "id": "GVB:04407",
+    "name": "Amsterdam, Ecuplein",
+    "lat": "52.349707",
+    "lng": "4.788174"
+  },
+  {
+    "id": "GVB:09527",
+    "name": "Amsterdam, Station Holendrecht",
+    "lat": "52.297802",
+    "lng": "4.960216"
+  },
+  {
+    "id": "GVB:08049",
+    "name": "Amsterdam, Alexanderplein",
+    "lat": "52.363833",
+    "lng": "4.919163"
+  },
+  {
+    "id": "GVB:09116",
+    "name": "Amsterdam, Ruysdaelkade",
+    "lat": "52.352242",
+    "lng": "4.887082"
+  },
+  {
+    "id": "GVB:09111",
+    "name": "Amsterdam, Ferd Bolstraat",
+    "lat": "52.352725",
+    "lng": "4.890732"
+  },
+  {
+    "id": "GVB:09110",
+    "name": "Amsterdam, Ferd Bolstraat",
+    "lat": "52.352854",
+    "lng": "4.891538"
+  },
+  {
+    "id": "GVB:09113",
+    "name": "Amsterdam, Ceintuurbaan",
+    "lat": "52.352539",
+    "lng": "4.891233"
+  },
+  {
+    "id": "GVB:04129",
+    "name": "Amsterdam, Derkinderenstraat",
+    "lat": "52.364155",
+    "lng": "4.839262"
+  },
+  {
+    "id": "GVB:09020",
+    "name": "Amsterdam, Wibautstraat",
+    "lat": "52.357259",
+    "lng": "490928"
+  },
+  {
+    "id": "GVB:09023",
+    "name": "Amsterdam, Camperstraat",
+    "lat": "52.358401",
+    "lng": "4.913833"
+  },
+  {
+    "id": "GVB:07148",
+    "name": "Amsterdam, Weerdestein",
+    "lat": "52.332142",
+    "lng": "4.888233"
+  },
+  {
+    "id": "GVB:07146",
+    "name": "Amsterdam, Oldengaarde",
+    "lat": "52.332056",
+    "lng": "4.882967"
+  },
+  {
+    "id": "GVB:07144",
+    "name": "Amsterdam, Oldengaarde",
+    "lat": "52.332141",
+    "lng": "4.881837"
+  },
+  {
+    "id": "GVB:07412",
+    "name": "Amsterdam, De Boelelaan/VU",
+    "lat": "52.334404",
+    "lng": "4.868856"
+  },
+  {
+    "id": "GVB:07413",
+    "name": "Amsterdam, De Boelelaan/VU",
+    "lat": "52.333946",
+    "lng": "4.868802"
+  },
+  {
+    "id": "GVB:07410",
+    "name": "Amsterdam, De Boelelaan/VU",
+    "lat": "523348",
+    "lng": "4.868866"
+  },
+  {
+    "id": "GVB:08216",
+    "name": "Amsterdam, Borneolaan",
+    "lat": "52.370567",
+    "lng": "4.938357"
+  },
+  {
+    "id": "GVB:07411",
+    "name": "Amsterdam, De Boelelaan/VU",
+    "lat": "52.334548",
+    "lng": "486881"
+  },
+  {
+    "id": "GVB:07416",
+    "name": "Amsterdam, AJ Ernststraat",
+    "lat": "52.331492",
+    "lng": "4.868875"
+  },
+  {
+    "id": "GVB:07417",
+    "name": "Amsterdam, AJ Ernststraat",
+    "lat": "52.331043",
+    "lng": "4.868821"
+  },
+  {
+    "id": "GVB:07414",
+    "name": "Amsterdam, AJ Ernststraat",
+    "lat": "52.331825",
+    "lng": "4.868871"
+  },
+  {
+    "id": "GVB:07415",
+    "name": "Amsterdam, AJ Ernststraat",
+    "lat": "52.331627",
+    "lng": "4.868815"
+  },
+  {
+    "id": "GVB:07149",
+    "name": "Amsterdam, Weerdestein",
+    "lat": "52.332063",
+    "lng": "4.888659"
+  },
+  {
+    "id": "GVB:07418",
+    "name": "Amsterdam, Van Boshuizenstraat",
+    "lat": "52.325094",
+    "lng": "4.869023"
+  },
+  {
+    "id": "GVB:07419",
+    "name": "Amsterdam, Van Boshuizenstraat",
+    "lat": "52.324878",
+    "lng": "4.868967"
+  },
+  {
+    "id": "GVB:07098",
+    "name": "Amsterdam, Olympiaplein",
+    "lat": "52.346366",
+    "lng": "4.866588"
+  },
+  {
+    "id": "GVB:07097",
+    "name": "Amsterdam, Olympiaplein",
+    "lat": "523463",
+    "lng": "4.865826"
+  },
+  {
+    "id": "GVB:07094",
+    "name": "Amsterdam, Minervaplein",
+    "lat": "52.346695",
+    "lng": "4.872043"
+  },
+  {
+    "id": "GVB:07091",
+    "name": "Amsterdam, Minervaplein",
+    "lat": "52.346771",
+    "lng": "4.872997"
+  },
+  {
+    "id": "GVB:04062",
+    "name": "Amsterdam, Johan Huizingalaan",
+    "lat": "52.35781",
+    "lng": "4.825821"
+  },
+  {
+    "id": "GVB:04063",
+    "name": "Amsterdam, Johan Huizingalaan",
+    "lat": "52.357785",
+    "lng": "4.826261"
+  },
+  {
+    "id": "GVB:04060",
+    "name": "Amsterdam, Derkinderenstraat",
+    "lat": "52.357965",
+    "lng": "483972"
+  },
+  {
+    "id": "GVB:04061",
+    "name": "Amsterdam, Derkinderenstraat",
+    "lat": "52.35794",
+    "lng": "4.840146"
+  },
+  {
+    "id": "GVB:04067",
+    "name": "Amsterdam, Wolbrantskerkweg",
+    "lat": "52.356846",
+    "lng": "479759"
+  },
+  {
+    "id": "GVB:04064",
+    "name": "Amsterdam, Piet Wiedijkstraat",
+    "lat": "52.357445",
+    "lng": "4.815329"
+  },
+  {
+    "id": "GVB:04065",
+    "name": "Amsterdam, Piet Wiedijkstraat",
+    "lat": "52.357492",
+    "lng": "4.815754"
+  },
+  {
+    "id": "GVB:00039",
+    "name": "Amsterdam, Hogeweg",
+    "lat": "52.353579",
+    "lng": "4.930837"
+  },
+  {
+    "id": "GVB:00038",
+    "name": "Amsterdam, Maxwellstraat",
+    "lat": "52.34709",
+    "lng": "4.928571"
+  },
+  {
+    "id": "GVB:04068",
+    "name": "Amsterdam, Koos Vorrinkweg",
+    "lat": "52.35291",
+    "lng": "4.799682"
+  },
+  {
+    "id": "GVB:00321",
+    "name": "Amsterdam, Gaasperplas (uitstap)",
+    "lat": "52.310913",
+    "lng": "4.985136"
+  },
+  {
+    "id": "GVB:00323",
+    "name": "Amsterdam, Gaasperplas",
+    "lat": "52.311093",
+    "lng": "4.985193"
+  },
+  {
+    "id": "GVB:00322",
+    "name": "Amsterdam, Gaasperplas",
+    "lat": "52.311147",
+    "lng": "4.985164"
+  },
+  {
+    "id": "GVB:01328",
+    "name": "Amsterdam, Het Breed",
+    "lat": "52.397724",
+    "lng": "4.937333"
+  },
+  {
+    "id": "GVB:01326",
+    "name": "Amsterdam, Bloemendgouw 51",
+    "lat": "52.39605",
+    "lng": "5008695"
+  },
+  {
+    "id": "GVB:01327",
+    "name": "Amsterdam, Bloemendgouw 51",
+    "lat": "52.396059",
+    "lng": "5008621"
+  },
+  {
+    "id": "GVB:01324",
+    "name": "Amsterdam, Volkstuin",
+    "lat": "52.387151",
+    "lng": "4.968214"
+  },
+  {
+    "id": "GVB:01325",
+    "name": "Amsterdam, Volkstuin",
+    "lat": "52.386775",
+    "lng": "4.968717"
+  },
+  {
+    "id": "GVB:04208",
+    "name": "Amsterdam, Jac Veltmanstraat",
+    "lat": "52.351534",
+    "lng": "4.830964"
+  },
+  {
+    "id": "GVB:04196",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.357901",
+    "lng": "483382"
+  },
+  {
+    "id": "GVB:04195",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.357878",
+    "lng": "4.834598"
+  },
+  {
+    "id": "GVB:04192",
+    "name": "Amsterdam, R Engelmanstraat",
+    "lat": "52.356322",
+    "lng": "483061"
+  },
+  {
+    "id": "GVB:04191",
+    "name": "Amsterdam, R Engelmanstraat",
+    "lat": "52.356246",
+    "lng": "4.831448"
+  },
+  {
+    "id": "GVB:04229",
+    "name": "Amsterdam, Zuidermolenweg",
+    "lat": "52.359917",
+    "lng": "4.781151"
+  },
+  {
+    "id": "GVB:04338",
+    "name": "Amsterdam, Brusselsingel",
+    "lat": "52.344886",
+    "lng": "4.807332"
+  },
+  {
+    "id": "GVB:04339",
+    "name": "Amsterdam, Brusselsingel",
+    "lat": "52.345012",
+    "lng": "4.807403"
+  },
+  {
+    "id": "GVB:04332",
+    "name": "Amsterdam, Anderlechtlaan",
+    "lat": "52.335744",
+    "lng": "4.814435"
+  },
+  {
+    "id": "GVB:04333",
+    "name": "Amsterdam, Anderlechtlaan",
+    "lat": "52.335854",
+    "lng": "4.814815"
+  },
+  {
+    "id": "GVB:05139",
+    "name": "Amsterdam, Dam",
+    "lat": "52.372725",
+    "lng": "4.891242"
+  },
+  {
+    "id": "GVB:05138",
+    "name": "Amsterdam, Dam",
+    "lat": "52.373552",
+    "lng": "4.891306"
+  },
+  {
+    "id": "GVB:08215",
+    "name": "Amsterdam, Borneolaan",
+    "lat": "52.370919",
+    "lng": "4.938618"
+  },
+  {
+    "id": "GVB:08219",
+    "name": "Amsterdam, Borneolaan",
+    "lat": "52.370901",
+    "lng": "4.938618"
+  },
+  {
+    "id": "GVB:08031",
+    "name": "Amsterdam, Prins Hendrikkade",
+    "lat": "52.374479",
+    "lng": "4.904557"
+  },
+  {
+    "id": "GVB:08030",
+    "name": "Amsterdam, Prins Hendrikkade",
+    "lat": "52.373828",
+    "lng": "4.905782"
+  },
+  {
+    "id": "GVB:08033",
+    "name": "Amsterdam, Prins Hendrikkade",
+    "lat": "52.375697",
+    "lng": "4.903559"
+  },
+  {
+    "id": "GVB:08032",
+    "name": "Amsterdam, Kattenburgerstraat",
+    "lat": "52.372728",
+    "lng": "4.918438"
+  },
+  {
+    "id": "GVB:05007",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377604",
+    "lng": "4.901776"
+  },
+  {
+    "id": "GVB:05006",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377443",
+    "lng": "4.901881"
+  },
+  {
+    "id": "GVB:08037",
+    "name": "Amsterdam, Borneolaan",
+    "lat": "52.371997",
+    "lng": "4.938607"
+  },
+  {
+    "id": "GVB:08036",
+    "name": "Amsterdam, Borneolaan",
+    "lat": "52.372095",
+    "lng": "4.938312"
+  },
+  {
+    "id": "GVB:01076",
+    "name": "Amsterdam, Waterlandplein",
+    "lat": "52.392383",
+    "lng": "495362"
+  },
+  {
+    "id": "GVB:01077",
+    "name": "Amsterdam, Dijkmanshuizenstraat",
+    "lat": "52.396269",
+    "lng": "4.954405"
+  },
+  {
+    "id": "GVB:01070",
+    "name": "Amsterdam, Werengouw",
+    "lat": "52.394088",
+    "lng": "4.948094"
+  },
+  {
+    "id": "GVB:01071",
+    "name": "Amsterdam, Waterlandplein",
+    "lat": "52.39264",
+    "lng": "4.952707"
+  },
+  {
+    "id": "GVB:01078",
+    "name": "Amsterdam, Dijkmanshuizenstraat",
+    "lat": "52.395497",
+    "lng": "4.954751"
+  },
+  {
+    "id": "GVB:01079",
+    "name": "Amsterdam, Beemsterstraat",
+    "lat": "52.397743",
+    "lng": "4.951937"
+  },
+  {
+    "id": "GVB:08013",
+    "name": "Amsterdam, Azartplein",
+    "lat": "52.376558",
+    "lng": "4.937342"
+  },
+  {
+    "id": "GVB:08012",
+    "name": "Amsterdam, C van Eesterenlaan",
+    "lat": "52.373562",
+    "lng": "4.938855"
+  },
+  {
+    "id": "GVB:09108",
+    "name": "Amsterdam, 2e vdHelststraat",
+    "lat": "52.353189",
+    "lng": "4.894235"
+  },
+  {
+    "id": "GVB:09109",
+    "name": "Amsterdam, 2e vdHelststraat",
+    "lat": "52.353318",
+    "lng": "4.894879"
+  },
+  {
+    "id": "GVB:09107",
+    "name": "Amsterdam, Albert Cuypstraat",
+    "lat": "52.355375",
+    "lng": "4.890409"
+  },
+  {
+    "id": "GVB:09104",
+    "name": "Amsterdam, Albert Cuypstraat",
+    "lat": "52.354823",
+    "lng": "4.889402"
+  },
+  {
+    "id": "GVB:09100",
+    "name": "Amsterdam, Stadhouderskade",
+    "lat": "52.358477",
+    "lng": "4.899182"
+  },
+  {
+    "id": "GVB:09101",
+    "name": "Amsterdam, Stadhouderskade",
+    "lat": "52.358018",
+    "lng": "4.899231"
+  },
+  {
+    "id": "GVB:02086",
+    "name": "Amsterdam, Solebaystraat",
+    "lat": "52.385011",
+    "lng": "485594"
+  },
+  {
+    "id": "GVB:01111",
+    "name": "Amsterdam, Rode Kruisstraat",
+    "lat": "52.394878",
+    "lng": "4.928811"
+  },
+  {
+    "id": "GVB:01110",
+    "name": "Amsterdam, Rode Kruisstraat",
+    "lat": "52.394553",
+    "lng": "4.928476"
+  },
+  {
+    "id": "GVB:04419",
+    "name": "Amsterdam, Oude Haagseweg",
+    "lat": "52.333411",
+    "lng": "4.809668"
+  },
+  {
+    "id": "GVB:00030",
+    "name": "Amsterdam, Pretoriusstraat",
+    "lat": "52.357392",
+    "lng": "4.926938"
+  },
+  {
+    "id": "GVB:01112",
+    "name": "Amsterdam, Waddenweg",
+    "lat": "52.392633",
+    "lng": "4.926954"
+  },
+  {
+    "id": "GVB:04417",
+    "name": "Amsterdam, Matterhorn",
+    "lat": "52.354961",
+    "lng": "4.775112"
+  },
+  {
+    "id": "GVB:02259",
+    "name": "Amsterdam, Contactweg",
+    "lat": "52.391952",
+    "lng": "4.856577"
+  },
+  {
+    "id": "GVB:02258",
+    "name": "Amsterdam, Kabelweg",
+    "lat": "52.392638",
+    "lng": "4.847122"
+  },
+  {
+    "id": "GVB:04416",
+    "name": "Amsterdam, Matterhorn",
+    "lat": "52.35441",
+    "lng": "4.774577"
+  },
+  {
+    "id": "GVB:02253",
+    "name": "Amsterdam, Zekeringstraat",
+    "lat": "52.397178",
+    "lng": "484742"
+  },
+  {
+    "id": "GVB:02252",
+    "name": "Amsterdam, Zekeringstraat",
+    "lat": "52.396907",
+    "lng": "4.847188"
+  },
+  {
+    "id": "GVB:02257",
+    "name": "Amsterdam, Kabelweg",
+    "lat": "52.39271",
+    "lng": "4.847268"
+  },
+  {
+    "id": "GVB:02099",
+    "name": "Amsterdam, Zaanstraat",
+    "lat": "52.389569",
+    "lng": "4.874616"
+  },
+  {
+    "id": "GVB:09033",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.34717",
+    "lng": "4.919177"
+  },
+  {
+    "id": "GVB:09030",
+    "name": "Amsterdam, Prins Bernhardplein",
+    "lat": "52.348693",
+    "lng": "4.918104"
+  },
+  {
+    "id": "GVB:09031",
+    "name": "Amsterdam, Prins Bernhardplein",
+    "lat": "52.349196",
+    "lng": "4.917791"
+  },
+  {
+    "id": "GVB:09037",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.346181",
+    "lng": "4.919217"
+  },
+  {
+    "id": "GVB:09034",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.347081",
+    "lng": "4.919501"
+  },
+  {
+    "id": "GVB:02091",
+    "name": "Amsterdam, Oostzaanstraat",
+    "lat": "52.392811",
+    "lng": "4.873932"
+  },
+  {
+    "id": "GVB:02090",
+    "name": "Amsterdam, Oostzaanstraat",
+    "lat": "52.393081",
+    "lng": "4.872077"
+  },
+  {
+    "id": "GVB:09038",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.346172",
+    "lng": "49191"
+  },
+  {
+    "id": "GVB:02092",
+    "name": "Amsterdam, Hempoint",
+    "lat": "52.393293",
+    "lng": "4.869019"
+  },
+  {
+    "id": "GVB:02095",
+    "name": "Amsterdam, Oderweg",
+    "lat": "52.390184",
+    "lng": "4.820284"
+  },
+  {
+    "id": "GVB:02094",
+    "name": "Amsterdam, Koogstraat",
+    "lat": "52.39154",
+    "lng": "4.873065"
+  },
+  {
+    "id": "GVB:02097",
+    "name": "Amsterdam, Kastrupstraat",
+    "lat": "52.390163",
+    "lng": "4.832947"
+  },
+  {
+    "id": "GVB:02096",
+    "name": "Amsterdam, Kapoeasweg",
+    "lat": "52.390153",
+    "lng": "482688"
+  },
+  {
+    "id": "GVB:04411",
+    "name": "Amsterdam, Hoekenes",
+    "lat": "52.352436",
+    "lng": "4.801832"
+  },
+  {
+    "id": "GVB:04410",
+    "name": "Amsterdam, Baden Powellweg",
+    "lat": "52.351055",
+    "lng": "4.795186"
+  },
+  {
+    "id": "GVB:02321",
+    "name": "Amsterdam, Van Hallstraat",
+    "lat": "52.385382",
+    "lng": "4.868642"
+  },
+  {
+    "id": "GVB:02320",
+    "name": "Amsterdam, Van Hallstraat",
+    "lat": "52.38527",
+    "lng": "486782"
+  },
+  {
+    "id": "GVB:03129",
+    "name": "Amsterdam, Plein '40 - '45",
+    "lat": "52.380751",
+    "lng": "4.821124"
+  },
+  {
+    "id": "GVB:03122",
+    "name": "Amsterdam, Aalbersestraat",
+    "lat": "52.382324",
+    "lng": "479897"
+  },
+  {
+    "id": "GVB:03123",
+    "name": "Amsterdam, Dr H Colijnstraat",
+    "lat": "52.382447",
+    "lng": "4.805651"
+  },
+  {
+    "id": "GVB:03121",
+    "name": "Amsterdam, Aalbersestraat",
+    "lat": "52.382021",
+    "lng": "479774"
+  },
+  {
+    "id": "GVB:07311",
+    "name": "Amsterdam, Ruysdaelkade",
+    "lat": "52.360239",
+    "lng": "4.886537"
+  },
+  {
+    "id": "GVB:07310",
+    "name": "Amsterdam, Apollolaan",
+    "lat": "52.348159",
+    "lng": "4.882109"
+  },
+  {
+    "id": "GVB:07312",
+    "name": "Amsterdam, Ruysdaelkade",
+    "lat": "52.360303",
+    "lng": "4.886683"
+  },
+  {
+    "id": "GVB:07131",
+    "name": "Amsterdam, Pr Irenestraat",
+    "lat": "52.34303",
+    "lng": "4.868329"
+  },
+  {
+    "id": "GVB:07130",
+    "name": "Amsterdam, Pr Irenestraat",
+    "lat": "52.342023",
+    "lng": "4.868194"
+  },
+  {
+    "id": "GVB:07421",
+    "name": "Amsterdam, Van Boshuizenstraat",
+    "lat": "52.325192",
+    "lng": "4.868948"
+  },
+  {
+    "id": "GVB:07420",
+    "name": "Amsterdam, Van Boshuizenstraat",
+    "lat": "52.325633",
+    "lng": "4.868987"
+  },
+  {
+    "id": "GVB:07138",
+    "name": "Amsterdam, Egelenburg",
+    "lat": "52.32827",
+    "lng": "4.861768"
+  },
+  {
+    "id": "GVB:07220",
+    "name": "Amsterdam, Van Nijenrodeweg",
+    "lat": "52.326759",
+    "lng": "4.857547"
+  },
+  {
+    "id": "GVB:07222",
+    "name": "Amsterdam, Van Nijenrodeweg",
+    "lat": "52.326957",
+    "lng": "4.857412"
+  },
+  {
+    "id": "GVB:07049",
+    "name": "Amsterdam, Hoofddorpplein",
+    "lat": "52.35117",
+    "lng": "4.849609"
+  },
+  {
+    "id": "GVB:07048",
+    "name": "Amsterdam, Hoofddorpplein",
+    "lat": "52.351541",
+    "lng": "4.850103"
+  },
+  {
+    "id": "GVB:00020",
+    "name": "Amsterdam, Beukenweg",
+    "lat": "52.35906",
+    "lng": "4.916747"
+  },
+  {
+    "id": "GVB:00021",
+    "name": "Amsterdam, Beukenweg",
+    "lat": "52.358298",
+    "lng": "491721"
+  },
+  {
+    "id": "GVB:04053",
+    "name": "Amsterdam, Piet Wiedijkstraat",
+    "lat": "52.355135",
+    "lng": "4.815374"
+  },
+  {
+    "id": "GVB:04052",
+    "name": "Amsterdam, CK Eloutstraat",
+    "lat": "52.35447",
+    "lng": "4.811683"
+  },
+  {
+    "id": "GVB:04051",
+    "name": "Amsterdam, CK Eloutstraat",
+    "lat": "52.354343",
+    "lng": "4.811377"
+  },
+  {
+    "id": "GVB:04050",
+    "name": "Amsterdam, Meer en Vaart",
+    "lat": "52.356367",
+    "lng": "4.809941"
+  },
+  {
+    "id": "GVB:00029",
+    "name": "Amsterdam, Pretoriusstraat",
+    "lat": "52.35707",
+    "lng": "492719"
+  },
+  {
+    "id": "GVB:07045",
+    "name": "Amsterdam, Haarlemmermeerstraat",
+    "lat": "52.355119",
+    "lng": "4.850236"
+  },
+  {
+    "id": "GVB:07044",
+    "name": "Amsterdam, Haarlemmermeerstraat",
+    "lat": "52.355371",
+    "lng": "4.850438"
+  },
+  {
+    "id": "GVB:07046",
+    "name": "Amsterdam, Hoofddorpplein",
+    "lat": "52.35201",
+    "lng": "4.850479"
+  },
+  {
+    "id": "GVB:00046",
+    "name": "Amsterdam, Fizeaustraat",
+    "lat": "52.345888",
+    "lng": "4.924635"
+  },
+  {
+    "id": "GVB:00338",
+    "name": "Amsterdam, Wageningendreef",
+    "lat": "52.292824",
+    "lng": "4.986018"
+  },
+  {
+    "id": "GVB:00339",
+    "name": "Amsterdam, Wageningendreef",
+    "lat": "52.292895",
+    "lng": "4.985842"
+  },
+  {
+    "id": "GVB:00336",
+    "name": "Amsterdam, Schaarsbergenstraat",
+    "lat": "52.292656",
+    "lng": "4.981578"
+  },
+  {
+    "id": "GVB:00337",
+    "name": "Amsterdam, Schaarsbergenstraat",
+    "lat": "52.292754",
+    "lng": "4.981299"
+  },
+  {
+    "id": "GVB:00334",
+    "name": "Amsterdam, Scherpenzeelstraat",
+    "lat": "52.292767",
+    "lng": "49774"
+  },
+  {
+    "id": "GVB:00335",
+    "name": "Amsterdam, Scherpenzeelstraat",
+    "lat": "52.292874",
+    "lng": "4.977238"
+  },
+  {
+    "id": "GVB:00332",
+    "name": "Amsterdam, Schoonhovendreef",
+    "lat": "52.293818",
+    "lng": "4.974488"
+  },
+  {
+    "id": "GVB:00333",
+    "name": "Amsterdam, Schoonhovendreef",
+    "lat": "52.294025",
+    "lng": "4.974633"
+  },
+  {
+    "id": "GVB:00330",
+    "name": "Amsterdam, Middenweg",
+    "lat": "52.350447",
+    "lng": "4.934554"
+  },
+  {
+    "id": "GVB:00331",
+    "name": "Amsterdam, Station Reigersbos",
+    "lat": "52.297373",
+    "lng": "4.973473"
+  },
+  {
+    "id": "GVB:01340",
+    "name": "Amsterdam, GJ Scheurleerweg",
+    "lat": "52.403178",
+    "lng": "4.929857"
+  },
+  {
+    "id": "GVB:00048",
+    "name": "Amsterdam, Lorentzlaan",
+    "lat": "52.345827",
+    "lng": "4.931974"
+  },
+  {
+    "id": "GVB:00049",
+    "name": "Amsterdam, Lorentzlaan",
+    "lat": "52.346399",
+    "lng": "4.931308"
+  },
+  {
+    "id": "GVB:04308",
+    "name": "Amsterdam, Antwerpenbaan",
+    "lat": "52.346035",
+    "lng": "481624"
+  },
+  {
+    "id": "GVB:04307",
+    "name": "Amsterdam, Antwerpenbaan",
+    "lat": "52.345863",
+    "lng": "4.815919"
+  },
+  {
+    "id": "GVB:04306",
+    "name": "Amsterdam, Westmallepad",
+    "lat": "52.347042",
+    "lng": "4.805352"
+  },
+  {
+    "id": "GVB:04305",
+    "name": "Amsterdam, Westmallepad",
+    "lat": "52.347501",
+    "lng": "4.805287"
+  },
+  {
+    "id": "GVB:05073",
+    "name": "Amsterdam, Westermarkt",
+    "lat": "52.374",
+    "lng": "4.884532"
+  },
+  {
+    "id": "GVB:05070",
+    "name": "Amsterdam, Nieuwezijds Kolk",
+    "lat": "52.375752",
+    "lng": "4.892838"
+  },
+  {
+    "id": "GVB:01022",
+    "name": "Amsterdam, Durgerddijk 36",
+    "lat": "52.375799",
+    "lng": "4.986149"
+  },
+  {
+    "id": "GVB:05077",
+    "name": "Amsterdam, Marnixstraat",
+    "lat": "52.372283",
+    "lng": "4.876152"
+  },
+  {
+    "id": "GVB:05074",
+    "name": "Amsterdam, Westermarkt",
+    "lat": "52.374077",
+    "lng": "4.883547"
+  },
+  {
+    "id": "GVB:08208",
+    "name": "Amsterdam, Levantplein",
+    "lat": "52.377116",
+    "lng": "4.942388"
+  },
+  {
+    "id": "GVB:08209",
+    "name": "Amsterdam, KNSM-laan",
+    "lat": "52.377076",
+    "lng": "4.946016"
+  },
+  {
+    "id": "GVB:04235",
+    "name": "Amsterdam, Maaseikpad",
+    "lat": "52.348145",
+    "lng": "4.815919"
+  },
+  {
+    "id": "GVB:04234",
+    "name": "Amsterdam, Maaseikpad",
+    "lat": "52.348596",
+    "lng": "4.816089"
+  },
+  {
+    "id": "GVB:02066",
+    "name": "Amsterdam, La Guardiaweg",
+    "lat": "52.391904",
+    "lng": "484008"
+  },
+  {
+    "id": "GVB:01048",
+    "name": "Amsterdam, Blijkmeer",
+    "lat": "52.408899",
+    "lng": "502478"
+  },
+  {
+    "id": "GVB:02060",
+    "name": "Amsterdam, Spaarndammerdijk",
+    "lat": "52.392607",
+    "lng": "4.860404"
+  },
+  {
+    "id": "GVB:02061",
+    "name": "Amsterdam, Spaarndammerdijk",
+    "lat": "52.392399",
+    "lng": "4.862037"
+  },
+  {
+    "id": "GVB:05014",
+    "name": "Amsterdam, Martelaarsgracht",
+    "lat": "52.377952",
+    "lng": "4.896735"
+  },
+  {
+    "id": "GVB:08023",
+    "name": "Amsterdam, Wittenburgergracht",
+    "lat": "52.369133",
+    "lng": "4.920796"
+  },
+  {
+    "id": "GVB:08026",
+    "name": "Amsterdam, Kattenburgerplein",
+    "lat": "52.370545",
+    "lng": "4.916405"
+  },
+  {
+    "id": "GVB:05011",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.378106",
+    "lng": "4.899215"
+  },
+  {
+    "id": "GVB:08024",
+    "name": "Amsterdam, Wittenburgergracht",
+    "lat": "52.369346",
+    "lng": "4.919971"
+  },
+  {
+    "id": "GVB:08025",
+    "name": "Amsterdam, Kattenburgerplein",
+    "lat": "52.370795",
+    "lng": "4.915962"
+  },
+  {
+    "id": "GVB:04161",
+    "name": "Amsterdam, J Jongkindstraat",
+    "lat": "52.358885",
+    "lng": "4.840531"
+  },
+  {
+    "id": "GVB:09139",
+    "name": "Amsterdam, Amsteldijk",
+    "lat": "52.347111",
+    "lng": "4.911238"
+  },
+  {
+    "id": "GVB:01448",
+    "name": "Amsterdam, Buikslotermeerplein",
+    "lat": "52.400242",
+    "lng": "4.933017"
+  },
+  {
+    "id": "GVB:01446",
+    "name": "Amsterdam, Johan vHasseltweg",
+    "lat": "52.387918",
+    "lng": "4.923227"
+  },
+  {
+    "id": "GVB:01443",
+    "name": "Amsterdam, Volendammerweg",
+    "lat": "52.392557",
+    "lng": "4.956968"
+  },
+  {
+    "id": "GVB:04160",
+    "name": "Amsterdam, M Bauerstraat",
+    "lat": "52.36346",
+    "lng": "4.840563"
+  },
+  {
+    "id": "GVB:09005",
+    "name": "Amsterdam, Europaplein",
+    "lat": "52.340436",
+    "lng": "4.892278"
+  },
+  {
+    "id": "GVB:09004",
+    "name": "Amsterdam, Europaplein",
+    "lat": "52.339924",
+    "lng": "4.892166"
+  },
+  {
+    "id": "GVB:09003",
+    "name": "Amsterdam, Dintelstraat",
+    "lat": "52.341922",
+    "lng": "4.892892"
+  },
+  {
+    "id": "GVB:09001",
+    "name": "Amsterdam, Dintelstraat",
+    "lat": "52.341916",
+    "lng": "4.893641"
+  },
+  {
+    "id": "GVB:09008",
+    "name": "Amsterdam, Maxwellstraat",
+    "lat": "52.347134",
+    "lng": "4.928409"
+  },
+  {
+    "id": "GVB:03203",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.371963",
+    "lng": "4.834922"
+  },
+  {
+    "id": "GVB:03202",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.372469",
+    "lng": "4.835312"
+  },
+  {
+    "id": "GVB:03201",
+    "name": "Amsterdam, Pieter Postpad",
+    "lat": "52.381675",
+    "lng": "479491"
+  },
+  {
+    "id": "GVB:03200",
+    "name": "Amsterdam, Pieter Postpad",
+    "lat": "52.381631",
+    "lng": "4.795248"
+  },
+  {
+    "id": "GVB:03205",
+    "name": "Amsterdam, Burgde Vlugtlaan",
+    "lat": "52.37951",
+    "lng": "4.838088"
+  },
+  {
+    "id": "GVB:03204",
+    "name": "Amsterdam, Burgde Vlugtlaan",
+    "lat": "52.380006",
+    "lng": "4.838464"
+  },
+  {
+    "id": "GVB:02332",
+    "name": "Amsterdam, Bornhout",
+    "lat": "52.395732",
+    "lng": "4.793311"
+  },
+  {
+    "id": "GVB:02333",
+    "name": "Amsterdam, Herwijk",
+    "lat": "52.39572",
+    "lng": "4.787288"
+  },
+  {
+    "id": "GVB:02339",
+    "name": "Amsterdam, Westpoortweg",
+    "lat": "52.397575",
+    "lng": "4.795226"
+  },
+  {
+    "id": "GVB:04056",
+    "name": "Amsterdam, V M Broekmanstraat",
+    "lat": "52.356459",
+    "lng": "482139"
+  },
+  {
+    "id": "GVB:07308",
+    "name": "Amsterdam, Beethovenstraat",
+    "lat": "52.346867",
+    "lng": "4.876327"
+  },
+  {
+    "id": "GVB:03118",
+    "name": "Amsterdam, Sam van Houtenstraat",
+    "lat": "52.379767",
+    "lng": "4.798005"
+  },
+  {
+    "id": "GVB:03117",
+    "name": "Amsterdam, Sam van Houtenstraat",
+    "lat": "52.378688",
+    "lng": "4.797902"
+  },
+  {
+    "id": "GVB:03116",
+    "name": "Amsterdam, De Sav Lohmanstraat",
+    "lat": "52.37625",
+    "lng": "4.797567"
+  },
+  {
+    "id": "GVB:03115",
+    "name": "Amsterdam, De Sav Lohmanstraat",
+    "lat": "52.37608",
+    "lng": "4.797701"
+  },
+  {
+    "id": "GVB:03114",
+    "name": "Amsterdam, De Sav Lohmanstraat",
+    "lat": "52.375439",
+    "lng": "4.800794"
+  },
+  {
+    "id": "GVB:03113",
+    "name": "Amsterdam, Nolensstraat",
+    "lat": "52.375225",
+    "lng": "4.800988"
+  },
+  {
+    "id": "GVB:07303",
+    "name": "Amsterdam, VU medisch centrum",
+    "lat": "52.335151",
+    "lng": "4.860968"
+  },
+  {
+    "id": "GVB:07300",
+    "name": "Amsterdam, Loowaard",
+    "lat": "52.330756",
+    "lng": "4.879373"
+  },
+  {
+    "id": "GVB:03110",
+    "name": "Amsterdam, Willinklaan",
+    "lat": "52.371123",
+    "lng": "4.800425"
+  },
+  {
+    "id": "GVB:07124",
+    "name": "Amsterdam, AJ Ernststraat",
+    "lat": "52.332026",
+    "lng": "4.869764"
+  },
+  {
+    "id": "GVB:07125",
+    "name": "Amsterdam, AJ Ernststraat",
+    "lat": "52.332116",
+    "lng": "4.869763"
+  },
+  {
+    "id": "GVB:07122",
+    "name": "Amsterdam, Gelderlandplein",
+    "lat": "52.332065",
+    "lng": "4.876644"
+  },
+  {
+    "id": "GVB:07123",
+    "name": "Amsterdam, Gelderlandplein",
+    "lat": "52.332154",
+    "lng": "4.876364"
+  },
+  {
+    "id": "GVB:07120",
+    "name": "Amsterdam, Olympiaweg",
+    "lat": "52.34526",
+    "lng": "4.858339"
+  },
+  {
+    "id": "GVB:07121",
+    "name": "Amsterdam, Stadionplein",
+    "lat": "52.343807",
+    "lng": "4.856962"
+  },
+  {
+    "id": "GVB:07129",
+    "name": "Amsterdam, Strawinskylaan",
+    "lat": "52.34126",
+    "lng": "4.868541"
+  },
+  {
+    "id": "GVB:07230",
+    "name": "Amsterdam, Museumplein",
+    "lat": "52.356109",
+    "lng": "4.881197"
+  },
+  {
+    "id": "GVB:07231",
+    "name": "Amsterdam, Museumplein",
+    "lat": "52.356249",
+    "lng": "4.880373"
+  },
+  {
+    "id": "GVB:00017",
+    "name": "Amsterdam, Linnaeusstraat",
+    "lat": "52.360129",
+    "lng": "4.925735"
+  },
+  {
+    "id": "GVB:07058",
+    "name": "Amsterdam, Haarl'meerstation",
+    "lat": "52.34902",
+    "lng": "485712"
+  },
+  {
+    "id": "GVB:07059",
+    "name": "Amsterdam, Haarl'meerstation",
+    "lat": "52.349039",
+    "lng": "4.857252"
+  },
+  {
+    "id": "GVB:00010",
+    "name": "Amsterdam, Dapperstraat",
+    "lat": "52.360923",
+    "lng": "4.928912"
+  },
+  {
+    "id": "GVB:07057",
+    "name": "Amsterdam, Haarl'meerstation",
+    "lat": "52.34912",
+    "lng": "4.857295"
+  },
+  {
+    "id": "GVB:09509",
+    "name": "Amsterdam, Waterlooplein",
+    "lat": "52.366977",
+    "lng": "4.902979"
+  },
+  {
+    "id": "GVB:00492",
+    "name": "Amsterdam, Science Park A'dam",
+    "lat": "52.355207",
+    "lng": "4.952692"
+  },
+  {
+    "id": "GVB:00491",
+    "name": "Amsterdam, Science Park A'dam",
+    "lat": "52.354782",
+    "lng": "4.952182"
+  },
+  {
+    "id": "GVB:00497",
+    "name": "Amsterdam, Science Park Aqua",
+    "lat": "52.356084",
+    "lng": "4.954136"
+  },
+  {
+    "id": "GVB:00494",
+    "name": "Amsterdam, Science Park Aqua",
+    "lat": "52.356012",
+    "lng": "4.954167"
+  },
+  {
+    "id": "GVB:00499",
+    "name": "Amsterdam, Science Park Ignis",
+    "lat": "52.356448",
+    "lng": "4.960357"
+  },
+  {
+    "id": "GVB:00498",
+    "name": "Amsterdam, Science Park Ignis",
+    "lat": "52.356475",
+    "lng": "4.960239"
+  },
+  {
+    "id": "GVB:00307",
+    "name": "Amsterdam, Leerdamhof",
+    "lat": "52.307405",
+    "lng": "4.974024"
+  },
+  {
+    "id": "GVB:00306",
+    "name": "Amsterdam, Leusdenhof",
+    "lat": "52.309901",
+    "lng": "4.978371"
+  },
+  {
+    "id": "GVB:00305",
+    "name": "Amsterdam, Leusdenhof",
+    "lat": "52.309812",
+    "lng": "4.978489"
+  },
+  {
+    "id": "GVB:00304",
+    "name": "Amsterdam, Gaasperplas",
+    "lat": "52.31121",
+    "lng": "4.985104"
+  },
+  {
+    "id": "GVB:07168",
+    "name": "Amsterdam, Bolestein",
+    "lat": "52.323613",
+    "lng": "4.861369"
+  },
+  {
+    "id": "GVB:04048",
+    "name": "Amsterdam, Meer en Vaart",
+    "lat": "52.356984",
+    "lng": "4.809185"
+  },
+  {
+    "id": "GVB:04049",
+    "name": "Amsterdam, Meer en Vaart",
+    "lat": "52.356469",
+    "lng": "4.810586"
+  },
+  {
+    "id": "GVB:04040",
+    "name": "Amsterdam, Ruimzicht",
+    "lat": "52.359456",
+    "lng": "4.807464"
+  },
+  {
+    "id": "GVB:04041",
+    "name": "Amsterdam, Ruimzicht",
+    "lat": "52.359834",
+    "lng": "480765"
+  },
+  {
+    "id": "GVB:04042",
+    "name": "Amsterdam, Ruimzicht",
+    "lat": "52.35951",
+    "lng": "4.807581"
+  },
+  {
+    "id": "GVB:04043",
+    "name": "Amsterdam, Ruimzicht",
+    "lat": "52.35978",
+    "lng": "4.807489"
+  },
+  {
+    "id": "GVB:04047",
+    "name": "Amsterdam, Meer en Vaart",
+    "lat": "52.356865",
+    "lng": "4.808819"
+  },
+  {
+    "id": "GVB:01278",
+    "name": "Amsterdam, Statenjachtstraat",
+    "lat": "52.407905",
+    "lng": "4.913804"
+  },
+  {
+    "id": "GVB:04314",
+    "name": "Amsterdam, Oudenaardeplantsoen",
+    "lat": "52.34495",
+    "lng": "4.803823"
+  },
+  {
+    "id": "GVB:04315",
+    "name": "Amsterdam, Hageland",
+    "lat": "52.345074",
+    "lng": "4.812627"
+  },
+  {
+    "id": "GVB:04316",
+    "name": "Amsterdam, Hageland",
+    "lat": "52.344937",
+    "lng": "4.812291"
+  },
+  {
+    "id": "GVB:04318",
+    "name": "Amsterdam, Henk Sneevlietweg",
+    "lat": "52.346796",
+    "lng": "483456"
+  },
+  {
+    "id": "GVB:04319",
+    "name": "Amsterdam, Henk Sneevlietweg",
+    "lat": "52.346265",
+    "lng": "4.834391"
+  },
+  {
+    "id": "GVB:01273",
+    "name": "Amsterdam, Chrysantenstraat",
+    "lat": "52.392156",
+    "lng": "4.906289"
+  },
+  {
+    "id": "GVB:01277",
+    "name": "Amsterdam, Statenjachtstraat",
+    "lat": "52.407905",
+    "lng": "4.913642"
+  },
+  {
+    "id": "GVB:00348",
+    "name": "Amsterdam, Haardstee",
+    "lat": "52.311045",
+    "lng": "4.951364"
+  },
+  {
+    "id": "GVB:08237",
+    "name": "Amsterdam, Kattenburgerstraat",
+    "lat": "52.376145",
+    "lng": "4.921265"
+  },
+  {
+    "id": "GVB:08236",
+    "name": "Amsterdam, Kattenburgerstraat",
+    "lat": "52.376077",
+    "lng": "492203"
+  },
+  {
+    "id": "GVB:08235",
+    "name": "Amsterdam, Muziekgeb Bimhuis",
+    "lat": "52.377236",
+    "lng": "4.912898"
+  },
+  {
+    "id": "GVB:08234",
+    "name": "Amsterdam, Muziekgeb Bimhuis",
+    "lat": "52.377237",
+    "lng": "4.913162"
+  },
+  {
+    "id": "GVB:08233",
+    "name": "Amsterdam, C van Eesterenlaan",
+    "lat": "52.373451",
+    "lng": "4.938122"
+  },
+  {
+    "id": "GVB:08232",
+    "name": "Amsterdam, IJ tunnel",
+    "lat": "52.37227",
+    "lng": "4.909559"
+  },
+  {
+    "id": "GVB:04220",
+    "name": "Amsterdam, Baldwinstraat",
+    "lat": "52.356913",
+    "lng": "4.777126"
+  },
+  {
+    "id": "GVB:08239",
+    "name": "Amsterdam, Rietlandpark",
+    "lat": "52.37296",
+    "lng": "4.934133"
+  },
+  {
+    "id": "GVB:08238",
+    "name": "Amsterdam, Rietlandpark",
+    "lat": "52.373218",
+    "lng": "4.933499"
+  },
+  {
+    "id": "GVB:01058",
+    "name": "Amsterdam, Purmerplein",
+    "lat": "52.390782",
+    "lng": "4.945865"
+  },
+  {
+    "id": "GVB:01059",
+    "name": "Amsterdam, Purmerplein",
+    "lat": "52.390458",
+    "lng": "4.945692"
+  },
+  {
+    "id": "GVB:08014",
+    "name": "Amsterdam, Azartplein",
+    "lat": "52.376828",
+    "lng": "4.937354"
+  },
+  {
+    "id": "GVB:08011",
+    "name": "Amsterdam, C van Eesterenlaan",
+    "lat": "52.373345",
+    "lng": "4.938549"
+  },
+  {
+    "id": "GVB:08300",
+    "name": "Amsterdam, POosterhuisstraat",
+    "lat": "52.352033",
+    "lng": "5007338"
+  },
+  {
+    "id": "GVB:05151",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.376944",
+    "lng": "4.900917"
+  },
+  {
+    "id": "GVB:05153",
+    "name": "Amsterdam, Dam",
+    "lat": "52.37434",
+    "lng": "4.894866"
+  },
+  {
+    "id": "GVB:05152",
+    "name": "Amsterdam, Waterlooplein",
+    "lat": "52.367605",
+    "lng": "4.902825"
+  },
+  {
+    "id": "GVB:09127",
+    "name": "Amsterdam, Stadhouderskade",
+    "lat": "52.357849",
+    "lng": "4.890851"
+  },
+  {
+    "id": "GVB:09120",
+    "name": "Amsterdam, Cornelis Troostplein",
+    "lat": "52.350464",
+    "lng": "4.891608"
+  },
+  {
+    "id": "GVB:09128",
+    "name": "Amsterdam, Stadhouderskade",
+    "lat": "52.357408",
+    "lng": "4.890738"
+  },
+  {
+    "id": "GVB:00014",
+    "name": "Amsterdam, Wijttenbachstraat",
+    "lat": "52.36027",
+    "lng": "4.925073"
+  },
+  {
+    "id": "GVB:05003",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377542",
+    "lng": "490188"
+  },
+  {
+    "id": "GVB:06082",
+    "name": "Amsterdam, Rhijnvis Feithstraat",
+    "lat": "52.358837",
+    "lng": "4.859674"
+  },
+  {
+    "id": "GVB:06081",
+    "name": "Amsterdam, Rhijnvis Feithstraat",
+    "lat": "52.359056",
+    "lng": "4.860391"
+  },
+  {
+    "id": "GVB:06089",
+    "name": "Amsterdam, Leidseplein",
+    "lat": "52.363291",
+    "lng": "4.881247"
+  },
+  {
+    "id": "GVB:03218",
+    "name": "Amsterdam, Alhambralaan",
+    "lat": "52.370238",
+    "lng": "4.833093"
+  },
+  {
+    "id": "GVB:03215",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.373199",
+    "lng": "4.835876"
+  },
+  {
+    "id": "GVB:03216",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.372834",
+    "lng": "4.836497"
+  },
+  {
+    "id": "GVB:03217",
+    "name": "Amsterdam, Alhambralaan",
+    "lat": "52.370311",
+    "lng": "483321"
+  },
+  {
+    "id": "GVB:02344",
+    "name": "Amsterdam, Westpoortweg",
+    "lat": "52.397031",
+    "lng": "4.794293"
+  },
+  {
+    "id": "GVB:02342",
+    "name": "Amsterdam, Scharenburg",
+    "lat": "52.395708",
+    "lng": "4.779692"
+  },
+  {
+    "id": "GVB:06015",
+    "name": "Amsterdam, Postjesweg",
+    "lat": "52.363527",
+    "lng": "4.853159"
+  },
+  {
+    "id": "GVB:02220",
+    "name": "Amsterdam, Jan Evertsenstraat",
+    "lat": "52.372039",
+    "lng": "4.859414"
+  },
+  {
+    "id": "GVB:00112",
+    "name": "Amsterdam, Daalwijk",
+    "lat": "52.321376",
+    "lng": "4.950045"
+  },
+  {
+    "id": "GVB:06016",
+    "name": "Amsterdam, JP Heijestraat",
+    "lat": "52.364727",
+    "lng": "4.862394"
+  },
+  {
+    "id": "GVB:00113",
+    "name": "Amsterdam, Dennenrode",
+    "lat": "52.321911",
+    "lng": "4.951243"
+  },
+  {
+    "id": "GVB:00111",
+    "name": "Amsterdam, Daalwijk",
+    "lat": "52.321148",
+    "lng": "4.949021"
+  },
+  {
+    "id": "GVB:00116",
+    "name": "Amsterdam, Develstein",
+    "lat": "52.323075",
+    "lng": "495506"
+  },
+  {
+    "id": "GVB:04433",
+    "name": "Amsterdam, Oeverpad (HvA)",
+    "lat": "52.364521",
+    "lng": "4.804843"
+  },
+  {
+    "id": "GVB:04162",
+    "name": "Amsterdam, J Jongkindstraat",
+    "lat": "52.358985",
+    "lng": "4.840706"
+  },
+  {
+    "id": "GVB:03100",
+    "name": "Amsterdam, Dr H Colijnstraat",
+    "lat": "52.376949",
+    "lng": "4.806266"
+  },
+  {
+    "id": "GVB:03101",
+    "name": "Amsterdam, Lambertus Zijlplein",
+    "lat": "52.377266",
+    "lng": "4.803002"
+  },
+  {
+    "id": "GVB:07331",
+    "name": "Amsterdam, Bouvigne",
+    "lat": "52.327923",
+    "lng": "4.883117"
+  },
+  {
+    "id": "GVB:03103",
+    "name": "Amsterdam, Confuciusplein",
+    "lat": "52.374587",
+    "lng": "4.812069"
+  },
+  {
+    "id": "GVB:03104",
+    "name": "Amsterdam, Dr H Colijnstraat",
+    "lat": "52.374715",
+    "lng": "4.807089"
+  },
+  {
+    "id": "GVB:03105",
+    "name": "Amsterdam, Dr H Colijnstraat",
+    "lat": "52.374626",
+    "lng": "4.807251"
+  },
+  {
+    "id": "GVB:03106",
+    "name": "Amsterdam, Troelstralaan",
+    "lat": "52.37476",
+    "lng": "4.801552"
+  },
+  {
+    "id": "GVB:03107",
+    "name": "Amsterdam, Willinklaan",
+    "lat": "52.370925",
+    "lng": "4.800295"
+  },
+  {
+    "id": "GVB:03108",
+    "name": "Amsterdam, Herman Bonpad",
+    "lat": "52.367962",
+    "lng": "4.800805"
+  },
+  {
+    "id": "GVB:03109",
+    "name": "Amsterdam, Herman Bonpad",
+    "lat": "52.368931",
+    "lng": "4.800645"
+  },
+  {
+    "id": "GVB:07339",
+    "name": "Amsterdam, Nieuw Herlaer",
+    "lat": "52.326019",
+    "lng": "4.889857"
+  },
+  {
+    "id": "GVB:07207",
+    "name": "Amsterdam, IJsbaanpad",
+    "lat": "52.340511",
+    "lng": "4.857559"
+  },
+  {
+    "id": "GVB:07205",
+    "name": "Amsterdam, IJsbaanpad",
+    "lat": "52.341689",
+    "lng": "4.857735"
+  },
+  {
+    "id": "GVB:07202",
+    "name": "Amsterdam, Stadionplein",
+    "lat": "52.344049",
+    "lng": "4.856842"
+  },
+  {
+    "id": "GVB:07069",
+    "name": "Amsterdam, Emmastraat",
+    "lat": "52.352967",
+    "lng": "4.869666"
+  },
+  {
+    "id": "GVB:07066",
+    "name": "Amsterdam, Valeriusplein",
+    "lat": "52.351869",
+    "lng": "486507"
+  },
+  {
+    "id": "GVB:07065",
+    "name": "Amsterdam, Valeriusplein",
+    "lat": "52.351604",
+    "lng": "4.864163"
+  },
+  {
+    "id": "GVB:07062",
+    "name": "Amsterdam, Haarl'meerstation",
+    "lat": "52.34922",
+    "lng": "4.857543"
+  },
+  {
+    "id": "GVB:07061",
+    "name": "Amsterdam, Haarl'meerstation",
+    "lat": "52.348941",
+    "lng": "4.857502"
+  },
+  {
+    "id": "GVB:00314",
+    "name": "Amsterdam, Leerdamhof",
+    "lat": "52.305388",
+    "lng": "497526"
+  },
+  {
+    "id": "GVB:00315",
+    "name": "Amsterdam, Gaasperplas",
+    "lat": "52.311254",
+    "lng": "4.985075"
+  },
+  {
+    "id": "GVB:07116",
+    "name": "Amsterdam, Haarl'meerstation",
+    "lat": "52.349238",
+    "lng": "4.857601"
+  },
+  {
+    "id": "GVB:04141",
+    "name": "Amsterdam, Sierplein",
+    "lat": "52.354914",
+    "lng": "4.827384"
+  },
+  {
+    "id": "GVB:04140",
+    "name": "Amsterdam, Sierplein",
+    "lat": "52.355031",
+    "lng": "4.827324"
+  },
+  {
+    "id": "GVB:00008",
+    "name": "Amsterdam, Dapperstraat",
+    "lat": "52.361106",
+    "lng": "4.929776"
+  },
+  {
+    "id": "GVB:04039",
+    "name": "Amsterdam, Vrijzicht",
+    "lat": "52.362542",
+    "lng": "4.806205"
+  },
+  {
+    "id": "GVB:04038",
+    "name": "Amsterdam, Vrijzicht",
+    "lat": "52.362217",
+    "lng": "4.806004"
+  },
+  {
+    "id": "GVB:00001",
+    "name": "Amsterdam, Muiderpoortstation",
+    "lat": "52.361325",
+    "lng": "4.932872"
+  },
+  {
+    "id": "GVB:04031",
+    "name": "Amsterdam, Bullepad",
+    "lat": "52.362013",
+    "lng": "4.799342"
+  },
+  {
+    "id": "GVB:00005",
+    "name": "Amsterdam, Muiderpoortstation",
+    "lat": "52.361217",
+    "lng": "49328"
+  },
+  {
+    "id": "GVB:00006",
+    "name": "Amsterdam, Muiderpoortstation",
+    "lat": "52.361058",
+    "lng": "4.933682"
+  },
+  {
+    "id": "GVB:00007",
+    "name": "Amsterdam, Muiderpoortstation",
+    "lat": "52.361175",
+    "lng": "4.933563"
+  },
+  {
+    "id": "GVB:01209",
+    "name": "Amsterdam, Meteorenweg",
+    "lat": "52.414718",
+    "lng": "4.881306"
+  },
+  {
+    "id": "GVB:01208",
+    "name": "Amsterdam, Meteorenweg",
+    "lat": "52.414791",
+    "lng": "4.881394"
+  },
+  {
+    "id": "GVB:01205",
+    "name": "Amsterdam, Maanstraat",
+    "lat": "52.412147",
+    "lng": "4.887347"
+  },
+  {
+    "id": "GVB:01204",
+    "name": "Amsterdam, Meteorensingel",
+    "lat": "52.410329",
+    "lng": "4.891071"
+  },
+  {
+    "id": "GVB:01207",
+    "name": "Amsterdam, Plejadenplein",
+    "lat": "52.41325",
+    "lng": "4.884821"
+  },
+  {
+    "id": "GVB:01206",
+    "name": "Amsterdam, Maanstraat",
+    "lat": "52.412225",
+    "lng": "4.886832"
+  },
+  {
+    "id": "GVB:01203",
+    "name": "Amsterdam, Meteorensingel",
+    "lat": "52.410214",
+    "lng": "4.891572"
+  },
+  {
+    "id": "GVB:08229",
+    "name": "Amsterdam, Tosaristraat",
+    "lat": "52.379487",
+    "lng": "4.923095"
+  },
+  {
+    "id": "GVB:08222",
+    "name": "Amsterdam, IJburg (Strand)",
+    "lat": "52.348819",
+    "lng": "5013911"
+  },
+  {
+    "id": "GVB:08223",
+    "name": "Amsterdam, IJburg (Strand)",
+    "lat": "52.348523",
+    "lng": "5014046"
+  },
+  {
+    "id": "GVB:08224",
+    "name": "Amsterdam, Tosaristraat",
+    "lat": "52.379343",
+    "lng": "4.923082"
+  },
+  {
+    "id": "GVB:08225",
+    "name": "Amsterdam, Majanggracht",
+    "lat": "52.379044",
+    "lng": "4.929342"
+  },
+  {
+    "id": "GVB:08226",
+    "name": "Amsterdam, Majanggracht",
+    "lat": "52.378683",
+    "lng": "4.931358"
+  },
+  {
+    "id": "GVB:07332",
+    "name": "Amsterdam, Bouvigne",
+    "lat": "52.328066",
+    "lng": "4.882939"
+  },
+  {
+    "id": "GVB:03102",
+    "name": "Amsterdam, Confuciusplein",
+    "lat": "52.374469",
+    "lng": "4.811835"
+  },
+  {
+    "id": "GVB:01198",
+    "name": "Amsterdam, Draaierweg",
+    "lat": "52.40047",
+    "lng": "4.902202"
+  },
+  {
+    "id": "GVB:01194",
+    "name": "Amsterdam, Slijperweg",
+    "lat": "52.399216",
+    "lng": "4.907681"
+  },
+  {
+    "id": "GVB:01197",
+    "name": "Amsterdam, Draaierweg",
+    "lat": "52.400097",
+    "lng": "4.903278"
+  },
+  {
+    "id": "GVB:01191",
+    "name": "Amsterdam, Pinksterbloemstraat",
+    "lat": "52.398812",
+    "lng": "4.912035"
+  },
+  {
+    "id": "GVB:01193",
+    "name": "Amsterdam, Slijperweg",
+    "lat": "52.399297",
+    "lng": "4.907534"
+  },
+  {
+    "id": "GVB:01424",
+    "name": "Amsterdam, Molenwijk",
+    "lat": "52.418203",
+    "lng": "4.893482"
+  },
+  {
+    "id": "GVB:01421",
+    "name": "Amsterdam, Fluitschipstraat",
+    "lat": "52.403771",
+    "lng": "4.916184"
+  },
+  {
+    "id": "GVB:01420",
+    "name": "Amsterdam, Fluitschipstraat",
+    "lat": "52.403636",
+    "lng": "4.916009"
+  },
+  {
+    "id": "GVB:00237",
+    "name": "Amsterdam, Flierbosdreef",
+    "lat": "52.315754",
+    "lng": "4.953752"
+  },
+  {
+    "id": "GVB:09069",
+    "name": "Amsterdam, Maasstraat",
+    "lat": "52.343107",
+    "lng": "4.896841"
+  },
+  {
+    "id": "GVB:09068",
+    "name": "Amsterdam, Maasstraat",
+    "lat": "52.342898",
+    "lng": "4.896359"
+  },
+  {
+    "id": "GVB:09065",
+    "name": "Amsterdam, Pres Kennedylaan",
+    "lat": "52.340953",
+    "lng": "4.901898"
+  },
+  {
+    "id": "GVB:09064",
+    "name": "Amsterdam, Pres Kennedylaan",
+    "lat": "52.340871",
+    "lng": "4.901738"
+  },
+  {
+    "id": "GVB:09061",
+    "name": "Amsterdam, Waalstraat",
+    "lat": "52.344426",
+    "lng": "4.900598"
+  },
+  {
+    "id": "GVB:09060",
+    "name": "Amsterdam, Waalstraat",
+    "lat": "52.344625",
+    "lng": "4.901036"
+  },
+  {
+    "id": "GVB:09063",
+    "name": "Amsterdam, Waalstraat",
+    "lat": "52.344653",
+    "lng": "4.901315"
+  },
+  {
+    "id": "GVB:03175",
+    "name": "Amsterdam, Burg RÃ¶ellstraat",
+    "lat": "52.375177",
+    "lng": "4.818831"
+  },
+  {
+    "id": "GVB:03174",
+    "name": "Amsterdam, Burg RÃ¶ellstraat",
+    "lat": "52.374762",
+    "lng": "4.818631"
+  },
+  {
+    "id": "GVB:03176",
+    "name": "Amsterdam, Sloterpark",
+    "lat": "52.372948",
+    "lng": "4.818903"
+  },
+  {
+    "id": "GVB:03171",
+    "name": "Amsterdam, Burg Rendorpstraat",
+    "lat": "52.374365",
+    "lng": "4.827682"
+  },
+  {
+    "id": "GVB:03170",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.37324",
+    "lng": "483495"
+  },
+  {
+    "id": "GVB:07322",
+    "name": "Amsterdam, Van Baerlestraat",
+    "lat": "52.35844",
+    "lng": "4.879717"
+  },
+  {
+    "id": "GVB:03172",
+    "name": "Amsterdam, Burg Rendorpstraat",
+    "lat": "52.374451",
+    "lng": "4.826917"
+  },
+  {
+    "id": "GVB:03179",
+    "name": "Amsterdam, Adm Helfrichstraat",
+    "lat": "52.369443",
+    "lng": "4.843866"
+  },
+  {
+    "id": "GVB:03178",
+    "name": "Amsterdam, Mercatorplein",
+    "lat": "52.370801",
+    "lng": "4.849914"
+  },
+  {
+    "id": "GVB:03009",
+    "name": "Amsterdam, Witte de Withstraat",
+    "lat": "52.364782",
+    "lng": "4.858517"
+  },
+  {
+    "id": "GVB:03008",
+    "name": "Amsterdam, Jan Evertsenstraat",
+    "lat": "52.370968",
+    "lng": "4.858972"
+  },
+  {
+    "id": "GVB:03003",
+    "name": "Amsterdam, Postjesweg",
+    "lat": "52.365442",
+    "lng": "4.859463"
+  },
+  {
+    "id": "GVB:03005",
+    "name": "Amsterdam, Van Kinsbergenstraat",
+    "lat": "52.36846",
+    "lng": "4.859046"
+  },
+  {
+    "id": "GVB:03004",
+    "name": "Amsterdam, Postjesweg",
+    "lat": "52.365011",
+    "lng": "4.859513"
+  },
+  {
+    "id": "GVB:03007",
+    "name": "Amsterdam, Jan Evertsenstraat",
+    "lat": "52.371246",
+    "lng": "4.858969"
+  },
+  {
+    "id": "GVB:03006",
+    "name": "Amsterdam, Van Kinsbergenstraat",
+    "lat": "523682",
+    "lng": "4.859064"
+  },
+  {
+    "id": "GVB:09519",
+    "name": "Amsterdam, Spaklerweg",
+    "lat": "52.339897",
+    "lng": "4.921029"
+  },
+  {
+    "id": "GVB:09518",
+    "name": "Amsterdam, Spaklerweg",
+    "lat": "52.340184",
+    "lng": "4.920894"
+  },
+  {
+    "id": "GVB:09511",
+    "name": "Amsterdam, Weesperplein",
+    "lat": "52.361199",
+    "lng": "4.907872"
+  },
+  {
+    "id": "GVB:09510",
+    "name": "Amsterdam, Weesperplein",
+    "lat": "52.361227",
+    "lng": "4.908033"
+  },
+  {
+    "id": "GVB:09513",
+    "name": "Amsterdam, Wibautstraat",
+    "lat": "52.354287",
+    "lng": "4.912027"
+  },
+  {
+    "id": "GVB:09512",
+    "name": "Amsterdam, Wibautstraat",
+    "lat": "52.354341",
+    "lng": "4.912232"
+  },
+  {
+    "id": "GVB:09515",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.346471",
+    "lng": "4.917512"
+  },
+  {
+    "id": "GVB:09514",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.346489",
+    "lng": "491757"
+  },
+  {
+    "id": "GVB:09517",
+    "name": "Amsterdam, Van der Madeweg",
+    "lat": "52.329454",
+    "lng": "4.930484"
+  },
+  {
+    "id": "GVB:09516",
+    "name": "Amsterdam, Van der Madeweg",
+    "lat": "52.329857",
+    "lng": "4.930172"
+  },
+  {
+    "id": "GVB:07070",
+    "name": "Amsterdam, Emmastraat",
+    "lat": "52.353176",
+    "lng": "4.870133"
+  },
+  {
+    "id": "GVB:07073",
+    "name": "Amsterdam, Jac Obrechtstraat",
+    "lat": "52.35473",
+    "lng": "4.876031"
+  },
+  {
+    "id": "GVB:07074",
+    "name": "Amsterdam, Jac Obrechtstraat",
+    "lat": "52.354876",
+    "lng": "4.876499"
+  },
+  {
+    "id": "GVB:07079",
+    "name": "Amsterdam, Apollolaan",
+    "lat": "52.35085",
+    "lng": "4.878864"
+  },
+  {
+    "id": "GVB:07108",
+    "name": "Amsterdam, Olympiaweg",
+    "lat": "52.34528",
+    "lng": "4.858735"
+  },
+  {
+    "id": "GVB:08066",
+    "name": "Amsterdam, Frederiksplein",
+    "lat": "52.359368",
+    "lng": "4.897513"
+  },
+  {
+    "id": "GVB:08067",
+    "name": "Amsterdam, Frederiksplein",
+    "lat": "52.359425",
+    "lng": "4.898188"
+  },
+  {
+    "id": "GVB:04159",
+    "name": "Amsterdam, M Bauerstraat",
+    "lat": "52.363082",
+    "lng": "4.840435"
+  },
+  {
+    "id": "GVB:08064",
+    "name": "Amsterdam, Frederiksplein",
+    "lat": "52.359887",
+    "lng": "489899"
+  },
+  {
+    "id": "GVB:01084",
+    "name": "Amsterdam, Kerklaan",
+    "lat": "52.407297",
+    "lng": "4.964482"
+  },
+  {
+    "id": "GVB:01083",
+    "name": "Amsterdam, Zunderdorpergouw",
+    "lat": "52.40459",
+    "lng": "4.961495"
+  },
+  {
+    "id": "GVB:01082",
+    "name": "Amsterdam, Zunderdorpergouw",
+    "lat": "52.403896",
+    "lng": "496084"
+  },
+  {
+    "id": "GVB:01081",
+    "name": "Amsterdam, Markengouw",
+    "lat": "52.399212",
+    "lng": "4.953098"
+  },
+  {
+    "id": "GVB:01080",
+    "name": "Amsterdam, Markengouw",
+    "lat": "52.399211",
+    "lng": "4.952981"
+  },
+  {
+    "id": "GVB:00079",
+    "name": "Amsterdam, Zaaiersweg",
+    "lat": "52.339847",
+    "lng": "4.938403"
+  },
+  {
+    "id": "GVB:04028",
+    "name": "Amsterdam, Reimerswaalstraat",
+    "lat": "52.360981",
+    "lng": "4.794261"
+  },
+  {
+    "id": "GVB:04029",
+    "name": "Amsterdam, Reimerswaalstraat",
+    "lat": "52.361159",
+    "lng": "4.795624"
+  },
+  {
+    "id": "GVB:04026",
+    "name": "Amsterdam, Saaftingestraat",
+    "lat": "52.360025",
+    "lng": "4.790017"
+  },
+  {
+    "id": "GVB:00074",
+    "name": "Amsterdam, Brinkstraat",
+    "lat": "52.342849",
+    "lng": "494797"
+  },
+  {
+    "id": "GVB:04024",
+    "name": "Amsterdam, Baden Powellweg",
+    "lat": "52.362486",
+    "lng": "4.787825"
+  },
+  {
+    "id": "GVB:00076",
+    "name": "Amsterdam, Brinkstraat",
+    "lat": "52.343243",
+    "lng": "4.947423"
+  },
+  {
+    "id": "GVB:04022",
+    "name": "Amsterdam, Osdorpplein",
+    "lat": "52.359624",
+    "lng": "480322"
+  },
+  {
+    "id": "GVB:00070",
+    "name": "Amsterdam, Kruislaan",
+    "lat": "52.347897",
+    "lng": "4.939936"
+  },
+  {
+    "id": "GVB:04020",
+    "name": "Amsterdam, Hoekenes",
+    "lat": "52.358324",
+    "lng": "4.800286"
+  },
+  {
+    "id": "GVB:04021",
+    "name": "Amsterdam, Osdorpplein",
+    "lat": "52.35913",
+    "lng": "4.803226"
+  },
+  {
+    "id": "GVB:09032",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.346945",
+    "lng": "4.919165"
+  },
+  {
+    "id": "GVB:01219",
+    "name": "Amsterdam, Petmolen",
+    "lat": "52.417193",
+    "lng": "4.886232"
+  },
+  {
+    "id": "GVB:01216",
+    "name": "Amsterdam, Petmolen",
+    "lat": "524179",
+    "lng": "4.885518"
+  },
+  {
+    "id": "GVB:01214",
+    "name": "Amsterdam, Bovenkruier",
+    "lat": "52.420114",
+    "lng": "4.884052"
+  },
+  {
+    "id": "GVB:01215",
+    "name": "Amsterdam, Bovenkruier",
+    "lat": "52.420285",
+    "lng": "4.884139"
+  },
+  {
+    "id": "GVB:01212",
+    "name": "Amsterdam, Oostzanerdijk",
+    "lat": "52.420238",
+    "lng": "4.881493"
+  },
+  {
+    "id": "GVB:01213",
+    "name": "Amsterdam, Oostzanerdijk",
+    "lat": "52.42037",
+    "lng": "488083"
+  },
+  {
+    "id": "GVB:01210",
+    "name": "Amsterdam, Kometensingel",
+    "lat": "52.416521",
+    "lng": "4.882623"
+  },
+  {
+    "id": "GVB:01211",
+    "name": "Amsterdam, Kometensingel",
+    "lat": "52.41663",
+    "lng": "4.882843"
+  },
+  {
+    "id": "GVB:08259",
+    "name": "Amsterdam, 1e Leeghwaterstraat",
+    "lat": "52.370472",
+    "lng": "4.930047"
+  },
+  {
+    "id": "GVB:08258",
+    "name": "Amsterdam, 1e Leeghwaterstraat",
+    "lat": "52.370093",
+    "lng": "4.929434"
+  },
+  {
+    "id": "GVB:08255",
+    "name": "Amsterdam, Hoogte Kadijk",
+    "lat": "52.366875",
+    "lng": "4.924828"
+  },
+  {
+    "id": "GVB:08254",
+    "name": "Amsterdam, Hoogte Kadijk",
+    "lat": "52.36663",
+    "lng": "4.924214"
+  },
+  {
+    "id": "GVB:08257",
+    "name": "Amsterdam, 1e Coehoornstraat",
+    "lat": "52.368085",
+    "lng": "4.926181"
+  },
+  {
+    "id": "GVB:08256",
+    "name": "Amsterdam, 1e Coehoornstraat",
+    "lat": "52.36832",
+    "lng": "4.926516"
+  },
+  {
+    "id": "GVB:08251",
+    "name": "Amsterdam, Ruisrietstraat",
+    "lat": "52.352978",
+    "lng": "4.999419"
+  },
+  {
+    "id": "GVB:08250",
+    "name": "Amsterdam, Ruisrietstraat",
+    "lat": "52.352764",
+    "lng": "4.999919"
+  },
+  {
+    "id": "GVB:08252",
+    "name": "Amsterdam, IJburg",
+    "lat": "52.350954",
+    "lng": "5004324"
+  },
+  {
+    "id": "GVB:00295",
+    "name": "Amsterdam, Dalsteindreef",
+    "lat": "52.324826",
+    "lng": "494234"
+  },
+  {
+    "id": "GVB:00296",
+    "name": "Amsterdam, Dalsteindreef",
+    "lat": "52.324808",
+    "lng": "4.942413"
+  },
+  {
+    "id": "GVB:02093",
+    "name": "Amsterdam, Hempoint",
+    "lat": "52.39298",
+    "lng": "4.869464"
+  },
+  {
+    "id": "GVB:08076",
+    "name": "Amsterdam, Weteringcircuit",
+    "lat": "52.360294",
+    "lng": "4.891117"
+  },
+  {
+    "id": "GVB:08073",
+    "name": "Amsterdam, Weteringcircuit",
+    "lat": "52.359463",
+    "lng": "4.892271"
+  },
+  {
+    "id": "GVB:08072",
+    "name": "Amsterdam, Weteringcircuit",
+    "lat": "52.359533",
+    "lng": "4.891595"
+  },
+  {
+    "id": "GVB:08078",
+    "name": "Amsterdam, Weteringcircuit",
+    "lat": "52.358945",
+    "lng": "489075"
+  },
+  {
+    "id": "GVB:01188",
+    "name": "Amsterdam, Barkpad",
+    "lat": "52.402683",
+    "lng": "4.911479"
+  },
+  {
+    "id": "GVB:01189",
+    "name": "Amsterdam, Pinksterbloemstraat",
+    "lat": "52.398525",
+    "lng": "4.912214"
+  },
+  {
+    "id": "GVB:01185",
+    "name": "Amsterdam, Koopvaardersplantsoen",
+    "lat": "52.406225",
+    "lng": "4.916129"
+  },
+  {
+    "id": "GVB:01180",
+    "name": "Amsterdam, Grootzeil",
+    "lat": "52.408185",
+    "lng": "4.923162"
+  },
+  {
+    "id": "GVB:01181",
+    "name": "Amsterdam, Banne Buiksloot",
+    "lat": "52.404731",
+    "lng": "4.920112"
+  },
+  {
+    "id": "GVB:02183",
+    "name": "Amsterdam, Markthallen",
+    "lat": "52.375756",
+    "lng": "4.866669"
+  },
+  {
+    "id": "GVB:08108",
+    "name": "Amsterdam, Zeeburgerdijk",
+    "lat": "52.365916",
+    "lng": "4.932458"
+  },
+  {
+    "id": "GVB:02184",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.374847",
+    "lng": "4.860335"
+  },
+  {
+    "id": "GVB:08103",
+    "name": "Amsterdam, Pontanusstraat",
+    "lat": "52.365926",
+    "lng": "4.928097"
+  },
+  {
+    "id": "GVB:08104",
+    "name": "Amsterdam, Pontanusstraat",
+    "lat": "52.365923",
+    "lng": "4.927231"
+  },
+  {
+    "id": "GVB:08107",
+    "name": "Amsterdam, Zeeburgerdijk",
+    "lat": "52.365702",
+    "lng": "493293"
+  },
+  {
+    "id": "GVB:01436",
+    "name": "Amsterdam, PA v Heijningestraat",
+    "lat": "52.422067",
+    "lng": "489976"
+  },
+  {
+    "id": "GVB:01437",
+    "name": "Amsterdam, A vWaertweg",
+    "lat": "52.420334",
+    "lng": "4.906791"
+  },
+  {
+    "id": "GVB:01434",
+    "name": "Amsterdam, Lange Vonder",
+    "lat": "52.421909",
+    "lng": "4.896454"
+  },
+  {
+    "id": "GVB:01435",
+    "name": "Amsterdam, PA v Heijningestraat",
+    "lat": "52.422101",
+    "lng": "4.899378"
+  },
+  {
+    "id": "GVB:01433",
+    "name": "Amsterdam, Lange Vonder",
+    "lat": "52.421872",
+    "lng": "4.896146"
+  },
+  {
+    "id": "GVB:01438",
+    "name": "Amsterdam, A vWaertweg",
+    "lat": "52.420181",
+    "lng": "4.906852"
+  },
+  {
+    "id": "GVB:02297",
+    "name": "Amsterdam, Isolatorweg",
+    "lat": "52.395231",
+    "lng": "4.850132"
+  },
+  {
+    "id": "GVB:02296",
+    "name": "Amsterdam, Isolatorweg",
+    "lat": "52.395109",
+    "lng": "4.851044"
+  },
+  {
+    "id": "GVB:02295",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.388806",
+    "lng": "4.838781"
+  },
+  {
+    "id": "GVB:02294",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.389329",
+    "lng": "4.838995"
+  },
+  {
+    "id": "GVB:09078",
+    "name": "Amsterdam, Maasstraat",
+    "lat": "52.34681",
+    "lng": "489476"
+  },
+  {
+    "id": "GVB:09079",
+    "name": "Amsterdam, Maasstraat",
+    "lat": "52.347065",
+    "lng": "4.895447"
+  },
+  {
+    "id": "GVB:09074",
+    "name": "Amsterdam, Scheldestraat",
+    "lat": "52.347478",
+    "lng": "4.891157"
+  },
+  {
+    "id": "GVB:09075",
+    "name": "Amsterdam, Scheldestraat",
+    "lat": "52.347264",
+    "lng": "4.891615"
+  },
+  {
+    "id": "GVB:09072",
+    "name": "Amsterdam, Scheldeplein",
+    "lat": "52.343845",
+    "lng": "4.890567"
+  },
+  {
+    "id": "GVB:09073",
+    "name": "Amsterdam, Scheldeplein",
+    "lat": "52.344449",
+    "lng": "4.891132"
+  },
+  {
+    "id": "GVB:02299",
+    "name": "Amsterdam, Kingsfordweg",
+    "lat": "52.386084",
+    "lng": "4.842766"
+  },
+  {
+    "id": "GVB:09071",
+    "name": "Amsterdam, Scheldestraat",
+    "lat": "52.347418",
+    "lng": "4.889617"
+  },
+  {
+    "id": "GVB:02369",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.387818",
+    "lng": "4.838779"
+  },
+  {
+    "id": "GVB:02361",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.388332",
+    "lng": "4.839316"
+  },
+  {
+    "id": "GVB:02360",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.388561",
+    "lng": "483827"
+  },
+  {
+    "id": "GVB:02367",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.388015",
+    "lng": "4.838762"
+  },
+  {
+    "id": "GVB:02366",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.388132",
+    "lng": "4.838731"
+  },
+  {
+    "id": "GVB:02365",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.388222",
+    "lng": "483873"
+  },
+  {
+    "id": "GVB:02364",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.38833",
+    "lng": "4.838728"
+  },
+  {
+    "id": "GVB:02169",
+    "name": "Amsterdam, Wiltzanghlaan",
+    "lat": "52.382064",
+    "lng": "4.852186"
+  },
+  {
+    "id": "GVB:02164",
+    "name": "Amsterdam, De Rijpstraat",
+    "lat": "52.377254",
+    "lng": "4.857766"
+  },
+  {
+    "id": "GVB:02167",
+    "name": "Amsterdam, Bos en Lommerweg",
+    "lat": "52.381181",
+    "lng": "4.853798"
+  },
+  {
+    "id": "GVB:02166",
+    "name": "Amsterdam, Bos en Lommerweg",
+    "lat": "52.380164",
+    "lng": "4.855484"
+  },
+  {
+    "id": "GVB:04027",
+    "name": "Amsterdam, Saaftingestraat",
+    "lat": "52.360401",
+    "lng": "4.791406"
+  },
+  {
+    "id": "GVB:08119",
+    "name": "Amsterdam, Insulindeweg",
+    "lat": "52.36476",
+    "lng": "4.947651"
+  },
+  {
+    "id": "GVB:03167",
+    "name": "Amsterdam, Bos en Lommerplein",
+    "lat": "52.377095",
+    "lng": "4.846504"
+  },
+  {
+    "id": "GVB:03164",
+    "name": "Amsterdam, Nachtwachtlaan",
+    "lat": "52.364209",
+    "lng": "4.843108"
+  },
+  {
+    "id": "GVB:03165",
+    "name": "Amsterdam, Nachtwachtlaan",
+    "lat": "52.364093",
+    "lng": "4.843315"
+  },
+  {
+    "id": "GVB:03162",
+    "name": "Amsterdam, Burgde Vlugtlaan",
+    "lat": "52.378836",
+    "lng": "4.838185"
+  },
+  {
+    "id": "GVB:03163",
+    "name": "Amsterdam, Burgde Vlugtlaan",
+    "lat": "52.378817",
+    "lng": "4.837935"
+  },
+  {
+    "id": "GVB:03168",
+    "name": "Amsterdam, Mercatorplein",
+    "lat": "52.370242",
+    "lng": "4.851521"
+  },
+  {
+    "id": "GVB:03169",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.373011",
+    "lng": "483601"
+  },
+  {
+    "id": "GVB:05025",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.378216",
+    "lng": "4.897511"
+  },
+  {
+    "id": "GVB:07269",
+    "name": "Amsterdam, Station Zuid",
+    "lat": "52.340825",
+    "lng": "487374"
+  },
+  {
+    "id": "GVB:07268",
+    "name": "Amsterdam, Station Zuid",
+    "lat": "52.340818",
+    "lng": "4.874283"
+  },
+  {
+    "id": "GVB:01011",
+    "name": "Amsterdam, Schellingwdijk 83",
+    "lat": "52.386712",
+    "lng": "495369"
+  },
+  {
+    "id": "GVB:03012",
+    "name": "Amsterdam, Postjesweg",
+    "lat": "52.364323",
+    "lng": "4.852371"
+  },
+  {
+    "id": "GVB:03013",
+    "name": "Amsterdam, Hoofdweg",
+    "lat": "52.364262",
+    "lng": "4.852841"
+  },
+  {
+    "id": "GVB:03010",
+    "name": "Amsterdam, Witte de Withstraat",
+    "lat": "52.364803",
+    "lng": "485928"
+  },
+  {
+    "id": "GVB:07261",
+    "name": "Amsterdam, Station RAI",
+    "lat": "52.33696",
+    "lng": "4.890688"
+  },
+  {
+    "id": "GVB:07260",
+    "name": "Amsterdam, Station RAI",
+    "lat": "52.337087",
+    "lng": "4.890775"
+  },
+  {
+    "id": "GVB:09508",
+    "name": "Amsterdam, Waterlooplein",
+    "lat": "52.367004",
+    "lng": "4.903052"
+  },
+  {
+    "id": "GVB:05026",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377984",
+    "lng": "489791"
+  },
+  {
+    "id": "GVB:09502",
+    "name": "Amsterdam, Nieuwmarkt",
+    "lat": "52.371931",
+    "lng": "4.901295"
+  },
+  {
+    "id": "GVB:09503",
+    "name": "Amsterdam, Nieuwmarkt",
+    "lat": "52.37194",
+    "lng": "4.901236"
+  },
+  {
+    "id": "GVB:09500",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377359",
+    "lng": "4.901133"
+  },
+  {
+    "id": "GVB:07005",
+    "name": "Amsterdam, De Boelelaan/VU",
+    "lat": "52.335224",
+    "lng": "4.867203"
+  },
+  {
+    "id": "GVB:07004",
+    "name": "Amsterdam, De Boelelaan/VU",
+    "lat": "52.335344",
+    "lng": "4.865866"
+  },
+  {
+    "id": "GVB:07007",
+    "name": "Amsterdam, Museumplein",
+    "lat": "52.356902",
+    "lng": "4.879499"
+  },
+  {
+    "id": "GVB:07006",
+    "name": "Amsterdam, Museumplein",
+    "lat": "52.356427",
+    "lng": "4.879798"
+  },
+  {
+    "id": "GVB:07003",
+    "name": "Amsterdam, Van Baerlestraat",
+    "lat": "52.358837",
+    "lng": "4.878083"
+  },
+  {
+    "id": "GVB:07002",
+    "name": "Amsterdam, Van Baerlestraat",
+    "lat": "52.358398",
+    "lng": "4.878367"
+  },
+  {
+    "id": "GVB:05022",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377718",
+    "lng": "4.901041"
+  },
+  {
+    "id": "GVB:01151",
+    "name": "Amsterdam, Mosplein",
+    "lat": "52.393571",
+    "lng": "4.914074"
+  },
+  {
+    "id": "GVB:01156",
+    "name": "Amsterdam, Sneeuwbalstraat",
+    "lat": "52.39633",
+    "lng": "4.913957"
+  },
+  {
+    "id": "GVB:04167",
+    "name": "Amsterdam, Langsom",
+    "lat": "52.341687",
+    "lng": "4.793037"
+  },
+  {
+    "id": "GVB:00441",
+    "name": "Amsterdam, Muiderpoortstation",
+    "lat": "52.360883",
+    "lng": "4.932539"
+  },
+  {
+    "id": "GVB:00444",
+    "name": "Amsterdam, Linnaeusstraat",
+    "lat": "52.35991",
+    "lng": "49249"
+  },
+  {
+    "id": "GVB:00114",
+    "name": "Amsterdam, Dennenrode",
+    "lat": "52.322094",
+    "lng": "4.952136"
+  },
+  {
+    "id": "GVB:00115",
+    "name": "Amsterdam, Develstein",
+    "lat": "52.322856",
+    "lng": "4.953991"
+  },
+  {
+    "id": "GVB:00118",
+    "name": "Amsterdam, Echtenstein",
+    "lat": "52.324628",
+    "lng": "4.959518"
+  },
+  {
+    "id": "GVB:00119",
+    "name": "Amsterdam, Echtenstein",
+    "lat": "52.324827",
+    "lng": "4.959722"
+  },
+  {
+    "id": "GVB:04168",
+    "name": "Amsterdam, Langsom",
+    "lat": "52.341789",
+    "lng": "4.793564"
+  },
+  {
+    "id": "GVB:04012",
+    "name": "Amsterdam, Baden Powellweg",
+    "lat": "52.356464",
+    "lng": "4.791371"
+  },
+  {
+    "id": "GVB:04011",
+    "name": "Amsterdam, Baden Powellweg",
+    "lat": "52.356502",
+    "lng": "4.791723"
+  },
+  {
+    "id": "GVB:04010",
+    "name": "Amsterdam, Osdorper Ban",
+    "lat": "52.35978",
+    "lng": "4.789389"
+  },
+  {
+    "id": "GVB:04016",
+    "name": "Amsterdam, Hoekenes",
+    "lat": "52.357911",
+    "lng": "4.798545"
+  },
+  {
+    "id": "GVB:04015",
+    "name": "Amsterdam, Hoekenes",
+    "lat": "52.358022",
+    "lng": "4.799277"
+  },
+  {
+    "id": "GVB:00066",
+    "name": "Amsterdam, Hugo de Vrieslaan",
+    "lat": "52.350729",
+    "lng": "4.935402"
+  },
+  {
+    "id": "GVB:04019",
+    "name": "Amsterdam, Hoekenes",
+    "lat": "52.358218",
+    "lng": "4.800625"
+  },
+  {
+    "id": "GVB:00065",
+    "name": "Amsterdam, Hugo de Vrieslaan",
+    "lat": "52.351015",
+    "lng": "4.934871"
+  },
+  {
+    "id": "GVB:00062",
+    "name": "Amsterdam, Archimedesweg",
+    "lat": "52.355563",
+    "lng": "4.939874"
+  },
+  {
+    "id": "GVB:00060",
+    "name": "Amsterdam, Radioweg",
+    "lat": "52.353631",
+    "lng": "4.939791"
+  },
+  {
+    "id": "GVB:00061",
+    "name": "Amsterdam, Archimedesweg",
+    "lat": "52.355742",
+    "lng": "4.939652"
+  },
+  {
+    "id": "GVB:01223",
+    "name": "Amsterdam, Standerdmolen",
+    "lat": "52.416306",
+    "lng": "4.893268"
+  },
+  {
+    "id": "GVB:01222",
+    "name": "Amsterdam, Standerdmolen",
+    "lat": "52.416202",
+    "lng": "4.892181"
+  },
+  {
+    "id": "GVB:01227",
+    "name": "Amsterdam, Druivenstraat",
+    "lat": "52.412326",
+    "lng": "4.898104"
+  },
+  {
+    "id": "GVB:01226",
+    "name": "Amsterdam, Druivenstraat",
+    "lat": "52.412742",
+    "lng": "4.898702"
+  },
+  {
+    "id": "GVB:01225",
+    "name": "Amsterdam, Appelweg",
+    "lat": "52.415802",
+    "lng": "4.895405"
+  },
+  {
+    "id": "GVB:01224",
+    "name": "Amsterdam, Appelweg",
+    "lat": "52.415552",
+    "lng": "4.895613"
+  },
+  {
+    "id": "GVB:01229",
+    "name": "Amsterdam, Ananasplein",
+    "lat": "52.410691",
+    "lng": "4.896108"
+  },
+  {
+    "id": "GVB:01228",
+    "name": "Amsterdam, Ananasplein",
+    "lat": "52.41032",
+    "lng": "4.895554"
+  },
+  {
+    "id": "GVB:08248",
+    "name": "Amsterdam, Diemerparklaan",
+    "lat": "52.355122",
+    "lng": "4.995466"
+  },
+  {
+    "id": "GVB:08249",
+    "name": "Amsterdam, Diemerparklaan",
+    "lat": "52.355328",
+    "lng": "4.994994"
+  },
+  {
+    "id": "GVB:08246",
+    "name": "Amsterdam, Vennepluimstraat",
+    "lat": "52.357489",
+    "lng": "4.991041"
+  },
+  {
+    "id": "GVB:08247",
+    "name": "Amsterdam, Vennepluimstraat",
+    "lat": "52.357695",
+    "lng": "499057"
+  },
+  {
+    "id": "GVB:08244",
+    "name": "Amsterdam, Steigereiland",
+    "lat": "52.362802",
+    "lng": "4.980835"
+  },
+  {
+    "id": "GVB:08245",
+    "name": "Amsterdam, Steigereiland",
+    "lat": "52.363133",
+    "lng": "4.980127"
+  },
+  {
+    "id": "GVB:08240",
+    "name": "Amsterdam, Zuiderzeeweg",
+    "lat": "52.372125",
+    "lng": "496116"
+  },
+  {
+    "id": "GVB:08241",
+    "name": "Amsterdam, Zuiderzeeweg",
+    "lat": "52.37193",
+    "lng": "4.961852"
+  },
+  {
+    "id": "GVB:01087",
+    "name": "Amsterdam, 't Nopeind",
+    "lat": "52.409948",
+    "lng": "49645"
+  },
+  {
+    "id": "GVB:01086",
+    "name": "Amsterdam, 't Nopeind",
+    "lat": "52.409788",
+    "lng": "4.964943"
+  },
+  {
+    "id": "GVB:01085",
+    "name": "Amsterdam, Kerklaan",
+    "lat": "52.407333",
+    "lng": "4.964467"
+  },
+  {
+    "id": "GVB:08065",
+    "name": "Amsterdam, Frederiksplein",
+    "lat": "52.360257",
+    "lng": "4.899368"
+  },
+  {
+    "id": "GVB:08062",
+    "name": "Amsterdam, Prinsengracht",
+    "lat": "52.361981",
+    "lng": "4.898996"
+  },
+  {
+    "id": "GVB:08063",
+    "name": "Amsterdam, Prinsengracht",
+    "lat": "52.362241",
+    "lng": "4.898935"
+  },
+  {
+    "id": "GVB:08060",
+    "name": "Amsterdam, Keizersgracht",
+    "lat": "52.363677",
+    "lng": "4.898332"
+  },
+  {
+    "id": "GVB:08061",
+    "name": "Amsterdam, Keizersgracht",
+    "lat": "52.363937",
+    "lng": "4.898285"
+  },
+  {
+    "id": "GVB:01089",
+    "name": "Amsterdam, Buikslotermeerdijk",
+    "lat": "52.401383",
+    "lng": "4.957088"
+  },
+  {
+    "id": "GVB:01088",
+    "name": "Amsterdam, Zunderdorp",
+    "lat": "52.410057",
+    "lng": "4.962074"
+  },
+  {
+    "id": "GVB:04343",
+    "name": "Amsterdam, Baden Powellweg",
+    "lat": "523566",
+    "lng": "4.791692"
+  },
+  {
+    "id": "GVB:04340",
+    "name": "Amsterdam, Oudenaardeplantsoen",
+    "lat": "52.345032",
+    "lng": "480416"
+  },
+  {
+    "id": "GVB:02194",
+    "name": "Amsterdam, Hornhaven",
+    "lat": "52.394667",
+    "lng": "4.808752"
+  },
+  {
+    "id": "GVB:02197",
+    "name": "Amsterdam, Hornhaven",
+    "lat": "52.39502",
+    "lng": "480744"
+  },
+  {
+    "id": "GVB:02190",
+    "name": "Amsterdam, Karel Doormanstraat",
+    "lat": "52.378895",
+    "lng": "4.856954"
+  },
+  {
+    "id": "GVB:08113",
+    "name": "Amsterdam, Javaplein",
+    "lat": "52.363957",
+    "lng": "4.939496"
+  },
+  {
+    "id": "GVB:08110",
+    "name": "Amsterdam, Javaplein",
+    "lat": "52.364052",
+    "lng": "4.938555"
+  },
+  {
+    "id": "GVB:08111",
+    "name": "Amsterdam, Javaplein",
+    "lat": "52.364177",
+    "lng": "4.938245"
+  },
+  {
+    "id": "GVB:08114",
+    "name": "Amsterdam, Javaplein",
+    "lat": "52.364119",
+    "lng": "4.939553"
+  },
+  {
+    "id": "GVB:01158",
+    "name": "Amsterdam, Sneeuwbalstraat",
+    "lat": "52.396384",
+    "lng": "4.914132"
+  },
+  {
+    "id": "GVB:01409",
+    "name": "Amsterdam, Kadoelenpad",
+    "lat": "52.41336",
+    "lng": "4.911291"
+  },
+  {
+    "id": "GVB:04101",
+    "name": "Amsterdam, Naaldwijkstraat",
+    "lat": "52.346842",
+    "lng": "4.842587"
+  },
+  {
+    "id": "GVB:01403",
+    "name": "Amsterdam, Distelweg",
+    "lat": "52.394514",
+    "lng": "4.902678"
+  },
+  {
+    "id": "GVB:01402",
+    "name": "Amsterdam, Klaprozenweg",
+    "lat": "52.398995",
+    "lng": "4.906141"
+  },
+  {
+    "id": "GVB:01401",
+    "name": "Amsterdam, Klaprozenweg",
+    "lat": "52.398385",
+    "lng": "4.906574"
+  },
+  {
+    "id": "GVB:01155",
+    "name": "Amsterdam, Mosplein",
+    "lat": "52.393003",
+    "lng": "4.913581"
+  },
+  {
+    "id": "GVB:01404",
+    "name": "Amsterdam, Distelweg",
+    "lat": "52.394224",
+    "lng": "4.902314"
+  },
+  {
+    "id": "GVB:04100",
+    "name": "Amsterdam, Naaldwijkstraat",
+    "lat": "52.346887",
+    "lng": "4.842484"
+  },
+  {
+    "id": "GVB:04130",
+    "name": "Amsterdam, Derkinderenstraat",
+    "lat": "52.364067",
+    "lng": "483963"
+  },
+  {
+    "id": "GVB:02283",
+    "name": "Amsterdam, Dynamostraat",
+    "lat": "52.398691",
+    "lng": "4.848254"
+  },
+  {
+    "id": "GVB:02284",
+    "name": "Amsterdam, Dynamostraat",
+    "lat": "52.398573",
+    "lng": "4.847976"
+  },
+  {
+    "id": "GVB:09041",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.346154",
+    "lng": "4.919012"
+  },
+  {
+    "id": "GVB:09047",
+    "name": "Amsterdam, Victorieplein",
+    "lat": "52.345973",
+    "lng": "490538"
+  },
+  {
+    "id": "GVB:09049",
+    "name": "Amsterdam, Victorieplein",
+    "lat": "52.34637",
+    "lng": "4.905699"
+  },
+  {
+    "id": "GVB:09048",
+    "name": "Amsterdam, Victorieplein",
+    "lat": "52.346592",
+    "lng": "4.905109"
+  },
+  {
+    "id": "GVB:04030",
+    "name": "Amsterdam, Bullepad",
+    "lat": "52.361997",
+    "lng": "479968"
+  },
+  {
+    "id": "GVB:04033",
+    "name": "Amsterdam, Geer Ban",
+    "lat": "52.362837",
+    "lng": "4.804234"
+  },
+  {
+    "id": "GVB:04032",
+    "name": "Amsterdam, Geer Ban",
+    "lat": "52.362906",
+    "lng": "4.803602"
+  },
+  {
+    "id": "GVB:02375",
+    "name": "Amsterdam, Barajasweg",
+    "lat": "52.387256",
+    "lng": "483385"
+  },
+  {
+    "id": "GVB:02376",
+    "name": "Amsterdam, Barajasweg",
+    "lat": "52.386716",
+    "lng": "4.833857"
+  },
+  {
+    "id": "GVB:03125",
+    "name": "Amsterdam, Ant Moddermanstraat",
+    "lat": "52.383302",
+    "lng": "481338"
+  },
+  {
+    "id": "GVB:02370",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.38771",
+    "lng": "4.838795"
+  },
+  {
+    "id": "GVB:02373",
+    "name": "Amsterdam, Station Sloterdijk",
+    "lat": "52.38718",
+    "lng": "4.838831"
+  },
+  {
+    "id": "GVB:02173",
+    "name": "Amsterdam, Haarlemmerweg",
+    "lat": "52.384361",
+    "lng": "4.847473"
+  },
+  {
+    "id": "GVB:02171",
+    "name": "Amsterdam, Wiltzanghlaan",
+    "lat": "52.382902",
+    "lng": "4.850605"
+  },
+  {
+    "id": "GVB:02177",
+    "name": "Amsterdam, Bos en Lommerweg",
+    "lat": "52.381008",
+    "lng": "485521"
+  },
+  {
+    "id": "GVB:02175",
+    "name": "Amsterdam, Haarlemmerweg",
+    "lat": "52.384649",
+    "lng": "4.847499"
+  },
+  {
+    "id": "GVB:03150",
+    "name": "Amsterdam, Mercatorplein",
+    "lat": "52.370317",
+    "lng": "4.850111"
+  },
+  {
+    "id": "GVB:03157",
+    "name": "Amsterdam, Lambertus Zijlplein",
+    "lat": "52.377268",
+    "lng": "4.803384"
+  },
+  {
+    "id": "GVB:06053",
+    "name": "Amsterdam, Overtoomsesluis",
+    "lat": "52.358033",
+    "lng": "4.856616"
+  },
+  {
+    "id": "GVB:06052",
+    "name": "Amsterdam, Overtoomsesluis",
+    "lat": "52.357813",
+    "lng": "4.855782"
+  },
+  {
+    "id": "GVB:06057",
+    "name": "Amsterdam, Stadhouderskade",
+    "lat": "52.363069",
+    "lng": "4.879884"
+  },
+  {
+    "id": "GVB:06059",
+    "name": "Amsterdam, Spiegelgracht",
+    "lat": "52.360711",
+    "lng": "4.887618"
+  },
+  {
+    "id": "GVB:07135",
+    "name": "Amsterdam, Overijsselweg",
+    "lat": "52.331704",
+    "lng": "4.861757"
+  },
+  {
+    "id": "GVB:07134",
+    "name": "Amsterdam, Overijsselweg",
+    "lat": "52.332558",
+    "lng": "4.861864"
+  },
+  {
+    "id": "GVB:07137",
+    "name": "Amsterdam, Egelenburg",
+    "lat": "52.328693",
+    "lng": "4.861881"
+  },
+  {
+    "id": "GVB:01368",
+    "name": "Amsterdam, Tuigerstraat",
+    "lat": "52.406193",
+    "lng": "4.899406"
+  },
+  {
+    "id": "GVB:03026",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.373007",
+    "lng": "4.848712"
+  },
+  {
+    "id": "GVB:03025",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.373419",
+    "lng": "4.848546"
+  },
+  {
+    "id": "GVB:03024",
+    "name": "Amsterdam, Marco Polostraat",
+    "lat": "52.370952",
+    "lng": "4.855463"
+  },
+  {
+    "id": "GVB:03023",
+    "name": "Amsterdam, Marco Polostraat",
+    "lat": "52.370879",
+    "lng": "4.855199"
+  },
+  {
+    "id": "GVB:03022",
+    "name": "Amsterdam, Mercatorplein",
+    "lat": "52.370122",
+    "lng": "48507"
+  },
+  {
+    "id": "GVB:07270",
+    "name": "Amsterdam, Parnassusweg",
+    "lat": "52.338062",
+    "lng": "4.868739"
+  },
+  {
+    "id": "GVB:07271",
+    "name": "Amsterdam, Parnassusweg",
+    "lat": "52.338178",
+    "lng": "4.868665"
+  },
+  {
+    "id": "GVB:09531",
+    "name": "Amsterdam, Gein",
+    "lat": "52.296269",
+    "lng": "498952"
+  },
+  {
+    "id": "GVB:09530",
+    "name": "Amsterdam, Gein",
+    "lat": "52.296391",
+    "lng": "4.988478"
+  },
+  {
+    "id": "GVB:07016",
+    "name": "Amsterdam, Roelof Hartplein",
+    "lat": "52.352746",
+    "lng": "4.882864"
+  },
+  {
+    "id": "GVB:07017",
+    "name": "Amsterdam, Roelof Hartplein",
+    "lat": "52.352635",
+    "lng": "4.882058"
+  },
+  {
+    "id": "GVB:07015",
+    "name": "Amsterdam, Roelof Hartplein",
+    "lat": "52.353147",
+    "lng": "4.882067"
+  },
+  {
+    "id": "GVB:07010",
+    "name": "Amsterdam, Museumplein",
+    "lat": "52.355885",
+    "lng": "4.879115"
+  },
+  {
+    "id": "GVB:07011",
+    "name": "Amsterdam, Museumplein",
+    "lat": "52.356012",
+    "lng": "4.879598"
+  },
+  {
+    "id": "GVB:07019",
+    "name": "Amsterdam, Ruysdaelstraat",
+    "lat": "52.354437",
+    "lng": "488534"
+  },
+  {
+    "id": "GVB:01129",
+    "name": "Amsterdam, Kraaienplein",
+    "lat": "52.386186",
+    "lng": "4.914844"
+  },
+  {
+    "id": "GVB:00127",
+    "name": "Amsterdam, Grubbehoeve",
+    "lat": "52.323857",
+    "lng": "4.977656"
+  },
+  {
+    "id": "GVB:00126",
+    "name": "Amsterdam, Grubbehoeve",
+    "lat": "52.323519",
+    "lng": "4.976265"
+  },
+  {
+    "id": "GVB:00123",
+    "name": "Amsterdam, Egeldonk",
+    "lat": "52.326489",
+    "lng": "4.964591"
+  },
+  {
+    "id": "GVB:00122",
+    "name": "Amsterdam, Egeldonk",
+    "lat": "52.326472",
+    "lng": "496487"
+  },
+  {
+    "id": "GVB:00121",
+    "name": "Amsterdam, Eeftink",
+    "lat": "52.325744",
+    "lng": "4.962412"
+  },
+  {
+    "id": "GVB:00120",
+    "name": "Amsterdam, Eeftink",
+    "lat": "52.325727",
+    "lng": "4.962706"
+  },
+  {
+    "id": "GVB:00129",
+    "name": "Amsterdam, Geerdinkhof",
+    "lat": "52.323641",
+    "lng": "4.980254"
+  },
+  {
+    "id": "GVB:00128",
+    "name": "Amsterdam, Geerdinkhof",
+    "lat": "52.32287",
+    "lng": "4.980775"
+  },
+  {
+    "id": "GVB:07493",
+    "name": "Amsterdam, Amstelveenseweg",
+    "lat": "52.338343",
+    "lng": "4.857247"
+  },
+  {
+    "id": "GVB:07490",
+    "name": "Amsterdam, Amstelveenseweg",
+    "lat": "52.338092",
+    "lng": "4.857309"
+  },
+  {
+    "id": "GVB:00053",
+    "name": "Amsterdam, Kruislaan",
+    "lat": "52.34742",
+    "lng": "4.939677"
+  },
+  {
+    "id": "GVB:00052",
+    "name": "Amsterdam, Maxwellstraat",
+    "lat": "52.345782",
+    "lng": "4.936773"
+  },
+  {
+    "id": "GVB:00051",
+    "name": "Amsterdam, Maxwellstraat",
+    "lat": "52.345511",
+    "lng": "4.936526"
+  },
+  {
+    "id": "GVB:04001",
+    "name": "Amsterdam, Jan Rebelstraat",
+    "lat": "52.361563",
+    "lng": "4.783081"
+  },
+  {
+    "id": "GVB:00055",
+    "name": "Amsterdam, Linnaeusparkweg",
+    "lat": "52.348649",
+    "lng": "4.941543"
+  },
+  {
+    "id": "GVB:00054",
+    "name": "Amsterdam, Kruislaan",
+    "lat": "52.347121",
+    "lng": "493899"
+  },
+  {
+    "id": "GVB:00059",
+    "name": "Amsterdam, Radioweg",
+    "lat": "52.353369",
+    "lng": "4.939456"
+  },
+  {
+    "id": "GVB:04008",
+    "name": "Amsterdam, Dijkgraafplein",
+    "lat": "52.355451",
+    "lng": "4.786467"
+  },
+  {
+    "id": "GVB:04009",
+    "name": "Amsterdam, Dijkgraafplein",
+    "lat": "52.355561",
+    "lng": "4.786891"
+  },
+  {
+    "id": "GVB:00549",
+    "name": "Amsterdam, Station Spaklerweg",
+    "lat": "52.337752",
+    "lng": "4.921756"
+  },
+  {
+    "id": "GVB:00548",
+    "name": "Amsterdam, Station Spaklerweg",
+    "lat": "52.337843",
+    "lng": "4.921975"
+  },
+  {
+    "id": "GVB:01237",
+    "name": "Amsterdam, Beemsterstraat",
+    "lat": "52.397123",
+    "lng": "4.952105"
+  },
+  {
+    "id": "GVB:08271",
+    "name": "Amsterdam, Diemerparklaan",
+    "lat": "52.354809",
+    "lng": "4.995733"
+  },
+  {
+    "id": "GVB:08270",
+    "name": "Amsterdam, Diemerparklaan",
+    "lat": "52.355668",
+    "lng": "4.994727"
+  },
+  {
+    "id": "GVB:08299",
+    "name": "Amsterdam, POosterhuisstraat",
+    "lat": "52.351846",
+    "lng": "5007648"
+  },
+  {
+    "id": "GVB:08291",
+    "name": "Amsterdam, Molukkenstraat",
+    "lat": "52.361805",
+    "lng": "4.941"
+  },
+  {
+    "id": "GVB:08290",
+    "name": "Amsterdam, Molukkenstraat",
+    "lat": "52.361721",
+    "lng": "4.940164"
+  },
+  {
+    "id": "GVB:08293",
+    "name": "Amsterdam, Zeeburgerdijk",
+    "lat": "52.365394",
+    "lng": "4.939466"
+  },
+  {
+    "id": "GVB:08292",
+    "name": "Amsterdam, Zeeburgerdijk",
+    "lat": "52.365592",
+    "lng": "4.939523"
+  },
+  {
+    "id": "GVB:08129",
+    "name": "Amsterdam, Molukkenstraat",
+    "lat": "523615",
+    "lng": "493861"
+  },
+  {
+    "id": "GVB:08124",
+    "name": "Amsterdam, Soembawastraat",
+    "lat": "52.362147",
+    "lng": "4.943463"
+  },
+  {
+    "id": "GVB:08121",
+    "name": "Amsterdam, Soembawastraat",
+    "lat": "52.362248",
+    "lng": "4.943917"
+  },
+  {
+    "id": "GVB:08120",
+    "name": "Amsterdam, Insulindeweg",
+    "lat": "52.364688",
+    "lng": "4.947637"
+  },
+  {
+    "id": "GVB:01418",
+    "name": "Amsterdam, Nieuwe Gouw",
+    "lat": "52.405678",
+    "lng": "4.966554"
+  },
+  {
+    "id": "GVB:01414",
+    "name": "Amsterdam, Olof Palmeplein",
+    "lat": "52.396791",
+    "lng": "4.940119"
+  },
+  {
+    "id": "GVB:01415",
+    "name": "Amsterdam, Olof Palmeplein",
+    "lat": "52.396683",
+    "lng": "4.940164"
+  },
+  {
+    "id": "GVB:01416",
+    "name": "Amsterdam, Olof Palmeplein",
+    "lat": "52.396718",
+    "lng": "4.939841"
+  },
+  {
+    "id": "GVB:01417",
+    "name": "Amsterdam, Johan vHasseltweg",
+    "lat": "52.387846",
+    "lng": "4.923096"
+  },
+  {
+    "id": "GVB:01049",
+    "name": "Amsterdam, Blijkmeer",
+    "lat": "52.408953",
+    "lng": "5024794"
+  },
+  {
+    "id": "GVB:01411",
+    "name": "Amsterdam, Meidoornplein",
+    "lat": "52.38754",
+    "lng": "49117"
+  },
+  {
+    "id": "GVB:01412",
+    "name": "Amsterdam, Meidoornplein",
+    "lat": "52.387357",
+    "lng": "4.911071"
+  },
+  {
+    "id": "GVB:02270",
+    "name": "Amsterdam, Bolstoen",
+    "lat": "52.391808",
+    "lng": "4.788575"
+  },
+  {
+    "id": "GVB:01107",
+    "name": "Amsterdam, Spelderholt",
+    "lat": "52.401093",
+    "lng": "494419"
+  },
+  {
+    "id": "GVB:04402",
+    "name": "Amsterdam, Matterhorn",
+    "lat": "52.353719",
+    "lng": "4.774777"
+  },
+  {
+    "id": "GVB:01098",
+    "name": "Amsterdam, Buikslotermeerplein",
+    "lat": "52.399952",
+    "lng": "4.934592"
+  },
+  {
+    "id": "GVB:01099",
+    "name": "Amsterdam, Buikslotermeerplein",
+    "lat": "52.399788",
+    "lng": "493405"
+  },
+  {
+    "id": "GVB:08059",
+    "name": "Amsterdam, Veelaan",
+    "lat": "52.367757",
+    "lng": "4.939266"
+  },
+  {
+    "id": "GVB:08058",
+    "name": "Amsterdam, Veelaan",
+    "lat": "52.368307",
+    "lng": "4.939613"
+  },
+  {
+    "id": "GVB:01090",
+    "name": "Amsterdam, Buikslotermeerdijk",
+    "lat": "52.401348",
+    "lng": "4.957162"
+  },
+  {
+    "id": "GVB:01091",
+    "name": "Amsterdam, Beemsterstraat",
+    "lat": "52.397596",
+    "lng": "4.951057"
+  },
+  {
+    "id": "GVB:01092",
+    "name": "Amsterdam, Th Weeversweg",
+    "lat": "52.398254",
+    "lng": "494438"
+  },
+  {
+    "id": "GVB:01093",
+    "name": "Amsterdam, Th Weeversweg",
+    "lat": "52.398218",
+    "lng": "4.944498"
+  },
+  {
+    "id": "GVB:01094",
+    "name": "Amsterdam, Werengouw",
+    "lat": "52.396296",
+    "lng": "4.942269"
+  },
+  {
+    "id": "GVB:01095",
+    "name": "Amsterdam, Werengouw",
+    "lat": "52.396278",
+    "lng": "4.942431"
+  },
+  {
+    "id": "GVB:01096",
+    "name": "Amsterdam, Buikslotermeerplein",
+    "lat": "52.399834",
+    "lng": "4.934431"
+  },
+  {
+    "id": "GVB:01097",
+    "name": "Amsterdam, Buikslotermeerplein",
+    "lat": "52.400013",
+    "lng": "4.934327"
+  },
+  {
+    "id": "GVB:01100",
+    "name": "Amsterdam, Bakkerswaal",
+    "lat": "52.40239",
+    "lng": "4.937594"
+  },
+  {
+    "id": "GVB:00023",
+    "name": "Amsterdam, Beukenplein",
+    "lat": "52.357016",
+    "lng": "491809"
+  },
+  {
+    "id": "GVB:01101",
+    "name": "Amsterdam, Bakkerswaal",
+    "lat": "52.402227",
+    "lng": "4.937287"
+  },
+  {
+    "id": "GVB:04055",
+    "name": "Amsterdam, V M Broekmanstraat",
+    "lat": "523568",
+    "lng": "4.821459"
+  },
+  {
+    "id": "GVB:09055",
+    "name": "Amsterdam, Uiterwaardenstraat",
+    "lat": "52.34302",
+    "lng": "4.906439"
+  },
+  {
+    "id": "GVB:09056",
+    "name": "Amsterdam, Uiterwaardenstraat",
+    "lat": "52.342662",
+    "lng": "4.906605"
+  },
+  {
+    "id": "GVB:04054",
+    "name": "Amsterdam, Piet Wiedijkstraat",
+    "lat": "52.355216",
+    "lng": "4.815343"
+  },
+  {
+    "id": "GVB:09050",
+    "name": "Amsterdam, Victorieplein",
+    "lat": "52.347005",
+    "lng": "4.904987"
+  },
+  {
+    "id": "GVB:09051",
+    "name": "Amsterdam, Victorieplein",
+    "lat": "52.346454",
+    "lng": "4.906534"
+  },
+  {
+    "id": "GVB:09058",
+    "name": "Amsterdam, Pres Kennedylaan",
+    "lat": "52.340506",
+    "lng": "4.907098"
+  },
+  {
+    "id": "GVB:00024",
+    "name": "Amsterdam, Beukenplein",
+    "lat": "52.35725",
+    "lng": "4.918073"
+  },
+  {
+    "id": "GVB:04058",
+    "name": "Amsterdam, Hemsterhuisstraat",
+    "lat": "52.359121",
+    "lng": "4.821826"
+  },
+  {
+    "id": "GVB:02149",
+    "name": "Amsterdam, Van LStirumstraat",
+    "lat": "52.384429",
+    "lng": "4.874895"
+  },
+  {
+    "id": "GVB:02148",
+    "name": "Amsterdam, Van LStirumstraat",
+    "lat": "52.384269",
+    "lng": "4.875176"
+  },
+  {
+    "id": "GVB:02147",
+    "name": "Amsterdam, Van LStirumstraat",
+    "lat": "52.385482",
+    "lng": "4.875177"
+  },
+  {
+    "id": "GVB:02146",
+    "name": "Amsterdam, Van LStirumstraat",
+    "lat": "52.385444",
+    "lng": "4.874766"
+  },
+  {
+    "id": "GVB:02145",
+    "name": "Amsterdam, Van Hallstraat",
+    "lat": "52.384183",
+    "lng": "4.869904"
+  },
+  {
+    "id": "GVB:02143",
+    "name": "Amsterdam, Fred Hendrikplants",
+    "lat": "52.378719",
+    "lng": "4.874065"
+  },
+  {
+    "id": "GVB:02142",
+    "name": "Amsterdam, Vd Hoopstraat",
+    "lat": "52.383349",
+    "lng": "487031"
+  },
+  {
+    "id": "GVB:02141",
+    "name": "Amsterdam, Vd Hoopstraat",
+    "lat": "52.383394",
+    "lng": "4.870369"
+  },
+  {
+    "id": "GVB:02140",
+    "name": "Amsterdam, Van Beuningenplein",
+    "lat": "52.381222",
+    "lng": "4.871114"
+  },
+  {
+    "id": "GVB:09186",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.346794",
+    "lng": "4.919563"
+  },
+  {
+    "id": "GVB:09187",
+    "name": "Amsterdam, Van Woustraat",
+    "lat": "52.357985",
+    "lng": "4.899892"
+  },
+  {
+    "id": "GVB:09184",
+    "name": "Amsterdam, Ferd Bolstraat",
+    "lat": "52.357959",
+    "lng": "4.891481"
+  },
+  {
+    "id": "GVB:09185",
+    "name": "Amsterdam, Van Woustraat",
+    "lat": "52.35785",
+    "lng": "4.899746"
+  },
+  {
+    "id": "GVB:09180",
+    "name": "Amsterdam, Wibautstraat",
+    "lat": "52.355005",
+    "lng": "491177"
+  },
+  {
+    "id": "GVB:09181",
+    "name": "Amsterdam, Wibautstraat",
+    "lat": "52.355676",
+    "lng": "4.911117"
+  },
+  {
+    "id": "GVB:09188",
+    "name": "Amsterdam, Ferd Bolstraat",
+    "lat": "52.35799",
+    "lng": "489239"
+  },
+  {
+    "id": "GVB:03145",
+    "name": "Amsterdam, J Cabeliaustraat",
+    "lat": "52.382466",
+    "lng": "4.804094"
+  },
+  {
+    "id": "GVB:06043",
+    "name": "Amsterdam, Overtoom",
+    "lat": "52.362994",
+    "lng": "4.875099"
+  },
+  {
+    "id": "GVB:06040",
+    "name": "Amsterdam, E Wolffstraat",
+    "lat": "52.370185",
+    "lng": "4.866998"
+  },
+  {
+    "id": "GVB:06046",
+    "name": "Amsterdam, 1e Con Huygensstraat",
+    "lat": "52.362625",
+    "lng": "4.874868"
+  },
+  {
+    "id": "GVB:06044",
+    "name": "Amsterdam, Overtoom",
+    "lat": "52.363452",
+    "lng": "4.874829"
+  },
+  {
+    "id": "GVB:06045",
+    "name": "Amsterdam, 1e Con Huygensstraat",
+    "lat": "52.362423",
+    "lng": "487399"
+  },
+  {
+    "id": "GVB:06048",
+    "name": "Amsterdam, JP Heijestraat",
+    "lat": "52.360375",
+    "lng": "4.865851"
+  },
+  {
+    "id": "GVB:06049",
+    "name": "Amsterdam, JP Heijestraat",
+    "lat": "52.360549",
+    "lng": "4.866715"
+  },
+  {
+    "id": "GVB:07242",
+    "name": "Amsterdam, Uilenstede",
+    "lat": "52.322165",
+    "lng": "486938"
+  },
+  {
+    "id": "GVB:03034",
+    "name": "Amsterdam, Erasmusgracht",
+    "lat": "52.376441",
+    "lng": "4.846908"
+  },
+  {
+    "id": "GVB:03036",
+    "name": "Amsterdam, Egidiusstraat",
+    "lat": "52.378903",
+    "lng": "4.850756"
+  },
+  {
+    "id": "GVB:07244",
+    "name": "Amsterdam, Uilenstede",
+    "lat": "52.321795",
+    "lng": "4.868915"
+  },
+  {
+    "id": "GVB:03038",
+    "name": "Amsterdam, Bos en Lommerweg",
+    "lat": "52.380147",
+    "lng": "4.853693"
+  },
+  {
+    "id": "GVB:03039",
+    "name": "Amsterdam, Wiltzanghlaan",
+    "lat": "52.382265",
+    "lng": "4.850965"
+  },
+  {
+    "id": "GVB:09520",
+    "name": "Amsterdam, Strandvliet",
+    "lat": "52.318665",
+    "lng": "494136"
+  },
+  {
+    "id": "GVB:09521",
+    "name": "Amsterdam, Strandvliet",
+    "lat": "52.318253",
+    "lng": "4.941526"
+  },
+  {
+    "id": "GVB:09522",
+    "name": "Amsterdam, Station Bijlmer ArenA",
+    "lat": "52.312611",
+    "lng": "4.946935"
+  },
+  {
+    "id": "GVB:09523",
+    "name": "Amsterdam, Station Bijlmer ArenA",
+    "lat": "52.311928",
+    "lng": "4.947132"
+  },
+  {
+    "id": "GVB:09524",
+    "name": "Amsterdam, Bullewijk",
+    "lat": "52.306931",
+    "lng": "4.952079"
+  },
+  {
+    "id": "GVB:09525",
+    "name": "Amsterdam, Bullewijk",
+    "lat": "52.30642",
+    "lng": "4.952333"
+  },
+  {
+    "id": "GVB:09526",
+    "name": "Amsterdam, Station Holendrecht",
+    "lat": "52.298403",
+    "lng": "4.959873"
+  },
+  {
+    "id": "GVB:09528",
+    "name": "Amsterdam, Reigersbos",
+    "lat": "52.295585",
+    "lng": "4.973636"
+  },
+  {
+    "id": "GVB:09529",
+    "name": "Amsterdam, Reigersbos",
+    "lat": "52.295661",
+    "lng": "4.974735"
+  },
+  {
+    "id": "GVB:01046",
+    "name": "Amsterdam, Bloemendgouw 69",
+    "lat": "52.403324",
+    "lng": "5018096"
+  },
+  {
+    "id": "GVB:00422",
+    "name": "Amsterdam, Veenendaalplein",
+    "lat": "52.301559",
+    "lng": "4.980412"
+  },
+  {
+    "id": "GVB:00420",
+    "name": "Amsterdam, Wamelstraat",
+    "lat": "52.301576",
+    "lng": "4.985558"
+  },
+  {
+    "id": "GVB:00421",
+    "name": "Amsterdam, Veenendaalplein",
+    "lat": "52.30147",
+    "lng": "4.980853"
+  },
+  {
+    "id": "GVB:00044",
+    "name": "Amsterdam, Fizeaustraat",
+    "lat": "52.345977",
+    "lng": "4.924326"
+  },
+  {
+    "id": "GVB:07029",
+    "name": "Amsterdam, Emmastraat",
+    "lat": "52.355108",
+    "lng": "4.867909"
+  },
+  {
+    "id": "GVB:07028",
+    "name": "Amsterdam, Corn Schuytstraat",
+    "lat": "52.356047",
+    "lng": "4.870878"
+  },
+  {
+    "id": "GVB:00040",
+    "name": "Amsterdam, Hogeweg",
+    "lat": "52.353212",
+    "lng": "4.931355"
+  },
+  {
+    "id": "GVB:00041",
+    "name": "Amsterdam, Maxwellstraat",
+    "lat": "52.348031",
+    "lng": "493019"
+  },
+  {
+    "id": "GVB:00042",
+    "name": "Amsterdam, Pieter Zeemanlaan",
+    "lat": "52.348772",
+    "lng": "4.931371"
+  },
+  {
+    "id": "GVB:00043",
+    "name": "Amsterdam, Pieter Zeemanlaan",
+    "lat": "52.348764",
+    "lng": "4.931518"
+  },
+  {
+    "id": "GVB:07020",
+    "name": "Amsterdam, Ruysdaelstraat",
+    "lat": "52.354548",
+    "lng": "4.886088"
+  },
+  {
+    "id": "GVB:07027",
+    "name": "Amsterdam, Corn Schuytstraat",
+    "lat": "52.355973",
+    "lng": "4.870512"
+  },
+  {
+    "id": "GVB:07026",
+    "name": "Amsterdam, Jac Obrechtstraat",
+    "lat": "52.357115",
+    "lng": "4.874829"
+  },
+  {
+    "id": "GVB:07025",
+    "name": "Amsterdam, Jac Obrechtstraat",
+    "lat": "52.357042",
+    "lng": "4.874448"
+  },
+  {
+    "id": "GVB:00559",
+    "name": "Amsterdam, Station Bijlmer ArenA",
+    "lat": "52.311211",
+    "lng": "4.947535"
+  },
+  {
+    "id": "GVB:00552",
+    "name": "Amsterdam, Kraaienneststation",
+    "lat": "52.31686",
+    "lng": "4.981563"
+  },
+  {
+    "id": "GVB:00553",
+    "name": "Amsterdam, Kraaienneststation",
+    "lat": "52.316012",
+    "lng": "4.980735"
+  },
+  {
+    "id": "GVB:00556",
+    "name": "Amsterdam, C Mac Gillavrylaan",
+    "lat": "52.357631",
+    "lng": "4.944697"
+  },
+  {
+    "id": "GVB:00557",
+    "name": "Amsterdam, C Mac Gillavrylaan",
+    "lat": "52.357719",
+    "lng": "4.944212"
+  },
+  {
+    "id": "GVB:00554",
+    "name": "Amsterdam, Science Park A'dam",
+    "lat": "52.354472",
+    "lng": "4.950879"
+  },
+  {
+    "id": "GVB:00555",
+    "name": "Amsterdam, Science Park A'dam",
+    "lat": "52.354857",
+    "lng": "4.950332"
+  },
+  {
+    "id": "GVB:08260",
+    "name": "Amsterdam, Rietlandpark",
+    "lat": "52.372934",
+    "lng": "4.934442"
+  },
+  {
+    "id": "GVB:08261",
+    "name": "Amsterdam, Rietlandpark",
+    "lat": "52.373007",
+    "lng": "4.934808"
+  },
+  {
+    "id": "GVB:08268",
+    "name": "Amsterdam, Steigereiland",
+    "lat": "52.363509",
+    "lng": "4.979933"
+  },
+  {
+    "id": "GVB:08269",
+    "name": "Amsterdam, Steigereiland",
+    "lat": "52.362544",
+    "lng": "4.981454"
+  },
+  {
+    "id": "GVB:04109",
+    "name": "Amsterdam, Westlandgracht",
+    "lat": "52.351599",
+    "lng": "4.845039"
+  },
+  {
+    "id": "GVB:04105",
+    "name": "Amsterdam, Hoofddorpplein",
+    "lat": "52.350675",
+    "lng": "4.849424"
+  },
+  {
+    "id": "GVB:04104",
+    "name": "Amsterdam, Hoofddorpplein",
+    "lat": "52.350738",
+    "lng": "4.849496"
+  },
+  {
+    "id": "GVB:00134",
+    "name": "Amsterdam, Koornhorst",
+    "lat": "52.31907",
+    "lng": "4.984007"
+  },
+  {
+    "id": "GVB:00135",
+    "name": "Amsterdam, Koornhorst",
+    "lat": "52.319313",
+    "lng": "498396"
+  },
+  {
+    "id": "GVB:04103",
+    "name": "Amsterdam, Aalsmeerplein",
+    "lat": "52.34694",
+    "lng": "4.846387"
+  },
+  {
+    "id": "GVB:04102",
+    "name": "Amsterdam, Aalsmeerplein",
+    "lat": "52.346969",
+    "lng": "4.846798"
+  },
+  {
+    "id": "GVB:08288",
+    "name": "Amsterdam, RJH Fortuynplein",
+    "lat": "52.372261",
+    "lng": "494671"
+  },
+  {
+    "id": "GVB:08282",
+    "name": "Amsterdam, Vennepluimstraat",
+    "lat": "52.358008",
+    "lng": "4.990332"
+  },
+  {
+    "id": "GVB:08281",
+    "name": "Amsterdam, Vennepluimstraat",
+    "lat": "52.35714",
+    "lng": "4.991397"
+  },
+  {
+    "id": "GVB:08286",
+    "name": "Amsterdam, Ruisrietstraat",
+    "lat": "52.353319",
+    "lng": "4.999151"
+  },
+  {
+    "id": "GVB:08285",
+    "name": "Amsterdam, Ruisrietstraat",
+    "lat": "52.352433",
+    "lng": "5000187"
+  },
+  {
+    "id": "GVB:08131",
+    "name": "Amsterdam, Valentijnkade",
+    "lat": "52.358838",
+    "lng": "4.940736"
+  },
+  {
+    "id": "GVB:08132",
+    "name": "Amsterdam, Valentijnkade",
+    "lat": "52.359",
+    "lng": "4.940793"
+  },
+  {
+    "id": "GVB:08133",
+    "name": "Amsterdam, Zuiderzeeweg",
+    "lat": "52.371097",
+    "lng": "4.962492"
+  },
+  {
+    "id": "GVB:08134",
+    "name": "Amsterdam, Zuiderzeeweg",
+    "lat": "52.371392",
+    "lng": "4.962254"
+  },
+  {
+    "id": "GVB:01179",
+    "name": "Amsterdam, Grootzeil",
+    "lat": "52.408782",
+    "lng": "4.924273"
+  },
+  {
+    "id": "GVB:01178",
+    "name": "Amsterdam, Masthof",
+    "lat": "52.411944",
+    "lng": "4.926004"
+  },
+  {
+    "id": "GVB:01177",
+    "name": "Amsterdam, Masthof",
+    "lat": "52.412239",
+    "lng": "4.925574"
+  },
+  {
+    "id": "GVB:01176",
+    "name": "Amsterdam, Staghof",
+    "lat": "52.413406",
+    "lng": "4.922946"
+  },
+  {
+    "id": "GVB:01175",
+    "name": "Amsterdam, Staghof",
+    "lat": "52.413701",
+    "lng": "4.922531"
+  },
+  {
+    "id": "GVB:01174",
+    "name": "Amsterdam, Tussendek",
+    "lat": "52.413133",
+    "lng": "4.919965"
+  },
+  {
+    "id": "GVB:01173",
+    "name": "Amsterdam, Tussendek",
+    "lat": "52.412528",
+    "lng": "4.919237"
+  },
+  {
+    "id": "GVB:01172",
+    "name": "Amsterdam, Voordek",
+    "lat": "52.411002",
+    "lng": "491743"
+  },
+  {
+    "id": "GVB:01171",
+    "name": "Amsterdam, Voordek",
+    "lat": "52.410488",
+    "lng": "4.916774"
+  },
+  {
+    "id": "GVB:08044",
+    "name": "Amsterdam, Flevopark",
+    "lat": "52.365161",
+    "lng": "4.951493"
+  },
+  {
+    "id": "GVB:08045",
+    "name": "Amsterdam, Plantage Badlaan",
+    "lat": "52.365095",
+    "lng": "4.915538"
+  },
+  {
+    "id": "GVB:08046",
+    "name": "Amsterdam, Plantage Badlaan",
+    "lat": "52.36522",
+    "lng": "4.915287"
+  },
+  {
+    "id": "GVB:08047",
+    "name": "Amsterdam, Flevopark",
+    "lat": "52.365221",
+    "lng": "4.950847"
+  },
+  {
+    "id": "GVB:08041",
+    "name": "Amsterdam, Kattenburgerstraat",
+    "lat": "52.373136",
+    "lng": "4.919344"
+  },
+  {
+    "id": "GVB:08042",
+    "name": "Amsterdam, Plantage Kerklaan",
+    "lat": "52.366766",
+    "lng": "4.910807"
+  },
+  {
+    "id": "GVB:08043",
+    "name": "Amsterdam, Plantage Kerklaan",
+    "lat": "52.366534",
+    "lng": "4.911412"
+  },
+  {
+    "id": "GVB:02150",
+    "name": "Amsterdam, De Wittenkade",
+    "lat": "523831",
+    "lng": "4.877173"
+  },
+  {
+    "id": "GVB:02151",
+    "name": "Amsterdam, De Wittenkade",
+    "lat": "52.383261",
+    "lng": "487695"
+  },
+  {
+    "id": "GVB:02152",
+    "name": "Amsterdam, Nassaukade",
+    "lat": "52.380834",
+    "lng": "4.879064"
+  },
+  {
+    "id": "GVB:02153",
+    "name": "Amsterdam, Nassaukade",
+    "lat": "52.38132",
+    "lng": "4.879205"
+  },
+  {
+    "id": "GVB:02154",
+    "name": "Amsterdam, De Clercqstraat",
+    "lat": "52.371189",
+    "lng": "4.870526"
+  },
+  {
+    "id": "GVB:02155",
+    "name": "Amsterdam, Willem de Zwijgerlaan",
+    "lat": "52.37071",
+    "lng": "48636"
+  },
+  {
+    "id": "GVB:02156",
+    "name": "Amsterdam, Willem de Zwijgerlaan",
+    "lat": "52.370389",
+    "lng": "486425"
+  },
+  {
+    "id": "GVB:02157",
+    "name": "Amsterdam, Adm de Ruijterweg",
+    "lat": "52.371485",
+    "lng": "4.860096"
+  },
+  {
+    "id": "GVB:02158",
+    "name": "Amsterdam, Adm de Ruijterweg",
+    "lat": "52.371291",
+    "lng": "4.860965"
+  },
+  {
+    "id": "GVB:02159",
+    "name": "Amsterdam, Jan Evertsenstraat",
+    "lat": "52.371842",
+    "lng": "4.859431"
+  },
+  {
+    "id": "GVB:00145",
+    "name": "Amsterdam, Kikkenstein",
+    "lat": "52.316218",
+    "lng": "4.972711"
+  },
+  {
+    "id": "GVB:04114",
+    "name": "Amsterdam, Heemstedestraat",
+    "lat": "52.351511",
+    "lng": "4.833723"
+  },
+  {
+    "id": "GVB:00141",
+    "name": "Amsterdam, Kraaienneststation",
+    "lat": "52.316032",
+    "lng": "4.978681"
+  },
+  {
+    "id": "GVB:06077",
+    "name": "Amsterdam, Raamplein",
+    "lat": "52.366367",
+    "lng": "4.879773"
+  },
+  {
+    "id": "GVB:06076",
+    "name": "Amsterdam, Koningsplein",
+    "lat": "52.36689",
+    "lng": "4.888576"
+  },
+  {
+    "id": "GVB:06075",
+    "name": "Amsterdam, Koningsplein",
+    "lat": "52.367136",
+    "lng": "4.889425"
+  },
+  {
+    "id": "GVB:06074",
+    "name": "Amsterdam, Keizersgracht",
+    "lat": "52.365882",
+    "lng": "4.886239"
+  },
+  {
+    "id": "GVB:06073",
+    "name": "Amsterdam, Keizersgracht",
+    "lat": "52.366046",
+    "lng": "4.886663"
+  },
+  {
+    "id": "GVB:06072",
+    "name": "Amsterdam, Prinsengracht",
+    "lat": "52.364957",
+    "lng": "4.884282"
+  },
+  {
+    "id": "GVB:06071",
+    "name": "Amsterdam, Prinsengracht",
+    "lat": "52.365094",
+    "lng": "4.884647"
+  },
+  {
+    "id": "GVB:09088",
+    "name": "Amsterdam, Amstelkade",
+    "lat": "52.349347",
+    "lng": "4.904067"
+  },
+  {
+    "id": "GVB:09086",
+    "name": "Amsterdam, Amstelkade",
+    "lat": "52.348782",
+    "lng": "4.904322"
+  },
+  {
+    "id": "GVB:09083",
+    "name": "Amsterdam, Waalstraat",
+    "lat": "52.346806",
+    "lng": "4.900323"
+  },
+  {
+    "id": "GVB:09082",
+    "name": "Amsterdam, Waalstraat",
+    "lat": "52.346561",
+    "lng": "4.899738"
+  },
+  {
+    "id": "GVB:06078",
+    "name": "Amsterdam, Raamplein",
+    "lat": "52.365945",
+    "lng": "4.879866"
+  },
+  {
+    "id": "GVB:03045",
+    "name": "Amsterdam, Burg V Meineszlaan",
+    "lat": "52.382781",
+    "lng": "4.834185"
+  },
+  {
+    "id": "GVB:03044",
+    "name": "Amsterdam, Akbarstraat",
+    "lat": "52.38173",
+    "lng": "4.841938"
+  },
+  {
+    "id": "GVB:03046",
+    "name": "Amsterdam, Burg V Meineszlaan",
+    "lat": "52.382666",
+    "lng": "4.834568"
+  },
+  {
+    "id": "GVB:03041",
+    "name": "Amsterdam, Granidastraat",
+    "lat": "52.381782",
+    "lng": "4.847534"
+  },
+  {
+    "id": "GVB:03043",
+    "name": "Amsterdam, Akbarstraat",
+    "lat": "52.381637",
+    "lng": "4.841381"
+  },
+  {
+    "id": "GVB:03042",
+    "name": "Amsterdam, Granidastraat",
+    "lat": "52.381811",
+    "lng": "4.845991"
+  },
+  {
+    "id": "GVB:07258",
+    "name": "Amsterdam, Drentepark",
+    "lat": "52.33611",
+    "lng": "4.889362"
+  },
+  {
+    "id": "GVB:09555",
+    "name": "Amsterdam, Gaasperplas",
+    "lat": "52.310804",
+    "lng": "4.984683"
+  },
+  {
+    "id": "GVB:09550",
+    "name": "Amsterdam, Gaasperplas",
+    "lat": "52.311225",
+    "lng": "4.984488"
+  },
+  {
+    "id": "GVB:04401",
+    "name": "Amsterdam, Matterhorn",
+    "lat": "52.353915",
+    "lng": "4.774378"
+  },
+  {
+    "id": "GVB:04403",
+    "name": "Amsterdam, Pilatus",
+    "lat": "52.352894",
+    "lng": "4.776961"
+  },
+  {
+    "id": "GVB:04404",
+    "name": "Amsterdam, Pilatus",
+    "lat": "52.352965",
+    "lng": "4.776681"
+  },
+  {
+    "id": "GVB:07157",
+    "name": "Amsterdam, Van Heenvlietlaan",
+    "lat": "52.324898",
+    "lng": "4.881992"
+  },
+  {
+    "id": "GVB:07034",
+    "name": "Amsterdam, Amstelveenseweg",
+    "lat": "52.351325",
+    "lng": "4.855962"
+  },
+  {
+    "id": "GVB:07035",
+    "name": "Amsterdam, Zeilstraat",
+    "lat": "52.351238",
+    "lng": "4.856726"
+  },
+  {
+    "id": "GVB:04405",
+    "name": "Amsterdam, Inaristraat",
+    "lat": "52.350303",
+    "lng": "4.783425"
+  },
+  {
+    "id": "GVB:07030",
+    "name": "Amsterdam, Emmastraat",
+    "lat": "52.35528",
+    "lng": "4.868127"
+  },
+  {
+    "id": "GVB:07031",
+    "name": "Amsterdam, Valeriusplein",
+    "lat": "52.353328",
+    "lng": "4.863747"
+  },
+  {
+    "id": "GVB:07032",
+    "name": "Amsterdam, Valeriusplein",
+    "lat": "52.353182",
+    "lng": "4.863264"
+  },
+  {
+    "id": "GVB:07033",
+    "name": "Amsterdam, Amstelveenseweg",
+    "lat": "52.351617",
+    "lng": "4.856957"
+  },
+  {
+    "id": "GVB:00564",
+    "name": "Amsterdam, Station Bijlmer ArenA",
+    "lat": "52.31147",
+    "lng": "4.947283"
+  },
+  {
+    "id": "GVB:00563",
+    "name": "Amsterdam, Station Bijlmer ArenA",
+    "lat": "52.311417",
+    "lng": "4.947313"
+  },
+  {
+    "id": "GVB:00560",
+    "name": "Amsterdam, Station Bijlmer ArenA",
+    "lat": "52.311255",
+    "lng": "4.947476"
+  },
+  {
+    "id": "GVB:04406",
+    "name": "Amsterdam, Inaristraat",
+    "lat": "52.350365",
+    "lng": "4.783146"
+  },
+  {
+    "id": "GVB:00419",
+    "name": "Amsterdam, Wamelstraat",
+    "lat": "52.301487",
+    "lng": "4.985911"
+  },
+  {
+    "id": "GVB:04116",
+    "name": "Amsterdam, Heemstedestraat",
+    "lat": "52.351486",
+    "lng": "4.834164"
+  },
+  {
+    "id": "GVB:00144",
+    "name": "Amsterdam, Kikkenstein",
+    "lat": "52.316801",
+    "lng": "4.972368"
+  },
+  {
+    "id": "GVB:00147",
+    "name": "Amsterdam, Gooioord",
+    "lat": "52.319945",
+    "lng": "4.969361"
+  },
+  {
+    "id": "GVB:00146",
+    "name": "Amsterdam, Gooioord",
+    "lat": "52.320483",
+    "lng": "4.969033"
+  },
+  {
+    "id": "GVB:04112",
+    "name": "Amsterdam, Johan Huizingalaan",
+    "lat": "52.349234",
+    "lng": "4.827426"
+  },
+  {
+    "id": "GVB:04113",
+    "name": "Amsterdam, Johan Huizingalaan",
+    "lat": "52.349073",
+    "lng": "4.827502"
+  },
+  {
+    "id": "GVB:04110",
+    "name": "Amsterdam, Westlandgracht",
+    "lat": "52.351567",
+    "lng": "4.845817"
+  },
+  {
+    "id": "GVB:04111",
+    "name": "Amsterdam, Delflandlaan",
+    "lat": "52.35154",
+    "lng": "4.841913"
+  },
+  {
+    "id": "GVB:01388",
+    "name": "Amsterdam, Liergouw",
+    "lat": "52.383321",
+    "lng": "4.970468"
+  },
+  {
+    "id": "GVB:01389",
+    "name": "Amsterdam, Liergouw",
+    "lat": "52.383349",
+    "lng": "4.970761"
+  },
+  {
+    "id": "GVB:01386",
+    "name": "Amsterdam, Zuiderzeeweg",
+    "lat": "52.382419",
+    "lng": "4.969492"
+  },
+  {
+    "id": "GVB:01387",
+    "name": "Amsterdam, Zuiderzeeweg",
+    "lat": "52.382381",
+    "lng": "4.971505"
+  },
+  {
+    "id": "GVB:01380",
+    "name": "Amsterdam, Zuideinde",
+    "lat": "52.420079",
+    "lng": "4.893005"
+  },
+  {
+    "id": "GVB:01381",
+    "name": "Amsterdam, Zuideinde",
+    "lat": "52.420124",
+    "lng": "4.892887"
+  },
+  {
+    "id": "GVB:01382",
+    "name": "Amsterdam, Vorticellaweg",
+    "lat": "52.419513",
+    "lng": "4.908241"
+  },
+  {
+    "id": "GVB:01383",
+    "name": "Amsterdam, Vorticellaweg",
+    "lat": "52.419674",
+    "lng": "4.907989"
+  },
+  {
+    "id": "GVB:08207",
+    "name": "Amsterdam, Levantplein",
+    "lat": "52.377073",
+    "lng": "4.942858"
+  },
+  {
+    "id": "GVB:01166",
+    "name": "Amsterdam, Barkpad",
+    "lat": "52.402621",
+    "lng": "4.911744"
+  },
+  {
+    "id": "GVB:01167",
+    "name": "Amsterdam, Tjalkstraat",
+    "lat": "52.404924",
+    "lng": "4.910074"
+  },
+  {
+    "id": "GVB:01168",
+    "name": "Amsterdam, Tjalkstraat",
+    "lat": "52.40572",
+    "lng": "4.911167"
+  },
+  {
+    "id": "GVB:04425",
+    "name": "Amsterdam, Vrije Geer",
+    "lat": "52.34817",
+    "lng": "4.798938"
+  },
+  {
+    "id": "GVB:05082",
+    "name": "Amsterdam, Buiten Brouwersstraat",
+    "lat": "52.381668",
+    "lng": "4.891289"
+  },
+  {
+    "id": "GVB:05081",
+    "name": "Amsterdam, Buiten Brouwersstraat",
+    "lat": "52.381507",
+    "lng": "489157"
+  },
+  {
+    "id": "GVB:05080",
+    "name": "Amsterdam, Buiten Oranjestraat",
+    "lat": "52.383307",
+    "lng": "4.887819"
+  },
+  {
+    "id": "GVB:05084",
+    "name": "Amsterdam, Singel",
+    "lat": "52.380226",
+    "lng": "4.894683"
+  },
+  {
+    "id": "GVB:05089",
+    "name": "Amsterdam, Droogbak",
+    "lat": "52.382054",
+    "lng": "4.895471"
+  },
+  {
+    "id": "GVB:05088",
+    "name": "Amsterdam, Droogbak",
+    "lat": "52.381823",
+    "lng": "4.896119"
+  },
+  {
+    "id": "GVB:08028",
+    "name": "Amsterdam, Kadijksplein",
+    "lat": "52.370991",
+    "lng": "4.913273"
+  },
+  {
+    "id": "GVB:05069",
+    "name": "Amsterdam, Nieuwezijds Kolk",
+    "lat": "52.376286",
+    "lng": "4.893728"
+  },
+  {
+    "id": "GVB:05068",
+    "name": "Amsterdam, Dam",
+    "lat": "52.374361",
+    "lng": "4.891239"
+  },
+  {
+    "id": "GVB:02013",
+    "name": "Amsterdam, Oderweg",
+    "lat": "52.390109",
+    "lng": "4.821445"
+  },
+  {
+    "id": "GVB:02015",
+    "name": "Amsterdam, Kastrupstraat",
+    "lat": "52.39013",
+    "lng": "4.833579"
+  },
+  {
+    "id": "GVB:02014",
+    "name": "Amsterdam, Kapoeasweg",
+    "lat": "52.390122",
+    "lng": "482807"
+  },
+  {
+    "id": "GVB:05061",
+    "name": "Amsterdam, Spui",
+    "lat": "52.369329",
+    "lng": "4.889327"
+  },
+  {
+    "id": "GVB:05063",
+    "name": "Amsterdam, Dam",
+    "lat": "52.372444",
+    "lng": "4.890643"
+  },
+  {
+    "id": "GVB:05062",
+    "name": "Amsterdam, Spui",
+    "lat": "52.369095",
+    "lng": "4.889256"
+  },
+  {
+    "id": "GVB:05065",
+    "name": "Amsterdam, Dam",
+    "lat": "52.373676",
+    "lng": "4.890791"
+  },
+  {
+    "id": "GVB:05019",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377497",
+    "lng": "490188"
+  },
+  {
+    "id": "GVB:05015",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377314",
+    "lng": "4.901295"
+  },
+  {
+    "id": "GVB:01047",
+    "name": "Amsterdam, Bloemendgouw 69",
+    "lat": "52.403215",
+    "lng": "5017906"
+  },
+  {
+    "id": "GVB:08027",
+    "name": "Amsterdam, Kadijksplein",
+    "lat": "52.370749",
+    "lng": "4.913569"
+  },
+  {
+    "id": "GVB:02125",
+    "name": "Amsterdam, Bloemgracht",
+    "lat": "52.374172",
+    "lng": "4.876321"
+  },
+  {
+    "id": "GVB:02127",
+    "name": "Amsterdam, Rozengracht",
+    "lat": "52.372525",
+    "lng": "487584"
+  },
+  {
+    "id": "GVB:02126",
+    "name": "Amsterdam, Bloemgracht",
+    "lat": "52.374496",
+    "lng": "4.876581"
+  },
+  {
+    "id": "GVB:02121",
+    "name": "Amsterdam, Marnixplein",
+    "lat": "52.378388",
+    "lng": "4.878593"
+  },
+  {
+    "id": "GVB:02120",
+    "name": "Amsterdam, Marnixplein",
+    "lat": "52.378543",
+    "lng": "4.879164"
+  },
+  {
+    "id": "GVB:02123",
+    "name": "Amsterdam, Marnixplein",
+    "lat": "52.379047",
+    "lng": "4.879408"
+  },
+  {
+    "id": "GVB:02122",
+    "name": "Amsterdam, Marnixplein",
+    "lat": "52.378056",
+    "lng": "4.878861"
+  },
+  {
+    "id": "GVB:02129",
+    "name": "Amsterdam, G vLedenberchstraat",
+    "lat": "52.375091",
+    "lng": "4.870803"
+  },
+  {
+    "id": "GVB:02128",
+    "name": "Amsterdam, G vLedenberchstraat",
+    "lat": "52.375207",
+    "lng": "4.870626"
+  },
+  {
+    "id": "GVB:00435",
+    "name": "Amsterdam, Bijlmerplein",
+    "lat": "52.315008",
+    "lng": "4.951135"
+  },
+  {
+    "id": "GVB:00434",
+    "name": "Amsterdam, Bijlmerplein",
+    "lat": "52.314573",
+    "lng": "4.950318"
+  },
+  {
+    "id": "GVB:00125",
+    "name": "Amsterdam, Geldershoofd",
+    "lat": "52.325172",
+    "lng": "4.970881"
+  },
+  {
+    "id": "GVB:00124",
+    "name": "Amsterdam, Geldershoofd",
+    "lat": "52.324957",
+    "lng": "4.970913"
+  },
+  {
+    "id": "GVB:09039",
+    "name": "Amsterdam, Amstelstation",
+    "lat": "52.346144",
+    "lng": "4.918939"
+  },
+  {
+    "id": "GVB:06068",
+    "name": "Amsterdam, Leidseplein",
+    "lat": "52.36388",
+    "lng": "4.882532"
+  },
+  {
+    "id": "GVB:06069",
+    "name": "Amsterdam, Leidseplein",
+    "lat": "52.363527",
+    "lng": "4.881861"
+  },
+  {
+    "id": "GVB:06061",
+    "name": "Amsterdam, Leidseplein",
+    "lat": "52.363737",
+    "lng": "4.882725"
+  },
+  {
+    "id": "GVB:06062",
+    "name": "Amsterdam, Leidseplein",
+    "lat": "52.363272",
+    "lng": "4.883244"
+  },
+  {
+    "id": "GVB:04427",
+    "name": "Amsterdam, Vlimmerenstraat",
+    "lat": "52.349154",
+    "lng": "4.803343"
+  },
+  {
+    "id": "GVB:09090",
+    "name": "Amsterdam, Lutmastraat",
+    "lat": "52.351483",
+    "lng": "490331"
+  },
+  {
+    "id": "GVB:09091",
+    "name": "Amsterdam, Lutmastraat",
+    "lat": "52.351842",
+    "lng": "4.903129"
+  },
+  {
+    "id": "GVB:09094",
+    "name": "Amsterdam, Ceintuurbaan",
+    "lat": "52.354603",
+    "lng": "4.901426"
+  },
+  {
+    "id": "GVB:09095",
+    "name": "Amsterdam, Ceintuurbaan",
+    "lat": "52.35506",
+    "lng": "4.901054"
+  },
+  {
+    "id": "GVB:09096",
+    "name": "Amsterdam, Van Woustraat",
+    "lat": "52.354954",
+    "lng": "4.901628"
+  },
+  {
+    "id": "GVB:09097",
+    "name": "Amsterdam, Van Woustraat",
+    "lat": "52.354682",
+    "lng": "4.900838"
+  },
+  {
+    "id": "GVB:09098",
+    "name": "Amsterdam, Amsteldijk",
+    "lat": "52.355911",
+    "lng": "4.904758"
+  },
+  {
+    "id": "GVB:09099",
+    "name": "Amsterdam, Amsteldijk",
+    "lat": "52.355728",
+    "lng": "4.904056"
+  },
+  {
+    "id": "GVB:03057",
+    "name": "Amsterdam, Ant Moddermanstraat",
+    "lat": "52.38339",
+    "lng": "4.814745"
+  },
+  {
+    "id": "GVB:03054",
+    "name": "Amsterdam, Burg Fockstraat",
+    "lat": "52.379524",
+    "lng": "4.833388"
+  },
+  {
+    "id": "GVB:03055",
+    "name": "Amsterdam, Burg Fockstraat",
+    "lat": "52.379918",
+    "lng": "4.831078"
+  },
+  {
+    "id": "GVB:03052",
+    "name": "Amsterdam, Burg Eliasstraat",
+    "lat": "52.380773",
+    "lng": "4.825647"
+  },
+  {
+    "id": "GVB:03053",
+    "name": "Amsterdam, Burg Fockstraat",
+    "lat": "52.380419",
+    "lng": "4.832599"
+  },
+  {
+    "id": "GVB:03051",
+    "name": "Amsterdam, Burg Eliasstraat",
+    "lat": "52.38037",
+    "lng": "4.828017"
+  },
+  {
+    "id": "GVB:09546",
+    "name": "Amsterdam, Station Ganzenhoef",
+    "lat": "52.323984",
+    "lng": "4.972858"
+  },
+  {
+    "id": "GVB:09547",
+    "name": "Amsterdam, Station Ganzenhoef",
+    "lat": "52.323311",
+    "lng": "4.973231"
+  },
+  {
+    "id": "GVB:09544",
+    "name": "Amsterdam, Verrijn Stuartweg",
+    "lat": "52.328815",
+    "lng": "4.966549"
+  },
+  {
+    "id": "GVB:09545",
+    "name": "Amsterdam, Verrijn Stuartweg",
+    "lat": "52.328439",
+    "lng": "4.966934"
+  },
+  {
+    "id": "GVB:09540",
+    "name": "Amsterdam, Venserpolder",
+    "lat": "52.326727",
+    "lng": "4.946047"
+  },
+  {
+    "id": "GVB:09541",
+    "name": "Amsterdam, Venserpolder",
+    "lat": "52.326792",
+    "lng": "4.946647"
+  },
+  {
+    "id": "GVB:09548",
+    "name": "Amsterdam, Kraaienneststation",
+    "lat": "52.316825",
+    "lng": "4.979407"
+  },
+  {
+    "id": "GVB:09549",
+    "name": "Amsterdam, Kraaienneststation",
+    "lat": "52.316323",
+    "lng": "4.979632"
+  },
+  {
+    "id": "GVB:00570",
+    "name": "Amsterdam, Stationsweg",
+    "lat": "52.324173",
+    "lng": "4.931404"
+  },
+  {
+    "id": "GVB:00571",
+    "name": "Amsterdam, Stationsweg",
+    "lat": "52.324244",
+    "lng": "493111"
+  },
+  {
+    "id": "GVB:00573",
+    "name": "Amsterdam, HJE Wenckebachweg",
+    "lat": "52.341221",
+    "lng": "4.919372"
+  },
+  {
+    "id": "GVB:00574",
+    "name": "Amsterdam, HJE Wenckebachweg",
+    "lat": "52.341284",
+    "lng": "4.919562"
+  },
+  {
+    "id": "GVB:00575",
+    "name": "Amsterdam, De Flinesstraat",
+    "lat": "52.325408",
+    "lng": "4.920771"
+  },
+  {
+    "id": "GVB:00576",
+    "name": "Amsterdam, De Flinesstraat",
+    "lat": "52.325514",
+    "lng": "4.920388"
+  },
+  {
+    "id": "GVB:00080",
+    "name": "Amsterdam, Zaaiersweg",
+    "lat": "52.339007",
+    "lng": "4.939483"
+  },
+  {
+    "id": "GVB:04123",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.356629",
+    "lng": "4.834599"
+  },
+  {
+    "id": "GVB:04122",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.356619",
+    "lng": "4.834526"
+  },
+  {
+    "id": "GVB:04121",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.356619",
+    "lng": "4.834452"
+  },
+  {
+    "id": "GVB:04120",
+    "name": "Amsterdam, Delflandlaan",
+    "lat": "52.351556",
+    "lng": "4.839697"
+  },
+  {
+    "id": "GVB:04125",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.356638",
+    "lng": "4.834746"
+  },
+  {
+    "id": "GVB:04124",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.356629",
+    "lng": "4.834672"
+  },
+  {
+    "id": "GVB:00156",
+    "name": "Amsterdam, Dolingadreef",
+    "lat": "52.319492",
+    "lng": "4.948436"
+  },
+  {
+    "id": "GVB:00157",
+    "name": "Amsterdam, Dolingadreef",
+    "lat": "52.319249",
+    "lng": "4.948468"
+  },
+  {
+    "id": "GVB:00154",
+    "name": "Amsterdam, Frissenstein",
+    "lat": "52.316205",
+    "lng": "4.951489"
+  },
+  {
+    "id": "GVB:00155",
+    "name": "Amsterdam, Frissenstein",
+    "lat": "52.316087",
+    "lng": "4.951315"
+  },
+  {
+    "id": "GVB:00152",
+    "name": "Amsterdam, Florijn",
+    "lat": "52.317588",
+    "lng": "4.958589"
+  },
+  {
+    "id": "GVB:00153",
+    "name": "Amsterdam, Florijn",
+    "lat": "52.31778",
+    "lng": "4.959716"
+  },
+  {
+    "id": "GVB:00150",
+    "name": "Amsterdam, Geinwijk",
+    "lat": "52.31994",
+    "lng": "4.965357"
+  },
+  {
+    "id": "GVB:00151",
+    "name": "Amsterdam, Geinwijk",
+    "lat": "52.319852",
+    "lng": "4.965842"
+  },
+  {
+    "id": "GVB:07324",
+    "name": "Amsterdam, Hobbemastraat",
+    "lat": "52.360172",
+    "lng": "4.883323"
+  },
+  {
+    "id": "GVB:04002",
+    "name": "Amsterdam, Jan Rebelstraat",
+    "lat": "52.361946",
+    "lng": "4.784221"
+  },
+  {
+    "id": "GVB:04256",
+    "name": "Amsterdam, Spechtstraat",
+    "lat": "52.338531",
+    "lng": "4.789088"
+  },
+  {
+    "id": "GVB:01371",
+    "name": "Amsterdam, Buiksloterwegveer",
+    "lat": "52.38242",
+    "lng": "4.903677"
+  },
+  {
+    "id": "GVB:01370",
+    "name": "Amsterdam, Pomonastraat",
+    "lat": "52.408828",
+    "lng": "4.895467"
+  },
+  {
+    "id": "GVB:01372",
+    "name": "Amsterdam, Buiksloterwegveer",
+    "lat": "52.382502",
+    "lng": "4.903838"
+  },
+  {
+    "id": "GVB:01377",
+    "name": "Amsterdam, Molenwijk",
+    "lat": "52.418266",
+    "lng": "4.893555"
+  },
+  {
+    "id": "GVB:01379",
+    "name": "Amsterdam, Molenaarsweg",
+    "lat": "52.421467",
+    "lng": "4.887462"
+  },
+  {
+    "id": "GVB:01378",
+    "name": "Amsterdam, Molenaarsweg",
+    "lat": "52.421462",
+    "lng": "4.886301"
+  },
+  {
+    "id": "GVB:07321",
+    "name": "Amsterdam, Van Baerlestraat",
+    "lat": "52.358275",
+    "lng": "4.878955"
+  },
+  {
+    "id": "GVB:07323",
+    "name": "Amsterdam, Hobbemastraat",
+    "lat": "52.359768",
+    "lng": "4.883548"
+  },
+  {
+    "id": "GVB:04387",
+    "name": "Amsterdam, Delflandlaan",
+    "lat": "52.351615",
+    "lng": "4.838742"
+  },
+  {
+    "id": "GVB:04383",
+    "name": "Amsterdam, La Meye",
+    "lat": "52.352995",
+    "lng": "4.773819"
+  },
+  {
+    "id": "GVB:04389",
+    "name": "Amsterdam, Heemstedestraat",
+    "lat": "52.351437",
+    "lng": "4.835354"
+  },
+  {
+    "id": "GVB:08152",
+    "name": "Amsterdam, Oosteinde",
+    "lat": "52.359915",
+    "lng": "4.901441"
+  },
+  {
+    "id": "GVB:08153",
+    "name": "Amsterdam, Oosteinde",
+    "lat": "52.360017",
+    "lng": "4.902189"
+  },
+  {
+    "id": "GVB:04214",
+    "name": "Amsterdam, Griendstraat",
+    "lat": "52.358345",
+    "lng": "4.779426"
+  },
+  {
+    "id": "GVB:01117",
+    "name": "Amsterdam, Merelstraat",
+    "lat": "52.389956",
+    "lng": "4.925057"
+  },
+  {
+    "id": "GVB:01116",
+    "name": "Amsterdam, Merelstraat",
+    "lat": "52.389866",
+    "lng": "4.924926"
+  },
+  {
+    "id": "GVB:01113",
+    "name": "Amsterdam, Waddenweg",
+    "lat": "52.393815",
+    "lng": "492822"
+  },
+  {
+    "id": "GVB:04418",
+    "name": "Amsterdam, Oude Haagseweg",
+    "lat": "52.334076",
+    "lng": "4.811376"
+  },
+  {
+    "id": "GVB:01119",
+    "name": "Amsterdam, Hamerstraat",
+    "lat": "52.386262",
+    "lng": "4.922672"
+  },
+  {
+    "id": "GVB:04412",
+    "name": "Amsterdam, Hoekenes",
+    "lat": "52.352556",
+    "lng": "4.802608"
+  },
+  {
+    "id": "GVB:05094",
+    "name": "Amsterdam, Zoutkeetsgracht",
+    "lat": "52.388085",
+    "lng": "4.884871"
+  },
+  {
+    "id": "GVB:05091",
+    "name": "Amsterdam, Westerdoksdijk",
+    "lat": "52.38411",
+    "lng": "4.892877"
+  },
+  {
+    "id": "GVB:05092",
+    "name": "Amsterdam, Barentszplein",
+    "lat": "52.389381",
+    "lng": "4.891599"
+  },
+  {
+    "id": "GVB:05093",
+    "name": "Amsterdam, Barentszplein",
+    "lat": "52.389012",
+    "lng": "4.891559"
+  },
+  {
+    "id": "GVB:05066",
+    "name": "Amsterdam, Dam",
+    "lat": "52.373179",
+    "lng": "4.890268"
+  },
+  {
+    "id": "GVB:05078",
+    "name": "Amsterdam, Marnixstraat",
+    "lat": "52.372476",
+    "lng": "4.877016"
+  },
+  {
+    "id": "GVB:05079",
+    "name": "Amsterdam, Buiten Oranjestraat",
+    "lat": "52.383119",
+    "lng": "4.888056"
+  },
+  {
+    "id": "GVB:01021",
+    "name": "Amsterdam, Durgerddijk 4",
+    "lat": "52.376123",
+    "lng": "4.978495"
+  },
+  {
+    "id": "GVB:01020",
+    "name": "Amsterdam, Durgerddijk 4",
+    "lat": "52.376311",
+    "lng": "4.978156"
+  },
+  {
+    "id": "GVB:02009",
+    "name": "Amsterdam, Contactweg",
+    "lat": "52.391469",
+    "lng": "4.855128"
+  },
+  {
+    "id": "GVB:04413",
+    "name": "Amsterdam, Louis Davidsstraat",
+    "lat": "52.353835",
+    "lng": "4.808506"
+  },
+  {
+    "id": "GVB:02136",
+    "name": "Amsterdam, Fred Hendrikplants",
+    "lat": "52.379003",
+    "lng": "4.875355"
+  },
+  {
+    "id": "GVB:02137",
+    "name": "Amsterdam, Kostverlorenstraat",
+    "lat": "52.379679",
+    "lng": "4.871734"
+  },
+  {
+    "id": "GVB:02132",
+    "name": "Amsterdam, Fred Hendrikplants",
+    "lat": "52.378626",
+    "lng": "4.875432"
+  },
+  {
+    "id": "GVB:02133",
+    "name": "Amsterdam, Fred Hendrikplants",
+    "lat": "52.378418",
+    "lng": "4.875214"
+  },
+  {
+    "id": "GVB:02130",
+    "name": "Amsterdam, Hugo de Grootplein",
+    "lat": "52.374389",
+    "lng": "4.872588"
+  },
+  {
+    "id": "GVB:02131",
+    "name": "Amsterdam, Hugo de Grootplein",
+    "lat": "52.374966",
+    "lng": "4.872919"
+  },
+  {
+    "id": "GVB:02138",
+    "name": "Amsterdam, Kostverlorenstraat",
+    "lat": "52.379526",
+    "lng": "4.871706"
+  },
+  {
+    "id": "GVB:02139",
+    "name": "Amsterdam, Van Beuningenplein",
+    "lat": "52.381375",
+    "lng": "4.871127"
+  },
+  {
+    "id": "GVB:03197",
+    "name": "Amsterdam, W Schoutenstraat",
+    "lat": "52.36737",
+    "lng": "4.852378"
+  },
+  {
+    "id": "GVB:03196",
+    "name": "Amsterdam, Sam van Houtenstraat",
+    "lat": "52.379269",
+    "lng": "4.797409"
+  },
+  {
+    "id": "GVB:03195",
+    "name": "Amsterdam, W Dreesplantsoen",
+    "lat": "52.37937",
+    "lng": "4.790608"
+  },
+  {
+    "id": "GVB:03194",
+    "name": "Amsterdam, W Dreesplantsoen",
+    "lat": "52.379405",
+    "lng": "4.790475"
+  },
+  {
+    "id": "GVB:03193",
+    "name": "Amsterdam, Frle Wttewaalpad",
+    "lat": "52.379914",
+    "lng": "4.788045"
+  },
+  {
+    "id": "GVB:03192",
+    "name": "Amsterdam, Frle Wttewaalpad",
+    "lat": "52.380445",
+    "lng": "4.788097"
+  },
+  {
+    "id": "GVB:03191",
+    "name": "Amsterdam, JM den Uylstraat",
+    "lat": "52.381695",
+    "lng": "4.790004"
+  },
+  {
+    "id": "GVB:01369",
+    "name": "Amsterdam, Pomonastraat",
+    "lat": "52.408864",
+    "lng": "4.895467"
+  },
+  {
+    "id": "GVB:03190",
+    "name": "Amsterdam, JM den Uylstraat",
+    "lat": "52.381503",
+    "lng": "4.791152"
+  },
+  {
+    "id": "GVB:03198",
+    "name": "Amsterdam, W Schoutenstraat",
+    "lat": "52.36702",
+    "lng": "4.852588"
+  },
+  {
+    "id": "GVB:06019",
+    "name": "Amsterdam, Ten Katestraat",
+    "lat": "52.365918",
+    "lng": "4.867372"
+  },
+  {
+    "id": "GVB:02222",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.373996",
+    "lng": "4.858745"
+  },
+  {
+    "id": "GVB:06017",
+    "name": "Amsterdam, JP Heijestraat",
+    "lat": "52.364874",
+    "lng": "486292"
+  },
+  {
+    "id": "GVB:02221",
+    "name": "Amsterdam, Jan vGalenstraat",
+    "lat": "52.375324",
+    "lng": "4.858421"
+  },
+  {
+    "id": "GVB:06010",
+    "name": "Amsterdam, Corantijnstraat",
+    "lat": "52.361316",
+    "lng": "4.853259"
+  },
+  {
+    "id": "GVB:06013",
+    "name": "Amsterdam, Corantijnstraat",
+    "lat": "52.361802",
+    "lng": "4.853297"
+  },
+  {
+    "id": "GVB:03069",
+    "name": "Amsterdam, Adm Helfrichstraat",
+    "lat": "52.369293",
+    "lng": "484447"
+  },
+  {
+    "id": "GVB:03061",
+    "name": "Amsterdam, Bos en Lommerplein",
+    "lat": "52.377781",
+    "lng": "4.845233"
+  },
+  {
+    "id": "GVB:03060",
+    "name": "Amsterdam, Bos en Lommerplein",
+    "lat": "52.37815",
+    "lng": "4.847181"
+  },
+  {
+    "id": "GVB:07299",
+    "name": "Amsterdam, Loowaard",
+    "lat": "52.330954",
+    "lng": "4.879591"
+  },
+  {
+    "id": "GVB:00501",
+    "name": "Amsterdam, Science Park Aer",
+    "lat": "52.355215",
+    "lng": "4.959767"
+  },
+  {
+    "id": "GVB:00500",
+    "name": "Amsterdam, Science Park Aer",
+    "lat": "52.354834",
+    "lng": "4.959037"
+  },
+  {
+    "id": "GVB:00503",
+    "name": "Amsterdam, Science Park Terra",
+    "lat": "52.353586",
+    "lng": "4.956803"
+  },
+  {
+    "id": "GVB:00502",
+    "name": "Amsterdam, Science Park Terra",
+    "lat": "52.353549",
+    "lng": "4.956539"
+  },
+  {
+    "id": "GVB:02088",
+    "name": "Amsterdam, Vredenhof",
+    "lat": "52.385199",
+    "lng": "4.863782"
+  },
+  {
+    "id": "GVB:02089",
+    "name": "Amsterdam, Vredenhof",
+    "lat": "52.385273",
+    "lng": "4.862386"
+  },
+  {
+    "id": "GVB:04134",
+    "name": "Amsterdam, Robert Fruinlaan",
+    "lat": "52.363987",
+    "lng": "4.830103"
+  },
+  {
+    "id": "GVB:04135",
+    "name": "Amsterdam, Justus Lipsiusstraat",
+    "lat": "52.361511",
+    "lng": "4.827257"
+  },
+  {
+    "id": "GVB:04136",
+    "name": "Amsterdam, Justus Lipsiusstraat",
+    "lat": "52.360818",
+    "lng": "4.827045"
+  },
+  {
+    "id": "GVB:00167",
+    "name": "Amsterdam, Hogevecht",
+    "lat": "52.309475",
+    "lng": "4.959562"
+  },
+  {
+    "id": "GVB:04131",
+    "name": "Amsterdam, Jan Tooropstraat",
+    "lat": "52.364031",
+    "lng": "4.835755"
+  },
+  {
+    "id": "GVB:04132",
+    "name": "Amsterdam, Jan Tooropstraat",
+    "lat": "52.36411",
+    "lng": "4.835372"
+  },
+  {
+    "id": "GVB:00164",
+    "name": "Amsterdam, Hofgeest",
+    "lat": "52.312546",
+    "lng": "4.958608"
+  },
+  {
+    "id": "GVB:00169",
+    "name": "Amsterdam, Huigenbos",
+    "lat": "52.306666",
+    "lng": "4.960762"
+  },
+  {
+    "id": "GVB:00168",
+    "name": "Amsterdam, Hogevecht",
+    "lat": "52.30945",
+    "lng": "4.959972"
+  },
+  {
+    "id": "GVB:04138",
+    "name": "Amsterdam, Cornelis Lelylaan",
+    "lat": "52.357635",
+    "lng": "4.826777"
+  },
+  {
+    "id": "GVB:04139",
+    "name": "Amsterdam, Cornelis Lelylaan",
+    "lat": "52.357981",
+    "lng": "4.827712"
+  },
+  {
+    "id": "GVB:00219",
+    "name": "Amsterdam, Gaasperplas",
+    "lat": "52.311308",
+    "lng": "498506"
+  },
+  {
+    "id": "GVB:00211",
+    "name": "Amsterdam, Station Holendrecht",
+    "lat": "52.29707",
+    "lng": "4.958889"
+  },
+  {
+    "id": "GVB:00210",
+    "name": "Amsterdam, Hakfort",
+    "lat": "52.308049",
+    "lng": "4.955411"
+  },
+  {
+    "id": "GVB:01362",
+    "name": "Amsterdam, Molenwijk",
+    "lat": "52.41797",
+    "lng": "4.893646"
+  },
+  {
+    "id": "GVB:01363",
+    "name": "Amsterdam, Hildsven",
+    "lat": "52.399432",
+    "lng": "4.939681"
+  },
+  {
+    "id": "GVB:01361",
+    "name": "Amsterdam, Molenwijk",
+    "lat": "52.418024",
+    "lng": "4.893631"
+  },
+  {
+    "id": "GVB:01366",
+    "name": "Amsterdam, AtatÃ¼rk",
+    "lat": "52.403274",
+    "lng": "4.897763"
+  },
+  {
+    "id": "GVB:01367",
+    "name": "Amsterdam, Tuigerstraat",
+    "lat": "52.406374",
+    "lng": "4.899624"
+  },
+  {
+    "id": "GVB:01364",
+    "name": "Amsterdam, Hildsven",
+    "lat": "52.399923",
+    "lng": "4.938868"
+  },
+  {
+    "id": "GVB:01365",
+    "name": "Amsterdam, AtatÃ¼rk",
+    "lat": "52.403194",
+    "lng": "489794"
+  },
+  {
+    "id": "GVB:00180",
+    "name": "Amsterdam, Kelbergen",
+    "lat": "52.313544",
+    "lng": "497143"
+  },
+  {
+    "id": "GVB:00185",
+    "name": "Amsterdam, Meernhof",
+    "lat": "52.299715",
+    "lng": "4.967103"
+  },
+  {
+    "id": "GVB:00184",
+    "name": "Amsterdam, Meernhof",
+    "lat": "52.299223",
+    "lng": "4.967841"
+  },
+  {
+    "id": "GVB:00187",
+    "name": "Amsterdam, Geinbrug",
+    "lat": "52.304479",
+    "lng": "5012773"
+  },
+  {
+    "id": "GVB:00186",
+    "name": "Amsterdam, Geinbrug",
+    "lat": "52.304426",
+    "lng": "5013126"
+  },
+  {
+    "id": "GVB:04390",
+    "name": "Amsterdam, Presanella",
+    "lat": "52.351797",
+    "lng": "47768"
+  },
+  {
+    "id": "GVB:04392",
+    "name": "Amsterdam, Allenstraat",
+    "lat": "52.34988",
+    "lng": "4.781508"
+  },
+  {
+    "id": "GVB:04394",
+    "name": "Amsterdam, Ecuplein",
+    "lat": "52.349243",
+    "lng": "4.787124"
+  },
+  {
+    "id": "GVB:01106",
+    "name": "Amsterdam, Spelderholt",
+    "lat": "52.401273",
+    "lng": "4.944232"
+  },
+  {
+    "id": "GVB:01104",
+    "name": "Amsterdam, MariÃ«ndaal",
+    "lat": "52.40301",
+    "lng": "4.942554"
+  },
+  {
+    "id": "GVB:01105",
+    "name": "Amsterdam, MariÃ«ndaal",
+    "lat": "52.402502",
+    "lng": "4.943661"
+  },
+  {
+    "id": "GVB:01102",
+    "name": "Amsterdam, JH van Heekweg",
+    "lat": "52.403919",
+    "lng": "4.940312"
+  },
+  {
+    "id": "GVB:01103",
+    "name": "Amsterdam, JH van Heekweg",
+    "lat": "52.403402",
+    "lng": "4.941404"
+  },
+  {
+    "id": "GVB:04408",
+    "name": "Amsterdam, Ecuplein",
+    "lat": "52.349809",
+    "lng": "4.788862"
+  },
+  {
+    "id": "GVB:04409",
+    "name": "Amsterdam, Baden Powellweg",
+    "lat": "52.350925",
+    "lng": "479441"
+  },
+  {
+    "id": "GVB:01108",
+    "name": "Amsterdam, J Drijverweg",
+    "lat": "52.399431",
+    "lng": "4.944368"
+  },
+  {
+    "id": "GVB:01109",
+    "name": "Amsterdam, J Drijverweg",
+    "lat": "52.399646",
+    "lng": "4.944204"
+  },
+  {
+    "id": "GVB:01299",
+    "name": "Amsterdam, Draaierweg",
+    "lat": "52.401411",
+    "lng": "4.905747"
+  },
+  {
+    "id": "GVB:08097",
+    "name": "Amsterdam, 1e vSwindenstraat",
+    "lat": "52.361686",
+    "lng": "4.924118"
+  },
+  {
+    "id": "GVB:08096",
+    "name": "Amsterdam, Alexanderplein",
+    "lat": "52.36351",
+    "lng": "4.919313"
+  },
+  {
+    "id": "GVB:08095",
+    "name": "Amsterdam, Alexanderplein",
+    "lat": "52.363413",
+    "lng": "4.919696"
+  },
+  {
+    "id": "GVB:08094",
+    "name": "Amsterdam, Wijttenbachstraat",
+    "lat": "52.359795",
+    "lng": "4.925474"
+  },
+  {
+    "id": "GVB:08098",
+    "name": "Amsterdam, 1e vSwindenstraat",
+    "lat": "52.362108",
+    "lng": "4.923864"
+  },
+  {
+    "id": "GVB:05048",
+    "name": "Amsterdam, Mr Visserplein",
+    "lat": "52.367663",
+    "lng": "4.906114"
+  },
+  {
+    "id": "GVB:05047",
+    "name": "Amsterdam, Rembrandtplein",
+    "lat": "52.366233",
+    "lng": "4.897026"
+  },
+  {
+    "id": "GVB:05046",
+    "name": "Amsterdam, Rembrandtplein",
+    "lat": "52.366257",
+    "lng": "4.896277"
+  },
+  {
+    "id": "GVB:02109",
+    "name": "Amsterdam, Nova Zemblastraat",
+    "lat": "52.391175",
+    "lng": "4.878123"
+  },
+  {
+    "id": "GVB:02108",
+    "name": "Amsterdam, Nova Zemblastraat",
+    "lat": "52.390978",
+    "lng": "4.878301"
+  },
+  {
+    "id": "GVB:02103",
+    "name": "Amsterdam, Spaarndammerstraat",
+    "lat": "52.392162",
+    "lng": "4.877656"
+  },
+  {
+    "id": "GVB:02102",
+    "name": "Amsterdam, Spaarndammerstraat",
+    "lat": "52.391475",
+    "lng": "4.878883"
+  },
+  {
+    "id": "GVB:02107",
+    "name": "Amsterdam, Assendelftstraat",
+    "lat": "52.388828",
+    "lng": "4.879839"
+  },
+  {
+    "id": "GVB:02106",
+    "name": "Amsterdam, Assendelftstraat",
+    "lat": "52.38941",
+    "lng": "4.879436"
+  },
+  {
+    "id": "GVB:02105",
+    "name": "Amsterdam, Houtmankade",
+    "lat": "52.391069",
+    "lng": "488284"
+  },
+  {
+    "id": "GVB:02104",
+    "name": "Amsterdam, Houtmankade",
+    "lat": "52.390858",
+    "lng": "4.883929"
+  },
+  {
+    "id": "GVB:09140",
+    "name": "Amsterdam, Amsteldijk",
+    "lat": "52.347045",
+    "lng": "4.910549"
+  },
+  {
+    "id": "GVB:04426",
+    "name": "Amsterdam, Vrije Geer",
+    "lat": "52.347147",
+    "lng": "4.797396"
+  },
+  {
+    "id": "GVB:03188",
+    "name": "Amsterdam, Burgde Vlugtlaan",
+    "lat": "52.382672",
+    "lng": "4.818749"
+  },
+  {
+    "id": "GVB:03180",
+    "name": "Amsterdam, Adm Helfrichstraat",
+    "lat": "52.36942",
+    "lng": "4.844586"
+  },
+  {
+    "id": "GVB:03181",
+    "name": "Amsterdam, Jan Voermanstraat",
+    "lat": "52.369703",
+    "lng": "4.837887"
+  },
+  {
+    "id": "GVB:03182",
+    "name": "Amsterdam, Jan Voermanstraat",
+    "lat": "52.369589",
+    "lng": "483852"
+  },
+  {
+    "id": "GVB:03187",
+    "name": "Amsterdam, Burgde Vlugtlaan",
+    "lat": "52.382952",
+    "lng": "481901"
+  },
+  {
+    "id": "GVB:04133",
+    "name": "Amsterdam, Robert Fruinlaan",
+    "lat": "52.364036",
+    "lng": "4.829104"
+  },
+  {
+    "id": "GVB:06008",
+    "name": "Amsterdam, Surinameplein",
+    "lat": "52.358138",
+    "lng": "4.852093"
+  },
+  {
+    "id": "GVB:06006",
+    "name": "Amsterdam, Hoofdweg",
+    "lat": "52.358872",
+    "lng": "4.853288"
+  },
+  {
+    "id": "GVB:06007",
+    "name": "Amsterdam, Hoofdweg",
+    "lat": "52.359375",
+    "lng": "485337"
+  },
+  {
+    "id": "GVB:06002",
+    "name": "Amsterdam, Surinameplein",
+    "lat": "52.35807",
+    "lng": "4.850905"
+  },
+  {
+    "id": "GVB:06001",
+    "name": "Amsterdam, Surinameplein",
+    "lat": "52.358068",
+    "lng": "485252"
+  },
+  {
+    "id": "GVB:03078",
+    "name": "Amsterdam, Burg vd Pollstraat",
+    "lat": "52.373712",
+    "lng": "4.832066"
+  },
+  {
+    "id": "GVB:03079",
+    "name": "Amsterdam, Burg vd Pollstraat",
+    "lat": "52.373552",
+    "lng": "4.832479"
+  },
+  {
+    "id": "GVB:03076",
+    "name": "Amsterdam, Jan Tooropstraat",
+    "lat": "52.371421",
+    "lng": "48381"
+  },
+  {
+    "id": "GVB:03077",
+    "name": "Amsterdam, Jan Tooropstraat",
+    "lat": "52.37097",
+    "lng": "4.837856"
+  },
+  {
+    "id": "GVB:03071",
+    "name": "Amsterdam, Jan Voermanstraat",
+    "lat": "52.369489",
+    "lng": "4.838183"
+  },
+  {
+    "id": "GVB:05036",
+    "name": "Amsterdam, Spui",
+    "lat": "52.368702",
+    "lng": "4.892095"
+  },
+  {
+    "id": "GVB:09564",
+    "name": "Amsterdam, Van der Madeweg",
+    "lat": "52.329903",
+    "lng": "4.930333"
+  },
+  {
+    "id": "GVB:09565",
+    "name": "Amsterdam, Van der Madeweg",
+    "lat": "523294",
+    "lng": "4.930323"
+  },
+  {
+    "id": "GVB:09566",
+    "name": "Amsterdam, Spaklerweg",
+    "lat": "52.33986",
+    "lng": "4.920854"
+  },
+  {
+    "id": "GVB:09567",
+    "name": "Amsterdam, Spaklerweg",
+    "lat": "52.340239",
+    "lng": "492107"
+  },
+  {
+    "id": "GVB:05034",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377651",
+    "lng": "489781"
+  },
+  {
+    "id": "GVB:09562",
+    "name": "Amsterdam, Station Zuid",
+    "lat": "52.339078",
+    "lng": "4.875096"
+  },
+  {
+    "id": "GVB:09563",
+    "name": "Amsterdam, Overamstel",
+    "lat": "52.331797",
+    "lng": "4.918151"
+  },
+  {
+    "id": "GVB:05035",
+    "name": "Amsterdam, Spui",
+    "lat": "52.369394",
+    "lng": "4.892102"
+  },
+  {
+    "id": "GVB:05032",
+    "name": "Amsterdam, Dam",
+    "lat": "52.373924",
+    "lng": "489421"
+  },
+  {
+    "id": "GVB:05033",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377705",
+    "lng": "489781"
+  },
+  {
+    "id": "GVB:05030",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377632",
+    "lng": "4.897767"
+  },
+  {
+    "id": "GVB:05031",
+    "name": "Amsterdam, Dam",
+    "lat": "52.373408",
+    "lng": "4.893481"
+  },
+  {
+    "id": "GVB:04098",
+    "name": "Amsterdam, Maassluisstraat",
+    "lat": "52.347002",
+    "lng": "4.838329"
+  },
+  {
+    "id": "GVB:06067",
+    "name": "Amsterdam, Leidseplein",
+    "lat": "52.364314",
+    "lng": "4.883012"
+  },
+  {
+    "id": "GVB:01140",
+    "name": "Amsterdam, Chrysantenstraat",
+    "lat": "52.392201",
+    "lng": "4.906376"
+  },
+  {
+    "id": "GVB:07192",
+    "name": "Amsterdam, Station Zuid",
+    "lat": "52.340839",
+    "lng": "4.872874"
+  },
+  {
+    "id": "GVB:07191",
+    "name": "Amsterdam, Station Zuid",
+    "lat": "52.340751",
+    "lng": "4.873418"
+  },
+  {
+    "id": "GVB:01410",
+    "name": "Amsterdam, Kadoelenpad",
+    "lat": "52.413908",
+    "lng": "4.911403"
+  },
+  {
+    "id": "GVB:07350",
+    "name": "Amsterdam, VU medisch centrum",
+    "lat": "52.335192",
+    "lng": "4.860058"
+  },
+  {
+    "id": "GVB:07171",
+    "name": "Amsterdam, Van Nijenrodeweg",
+    "lat": "52.327357",
+    "lng": "4.868659"
+  },
+  {
+    "id": "GVB:07170",
+    "name": "Amsterdam, Van Nijenrodeweg",
+    "lat": "52.32823",
+    "lng": "486906"
+  },
+  {
+    "id": "GVB:04095",
+    "name": "Amsterdam, Aletta Jacobslaan",
+    "lat": "52.346869",
+    "lng": "482907"
+  },
+  {
+    "id": "GVB:00517",
+    "name": "Amsterdam, Foppingadreef",
+    "lat": "52.313213",
+    "lng": "4.949378"
+  },
+  {
+    "id": "GVB:04099",
+    "name": "Amsterdam, Maassluisstraat",
+    "lat": "52.346969",
+    "lng": "4.838975"
+  },
+  {
+    "id": "GVB:00512",
+    "name": "Amsterdam, Middenweg",
+    "lat": "52.350202",
+    "lng": "4.933896"
+  },
+  {
+    "id": "GVB:04091",
+    "name": "Amsterdam, Louweshoek",
+    "lat": "52.346311",
+    "lng": "4.823119"
+  },
+  {
+    "id": "GVB:04097",
+    "name": "Amsterdam, Ottho Heldringstraat",
+    "lat": "52.346969",
+    "lng": "4.833046"
+  },
+  {
+    "id": "GVB:04096",
+    "name": "Amsterdam, Ottho Heldringstraat",
+    "lat": "52.346918",
+    "lng": "4.833795"
+  },
+  {
+    "id": "GVB:00518",
+    "name": "Amsterdam, Foppingadreef",
+    "lat": "52.312684",
+    "lng": "4.949676"
+  },
+  {
+    "id": "GVB:04094",
+    "name": "Amsterdam, Aletta Jacobslaan",
+    "lat": "52.346911",
+    "lng": "4.828468"
+  },
+  {
+    "id": "GVB:00174",
+    "name": "Amsterdam, Maasdrielhof",
+    "lat": "52.301803",
+    "lng": "4.965485"
+  },
+  {
+    "id": "GVB:00177",
+    "name": "Amsterdam, Bijlmerpark",
+    "lat": "52.310948",
+    "lng": "4.964357"
+  },
+  {
+    "id": "GVB:00170",
+    "name": "Amsterdam, Huigenbos",
+    "lat": "52.306891",
+    "lng": "4.960833"
+  },
+  {
+    "id": "GVB:00171",
+    "name": "Amsterdam, Maasdrielhof",
+    "lat": "52.302205",
+    "lng": "4.964836"
+  },
+  {
+    "id": "GVB:00172",
+    "name": "Amsterdam, Holendrechtplein",
+    "lat": "52.299524",
+    "lng": "4.964026"
+  },
+  {
+    "id": "GVB:00173",
+    "name": "Amsterdam, Holendrechtplein",
+    "lat": "52.299107",
+    "lng": "4.963092"
+  },
+  {
+    "id": "GVB:00178",
+    "name": "Amsterdam, Bijlmerpark",
+    "lat": "52.31101",
+    "lng": "4.964034"
+  },
+  {
+    "id": "GVB:00179",
+    "name": "Amsterdam, Kelbergen",
+    "lat": "52.313509",
+    "lng": "4.971797"
+  },
+  {
+    "id": "GVB:00209",
+    "name": "Amsterdam, Hakfort",
+    "lat": "52.307987",
+    "lng": "4.955764"
+  },
+  {
+    "id": "GVB:04279",
+    "name": "Amsterdam, Kasterleepark",
+    "lat": "52.346387",
+    "lng": "481104"
+  },
+  {
+    "id": "GVB:04278",
+    "name": "Amsterdam, Kasterleepark",
+    "lat": "52.346304",
+    "lng": "4.810615"
+  },
+  {
+    "id": "GVB:04277",
+    "name": "Amsterdam, Laan vVlaanderen",
+    "lat": "52.346485",
+    "lng": "4.816425"
+  },
+  {
+    "id": "GVB:04276",
+    "name": "Amsterdam, Laan vVlaanderen",
+    "lat": "52.346437",
+    "lng": "4.815677"
+  },
+  {
+    "id": "GVB:00200",
+    "name": "Amsterdam, Station Ganzenhoef",
+    "lat": "52.322976",
+    "lng": "4.975082"
+  },
+  {
+    "id": "GVB:00201",
+    "name": "Amsterdam, Reigersbroeck",
+    "lat": "52.310552",
+    "lng": "5000962"
+  },
+  {
+    "id": "GVB:00206",
+    "name": "Amsterdam, Rhenenhof",
+    "lat": "52.29808",
+    "lng": "4.970036"
+  },
+  {
+    "id": "GVB:00207",
+    "name": "Amsterdam, Rhenenhof",
+    "lat": "52.298379",
+    "lng": "4.970825"
+  },
+  {
+    "id": "GVB:08053",
+    "name": "Amsterdam, Weesperplein",
+    "lat": "52.360879",
+    "lng": "4.906554"
+  },
+  {
+    "id": "GVB:00198",
+    "name": "Amsterdam, Annie Romeinplein",
+    "lat": "52.32143",
+    "lng": "4.969978"
+  },
+  {
+    "id": "GVB:00199",
+    "name": "Amsterdam, Station Ganzenhoef",
+    "lat": "52.323087",
+    "lng": "4.973292"
+  },
+  {
+    "id": "GVB:01353",
+    "name": "Amsterdam, BovenIJ ziekenhuis",
+    "lat": "52.405386",
+    "lng": "4.920017"
+  },
+  {
+    "id": "GVB:01352",
+    "name": "Amsterdam, Oosterlengte",
+    "lat": "52.406113",
+    "lng": "4.922067"
+  },
+  {
+    "id": "GVB:01351",
+    "name": "Amsterdam, Oosterlengte",
+    "lat": "52.405827",
+    "lng": "492232"
+  },
+  {
+    "id": "GVB:08052",
+    "name": "Amsterdam, K 's-Gravesandestr",
+    "lat": "52.362713",
+    "lng": "4.915505"
+  },
+  {
+    "id": "GVB:00196",
+    "name": "Amsterdam, Station Ganzenhoef",
+    "lat": "52.32282",
+    "lng": "4.974174"
+  },
+  {
+    "id": "GVB:00197",
+    "name": "Amsterdam, Annie Romeinplein",
+    "lat": "52.321733",
+    "lng": "4.971618"
+  },
+  {
+    "id": "GVB:01359",
+    "name": "Amsterdam, Molenwijk",
+    "lat": "52.418069",
+    "lng": "4.893616"
+  },
+  {
+    "id": "GVB:01358",
+    "name": "Amsterdam, Durgerddijk 143",
+    "lat": "52.378927",
+    "lng": "4.994375"
+  },
+  {
+    "id": "GVB:08050",
+    "name": "Amsterdam, Alexanderplein",
+    "lat": "52.363409",
+    "lng": "4.918668"
+  },
+  {
+    "id": "GVB:08054",
+    "name": "Amsterdam, Weesperplein",
+    "lat": "52.361457",
+    "lng": "4.909411"
+  },
+  {
+    "id": "GVB:01133",
+    "name": "Amsterdam, Gentiaanstraat",
+    "lat": "52.390399",
+    "lng": "491189"
+  },
+  {
+    "id": "GVB:01132",
+    "name": "Amsterdam, Gentiaanstraat",
+    "lat": "52.390551",
+    "lng": "4.911903"
+  },
+  {
+    "id": "GVB:01131",
+    "name": "Amsterdam, Hagedoornplein",
+    "lat": "52.388014",
+    "lng": "4.913473"
+  },
+  {
+    "id": "GVB:01130",
+    "name": "Amsterdam, Hagedoornplein",
+    "lat": "52.38806",
+    "lng": "4.913619"
+  },
+  {
+    "id": "GVB:01137",
+    "name": "Amsterdam, Vd Pekplein",
+    "lat": "52.386951",
+    "lng": "4.908431"
+  },
+  {
+    "id": "GVB:01136",
+    "name": "Amsterdam, Vd Pekplein",
+    "lat": "52.386752",
+    "lng": "4.908095"
+  },
+  {
+    "id": "GVB:01135",
+    "name": "Amsterdam, Hagedoornweg",
+    "lat": "52.390728",
+    "lng": "4.911034"
+  },
+  {
+    "id": "GVB:01134",
+    "name": "Amsterdam, Hagedoornweg",
+    "lat": "52.390502",
+    "lng": "4.910728"
+  },
+  {
+    "id": "GVB:08080",
+    "name": "Amsterdam, Spiegelgracht",
+    "lat": "52.361068",
+    "lng": "488691"
+  },
+  {
+    "id": "GVB:08083",
+    "name": "Amsterdam, Jan Schaeferbrug",
+    "lat": "52.376579",
+    "lng": "4.921936"
+  },
+  {
+    "id": "GVB:08084",
+    "name": "Amsterdam, Jan Schaeferbrug",
+    "lat": "52.376525",
+    "lng": "4.921702"
+  },
+  {
+    "id": "GVB:08086",
+    "name": "Amsterdam, Keizersgracht",
+    "lat": "52.364165",
+    "lng": "4.892439"
+  },
+  {
+    "id": "GVB:08087",
+    "name": "Amsterdam, Keizersgracht",
+    "lat": "52.364561",
+    "lng": "4.892625"
+  },
+  {
+    "id": "GVB:05052",
+    "name": "Amsterdam, Waterlooplein",
+    "lat": "52.367271",
+    "lng": "4.902344"
+  },
+  {
+    "id": "GVB:05053",
+    "name": "Amsterdam, Waterlooplein",
+    "lat": "52.366954",
+    "lng": "4.901952"
+  },
+  {
+    "id": "GVB:05055",
+    "name": "Amsterdam, Dam",
+    "lat": "52.373125",
+    "lng": "4.890078"
+  },
+  {
+    "id": "GVB:05056",
+    "name": "Amsterdam, Mr Visserplein",
+    "lat": "52.367939",
+    "lng": "4.905391"
+  },
+  {
+    "id": "GVB:01008",
+    "name": "Amsterdam, Wognumerplantsoen",
+    "lat": "52.387622",
+    "lng": "4.949392"
+  },
+  {
+    "id": "GVB:01007",
+    "name": "Amsterdam, Purmerweg",
+    "lat": "52.389992",
+    "lng": "4.948708"
+  },
+  {
+    "id": "GVB:01006",
+    "name": "Amsterdam, Purmerweg",
+    "lat": "52.390027",
+    "lng": "4.948472"
+  },
+  {
+    "id": "GVB:01005",
+    "name": "Amsterdam, Volendammerweg",
+    "lat": "52.39306",
+    "lng": "4.956802"
+  },
+  {
+    "id": "GVB:01004",
+    "name": "Amsterdam, Volendammerweg",
+    "lat": "52.391688",
+    "lng": "4.957564"
+  },
+  {
+    "id": "GVB:01002",
+    "name": "Amsterdam, Hilversumstraat",
+    "lat": "52.389733",
+    "lng": "4.958979"
+  },
+  {
+    "id": "GVB:01001",
+    "name": "Amsterdam, Hilversumstraat",
+    "lat": "52.390254",
+    "lng": "4.958841"
+  },
+  {
+    "id": "GVB:04025",
+    "name": "Amsterdam, Baden Powellweg",
+    "lat": "52.362279",
+    "lng": "4.787711"
+  },
+  {
+    "id": "GVB:00071",
+    "name": "Amsterdam, Kruislaan",
+    "lat": "52.347612",
+    "lng": "4.940453"
+  },
+  {
+    "id": "GVB:07309",
+    "name": "Amsterdam, Apollolaan",
+    "lat": "52.348167",
+    "lng": "4.881874"
+  },
+  {
+    "id": "GVB:09057",
+    "name": "Amsterdam, Hunzestraat",
+    "lat": "52.340739",
+    "lng": "490463"
+  },
+  {
+    "id": "GVB:08178",
+    "name": "Amsterdam, Marinierskade",
+    "lat": "52.37375",
+    "lng": "4.920072"
+  },
+  {
+    "id": "GVB:08179",
+    "name": "Amsterdam, K 's-Gravesandestr",
+    "lat": "52.362198",
+    "lng": "4.914805"
+  },
+  {
+    "id": "GVB:07307",
+    "name": "Amsterdam, Beethovenstraat",
+    "lat": "52.347001",
+    "lng": "4.878204"
+  },
+  {
+    "id": "GVB:08177",
+    "name": "Amsterdam, Marinierskade",
+    "lat": "52.37423",
+    "lng": "4.920962"
+  },
+  {
+    "id": "GVB:02118",
+    "name": "Amsterdam, Nw Willemsstraat",
+    "lat": "52.381273",
+    "lng": "488088"
+  },
+  {
+    "id": "GVB:02119",
+    "name": "Amsterdam, Nw Willemsstraat",
+    "lat": "52.380841",
+    "lng": "4.880665"
+  },
+  {
+    "id": "GVB:00528",
+    "name": "Amsterdam, Eekholt",
+    "lat": "52.327199",
+    "lng": "4.967063"
+  },
+  {
+    "id": "GVB:02114",
+    "name": "Amsterdam, Haarlemmerplein",
+    "lat": "52.384843",
+    "lng": "488341"
+  },
+  {
+    "id": "GVB:02115",
+    "name": "Amsterdam, Nw Willemsstraat",
+    "lat": "52.381148",
+    "lng": "4.880882"
+  },
+  {
+    "id": "GVB:02110",
+    "name": "Amsterdam, Nassauplein",
+    "lat": "52.385382",
+    "lng": "4.881259"
+  },
+  {
+    "id": "GVB:02111",
+    "name": "Amsterdam, Nassauplein",
+    "lat": "52.385257",
+    "lng": "4.881466"
+  },
+  {
+    "id": "GVB:02112",
+    "name": "Amsterdam, Nassauplein",
+    "lat": "52.385437",
+    "lng": "4.881494"
+  },
+  {
+    "id": "GVB:02113",
+    "name": "Amsterdam, Haarlemmerplein",
+    "lat": "52.385159",
+    "lng": "4.883715"
+  },
+  {
+    "id": "GVB:09177",
+    "name": "Amsterdam, Krugerplein",
+    "lat": "52.353072",
+    "lng": "4.920759"
+  },
+  {
+    "id": "GVB:09176",
+    "name": "Amsterdam, James Wattstraat",
+    "lat": "52.351159",
+    "lng": "4.923289"
+  },
+  {
+    "id": "GVB:09175",
+    "name": "Amsterdam, James Wattstraat",
+    "lat": "52.351534",
+    "lng": "4.922757"
+  },
+  {
+    "id": "GVB:09170",
+    "name": "Amsterdam, Victorieplein",
+    "lat": "52.345542",
+    "lng": "4.905488"
+  },
+  {
+    "id": "GVB:09179",
+    "name": "Amsterdam, Maxwellstraat",
+    "lat": "52.348239",
+    "lng": "4.928265"
+  },
+  {
+    "id": "GVB:09178",
+    "name": "Amsterdam, Krugerplein",
+    "lat": "52.352973",
+    "lng": "4.920804"
+  },
+  {
+    "id": "GVB:00202",
+    "name": "Amsterdam, Reigersbroeck",
+    "lat": "52.311331",
+    "lng": "4.999811"
+  },
+  {
+    "id": "GVB:04432",
+    "name": "Amsterdam, Oeverpad (HvA)",
+    "lat": "52.364962",
+    "lng": "480497"
+  },
+  {
+    "id": "GVB:00205",
+    "name": "Amsterdam, Station Holendrecht",
+    "lat": "52.297168",
+    "lng": "4.958654"
+  },
+  {
+    "id": "GVB:02200",
+    "name": "Amsterdam, Pleimuiden",
+    "lat": "52.391807",
+    "lng": "4.784873"
+  },
+  {
+    "id": "GVB:02201",
+    "name": "Amsterdam, Abberdaan",
+    "lat": "52.391805",
+    "lng": "4.780877"
+  },
+  {
+    "id": "GVB:06030",
+    "name": "Amsterdam, Rozengracht",
+    "lat": "52.371986",
+    "lng": "4.875876"
+  },
+  {
+    "id": "GVB:06037",
+    "name": "Amsterdam, Bilderdijkstraat",
+    "lat": "52.370827",
+    "lng": "4.869854"
+  },
+  {
+    "id": "GVB:06036",
+    "name": "Amsterdam, E Wolffstraat",
+    "lat": "52.370277",
+    "lng": "4.867365"
+  },
+  {
+    "id": "GVB:06034",
+    "name": "Amsterdam, Bilderdijkstraat",
+    "lat": "52.371056",
+    "lng": "4.870821"
+  },
+  {
+    "id": "GVB:06038",
+    "name": "Amsterdam, De Clercqstraat",
+    "lat": "52.370614",
+    "lng": "48704"
+  },
+  {
+    "id": "GVB:01354",
+    "name": "Amsterdam, BovenIJ ziekenhuis",
+    "lat": "52.405701",
+    "lng": "4.920102"
+  },
+  {
+    "id": "GVB:09911",
+    "name": "Amsterdam, IJplein",
+    "lat": "52.381774",
+    "lng": "4.908281"
+  },
+  {
+    "id": "GVB:09910",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.38124",
+    "lng": "4.898652"
+  },
+  {
+    "id": "GVB:03087",
+    "name": "Amsterdam, Plein '40 - '45",
+    "lat": "52.381594",
+    "lng": "4.820629"
+  },
+  {
+    "id": "GVB:07186",
+    "name": "Amsterdam, Pr Irenestraat",
+    "lat": "523426",
+    "lng": "4.876772"
+  },
+  {
+    "id": "GVB:07187",
+    "name": "Amsterdam, Pr Irenestraat",
+    "lat": "52.34313",
+    "lng": "4.876781"
+  },
+  {
+    "id": "GVB:07342",
+    "name": "Amsterdam, Amstelveenseweg",
+    "lat": "52.33846",
+    "lng": "4.857202"
+  },
+  {
+    "id": "GVB:07343",
+    "name": "Amsterdam, Amstelveenseweg",
+    "lat": "52.338365",
+    "lng": "4.857981"
+  },
+  {
+    "id": "GVB:07340",
+    "name": "Amsterdam, Nieuw Herlaer",
+    "lat": "52.325913",
+    "lng": "4.890313"
+  },
+  {
+    "id": "GVB:00347",
+    "name": "Amsterdam, Haardstee",
+    "lat": "52.311161",
+    "lng": "495104"
+  },
+  {
+    "id": "GVB:00346",
+    "name": "Amsterdam, Station Gein",
+    "lat": "52.296439",
+    "lng": "4.989357"
+  },
+  {
+    "id": "GVB:00345",
+    "name": "Amsterdam, Station Gein",
+    "lat": "52.296249",
+    "lng": "498911"
+  },
+  {
+    "id": "GVB:07169",
+    "name": "Amsterdam, Bolestein",
+    "lat": "52.323546",
+    "lng": "4.862602"
+  },
+  {
+    "id": "GVB:00343",
+    "name": "Amsterdam, Gein",
+    "lat": "52.298631",
+    "lng": "4.989147"
+  },
+  {
+    "id": "GVB:00342",
+    "name": "Amsterdam, Gein",
+    "lat": "52.298839",
+    "lng": "4.989292"
+  },
+  {
+    "id": "GVB:00341",
+    "name": "Amsterdam, Gein",
+    "lat": "52.294181",
+    "lng": "498882"
+  },
+  {
+    "id": "GVB:00340",
+    "name": "Amsterdam, Gein",
+    "lat": "52.294389",
+    "lng": "4.989053"
+  },
+  {
+    "id": "GVB:07162",
+    "name": "Amsterdam, Backershagen",
+    "lat": "52.324698",
+    "lng": "4.875159"
+  },
+  {
+    "id": "GVB:07163",
+    "name": "Amsterdam, Van Boshuizenstraat",
+    "lat": "52.324576",
+    "lng": "4.869982"
+  },
+  {
+    "id": "GVB:07160",
+    "name": "Amsterdam, Bleyenbeek",
+    "lat": "52.325042",
+    "lng": "488846"
+  },
+  {
+    "id": "GVB:07161",
+    "name": "Amsterdam, Backershagen",
+    "lat": "52.324805",
+    "lng": "4.877006"
+  },
+  {
+    "id": "GVB:07166",
+    "name": "Amsterdam, Noordhollandstraat",
+    "lat": "52.32362",
+    "lng": "4.865006"
+  },
+  {
+    "id": "GVB:07167",
+    "name": "Amsterdam, Noordhollandstraat",
+    "lat": "52.323568",
+    "lng": "4.865418"
+  },
+  {
+    "id": "GVB:07165",
+    "name": "Amsterdam, Van Boshuizenstraat",
+    "lat": "52.324041",
+    "lng": "4.868815"
+  },
+  {
+    "id": "GVB:04088",
+    "name": "Amsterdam, Louwesweg",
+    "lat": "52.346694",
+    "lng": "4.824362"
+  },
+  {
+    "id": "GVB:04089",
+    "name": "Amsterdam, Louwesweg",
+    "lat": "52.346707",
+    "lng": "4.825139"
+  },
+  {
+    "id": "GVB:00239",
+    "name": "Amsterdam, Anton de Komplein",
+    "lat": "52.316527",
+    "lng": "4.955974"
+  },
+  {
+    "id": "GVB:00238",
+    "name": "Amsterdam, Flierbosdreef",
+    "lat": "52.316034",
+    "lng": "4.954131"
+  },
+  {
+    "id": "GVB:00236",
+    "name": "Amsterdam, Hofgeest",
+    "lat": "52.313333",
+    "lng": "4.957618"
+  },
+  {
+    "id": "GVB:00235",
+    "name": "Amsterdam, Station Reigersbos",
+    "lat": "52.296323",
+    "lng": "4.973746"
+  },
+  {
+    "id": "GVB:01346",
+    "name": "Amsterdam, Nageljongenstraat",
+    "lat": "52.40824",
+    "lng": "4.898942"
+  },
+  {
+    "id": "GVB:01347",
+    "name": "Amsterdam, Nageljongenstraat",
+    "lat": "52.408154",
+    "lng": "4.899781"
+  },
+  {
+    "id": "GVB:00529",
+    "name": "Amsterdam, Station Science Park",
+    "lat": "52.352304",
+    "lng": "4.947818"
+  },
+  {
+    "id": "GVB:00527",
+    "name": "Amsterdam, Eekholt",
+    "lat": "52.327234",
+    "lng": "4.966667"
+  },
+  {
+    "id": "GVB:05113",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.376745",
+    "lng": "4.900625"
+  },
+  {
+    "id": "GVB:01128",
+    "name": "Amsterdam, Kraaienplein",
+    "lat": "52.385944",
+    "lng": "4.914993"
+  },
+  {
+    "id": "GVB:05114",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377138",
+    "lng": "4.901987"
+  },
+  {
+    "id": "GVB:01124",
+    "name": "Amsterdam, Valkenweg",
+    "lat": "52.383097",
+    "lng": "4.913275"
+  },
+  {
+    "id": "GVB:01125",
+    "name": "Amsterdam, Valkenweg",
+    "lat": "52.383045",
+    "lng": "4.913775"
+  },
+  {
+    "id": "GVB:01126",
+    "name": "Amsterdam, Spreeuwenpark",
+    "lat": "52.384512",
+    "lng": "4.914127"
+  },
+  {
+    "id": "GVB:01127",
+    "name": "Amsterdam, Spreeuwenpark",
+    "lat": "52.385204",
+    "lng": "4.914296"
+  },
+  {
+    "id": "GVB:01121",
+    "name": "Amsterdam, Hamerstraat",
+    "lat": "52.386004",
+    "lng": "4.921"
+  },
+  {
+    "id": "GVB:01122",
+    "name": "Amsterdam, Havikslaan",
+    "lat": "52.385319",
+    "lng": "491829"
+  },
+  {
+    "id": "GVB:01123",
+    "name": "Amsterdam, Havikslaan",
+    "lat": "52.385029",
+    "lng": "4.917603"
+  },
+  {
+    "id": "GVB:02055",
+    "name": "Amsterdam, Nieuwe Hemweg",
+    "lat": "52.401679",
+    "lng": "4.849099"
+  },
+  {
+    "id": "GVB:01010",
+    "name": "Amsterdam, Schellingwdijk 83",
+    "lat": "52.386354",
+    "lng": "4.953958"
+  },
+  {
+    "id": "GVB:05024",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.377129",
+    "lng": "4.902046"
+  },
+  {
+    "id": "GVB:01012",
+    "name": "Amsterdam, Schellingwdijk 175",
+    "lat": "52.385723",
+    "lng": "4.958503"
+  },
+  {
+    "id": "GVB:01013",
+    "name": "Amsterdam, Schellingwdijk 175",
+    "lat": "52.385643",
+    "lng": "4.958798"
+  },
+  {
+    "id": "GVB:01014",
+    "name": "Amsterdam, IJdijk",
+    "lat": "52.383888",
+    "lng": "4.963118"
+  },
+  {
+    "id": "GVB:01015",
+    "name": "Amsterdam, IJdijk",
+    "lat": "52.384085",
+    "lng": "4.962735"
+  },
+  {
+    "id": "GVB:01016",
+    "name": "Amsterdam, Liergouw",
+    "lat": "52.381591",
+    "lng": "4.966533"
+  },
+  {
+    "id": "GVB:01017",
+    "name": "Amsterdam, Liergouw",
+    "lat": "52.381609",
+    "lng": "4.966592"
+  },
+  {
+    "id": "GVB:01018",
+    "name": "Amsterdam, Volkstuin",
+    "lat": "52.379435",
+    "lng": "4.974455"
+  },
+  {
+    "id": "GVB:01019",
+    "name": "Amsterdam, Volkstuin",
+    "lat": "52.379757",
+    "lng": "4.974041"
+  },
+  {
+    "id": "GVB:08183",
+    "name": "Amsterdam, Het Funen",
+    "lat": "52.367459",
+    "lng": "4.931605"
+  },
+  {
+    "id": "GVB:08184",
+    "name": "Amsterdam, Het Funen",
+    "lat": "52.367483",
+    "lng": "4.930871"
+  },
+  {
+    "id": "GVB:08051",
+    "name": "Amsterdam, K 's-Gravesandestr",
+    "lat": "52.362355",
+    "lng": "4.913659"
+  },
+  {
+    "id": "GVB:09160",
+    "name": "Amsterdam, Maasstraat",
+    "lat": "52.340723",
+    "lng": "4.896398"
+  },
+  {
+    "id": "GVB:09161",
+    "name": "Amsterdam, Maasstraat",
+    "lat": "52.340471",
+    "lng": "489844"
+  },
+  {
+    "id": "GVB:06024",
+    "name": "Amsterdam, Kinkerstraat",
+    "lat": "52.367063",
+    "lng": "4.872306"
+  },
+  {
+    "id": "GVB:06025",
+    "name": "Amsterdam, Kinkerstraat",
+    "lat": "52.36743",
+    "lng": "4.872008"
+  },
+  {
+    "id": "GVB:06027",
+    "name": "Amsterdam, Elandsgracht",
+    "lat": "52.368087",
+    "lng": "4.878549"
+  },
+  {
+    "id": "GVB:06020",
+    "name": "Amsterdam, Ten Katestraat",
+    "lat": "52.366036",
+    "lng": "4.867737"
+  },
+  {
+    "id": "GVB:06021",
+    "name": "Amsterdam, Bilderdijkstraat",
+    "lat": "52.367123",
+    "lng": "4.871762"
+  },
+  {
+    "id": "GVB:02273",
+    "name": "Amsterdam, La Guardiaweg",
+    "lat": "52.391519",
+    "lng": "4.840364"
+  },
+  {
+    "id": "GVB:06023",
+    "name": "Amsterdam, Bilderdijkstraat",
+    "lat": "52.36736",
+    "lng": "4.872538"
+  },
+  {
+    "id": "GVB:06028",
+    "name": "Amsterdam, Elandsgracht",
+    "lat": "52.369745",
+    "lng": "4.877414"
+  },
+  {
+    "id": "GVB:06029",
+    "name": "Amsterdam, Elandsgracht",
+    "lat": "52.36852",
+    "lng": "4.876841"
+  },
+  {
+    "id": "GVB:09906",
+    "name": "Amsterdam, Buiksloterweg",
+    "lat": "52.382265",
+    "lng": "4.903179"
+  },
+  {
+    "id": "GVB:09905",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.380633",
+    "lng": "4.899584"
+  },
+  {
+    "id": "GVB:09902",
+    "name": "Amsterdam, NDSM-werf",
+    "lat": "52.400939",
+    "lng": "4.891735"
+  },
+  {
+    "id": "GVB:09903",
+    "name": "Amsterdam, Centraal Station",
+    "lat": "52.380793",
+    "lng": "4.899259"
+  },
+  {
+    "id": "GVB:09900",
+    "name": "Amsterdam, Tasmanstraat",
+    "lat": "52.393089",
+    "lng": "4.886416"
+  },
+  {
+    "id": "GVB:09901",
+    "name": "Amsterdam, Distelweg",
+    "lat": "52.395773",
+    "lng": "4.896479"
+  },
+  {
+    "id": "GVB:03090",
+    "name": "Amsterdam, Slotermeerlaan",
+    "lat": "52.37596",
+    "lng": "4.817279"
+  },
+  {
+    "id": "GVB:03091",
+    "name": "Amsterdam, Slotermeerlaan",
+    "lat": "52.37542",
+    "lng": "4.820766"
+  },
+  {
+    "id": "GVB:03096",
+    "name": "Amsterdam, Burg v Leeuwenlaan",
+    "lat": "52.376255",
+    "lng": "4.813251"
+  },
+  {
+    "id": "GVB:03097",
+    "name": "Amsterdam, Burg v Leeuwenlaan",
+    "lat": "52.376509",
+    "lng": "4.811823"
+  },
+  {
+    "id": "GVB:03095",
+    "name": "Amsterdam, Burg v Leeuwenlaan",
+    "lat": "52.37641",
+    "lng": "4.813734"
+  },
+  {
+    "id": "GVB:03098",
+    "name": "Amsterdam, Burg v Leeuwenlaan",
+    "lat": "52.376447",
+    "lng": "4.812088"
+  },
+  {
+    "id": "GVB:03099",
+    "name": "Amsterdam, Dr H Colijnstraat",
+    "lat": "52.376934",
+    "lng": "4.806722"
+  },
+  {
+    "id": "GVB:02309",
+    "name": "Amsterdam, Plesostraat",
+    "lat": "52.387949",
+    "lng": "4.826453"
+  },
+  {
+    "id": "GVB:02301",
+    "name": "Amsterdam, Fred Hendrikplants",
+    "lat": "52.378526",
+    "lng": "4.875213"
+  },
+  {
+    "id": "GVB:02300",
+    "name": "Amsterdam, Kingsfordweg",
+    "lat": "52.38605",
+    "lng": "4.843222"
+  },
+  {
+    "id": "GVB:02302",
+    "name": "Amsterdam, Fred Hendrikplants",
+    "lat": "52.37859",
+    "lng": "4.875491"
+  },
+  {
+    "id": "GVB:06116",
+    "name": "Amsterdam, Postjesweg",
+    "lat": "52.363958",
+    "lng": "4.853197"
+  },
+  {
+    "id": "GVB:02182",
+    "name": "Amsterdam, Markthallen",
+    "lat": "52.375677",
+    "lng": "4.866949"
+  },
+  {
+    "id": "GVB:02189",
+    "name": "Amsterdam, Zaanhof",
+    "lat": "52.392006",
+    "lng": "4.872898"
+  },
+  {
+    "id": "GVB:07401",
+    "name": "Amsterdam, Overamstel",
+    "lat": "52.331649",
+    "lng": "4.917214"
+  },
+  {
+    "id": "GVB:07400",
+    "name": "Amsterdam, Overamstel",
+    "lat": "52.331569",
+    "lng": "4.917273"
+  },
+  {
+    "id": "GVB:07405",
+    "name": "Amsterdam, Station RAI",
+    "lat": "52.33788",
+    "lng": "488921"
+  },
+  {
+    "id": "GVB:07404",
+    "name": "Amsterdam, Station RAI",
+    "lat": "52.337397",
+    "lng": "4.889817"
+  },
+  {
+    "id": "GVB:07159",
+    "name": "Amsterdam, Bleyenbeek",
+    "lat": "52.324954",
+    "lng": "4.888827"
+  },
+  {
+    "id": "GVB:07158",
+    "name": "Amsterdam, Van Heenvlietlaan",
+    "lat": "52.324859",
+    "lng": "4.883342"
+  },
+  {
+    "id": "GVB:07409",
+    "name": "Amsterdam, Station Zuid",
+    "lat": "52.339315",
+    "lng": "4.873758"
+  },
+  {
+    "id": "GVB:07408",
+    "name": "Amsterdam, Station Zuid",
+    "lat": "52.339166",
+    "lng": "4.874713"
+  },
+  {
+    "id": "GVB:07151",
+    "name": "Amsterdam, Europaboulevard",
+    "lat": "52.335196",
+    "lng": "4.890106"
+  },
+  {
+    "id": "GVB:07150",
+    "name": "Amsterdam, Europaboulevard",
+    "lat": "52.333991",
+    "lng": "4.889738"
+  },
+  {
+    "id": "GVB:07088",
+    "name": "Amsterdam, Stadionweg",
+    "lat": "52.346653",
+    "lng": "4.876872"
+  },
+  {
+    "id": "GVB:07084",
+    "name": "Amsterdam, Gerrit vd Veenstr",
+    "lat": "52.348866",
+    "lng": "4.877199"
+  },
+  {
+    "id": "GVB:07087",
+    "name": "Amsterdam, Stadionweg",
+    "lat": "52.347148",
+    "lng": "4.876881"
+  },
+  {
+    "id": "GVB:07080",
+    "name": "Amsterdam, Apollolaan",
+    "lat": "52.351283",
+    "lng": "4.879123"
+  },
+  {
+    "id": "GVB:07083",
+    "name": "Amsterdam, Gerrit vd Veenstr",
+    "lat": "52.349208",
+    "lng": "4.877357"
+  },
+  {
+    "id": "GVB:01009",
+    "name": "Amsterdam, Wognumerplantsoen",
+    "lat": "52.387389",
+    "lng": "4.949586"
+  },
+  {
+    "id": "GVB:03111",
+    "name": "Amsterdam, Troelstralaan",
+    "lat": "52.374969",
+    "lng": "4.802063"
+  },
+  {
+    "id": "GVB:00351",
+    "name": "Amsterdam, Dostojevskisingel",
+    "lat": "52.322751",
+    "lng": "494525"
+  },
+  {
+    "id": "GVB:00352",
+    "name": "Amsterdam, Dostojevskisingel",
+    "lat": "52.323144",
+    "lng": "4.944571"
+  },
+  {
+    "id": "GVB:04215",
+    "name": "Amsterdam, Griendstraat",
+    "lat": "52.358949",
+    "lng": "4.779917"
+  },
+  {
+    "id": "GVB:00221",
+    "name": "Amsterdam, Gaasp",
+    "lat": "52.31437",
+    "lng": "4.992144"
+  },
+  {
+    "id": "GVB:01339",
+    "name": "Amsterdam, GJ Scheurleerweg",
+    "lat": "52.403908",
+    "lng": "4.928174"
+  },
+  {
+    "id": "GVB:01338",
+    "name": "Amsterdam, Dorpsweg 38",
+    "lat": "52.392436",
+    "lng": "4.994505"
+  },
+  {
+    "id": "GVB:01337",
+    "name": "Amsterdam, Dorpsweg 38",
+    "lat": "52.391754",
+    "lng": "4.994907"
+  },
+  {
+    "id": "GVB:04219",
+    "name": "Amsterdam, Baldwinstraat",
+    "lat": "52.356777",
+    "lng": "4.776952"
+  },
+  {
+    "id": "GVB:04218",
+    "name": "Amsterdam, M Gandhilaan",
+    "lat": "52.355712",
+    "lng": "47761"
+  },
+  {
+    "id": "GVB:04185",
+    "name": "Amsterdam, Osdorpplein",
+    "lat": "52.359337",
+    "lng": "4.803341"
+  },
+  {
+    "id": "GVB:04186",
+    "name": "Amsterdam, Osdorpplein",
+    "lat": "52.359237",
+    "lng": "4.803092"
+  },
+  {
+    "id": "GVB:04189",
+    "name": "Amsterdam, Kon Wilhelminaplein",
+    "lat": "52.35637",
+    "lng": "4.838947"
+  },
+  {
+    "id": "GVB:04188",
+    "name": "Amsterdam, Kon Wilhelminaplein",
+    "lat": "52.356294",
+    "lng": "484002"
+  },
+  {
+    "id": "GVB:00538",
+    "name": "Amsterdam, Station Science Park",
+    "lat": "52.352395",
+    "lng": "4.948081"
+  },
+  {
+    "id": "GVB:00537",
+    "name": "Amsterdam, Linnaeusparkweg",
+    "lat": "52.349247",
+    "lng": "4.942755"
+  },
+  {
+    "id": "GVB:04329",
+    "name": "Amsterdam, L Bouwmeesterstraat",
+    "lat": "52.356166",
+    "lng": "4.822172"
+  },
+  {
+    "id": "GVB:04328",
+    "name": "Amsterdam, L Bouwmeesterstraat",
+    "lat": "52.35613",
+    "lng": "4.822319"
+  },
+  {
+    "id": "GVB:04321",
+    "name": "Amsterdam, Heemstedestraat",
+    "lat": "52.352555",
+    "lng": "4.834209"
+  },
+  {
+    "id": "GVB:04320",
+    "name": "Amsterdam, Heemstedestraat",
+    "lat": "52.353086",
+    "lng": "483435"
+  },
+  {
+    "id": "GVB:04323",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.357661",
+    "lng": "4.834263"
+  },
+  {
+    "id": "GVB:04322",
+    "name": "Amsterdam, Station Lelylaan",
+    "lat": "52.358174",
+    "lng": "4.834462"
+  },
+  {
+    "id": "GVB:04325",
+    "name": "Amsterdam, Postjesweg",
+    "lat": "52.364678",
+    "lng": "4.833853"
+  },
+  {
+    "id": "GVB:04324",
+    "name": "Amsterdam, Postjesweg",
+    "lat": "52.365057",
+    "lng": "4.834024"
+  },
+  {
+    "id": "GVB:04327",
+    "name": "Amsterdam, Plesmanlaan",
+    "lat": "52.350582",
+    "lng": "4.810442"
+  },
+  {
+    "id": "GVB:04326",
+    "name": "Amsterdam, Plesmanlaan",
+    "lat": "52.350634",
+    "lng": "4.810163"
+  },
+  {
+    "id": "GVB:04414",
+    "name": "Amsterdam, Louis Davidsstraat",
+    "lat": "52.353928",
+    "lng": "4.809107"
+  },
+  {
+    "id": "GVB:02043",
+    "name": "Amsterdam, Nieuwe Hemweg",
+    "lat": "52.401238",
+    "lng": "4.850882"
+  },
+  {
+    "id": "GVB:01065",
+    "name": "Amsterdam, Het Breed",
+    "lat": "52.39809",
+    "lng": "4.931893"
+  },
+  {
+    "id": "GVB:01064",
+    "name": "Amsterdam, Het Breed",
+    "lat": "52.398299",
+    "lng": "4.932434"
+  },
+  {
+    "id": "GVB:01067",
+    "name": "Amsterdam, Ilperveldstraat",
+    "lat": "52.395037",
+    "lng": "4.944647"
+  },
+  {
+    "id": "GVB:01066",
+    "name": "Amsterdam, Olof Palmeplein",
+    "lat": "52.396835",
+    "lng": "4.939942"
+  },
+  {
+    "id": "GVB:01061",
+    "name": "Amsterdam, Wervershoofstraat",
+    "lat": "52.392708",
+    "lng": "4.939543"
+  },
+  {
+    "id": "GVB:01060",
+    "name": "Amsterdam, Wervershoofstraat",
+    "lat": "52.392496",
+    "lng": "4.940383"
+  },
+  {
+    "id": "GVB:01063",
+    "name": "Amsterdam, Nieuwe Purmerweg",
+    "lat": "52.394181",
+    "lng": "4.934504"
+  },
+  {
+    "id": "GVB:01062",
+    "name": "Amsterdam, Nieuwe Purmerweg",
+    "lat": "52.394485",
+    "lng": "4.934133"
+  },
+  {
+    "id": "GVB:01069",
+    "name": "Amsterdam, Werengouw",
+    "lat": "52.393608",
+    "lng": "494948"
+  },
+  {
+    "id": "GVB:01068",
+    "name": "Amsterdam, Ilperveldstraat",
+    "lat": "52.394958",
+    "lng": "4.945162"
+  },
+  {
+    "id": "GVB:05039",
+    "name": "Amsterdam, Muntplein",
+    "lat": "52.367611",
+    "lng": "4.893296"
+  },
+  {
+    "id": "GVB:08190",
+    "name": "Amsterdam, Molukkenstraat",
+    "lat": "52.361574",
+    "lng": "4.939343"
+  },
+  {
+    "id": "GVB:08196",
+    "name": "Amsterdam, Oostenburgergracht",
+    "lat": "52.367712",
+    "lng": "492498"
+  },
+  {
+    "id": "GVB:08197",
+    "name": "Amsterdam, Oostenburgergracht",
+    "lat": "52.368315",
+    "lng": "4.922948"
+  },
+  {
+    "id": "GVB:09119",
+    "name": "Amsterdam, Cornelis Troostplein",
+    "lat": "52.350005",
+    "lng": "4.891496"
+  },
+  {
+    "id": "GVB:09115",
+    "name": "Amsterdam, Ruysdaelkade",
+    "lat": "52.352249",
+    "lng": "4.886422"
+  },
+  {
+    "id": "GVB:09024",
+    "name": "Amsterdam, Camperstraat",
+    "lat": "52.358328",
+    "lng": "4.913393"
+  },
+  {
+    "id": "GVB:09027",
+    "name": "Amsterdam, Wibautstraat",
+    "lat": "52.357379",
+    "lng": "4.909866"
+  },
+  {
+    "id": "GVB:03037",
+    "name": "Amsterdam, Egidiusstraat",
+    "lat": "52.379023",
+    "lng": "4.851503"
+  },
+  {
+    "id": "GVB:02291",
+    "name": "Amsterdam, Bornhout",
+    "lat": "52.396036",
+    "lng": "4.794762"
+  },
+  {
+    "id": "GVB:02290",
+    "name": "Amsterdam, Jarmuiden",
+    "lat": "52.390658",
+    "lng": "4.790529"
+  },
+  {
+    "id": "GVB:03224",
+    "name": "Amsterdam, Hermitagelaan",
+    "lat": "52.366717",
+    "lng": "4.827822"
+  },
+  {
+    "id": "GVB:02319",
+    "name": "Amsterdam, Haarlemmerweg",
+    "lat": "52.384316",
+    "lng": "4.855405"
+  },
+  {
+    "id": "GVB:03221",
+    "name": "Amsterdam, Jan Evertsenstraat",
+    "lat": "52.369866",
+    "lng": "4.836181"
+  },
+  {
+    "id": "GVB:03223",
+    "name": "Amsterdam, Hermitagelaan",
+    "lat": "52.366482",
+    "lng": "4.827517"
+  },
+  {
+    "id": "GVB:03222",
+    "name": "Amsterdam, Jan Evertsenstraat",
+    "lat": "52.369732",
+    "lng": "4.836433"
+  },
+  {
+    "id": "GVB:02312",
+    "name": "Amsterdam, Seineweg",
+    "lat": "52.386538",
+    "lng": "481892"
+  },
+  {
+    "id": "GVB:02310",
+    "name": "Amsterdam, Plesostraat",
+    "lat": "52.387886",
+    "lng": "4.828495"
+  },
+  {
+    "id": "GVB:02311",
+    "name": "Amsterdam, Seineweg",
+    "lat": "52.38632",
+    "lng": "481857"
+  },
+  {
+    "id": "GVB:02316",
+    "name": "Amsterdam, Naritaweg",
+    "lat": "52.387837",
+    "lng": "4.821886"
+  },
+  {
+    "id": "GVB:02317",
+    "name": "Amsterdam, Naritaweg",
+    "lat": "52.387905",
+    "lng": "4.821018"
+  },
+  {
+    "id": "GVB:09070",
+    "name": "Amsterdam, Scheldestraat",
+    "lat": "52.347022",
+    "lng": "4.889519"
+  },
+  {
+    "id": "GVB:03131",
+    "name": "Amsterdam, Lod v Deysselstraat",
+    "lat": "52.377302",
+    "lng": "481967"
+  },
+  {
+    "id": "GVB:03130",
+    "name": "Amsterdam, Plein '40 - '45",
+    "lat": "52.381208",
+    "lng": "4.822675"
+  },
+  {
+    "id": "GVB:03132",
+    "name": "Amsterdam, Lod v Deysselstraat",
+    "lat": "52.376762",
+    "lng": "4.819501"
+  },
+  {
+    "id": "GVB:04057",
+    "name": "Amsterdam, Hemsterhuisstraat",
+    "lat": "52.359175",
+    "lng": "4.821898"
+  },
+  {
+    "id": "GVB:07261",
+    "name": "Amsterdam, Station RAI",
+    "lat": "52.33696",
+    "lng": "4.890688"
+  },
+  {
+    "id": "GVB:07260",
+    "name": "Amsterdam, Station RAI",
+    "lat": "52.337087",
+    "lng": "4.890775"
+  },
+  {
+    "id": "GVB:09922",
+    "name": "Amsterdam, Zaandam",
+    "lat": "52.421329",
+    "lng": "4.826383"
+  },
+  {
+    "id": "GVB:09923",
+    "name": "Amsterdam, Hempontplein",
+    "lat": "52.418051",
+    "lng": "4.826983"
+  },
+  {
+    "id": "GVB:07405",
+    "name": "Amsterdam, Station RAI",
+    "lat": "52.33788",
+    "lng": "488921"
+  },
+  {
+    "id": "GVB:07404",
+    "name": "Amsterdam, Station RAI",
+    "lat": "52.337397",
+    "lng": "4.889817"
+  },
+  {
+    "id": "GVB:04433",
+    "name": "Amsterdam, Oeverpad",
+    "lat": "52.364521",
+    "lng": "4.804843"
+  },
+  {
+    "id": "GVB:99003",
+    "name": "Amsterdam, Waterlooplein",
+    "lat": "52.368708",
+    "lng": "4.904399"
+  },
+  {
+    "id": "GVB:99004",
+    "name": "Amsterdam, Waterlooplein",
+    "lat": "52.368674",
+    "lng": "4.904767"
+  },
+  {
+    "id": "GVB:08147",
+    "name": "Amsterdam, Weesperplein",
+    "lat": "52.361756",
+    "lng": "490766"
+  },
+  {
+    "id": "GVB:05036",
+    "name": "Amsterdam, Spui",
+    "lat": "52.368801",
+    "lng": "4.892094"
+  },
+  {
+    "id": "GVB:08172",
+    "name": "Amsterdam, Weesperplein",
+    "lat": "52.361315",
+    "lng": "4.907577"
+  },
+  {
+    "id": "GVB:04432",
+    "name": "Amsterdam, Oeverpad",
+    "lat": "52.364962",
+    "lng": "480497"
+  },
+  {
+    "id": "GVB:06030",
+    "name": "Amsterdam, Rozengracht",
+    "lat": "52.371878",
+    "lng": "4.875907"
+  },
+  {
+    "id": "GVB:07294",
+    "name": "Amsterdam, Station Zuid",
+    "lat": "52.340724",
+    "lng": "4.873272"
+  },
+  {
+    "id": "GVB:07140",
+    "name": "Amsterdam, De Boelelaan/VU",
+    "lat": "52.334738",
+    "lng": "4.869072"
+  },
+  {
+    "id": "GVB:00220",
+    "name": "Amsterdam, Gaasp",
+    "lat": "52.314813",
+    "lng": "4.992947"
+  },
+  {
+    "id": "GVB:05141",
+    "name": "Amsterdam, Singel",
+    "lat": "52.379938",
+    "lng": "4.894657"
+  },
+  {
+    "id": "GVB:05090",
+    "name": "Amsterdam, Westerdoksdijk",
+    "lat": "52.38368",
+    "lng": "4.893044"
+  },
+  {
+    "id": "GVB:07139",
+    "name": "Amsterdam, De Boelelaan/VU",
+    "lat": "52.334484",
+    "lng": "4.868605"
+  }
+]

@@ -1,34 +1,10 @@
 # Python
 # Packages
-from datetime import datetime
-from datetime import timezone
 import factory
 from factory import fuzzy
 
 # Project
 from citydynamics.datasets import models
-
-
-class DrukteindexFactory(factory.DjangoModelFactory):
-    class Meta:
-        model = models.Drukteindex
-
-    index = fuzzy.FuzzyInteger(low=10000000000000, high=19000009999999)
-    timestamp = fuzzy.FuzzyDateTime(
-        datetime(2016, 1, 1, tzinfo=timezone.utc),
-        datetime(2017, 1, 1, tzinfo=timezone.utc))
-    vollcode = fuzzy.FuzzyText()
-    weekday = fuzzy.FuzzyInteger(0, 6)
-    hour = fuzzy.FuzzyFloat(0, 23)
-
-    # google_live = fuzzy.FuzzyFloat(0, 1)
-    # google_week = fuzzy.FuzzyFloat(0, 1)
-    gvb_buurt = fuzzy.FuzzyFloat(0, 1)
-    gvb_stad = fuzzy.FuzzyFloat(0, 1)
-    verblijvers = fuzzy.FuzzyFloat(0, 1)
-    # google = fuzzy.FuzzyFloat(0, 1)
-    gvb = fuzzy.FuzzyFloat(0, 1)
-    drukteindex = fuzzy.FuzzyFloat(0, 1)
 
 
 class HotspotsFactory(factory.DjangoModelFactory):
@@ -39,4 +15,24 @@ class HotspotsFactory(factory.DjangoModelFactory):
     hotspot = fuzzy.FuzzyText()
     lat = fuzzy.FuzzyFloat(low=0)
     lon = fuzzy.FuzzyFloat(low=0)
-    # point_sm = fuzzy.GeometryField()
+
+
+class BuurtcombinatieFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.Buurtcombinatie
+
+    vollcode = fuzzy.FuzzyText()
+    naam = fuzzy.FuzzyText()
+
+
+class BuurtcombinatieIndexFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.BuurtCombinatieDrukteindex
+
+    index = fuzzy.FuzzyInteger(low=0, high=99900090000000)
+    # vollcode = factory.SubFactory(BuurtcombinatieFactory)
+    #  naam = fuzzy.FuzzyText()
+    hour = fuzzy.FuzzyInteger(low=0, high=24)
+    weekday = fuzzy.FuzzyInteger(low=0, high=6)
+    drukteindex = fuzzy.FuzzyFloat(low=0, high=1)
+    # wkb_geometry_simplified = ...
