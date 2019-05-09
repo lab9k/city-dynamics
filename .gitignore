@@ -3,6 +3,7 @@ venv/
 
 # Ignore the Pycharm .idea folder
 /.idea
+.vscode/
 
 # Ignore OSX folders
 /.DS_Store
